@@ -31,6 +31,16 @@ var copy = {
     src: [
       'd3.js'
     ]
+  },
+
+  leaflet: {
+    cwd: 'node_modules/leaflet/dist',
+    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet-0.7.x',
+    expand: true,
+    src: [
+      'leaflet.css',
+      'images/*'
+    ]
   }
 };
 

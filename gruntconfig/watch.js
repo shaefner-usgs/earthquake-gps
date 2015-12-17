@@ -25,7 +25,7 @@ var watch = {
       config.src + '/htdocs/**/*.js'
     ],
     tasks: [
-      'browserify'
+      'browserify:qc'
     ]
   },
 
