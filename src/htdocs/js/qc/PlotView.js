@@ -1,3 +1,5 @@
+/* global c3 */
+
 'use strict';
 
 var Util = require('util/Util'),
@@ -95,7 +97,7 @@ var PlotView = function (options) {
    *        object with key/value pairs that changed.
    *        when null, assume all have changed.
    */
-  _this.render = function (changed) {
+  _this.render = function (/*changed*/) {
     var axes,
         axis,
         c3options,

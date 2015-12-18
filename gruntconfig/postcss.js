@@ -7,7 +7,7 @@ var autoprefixer = require('autoprefixer'),
 var config = require('./config');
 
 var postcss = {
-  qc: {
+  dev: {
     cwd: config.src + '/htdocs',
     dest: config.build + '/' + config.src + '/htdocs',
     expand: true,
@@ -27,7 +27,10 @@ var postcss = {
         })
       ]
     },
-    src: 'css/qc/index.scss' // import any other css files from here
+    src: [
+      '**/*.scss',  // import any other css files from here
+      '!**/_*.scss'
+    ]
   }
 };
 

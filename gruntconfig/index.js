@@ -5,6 +5,7 @@ var gruntConfig = {
   browserify: require('./browserify'),
   connect: require('./connect'),
   copy: require('./copy'),
+  jshint: require('./jshint'),
   postcss: require('./postcss'),
   watch: require('./watch'),
 
@@ -14,6 +15,7 @@ var gruntConfig = {
     'grunt-connect-proxy', // webserver plugin
     'grunt-contrib-connect', // webserver
     'grunt-contrib-copy',
+    'grunt-contrib-jshint',
     'grunt-contrib-watch',
     'grunt-postcss'
   ]

@@ -12,6 +12,7 @@ module.exports = function (grunt) {
 
   // Execute tasks
   grunt.registerTask('default', [
+    'jshint', // check first for errors
     'browserify',
     'copy:dev',
     'copy:c3',
@@ -20,7 +21,7 @@ module.exports = function (grunt) {
     'configureProxies:dev', // don't need to define
     'connect:template',
     'connect:dev',
-    'postcss:qc',
+    'postcss:dev',
     'watch'
   ]);
-}
+};

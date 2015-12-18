@@ -151,12 +151,7 @@ var Factory = function (options) {
    */
   _this.getData = function (options) {
     var data,
-        dates,
-        end,
-        endIndex,
-        onReady,
-        start,
-        startIndex;
+        onReady;
 
     if (!options || !options.callback) {
       throw new Error('callback is a required parameter');

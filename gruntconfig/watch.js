@@ -3,6 +3,34 @@
 var config = require('./config');
 
 var watch = {
+  gruntfile: {
+    files: [
+      'Gruntfile.js',
+      'gruntconfig/**/*.js'
+    ],
+    tasks: [
+      'jshint:gruntfile'
+    ]
+  },
+
+  livereload: {
+    options: {
+      livereload: config.liveReloadPort,
+    },
+    files: [
+      config.build + '/' + config.src + '/htdocs/**/*'
+    ]
+  },
+
+  postcss: {
+    files: [
+      config.src + '/htdocs/**/*.scss'
+    ],
+    tasks: [
+      'postcss:dev'
+    ]
+  },
+
   resources: {
     files: [
       config.src + '/**/*',
@@ -14,29 +42,16 @@ var watch = {
     ]
   },
 
-  // postcss: {
-  //   files: [
-  //
-  //   ]
-  // },
-
   scripts: {
     files: [
       config.src + '/htdocs/**/*.js'
     ],
     tasks: [
+      'jshint:dev', // check for errors first
       'browserify:qc'
     ]
-  },
-
-  livereload: {
-    options: {
-      livereload: config.liveReloadPort,
-    },
-    files: [
-      config.build + '/' + config.src + '/htdocs/**/*'
-    ]
   }
+
 };
 
 module.exports = watch;
