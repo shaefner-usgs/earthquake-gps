@@ -20,6 +20,7 @@ module.exports = function (grunt) {
     'configureProxies:dev', // don't need to define
     'connect:template',
     'connect:dev',
+    'postcss:qc',
     'watch'
   ]);
 }

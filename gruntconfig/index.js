@@ -5,6 +5,7 @@ var gruntConfig = {
   browserify: require('./browserify'),
   connect: require('./connect'),
   copy: require('./copy'),
+  postcss: require('./postcss'),
   watch: require('./watch'),
 
   // Define tasks array
@@ -13,7 +14,8 @@ var gruntConfig = {
     'grunt-connect-proxy', // webserver plugin
     'grunt-contrib-connect', // webserver
     'grunt-contrib-copy',
-    'grunt-contrib-watch'
+    'grunt-contrib-watch',
+    'grunt-postcss'
   ]
 };
 
