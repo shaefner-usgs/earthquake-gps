@@ -48,6 +48,7 @@ $DEFAULTS = array(
   'APP_DIR' => $APP_DIR,
   'DATA_DIR' => str_replace('/apps/', '/data/', $APP_DIR),
   'MOUNT_PATH' => '',
+  'DATA_HOST' => 'localhost',
 
   'DB_DSN' => 'mysql:host=localhost;port=3306;dbname=dbname',
   'DB_USER' => 'web',
@@ -58,6 +59,7 @@ $HELP_TEXT = array(
   'APP_DIR' => 'Absolute path to application root directory',
   'DATA_DIR' => 'Absolute path to application data directory',
   'MOUNT_PATH' => 'Url path to application',
+  'DATA_HOST' => 'Host where data files are served',
 
   'DB_DSN' => 'Database connection DSN string',
   'DB_USER' => 'Read-only username for database connections',

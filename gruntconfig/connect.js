@@ -32,9 +32,14 @@ var connect = {
   },
   proxies: [
     {
-      context: '/theme/', // template
-      host: 'localhost', // destination host
-      port: config.templatePort, // destination port
+      context: config.ini.MOUNT_PATH + '/data', // data on dev server
+      host: config.ini.DATA_HOST,
+      port: 80
+    },
+    {
+      context: '/theme/', // 'local' template
+      host: 'localhost',
+      port: config.templatePort,
       rewrite: {
         '^/theme': ''
       }
