@@ -4,13 +4,13 @@ module.exports = function (grunt) {
 
   var gruntConfig = require('./gruntconfig');
 
-  // Load grunt tasks
-  gruntConfig.tasks.forEach(grunt.loadNpmTasks);
-
   // Configure tasks
   grunt.initConfig(gruntConfig);
 
-  // Execute tasks
+  // Load grunt tasks
+  gruntConfig.tasks.forEach(grunt.loadNpmTasks);
+
+  // Setup cli tasks
   grunt.registerTask('default', [
     'jshint', // check first for errors
     'browserify',
