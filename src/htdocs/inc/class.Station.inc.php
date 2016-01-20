@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Stations class
+ * Station class
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
-class Stations {
+class Station {
   public $param1;
   private $_param2;
 
@@ -15,13 +15,20 @@ class Stations {
   }
 
   /**
-   * Get a list of stations beginning with a given letter / number
+   * Get station's photos
    *
-   * @param $firstChar {String}
    * @return {Array}
    */
-  public function getList($firstChar) {
+  public function getPhotos() {
 
   }
 
+  /**
+   * Get station's log sheets
+   *
+   * @return {Array}
+   */
+  public function getLogSheets() {
+
+  }
 }
