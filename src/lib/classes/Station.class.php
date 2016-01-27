@@ -37,11 +37,10 @@ class Station {
   }
 
   protected function getGmapLink () {
-    $r = sprintf('http://maps.google.com/?q=%f,%f+(Station+7ADL)&t=p&z=10',
+    return sprintf('http://maps.google.com/?q=%f,%f+(Station+7ADL)&t=p&z=10',
       $this->lat,
       $this->lon
     );
-    return $r;
   }
 
   protected function getLinks () {
@@ -65,18 +64,16 @@ class Station {
   }
 
   protected function getNgsLink () {
-    $r = sprintf('http://www.ngs.noaa.gov/cgi-bin/ds_radius.prl?selectedFormat=Decimal+Degrees&DLatBox=%f&DLonBox=%f&RadBox=0.5&SubmitBtn=Submit',
+    return sprintf('http://www.ngs.noaa.gov/cgi-bin/ds_radius.prl?selectedFormat=Decimal+Degrees&DLatBox=%f&DLonBox=%f&RadBox=0.5&SubmitBtn=Submit',
       $this->lat,
       $this->lon
     );
-    return $r;
   }
 
   protected function getWeatherLink () {
-    $r = sprintf('http://forecast.weather.gov/MapClick.php?textField1=%.4f&textField2=%.4f',
+    return sprintf('http://forecast.weather.gov/MapClick.php?textField1=%.4f&textField2=%.4f',
       $this->lat,
       $this->lon
     );
-    return $r;
   }
 }
