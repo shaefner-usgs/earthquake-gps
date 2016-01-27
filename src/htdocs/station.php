@@ -1,60 +1,47 @@
 <?php
 
-include_once 'functions.inc.php';
-include_once '../conf/config.inc.php'; // db connection
+include_once 'functions.inc.php'; // template functions
+include_once '../conf/config.inc.php'; // app config, db connection
+include_once '../lib/functions/functions.inc.php'; // app functions
 include_once '../lib/classes/Station.class.php'; // model
 include_once '../lib/classes/StationView.class.php'; // view
 
-$stationName = param('station', 'HALY');
-$networkName = param('network', 'WindKetchFlat_SGPS');
+// set default values so page loads without passing params
+$stationName = param('station', 'aoa1');
+$networkName = param('network', 'Pacific');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "GPS Station $stationName";
+  $TITLE = 'GPS Station ' . strtoupper($stationName) . " ($networkName Network)";
   $HEAD = '';
   $FOOT = '';
 
   include_once 'template.inc.php';
 }
 
-// Create a station obj using the db result
-try {
-  $sqlStation = "SELECT s.lat, s.lon, s.elevation, s.x, s.y, s.z,
-    r.stationtype, r.showcoords
-    FROM nca_gps_stations s
-    LEFT JOIN nca_gps_relations r USING (station)
-    WHERE s.station = :station AND r.network = :network";
+// Db query result for all networks matching a station
+$rsNetworks = getNetworks($DB, $stationName);
 
-  $rsStation = $DB->prepare($sqlStation);
-  $rsStation->bindValue(':station', $stationName, PDO::PARAM_STR);
-  $rsStation->bindValue(':network', $networkName, PDO::PARAM_STR);
-  $rsStation->execute();
-
-  // Instantiate Station class which creates the station model
-  $rsStation->setFetchMode(PDO::FETCH_CLASS,
-    'Station', array($stationName, $networkName));
-  $station = $rsStation->fetch();
-
-  if (!$station) {
-    print "ERROR: Cannot find station ($stationName) and/or network ($networkName).";
-  }
-} catch(Exception $e) {
-  print 'ERROR: ' . $e->getMessage();
+// Create the networks array using the db result
+$networks = array();
+while ($row = $rsNetworks->fetch(PDO::FETCH_ASSOC)) {
+  array_push($networks, $row['network']);
 }
 
-// Add networks to station obj
-try {
-  $sqlNetworks = "SELECT network FROM nca_gps_relations WHERE station = :station";
+// Db query result for station details matching a station and network
+$rsStation = getStation($DB, $stationName, $networkName);
 
-  $rsNetworks = $DB->prepare($sqlNetworks);
-  $rsNetworks->bindValue(':station', $stationName, PDO::PARAM_STR);
-  $rsNetworks->execute();
-  $rsNetworks->setFetchMode(PDO::FETCH_INTO, 'Station');
-} catch(Exception $e) {
-  print 'ERROR: ' . $e->getMessage();
-}
+// Create the station model using the db result and $networks array
+$rsStation->setFetchMode(
+  PDO::FETCH_CLASS,
+  'Station',
+  array($networks)
+);
+$station = $rsStation->fetch();
 
 // Create the view and render it
-$view = new StationView($station);
-$view->render();
-
-?>
+if ($station) {
+  $view = new StationView($station);
+  $view->render();
+} else {
+  print "ERROR: Station / Network Not Found.";
+}

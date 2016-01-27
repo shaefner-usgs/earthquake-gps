@@ -3,18 +3,19 @@
 include_once '../conf/config.inc.php';
 
 /**
- * Station model - populate name / value pairs from db query
+ * Station model
+ * - populates fields from db query using magic __set method
+ * - also sets up other 'non-db field' properites (e.g. links and networkList)
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Station {
   protected $data = array();
 
-  public function __construct ($stationName, $networkName = NULL) {
+  public function __construct ($networks = NULL) {
     //$this->name = $stationName;
-    $this->data['station'] = $stationName;
-    $this->data['network'] = $networkName;
-    $this->data['links'] = $this->getLinks();
+    $this->data['links'] = $this->getLinkList();
+    $this->data['networkList']= $networks;
   }
 
   public function __get ($name) {
@@ -43,7 +44,7 @@ class Station {
     );
   }
 
-  protected function getLinks () {
+  protected function getLinkList () {
     $path = $GLOBALS['MOUNT_PATH'] . '/' . $this->network . '/' . $this->station;
     $logs = $path . '/logs/';
     $photos = $path . '/photos/';
