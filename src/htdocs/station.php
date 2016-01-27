@@ -5,8 +5,8 @@ include_once '../conf/config.inc.php'; // db connection
 include_once '../lib/classes/Station.class.php'; // model
 include_once '../lib/classes/StationView.class.php'; // view
 
-$stationName = param('station');
-$networkName = param('network');
+$stationName = param('station', 'HALY');
+$networkName = param('network', 'WindKetchFlat_SGPS');
 
 if (!isset($TEMPLATE)) {
   $TITLE = "GPS Station $stationName";
