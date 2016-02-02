@@ -8,7 +8,8 @@ $station = safeParam('station', 'aoa1');
 $network = safeParam('network', 'Pacific');
 
 if (!isset($TEMPLATE)) {
-  include '../conf/config.inc.php'; // app config, db connection
+  include '../conf/config.inc.php'; // app config
+  include '../lib/classes/Db.class.php'; // db connector, queries
   include '../lib/classes/Station.class.php'; // model
   include '../lib/classes/StationView.class.php'; // view
 
@@ -19,8 +20,11 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+$db = new Db;
+
 // Db query result: all "non-hidden" networks that selected station belongs to
-$rsNetworkList = queryNetworkList($DB, $station);
+//$rsNetworkList = queryNetworkList($DB, $station);
+$rsNetworkList = $db->queryNetworkList($station);
 
 // Create an array of networks
 $networkList = array();
@@ -34,7 +38,8 @@ if (!in_array($network, $networkList)) {
 }
 
 // Db query result: station details for selected station and network
-$rsStation = queryStation($DB, $station, $network);
+//$rsStation = queryStation($DB, $station, $network);
+$rsStation = $db->queryStation($station, $network);
 
 // Create the station model using the station details and $networkList array
 $rsStation->setFetchMode(
