@@ -2,13 +2,14 @@
 
 /**
  * Station view
+ * - creates the HTML for station.php
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class StationView {
   private $model;
 
-  public function __construct ($model) {
+  public function __construct (Station $model) {
     $this->model = $model;
   }
 

@@ -1,46 +1,52 @@
 <?php
 
-include_once 'functions.inc.php'; // template functions
-include_once '../conf/config.inc.php'; // app config, db connection
+//include_once 'functions.inc.php'; // template functions
 include_once '../lib/functions/functions.inc.php'; // app functions
-include_once '../lib/classes/Station.class.php'; // model
-include_once '../lib/classes/StationView.class.php'; // view
 
 // set default values so page loads without passing params
-$stationName = param('station', 'aoa1');
-$networkName = param('network', 'Pacific');
+$station = safeParam('station', 'aoa1');
+$network = safeParam('network', 'Pacific');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($stationName) . " ($networkName Network)";
+  include '../conf/config.inc.php'; // app config, db connection
+  include '../lib/classes/Station.class.php'; // model
+  include '../lib/classes/StationView.class.php'; // view
+
+  $TITLE = 'GPS Station ' . strtoupper($station) . " ($network Network)";
   $HEAD = '';
   $FOOT = '';
 
-  include_once 'template.inc.php';
+  include 'template.inc.php';
 }
 
-// Db query result for all networks matching a station
-$rsNetworks = getNetworks($DB, $stationName);
+// Db query result: all "non-hidden" networks that selected station belongs to
+$rsNetworkList = queryNetworkList($DB, $station);
 
-// Create the networks array using the db result
-$networks = array();
-while ($row = $rsNetworks->fetch(PDO::FETCH_ASSOC)) {
-  array_push($networks, $row['network']);
+// Create an array of networks
+$networkList = array();
+while ($row = $rsNetworkList->fetch(PDO::FETCH_ASSOC)) {
+  array_push($networkList, $row['network']);
+}
+// Add selected network if it's not already in the list (this would happen if
+// user is currently viewing a "hidden" network)
+if (!in_array($network, $networkList)) {
+  array_push($networkList, $network);
 }
 
-// Db query result for station details matching a station and network
-$rsStation = getStation($DB, $stationName, $networkName);
+// Db query result: station details for selected station and network
+$rsStation = queryStation($DB, $station, $network);
 
-// Create the station model using the db result and $networks array
+// Create the station model using the station details and $networkList array
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
   'Station',
-  array($networks)
+  array($networkList)
 );
-$station = $rsStation->fetch();
+$stationModel = $rsStation->fetch();
 
 // Create the view and render it
-if ($station) {
-  $view = new StationView($station);
+if ($stationModel) {
+  $view = new StationView($stationModel);
   $view->render();
 } else {
   print "ERROR: Station / Network Not Found.";

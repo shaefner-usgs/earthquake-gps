@@ -1,20 +1,21 @@
 <?php
 
-include_once '../conf/config.inc.php';
+include '../conf/config.inc.php';
 
 /**
  * Station model
  * - populates fields from db query using magic __set method
- * - also sets up other 'non-db field' properites (e.g. links and networkList)
+ * - also sets up other properites (e.g. links, map, and networkList)
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Station {
-  protected $data = array();
+  private $data = array();
 
-  public function __construct ($networks = NULL) {
+  public function __construct ($networks = null) {
     //$this->name = $stationName;
-    $this->data['links'] = $this->getLinkList();
+    $this->data['links'] = $this->_getLinkList();
+    $this->data['map'] = $this->_getMapImg();
     $this->data['networkList']= $networks;
   }
 
@@ -37,42 +38,54 @@ class Station {
     $this->data[$name] = $value;
   }
 
-  protected function getGmapLink () {
-    return sprintf('http://maps.google.com/?q=%f,%f+(Station+7ADL)&t=p&z=10',
-      $this->lat,
-      $this->lon
-    );
-  }
-
-  protected function getLinkList () {
+  private function _getLinkList () {
     $path = $GLOBALS['MOUNT_PATH'] . '/' . $this->network . '/' . $this->station;
     $logs = $path . '/logs/';
-    $photos = $path . '/photos/';
+    //$photos = $path . '/photos/';
+    $photos = $this->_getPhotosLink($path);
     $qc = $path . '/qc/';
-    $weather = $this->getWeatherLink();
-    $ngs = $this->getNgsLink();
-    $gmap = $this->getGmapLink();
+    $weather = $this->_getWeatherLink();
+    $ngs = $this->_getNgsLink();
 
     $links = array(
       'Field Logs' => $logs,
       'Photos' => $photos,
       'Quality Control Data' => $qc,
       'Weather' => $weather,
-      'NGS Datasheets' => $ngs,
-      'Map' => $gmap
+      'NGS Datasheets' => $ngs
     );
     return $links;
   }
 
-  protected function getNgsLink () {
-    return sprintf('http://www.ngs.noaa.gov/cgi-bin/ds_radius.prl?selectedFormat=Decimal+Degrees&DLatBox=%f&DLonBox=%f&RadBox=0.5&SubmitBtn=Submit',
+  private function _getLogsLink () {
+
+  }
+
+  private function _getMapImg () {
+    return sprintf(
+      'http://maps.google.com/?q=%f,%f+(Station+7ADL)&t=p&z=10',
       $this->lat,
       $this->lon
     );
   }
 
-  protected function getWeatherLink () {
-    return sprintf('http://forecast.weather.gov/MapClick.php?textField1=%.4f&textField2=%.4f',
+  private function _getNgsLink () {
+    return sprintf(
+      'http://www.ngs.noaa.gov/cgi-bin/ds_radius.prl?selectedFormat=Decimal+Degrees&DLatBox=%f&DLonBox=%f&RadBox=0.5&SubmitBtn=Submit',
+      $this->lat,
+      $this->lon
+    );
+  }
+
+  private function _getPhotosLink ($path) {
+    $dir = '/home/www/data/GPS/stations/7.dir/7adl/photos';
+    $exists = file_exists('data/stations/7.dir/7adl/photos/full/7adl_20030916e.jpg');
+    return $exists;
+  }
+
+  private function _getWeatherLink () {
+    return sprintf(
+      'http://forecast.weather.gov/MapClick.php?textField1=%.4f&textField2=%.4f',
       $this->lat,
       $this->lon
     );
