@@ -87,7 +87,7 @@ function queryStations ($db, $network) {
  *        The parameter name.
  * @param $default {?} default is null.
  *        Optional default value if the parameter was not provided.
- * @param $filter {?} default is FILTER_SANITIZE_STRING
+ * @param $filter {PHP Sanitize filter} default is FILTER_SANITIZE_STRING
  *        Optional sanitizing filter to apply
  * @return $value {String}
  */
