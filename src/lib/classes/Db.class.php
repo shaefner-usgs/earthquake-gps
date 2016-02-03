@@ -45,6 +45,10 @@ class Db {
     }
   }
 
+/**
+ *
+ *
+ */
   private function _getType ($var) {
     $varType = gettype($var);
     $pdoTypes = array(
@@ -62,8 +66,10 @@ class Db {
     return $type;
   }
 
-  // Query db to get a list of "non-hidden" networks a given station belongs to
-  // @return PDOStatement object
+  /**
+   * Query db to get a list of "non-hidden" networks a given station belongs to
+   *
+   */
   public function queryNetworkList ($station) {
     $sql = 'SELECT r.network
       FROM nca_gps_relations r
