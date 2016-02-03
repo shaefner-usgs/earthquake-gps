@@ -13,10 +13,10 @@ class Station {
   private $data = array();
 
   public function __construct ($networks = null) {
-    //$this->name = $stationName;
     $this->data['links'] = $this->_getLinkList();
     $this->data['map'] = $this->_getMapImg();
     $this->data['networkList']= $networks;
+    $this->data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network . '/' . $this->station;
   }
 
   public function __get ($name) {
@@ -34,18 +34,15 @@ class Station {
     ) {
       $value = floatval($value);
     }
-    //$this->$name = $value;
     $this->data[$name] = $value;
   }
 
   private function _getLinkList () {
-    $path = $GLOBALS['MOUNT_PATH'] . '/' . $this->network . '/' . $this->station;
-    $logs = $path . '/logs/';
-    //$photos = $path . '/photos/';
-    $photos = $this->_getPhotosLink($path);
-    $qc = $path . '/qc/';
-    $weather = $this->_getWeatherLink();
+    $logs = $this->stationPath . '/logs/';
     $ngs = $this->_getNgsLink();
+    $photos = $this->stationPath . '/photos/';
+    $qc = $this->stationPath . '/qc/';
+    $weather = $this->_getWeatherLink();
 
     $links = array(
       'Field Logs' => $logs,
@@ -75,18 +72,6 @@ class Station {
       $this->lat,
       $this->lon
     );
-  }
-
-  private function _getPhotosLink ($path) {
-    $photos = [];
-    $dir = sprintf('%s/stations/%s.dir/%s/photos/screen',
-      $GLOBALS['DATA_DIR'],
-      substr($this->station, 0, 1),
-      $this->station
-    );
-    $dir_contents = scandir($dir, SCANDIR_SORT_DESCENDING);
-    $photos['screen'] = array_diff($dir_contents, array('..', '.'));
-    return $photos;
   }
 
   private function _getWeatherLink () {
