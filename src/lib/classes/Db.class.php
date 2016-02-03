@@ -25,8 +25,8 @@ class Db {
    * @param $sql {String}
    *        SQL query
    * @param $params {Array} default is null
-   *        array of key-value substitution params for SQL query
-   * @return {Object} PDOStatement object
+   *        key-value substitution params for SQL query
+   * @return $stmt {Object} - PDOStatement object
    */
   private function _execQuery ($sql, $params=null) {
     try {
@@ -46,8 +46,11 @@ class Db {
   }
 
 /**
+ * Get data type for a sql parameter (PDO::PARAM_* constant)
  *
- *
+ * @param $var {?}
+ *        variable to identify
+ * @return $type {Integer}
  */
   private function _getType ($var) {
     $varType = gettype($var);
@@ -69,6 +72,8 @@ class Db {
   /**
    * Query db to get a list of "non-hidden" networks a given station belongs to
    *
+   * @param $station {String}
+   * @return {Function}
    */
   public function queryNetworkList ($station) {
     $sql = 'SELECT r.network
@@ -82,8 +87,11 @@ class Db {
     ));
   }
 
-  // Query db to get all "non-hidden" networks
-  // @return PDOStatement object
+  /**
+   * Query db to get all "non-hidden" networks
+   *
+   * @return {Function}
+   */
   public function queryNetworks () {
     $sql = 'SELECT *
       FROM nca_gps_networks
@@ -93,8 +101,13 @@ class Db {
     return $this->_execQuery($sql);
   }
 
-  // Query db to get station details for a given station and network
-  // @return PDOStatement object
+  /**
+   * Query db to get station details for a given station and network
+   *
+   * @param $station {String}
+   * @param $network {String}
+   * @return {Function}
+   */
   public function queryStation ($station, $network) {
     $sql = 'SELECT s.lat, s.lon, s.elevation, s.x, s.y, s.z, s.station,
       s.showcoords, r.stationtype, r.network
@@ -108,8 +121,13 @@ class Db {
     ));
   }
 
-  // Query db to get all stations in a given network
-  // @return PDOStatement object
+  /**
+   * Query db to get all stations in a given network
+   *
+   * @param $station {String}
+   * @param $network {String}
+   * @return {Function}
+   */
   public function queryStations ($network) {
     $sql = 'SELECT s.id, s.station, s.lat, s.lon, s.destroyed, s.showcoords,
       v.last_observation, v.up_rms, v.north_rms, v.east_rms
