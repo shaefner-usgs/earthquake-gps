@@ -13,10 +13,11 @@ class Station {
   private $data = array();
 
   public function __construct ($networks = null) {
+    $this->data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
+      . '/' . $this->station;
+    $this->data['networkList']= $networks;
     $this->data['links'] = $this->_getLinkList();
     $this->data['map'] = $this->_getMapImg();
-    $this->data['networkList']= $networks;
-    $this->data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network . '/' . $this->station;
   }
 
   public function __get ($name) {
@@ -52,10 +53,6 @@ class Station {
       'NGS Datasheets' => $ngs
     );
     return $links;
-  }
-
-  private function _getLogsLink () {
-
   }
 
   private function _getMapImg () {
