@@ -2,21 +2,22 @@
 
 /**
  * Get directory contents (checks first if it exists and doesn't return .., .)
+ *
  * @param $dir {String}
- *		directory to scan
+ *        directory to scan
  * @param $order {Integer} default is SCANDIR_SORT_DESCENDING
  *
  * @return $r {Array}
  */
 function getContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
-	$r = [];
+  $r = [];
 
-	if (file_exists($dir)) {
-		$contents = scandir($dir, $order);
-		$r = array_diff($contents, array('..', '.'));
-	}
+  if (file_exists($dir)) {
+    $contents = scandir($dir, $order);
+    $r = array_diff($contents, array('..', '.'));
+  }
 
-	return $r;
+  return $r;
 }
 
 /**
@@ -31,15 +32,15 @@ function getContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
  * @return $value {String}
  */
 function safeParam ($name, $default=null, $filter=FILTER_SANITIZE_STRING) {
-	$value = null;
+  $value = null;
 
-	if (isset($_POST[$name])) {
-		$value = filter_input(INPUT_POST, $name, $filter);
-	} else if (isset($_GET[$name])) {
+  if (isset($_POST[$name])) {
+    $value = filter_input(INPUT_POST, $name, $filter);
+  } else if (isset($_GET[$name])) {
     $value = filter_input(INPUT_GET, $name, $filter);
-	} else {
-		$value = $default;
-	}
+  } else {
+    $value = $default;
+  }
 
-	return $value;
+  return $value;
 }
