@@ -15,7 +15,7 @@ class Db {
       $this->db = new PDO($GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASS']);
       $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
-      print 'Error: ' . $e->getMessage();
+      print '<p class="alert error">ERROR: ' . $e->getMessage() . '</p>';
     }
   }
 
@@ -41,7 +41,7 @@ class Db {
       $stmt->execute();
       return $stmt;
     } catch(Exception $e) {
-      print 'ERROR: ' . $e->getMessage();
+      print '<p class="alert error">ERROR: ' . $e->getMessage() . '</p>';
     }
   }
 
@@ -102,18 +102,23 @@ class Db {
   }
 
   /**
-   * Query db to get station details for a given station and network
+   * Query db to get station details for a given station and (optional) network
    *
    * @param $station {String}
-   * @param $network {String}
+   * @param $network {String} default is '%'
    * @return {Function}
    */
-  public function queryStation ($station, $network) {
+  public function queryStation ($station, $network='%') {
+    // use 'LIKE' when no network is passed
+    $operator = '=';
+    if ($network === '%') {
+      $operator = 'LIKE';
+    }
     $sql = 'SELECT s.lat, s.lon, s.elevation, s.x, s.y, s.z, s.station,
       s.showcoords, r.stationtype, r.network
       FROM nca_gps_stations s
       LEFT JOIN nca_gps_relations r USING (station)
-      WHERE s.station = :station AND r.network = :network';
+      WHERE s.station = :station AND r.network ' . $operator . ' :network';
 
     return $this->_execQuery($sql, array(
       'network' => $network,
