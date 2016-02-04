@@ -12,8 +12,10 @@ class Photos {
   public $station;
 
   public function __construct ($station) {
+    $this->path = $GLOBALS['MOUNT_PATH'] . '/data/stations/7.dir/7adl/photos';
     $this->photos = [];
     $this->station = $station;
+
     $this->_getPhotos();
   }
 
