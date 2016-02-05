@@ -7,14 +7,13 @@ $station = safeParam('station', 'aoa1');
 $network = safeParam('network', 'Pacific');
 
 if (!isset($TEMPLATE)) {
-  include '../lib/classes/Db.class.php'; // db connector, queries
-  include '../lib/classes/Station.class.php'; // model
-  include '../lib/classes/StationView.class.php'; // view
-
   $TITLE = 'GPS Station ' . strtoupper($station) . " ($network Network)";
   $HEAD = '';
   $FOOT = '';
 
+  include '../lib/classes/Db.class.php'; // db connector, queries
+  include '../lib/classes/StationModel.class.php'; // model
+  include '../lib/classes/StationView.class.php'; // view
   include 'template.inc.php';
 }
 
@@ -40,7 +39,7 @@ $rsStation = $db->queryStation($station, $network);
 // Create the station model using the station details and $networkList array
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
-  'Station',
+  'StationModel',
   array($networkList)
 );
 $stationModel = $rsStation->fetch();
@@ -50,5 +49,5 @@ if ($stationModel) {
   $view = new StationView($stationModel);
   $view->render();
 } else {
-  print '<p class="alert error">ERROR: Station / Network Not Found.</p>';
+  print '<p class="alert error">ERROR: Station / Network Not Found</p>';
 }

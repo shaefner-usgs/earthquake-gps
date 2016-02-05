@@ -9,7 +9,7 @@
 class StationView {
   private $model;
 
-  public function __construct (Station $model) {
+  public function __construct (StationModel $model) {
     $this->model = $model;
   }
 
