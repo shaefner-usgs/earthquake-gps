@@ -65,9 +65,9 @@ class StationModel {
 
   private function _getNgsLink () {
     return sprintf(
-      'http://www.ngs.noaa.gov/cgi-bin/ds_radius.prl?selectedFormat=Decimal+Degrees&DLatBox=%f&DLonBox=%f&RadBox=0.5&SubmitBtn=Submit',
+      'http://www.ngs.noaa.gov/cgi-bin/ds_radius.prl?selectedFormat=Decimal+Degrees&DLatBox=%f&DLonBox=%f&RadBox=0.5&StabilSelected=0&TypeSelected=X-0&SubmitBtn=Submit',
       $this->lat,
-      $this->lon
+      $this->lon * -1 // ngs server 'balks' at negative values for W longitude
     );
   }
 
