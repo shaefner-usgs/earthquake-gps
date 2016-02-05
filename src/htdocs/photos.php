@@ -6,17 +6,16 @@ include_once '../lib/functions/functions.inc.php'; // app functions
 $station = safeParam('station', '7adl');
 
 if (!isset($TEMPLATE)) {
+  $TITLE = 'GPS Station ' . strtoupper($station) . ' Photos';
+  $HEAD = '';
+  $FOOT = '';
+
   include '../conf/config.inc.php'; // app config
   include '../lib/classes/Db.class.php'; // db connector, queries
   include '../lib/classes/PhotoModel.class.php'; // model
   include '../lib/classes/PhotoCollection.class.php'; // collection
   include '../lib/classes/PhotosView.class.php'; // view
-
-  $TITLE = 'GPS Station ' . strtoupper($station) . ' Photos';
-  $HEAD = '';
-  $FOOT = '';
-
-  include_once 'template.inc.php';
+  include 'template.inc.php';
 }
 
 $db = new Db();
@@ -28,14 +27,14 @@ $station_exists = $rsStation->fetch();
 if ($station_exists) {
   // Get a list of photos for selected station
   $dir = sprintf('%s/stations/%s.dir/%s/photos/screen',
-    $GLOBALS['DATA_DIR'],
+    $DATA_DIR,
     substr($station, 0, 1),
     $station
   );
   $files = getContents($dir);
 
   // Add photos to collection
-  $photoCollection = new photoCollection();
+  $photoCollection = new photoCollection($station);
   foreach ($files as $file) {
     $photoModel = new PhotoModel($file);
     $photoCollection->add($photoModel);
@@ -45,5 +44,5 @@ if ($station_exists) {
   $view = new PhotosView($photoCollection);
   $view->render();
 } else {
-  print '<p class="alert error">ERROR: Station Not Found.';
+  print '<p class="alert error">ERROR: Station Not Found</p>';
 }
