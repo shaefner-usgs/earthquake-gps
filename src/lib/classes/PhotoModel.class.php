@@ -30,7 +30,8 @@ class PhotoModel {
       's' => 'South',
       'w' => 'West'
     ];
-    preg_match('/.*_(\d{8})([A-Za-z]+)\d?\.\w+/', $this->file, $matches);
+    // filename convention is {station}_{datestring}{type}[{num}]
+    preg_match('/.+_(\d{8})([A-Za-z]+)\d*\.\w+/', $this->file, $matches);
 
     $this->date = $matches[1];
     $this->name = $types[$matches[2]];

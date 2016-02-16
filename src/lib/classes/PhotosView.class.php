@@ -11,8 +11,9 @@ class PhotosView {
     if (!$this->_collection->photos) {
       print '<p class="alert warning">No Photos Found</p>';
     } else {
+      // loop thru each photo (grouped by date taken)
       foreach ($this->_collection->photos as $date => $photos) {
-        print '<h2>' . date('F j, Y', $date) . '</h2>';
+        print '<h2>' . date('F j, Y', strtotime($date)) . '</h2>';
         print '<ul>';
         foreach ($photos as $photo) {
           printf('<li>
