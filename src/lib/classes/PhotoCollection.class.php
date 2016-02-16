@@ -3,7 +3,20 @@
 include '../conf/config.inc.php'; // app config
 
 /**
- * Photo collection
+ * PhotoCollection Object (
+ *   [path] => String
+ *   [station] => String
+ *   [photos] => Array (
+ *     [(date)] => Array (
+ *       PhotoModel Object (
+ *         [date] => Int
+ *         [file] => String
+ *         [name] => String
+ *       )
+ *     )
+ *     ...
+ *   )
+ * )
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
@@ -19,6 +32,7 @@ include '../conf/config.inc.php'; // app config
       $dir,
       $station
     );
+    $this->station = $station;
     $this->photos = [];
   }
 
@@ -28,7 +42,7 @@ include '../conf/config.inc.php'; // app config
   * @param $photo {Object}
   */
   public function add ($photo) {
-    $date = $photo->date;
+    $date = (int) $photo->date;
     if (!is_array($this->photos[$date])) {
       $this->photos[$date] = [];
     }
