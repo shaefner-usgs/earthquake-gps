@@ -9,7 +9,7 @@
  *
  * @return $r {Array}
  */
-function getContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
+function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
   $r = [];
 
   if (file_exists($dir)) {
