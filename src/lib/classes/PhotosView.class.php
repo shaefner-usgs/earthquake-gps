@@ -22,12 +22,12 @@ class PhotosView {
                 <img src="%s/thumb/%s" alt="thumbnail image (%s)"/>
               </a>
             </li>',
-            $photo->name,
+            $photo->type,
             $this->_collection->path,
             $photo->file,
             $this->_collection->path,
             $photo->file,
-            $photo->name
+            $photo->type
           );
         }
         print '</ul>';

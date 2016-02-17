@@ -31,10 +31,10 @@ if ($station_exists) {
     substr($station, 0, 1),
     $station
   );
-  $files = getContents($dir);
+  $files = getDirContents($dir);
 
   // Add photos to collection
-  $photoCollection = new photoCollection($station);
+  $photoCollection = new PhotoCollection($station);
   foreach ($files as $file) {
     $photoModel = new PhotoModel($file);
     $photoCollection->add($photoModel);

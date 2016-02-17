@@ -1,10 +1,12 @@
 <?php
 
 /**
+ * Model for station photos
+ *
  * PhotoModel Object (
  *   [date] => Int
  *   [file] => String
- *   [name] => String
+ *   [type] => String
  * )
  *
  * @author Scott Haefner <shaefner@usgs.gov>
@@ -12,7 +14,17 @@
 class PhotoModel {
   public $date;
   public $file;
-  public $name;
+  public $type;
+
+  private $_types = [
+    'bay' => 'Tripod Bayonet',
+    'bm' => 'Benchmark',
+    'e' => 'East',
+    'misc' => 'Miscellaneous',
+    'n' => 'North',
+    's' => 'South',
+    'w' => 'West'
+  ];
 
   public function __construct ($file) {
     $this->file = $file;
@@ -21,23 +33,17 @@ class PhotoModel {
   }
 
   /**
-   * Get date string and type of photo from filename
+   * Get datestring and type of photo from filename
    *
+   * filename convention is {station}_{datestring}{type}[{num}].ext
    */
   private function _parseFilename () {
-    $types = [
-      'bay' => 'Tripod Bayonet',
-      'bm' => 'Benchmark',
-      'e' => 'East',
-      'misc' => 'Miscellaneous',
-      'n' => 'North',
-      's' => 'South',
-      'w' => 'West'
-    ];
-    // filename convention is {station}_{datestring}{type}[{num}]
-    preg_match('/.+_(\d{8})([A-Za-z]+)\d*\.\w+/', $this->file, $matches);
-
-    $this->date = (int) $matches[1];
-    $this->name = $types[$matches[2]];
+    $photo = preg_match('/\w{4}_(\d{8})([A-Za-z]+)\d*\.\w+/',
+      $this->file, $matches
+    );
+    if ($photo) {
+      $this->date = (int) $matches[1];
+      $this->type = $this->_types[$matches[2]];
+    }
   }
 }
