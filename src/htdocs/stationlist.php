@@ -26,11 +26,16 @@ while ($row = $rsStationList->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Create html for station list
-$list_html = '<ul>';
+$list_html = '<ul class="no-style">';
 foreach ($stations as $station => $networks) {
   $networks_html = '<ul>';
   foreach ($networks as $network) {
-    $networks_html .= "<li>$network</li>";
+    $networks_html .= sprintf ('<li><a href="%s/%s/%s/">%s</a></li>',
+      $MOUNT_PATH,
+      $network,
+      $station,
+      $network
+    );
   }
   $networks_html .= '</ul>';
   $list_html .= sprintf('<li><h3>%s</h3>%s</li>',
@@ -48,7 +53,7 @@ $nav_html = '<nav class="jumplist">';
 while ($row = $rsStationChars->fetch(PDO::FETCH_ASSOC)) {
   $link_html = '<a href="%s/stationlist.php?filter=%s">%s</a>';
   if ($row['alphanum'] === $filter) {
-    $link_html = '<a href="%s/stationlist.php?filter=%s"><strong>%s</strong></a>';
+    $link_html = '<a href="%s/stationlist/%s/"><strong>%s</strong></a>';
   }
   $nav_html .= sprintf($link_html,
     $MOUNT_PATH,
