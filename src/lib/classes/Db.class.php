@@ -33,9 +33,11 @@ class Db {
       $stmt = $this->db->prepare($sql);
 
       // bind sql params
-      foreach ($params as $key => $value) {
-        $type = $this->_getType($value);
-        $stmt->bindValue($key, $value, $type);
+      if (is_array($params)) {
+        foreach ($params as $key => $value) {
+          $type = $this->_getType($value);
+          $stmt->bindValue($key, $value, $type);
+        }
       }
 
       $stmt->execute();
@@ -125,6 +127,43 @@ class Db {
       'station' => $station
     ));
   }
+
+  /**
+   * Query db to get alphanumeric list representing the first char of all stations
+   *
+   * @return {Function}
+   */
+  public function queryStationChars() {
+    $sql = 'SELECT DISTINCT LEFT(r.station, 1) AS `alphanum`
+      FROM nca_gps_relations r
+      LEFT JOIN nca_gps_networks n ON (r.network = n.name)
+      WHERE n.show = 1
+      ORDER BY
+        CASE WHEN LEFT(alphanum, 1) REGEXP ("^[0-9]") THEN 1 ELSE 0 END,
+          LEFT(alphanum, 1)';
+
+    return $this->_execQuery($sql);
+  }
+
+  /**
+   * Query db to get all stations and their associated networks
+   *
+   * @param $firstchar {String/Int} default is null
+   *        optional char to filter stations (e.g. only stations starting w 'a')
+   * @return {Function}
+   */
+  public function queryStationList($firstchar=null) {
+    $filter = "$firstchar%";
+    $sql = 'SELECT r.station, r.network
+      FROM nca_gps_relations r
+      LEFT JOIN nca_gps_networks n ON (r.network = n.name)
+      WHERE r.station LIKE :filter AND n.show = 1
+      ORDER BY `station` ASC, `network` ASC';
+
+      return $this->_execQuery($sql, array(
+        'filter' => $filter
+      ));
+    }
 
   /**
    * Query db to get all stations in a given network
