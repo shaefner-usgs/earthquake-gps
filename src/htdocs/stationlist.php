@@ -48,7 +48,7 @@ $list_html .= '</ul>';
 // Db query result: first char for all stations in db
 $rsStationChars = $db->queryStationChars();
 
-// Create html for navbar
+// Create html for jumplist
 $nav_html = '<nav class="jumplist">';
 while ($row = $rsStationChars->fetch(PDO::FETCH_ASSOC)) {
   $link_html = '<a href="%s/stationlist/%s/">%s</a>';
