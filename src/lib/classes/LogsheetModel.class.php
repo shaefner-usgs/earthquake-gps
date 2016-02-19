@@ -19,7 +19,7 @@ class LogsheetModel {
   private $_types = [
     1 => 'Front', // scanned image
     2 => 'Back', // scanned image
-    'txt' => 'Site log' // text-based
+    'txt' => 'Site log' // text-based log
   ];
 
   public function __construct ($file) {
@@ -39,15 +39,15 @@ class LogsheetModel {
       $this->file, $s_matches
     );
 
-    if ($scan) { // found scanned log
+    if ($scan) { // file is a scanned log
       $this->date = (int) $s_matches[1];
       $this->type = $this->_types[$s_matches[2]];
     }
-    else {
+    else { // look for text-based log
       $text = preg_match('/\w{4}(\d{8})\.\w+/', $this->file, $t_matches);
     }
 
-    if ($text) { // found text log
+    if ($text) { // file is a text log
       $this->date = (int) $t_matches[1];
       $this->type = $this->_types['txt'];
     }
