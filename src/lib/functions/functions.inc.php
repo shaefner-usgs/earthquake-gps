@@ -21,11 +21,11 @@ function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
 }
 
 /**
- * Get a request parameter from $_GET or $_POST.
+ * Get a request parameter from $_GET or $_POST
  *
  * @param $name {String}
- *        The parameter name.
- * @param $default {?} default is null.
+ *        The parameter name
+ * @param $default {?} default is null
  *        Optional default value if the parameter was not provided.
  * @param $filter {PHP Sanitize filter} default is FILTER_SANITIZE_STRING
  *        Optional sanitizing filter to apply
@@ -43,4 +43,25 @@ function safeParam ($name, $default=null, $filter=FILTER_SANITIZE_STRING) {
   }
 
   return $value;
+}
+
+/**
+ * Convert an array to a json feed and print it
+ *
+ * @param $array {Array}
+ *        Data from db
+ * @param $callback {String} default is null
+ *        optional callback for jsonp requests
+ */
+function showJson ($array, $callback=null) {
+  header('Content-Type: application/json');
+  header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Methods: *');
+  header('Access-Control-Allow-Headers: accept,origin,authorization,content-type');
+
+  $json = json_encode($array);
+  if ($callback) {
+    $json = "$callback($json)";
+  }
+  print $json;
 }
