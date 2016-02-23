@@ -51,7 +51,7 @@ class Db {
  * Get data type for a sql parameter (PDO::PARAM_* constant)
  *
  * @param $var {?}
- *        variable to identify
+ *        variable to identify type of
  * @return $type {Integer}
  */
   private function _getType ($var) {
@@ -72,6 +72,26 @@ class Db {
   }
 
   /**
+   * Query db to get a list of stations for a given network that aren't up to date
+   *
+   * @param $network {String}
+   * @param $threshold {Int}
+   * @return {Function}
+   */
+  public function queryLastUpdated ($network, $threshold) {
+    $sql = 'SELECT `station`, `last_observation`
+      FROM nca_gps_velocities
+      WHERE `type` = "nafixed" AND `network` = :network
+        AND `last_observation` < :threshold
+      ORDER BY `station` ASC';
+
+    return $this->_execQuery($sql, array(
+      'network' => $network,
+      'threshold' => $threshold
+    ));
+  }
+
+  /**
    * Query db to get a list of "non-hidden" networks a given station belongs to
    *
    * @param $station {String}
@@ -81,7 +101,7 @@ class Db {
     $sql = 'SELECT r.network
       FROM nca_gps_relations r
       LEFT JOIN nca_gps_networks n ON r.network = n.name
-      WHERE r.station = :station AND n.show = "1"
+      WHERE r.station = :station AND n.show = 1
       ORDER BY `network` ASC';
 
     return $this->_execQuery($sql, array(
@@ -97,10 +117,26 @@ class Db {
   public function queryNetworks () {
     $sql = 'SELECT *
       FROM nca_gps_networks
-      WHERE `show` = "1"
+      WHERE `show` = 1
       ORDER BY `name` ASC';
 
     return $this->_execQuery($sql);
+  }
+
+  /**
+   * Query db to get a QC data for a given station
+   *
+   * @param $station {String}
+   * @return {Function}
+   */
+  public function queryQcData ($station) {
+    $sql = 'SELECT * FROM nca_gps_qualitycontrol
+      WHERE `station` = :station
+      ORDER BY `date` DESC';
+
+    return $this->_execQuery($sql, array(
+      'station' => $station
+    ));
   }
 
   /**
@@ -129,11 +165,11 @@ class Db {
   }
 
   /**
-   * Query db to get alphanumeric list representing the first char of all stations
+   * Query db to get alphanumeric list (first char only) of stations for jumplist
    *
    * @return {Function}
    */
-  public function queryStationChars() {
+  public function queryStationChars () {
     $sql = 'SELECT DISTINCT LEFT(r.station, 1) AS `alphanum`
       FROM nca_gps_relations r
       LEFT JOIN nca_gps_networks n ON (r.network = n.name)
@@ -146,13 +182,13 @@ class Db {
   }
 
   /**
-   * Query db to get all stations and their associated networks
+   * Query db to get a list of stations and their associated networks
    *
    * @param $firstchar {String/Int} default is null
    *        optional char to filter stations (e.g. only stations starting w 'a')
    * @return {Function}
    */
-  public function queryStationList($firstchar=null) {
+  public function queryStationList ($firstchar=null) {
     $filter = "$firstchar%";
     $sql = 'SELECT r.station, r.network
       FROM nca_gps_relations r
@@ -168,19 +204,18 @@ class Db {
   /**
    * Query db to get all stations in a given network
    *
-   * @param $station {String}
    * @param $network {String}
    * @return {Function}
    */
   public function queryStations ($network) {
     $sql = 'SELECT s.id, s.station, s.lat, s.lon, s.destroyed, s.showcoords,
-      v.last_observation, v.up_rms, v.north_rms, v.east_rms
+      r.stationtype, v.last_observation, v.up_rms, v.north_rms, v.east_rms
       FROM nca_gps_stations s
       LEFT JOIN nca_gps_relations r USING (station)
       LEFT JOIN nca_gps_velocities v USING (station)
       WHERE r.network = :network AND v.network = :network AND v.type = "nafixed"
       GROUP BY `station`
-      ORDER BY `station` ASC';
+      ORDER BY v.last_observation DESC';
 
     return $this->_execQuery($sql, array(
       'network' => $network
