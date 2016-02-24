@@ -22,6 +22,7 @@ if (preg_match('/^north|east|vertical$/', $direction)) {
 }
 $output = $header;
 
+// Add timeseries data
 while ($row = $rsTimeSeries->fetch(PDO::FETCH_ASSOC)) {
   // J2000 time (epoch field) starts at 12 noon on 1 January 2000 UTC
   $secs_1970_2000 = mktime(12, 0, 0, 01, 01, 2000);
@@ -45,5 +46,6 @@ while ($row = $rsTimeSeries->fetch(PDO::FETCH_ASSOC)) {
 	$output .= "$date, $values\n";
 }
 
+// Send txt stream to browser
 header('Content-type: text/plain');
 print $output;
