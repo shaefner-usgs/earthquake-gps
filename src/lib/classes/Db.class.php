@@ -8,7 +8,7 @@ include '../conf/config.inc.php'; // app config
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Db {
-  private $db;
+  private static $db;
 
   public function __construct() {
     try {
