@@ -221,4 +221,20 @@ class Db {
       'network' => $network
     ));
   }
+
+  /**
+   * Query db to get time series data for a given station
+   *
+   * @param $station {String}
+   * @return {Function}
+   */
+  public function queryTimeSeries ($station) {
+    $sql = 'SELECT * FROM nca_gps_timeseries
+      WHERE station = :station
+      ORDER BY `epoch` DESC';
+
+    return $this->_execQuery($sql, array(
+      'station' => $station
+    ));
+  }
 }
