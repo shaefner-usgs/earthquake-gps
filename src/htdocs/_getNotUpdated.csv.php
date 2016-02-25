@@ -6,12 +6,11 @@ include '../lib/functions/functions.inc.php'; // app functions
 date_default_timezone_set('UTC');
 
 $network = safeParam('network', 'Pacific');
-$threshold = date('Y-m-d', strtotime('-8 days'));
 
 $db = new Db();
 
-// Db query result: all stations that haven't been updated since $threshold
-$rsLastUpdated = $db->queryLastUpdated($network, $threshold);
+// Db query result: all stations that haven't been updated in past x days
+$rsLastUpdated = $db->queryLastUpdated($network, 7);
 
 // Send csv stream to browser
 header('Content-Type: text/plain');
