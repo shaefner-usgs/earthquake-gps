@@ -102,7 +102,7 @@ class Db {
       FROM nca_gps_velocities
       WHERE `type` = "nafixed" AND `network` = :network
         AND `last_observation` < (NOW() - INTERVAL :days DAY)
-      ORDER BY `last_observation` DESC';
+      ORDER BY `last_observation` DESC, `station` ASC';
 
     return $this->_execQuery($sql, array(
       'network' => $network,
