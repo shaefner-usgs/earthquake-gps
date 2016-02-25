@@ -71,6 +71,18 @@ class Db {
     return $type;
   }
 
+  public function queryEarthquakes ($mag=2.5, $days=7) {
+    $datetime = ""; // datetime x days ago
+    $sql = 'SELECT * FROM earthquakes.recenteqs_pdl
+      WHERE mag >= :mag AND `datetime (GMT)` >= SUBDATE(NOW(), :days)
+      ORDER BY `datetime (GMT)` ASC;';
+
+    return $this->_execQuery($sql, array(
+      'mag' => $mag,
+      'days' => $days
+    ));
+  }
+
   /**
    * Query db to get a list of stations for a given network that aren't up to date
    *
