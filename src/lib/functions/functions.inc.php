@@ -21,7 +21,7 @@ function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
 }
 
 /**
- * Import json file (using output buffer) and store it in a variable
+ * Import dynamically generated json file and store it in a variable
  *
  * @param $file {String}
  *        full path to json file to import (__DIR__ magic constant is useful)
