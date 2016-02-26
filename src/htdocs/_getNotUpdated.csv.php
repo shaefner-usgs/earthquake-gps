@@ -1,7 +1,7 @@
 <?php
 
-include '../lib/classes/Db.class.php'; // db connector, queries
-include '../lib/functions/functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
+include_once '../lib/functions/functions.inc.php'; // app functions
 
 date_default_timezone_set('UTC');
 
