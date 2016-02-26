@@ -12,12 +12,35 @@
 function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
   $r = [];
 
-  if (file_exists($dir)) {
+  if (is_dir($dir)) {
     $contents = scandir($dir, $order);
     $r = array_diff($contents, array('..', '.'));
   }
 
   return $r;
+}
+
+/**
+ * Import json file (using output buffer) and store it in a variable
+ *
+ * @param $file {String}
+ *        full path to json file to import (__DIR__ magic constant is useful)
+ *
+ * @return $contents {String} json file
+ */
+function import_json ($file) {
+  if (is_file($file)) {
+    ob_start();
+    include_once $file;
+    $contents = ob_get_contents();
+    ob_end_clean();
+
+    // reset to html (include file sets it to json)
+    header('Content-Type: text/html');
+    return $contents;
+  } else {
+    trigger_error("import_json(): Failed opening $file for import", E_USER_WARNING);
+  }
 }
 
 /**
