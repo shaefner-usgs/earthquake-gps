@@ -1,7 +1,7 @@
 <?php
 
-include '../lib/classes/Db.class.php'; // db connector, queries
-include '../lib/functions/functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
+include_once '../lib/functions/functions.inc.php'; // app functions
 
 date_default_timezone_set('UTC');
 
@@ -51,10 +51,10 @@ while ($row = $rsEarthquakes->fetch(PDO::FETCH_ASSOC)) {
     'properties' => [
       'age' => getAge($timestamp),
       'datetime' => date('D, M j H:i:s', $timestamp) . ' UTC',
-      'depth' => floatval(number_format($row['depth'], 1)),
+      'depth' => round($row['depth'], 1),
       'dyfi' => $dyfi,
       'dyfi_responses' => intval($row['dyfi_responses']),
-      'mag' => floatval(number_format($row['mag'], 1)),
+      'mag' => round($row['mag'], 1),
       'place' => $row['place'],
       'pager' => $row['pager_alertlevel'],
       'shakemap' => $shakemap,
