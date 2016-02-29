@@ -9,11 +9,23 @@ if (!isset($TEMPLATE)) {
   include '../conf/config.inc.php'; // app config
   include '../lib/functions/functions.inc.php'; // app functions
 
-  $json = import_json(__DIR__ . '/_getNetworks.json.php');
-  $networks = json_decode($json, true);
+  // importJsonToArray() sets headers -> needs to run before template included
+  $networks = importJsonToArray(__DIR__ . '/_getNetworks.json.php');
 
   include 'template.inc.php';
 }
+
+// Create HTML for network list
+$networks_html = '<ul>';
+foreach ($networks['features'] as $feature) {
+  $networks_html .= sprintf('<li>
+    <a href="./%s/" title="Go to map of stations" class="feature%d">%s</a>',
+    $feature['properties']['name'],
+    $feature['id'],
+    $feature['properties']['name']
+  );
+}
+$networks_html .= '</ul>';
 
 ?>
 
@@ -21,11 +33,9 @@ if (!isset($TEMPLATE)) {
 
 <section>
   <h2>View Stations by Network</h2>
-
   <div class="map"></div>
-
-  <p>Networks on this map</p>
-  <?php print_r($networks); ?>
+  <p class="count"><?php print $networks['count']; ?> Networks on this map</p>
+  <?php print $networks_html; ?>
 </section>
 
 <section>
