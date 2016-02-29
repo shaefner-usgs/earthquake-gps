@@ -1,7 +1,5 @@
 <?php
 
-include_once '../conf/config.inc.php'; // app config
-
 /**
  * Database connector and queries for GPS app
  *
@@ -15,7 +13,7 @@ class Db {
       $this->db = new PDO($GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASS']);
       $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
-      print '<p class="alert error">ERROR: ' . $e->getMessage() . '</p>';
+      print '<p class="alert error">ERROR 1: ' . $e->getMessage() . '</p>';
     }
   }
 
@@ -43,7 +41,7 @@ class Db {
       $stmt->execute();
       return $stmt;
     } catch(Exception $e) {
-      print '<p class="alert error">ERROR: ' . $e->getMessage() . '</p>';
+      print '<p class="alert error">ERROR 2: ' . $e->getMessage() . '</p>';
     }
   }
 
