@@ -9,7 +9,7 @@ if (!isset($TEMPLATE)) {
   include '../conf/config.inc.php'; // app config
   include '../lib/functions/functions.inc.php'; // app functions
 
-  // importJsonToArray() sets headers -> needs to run before template included
+  // importJsonToArray() sets headers -> needs to run before including template
   $networks = importJsonToArray(__DIR__ . '/_getNetworks.json.php');
 
   include 'template.inc.php';
@@ -19,7 +19,8 @@ if (!isset($TEMPLATE)) {
 $networks_html = '<ul>';
 foreach ($networks['features'] as $feature) {
   $networks_html .= sprintf('<li>
-    <a href="./%s/" title="Go to map of stations" class="feature%d">%s</a>',
+      <a href="./%s/" title="Go to map of stations" class="feature%d">%s</a>
+    </li>',
     $feature['properties']['name'],
     $feature['id'],
     $feature['properties']['name']
