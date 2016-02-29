@@ -21,25 +21,28 @@ function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
 }
 
 /**
- * Import dynamically generated json file and store it in a variable
+ * Import dynamically generated json file and store it in an array
  *
  * @param $file {String}
  *        full path to json file to import (__DIR__ magic constant is useful)
  *
- * @return $contents {String} json file
+ * @return {Array} json file contents
  */
-function import_json ($file) {
+function importJsonToArray ($file) {
   if (is_file($file)) {
+    // Read file contents into output buffer
     ob_start();
-    include_once $file;
+    include $file;
     $contents = ob_get_contents();
     ob_end_clean();
 
-    // reset to html (include file sets it to json)
+    // Reset to html (gets set to JSON by included $file)
     header('Content-Type: text/html');
-    return $contents;
+
+    return json_decode($contents, true);
   } else {
-    trigger_error("import_json(): Failed opening $file for import", E_USER_WARNING);
+    trigger_error("importJsonToArray(): Failed opening $file for import",
+      E_USER_WARNING);
   }
 }
 
