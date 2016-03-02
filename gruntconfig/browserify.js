@@ -9,6 +9,7 @@ var browserify = {
       debug: true, // create sourcemaps
       paths: [ // ordered list of where to find required components
         config.src + '/htdocs/js',
+        config.src + '/htdocs/lib',
         'node_modules/hazdev-webutils/src',
         'node_modules/leaflet'
       ]
