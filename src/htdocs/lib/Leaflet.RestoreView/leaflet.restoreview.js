@@ -22,6 +22,10 @@ var RestoreViewMixin = {
         };
         storage.mapView = JSON.stringify(view);
       }, this);
+      this.on('baselayerchange overlayadd overlayremove', function (e) {
+        console.log(e);
+      }, this);
+
       this.__initRestore = true;
     }
 
