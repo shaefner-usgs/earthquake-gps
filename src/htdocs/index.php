@@ -3,8 +3,14 @@
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Data';
   $NAVIGATION = true;
-  $HEAD = '';
-  $FOOT = '';
+  $HEAD = '
+    <link rel="stylesheet" href="/lib/leaflet-0.7.x/leaflet.css" />
+    <link rel="stylesheet" href="css/index/index.css" />
+  ';
+  $FOOT = '
+    <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
+    <script src="js/index/index.js"></script>
+  ';
 
   include '../conf/config.inc.php'; // app config
   include '../lib/functions/functions.inc.php'; // app functions
@@ -34,7 +40,7 @@ $networks_html .= '</ul>';
 
 <section>
   <h2>View Stations by Network</h2>
-  <div class="map"></div>
+  <div id="map"></div>
   <p class="count"><?php print $networks['count']; ?> Networks on this map</p>
   <?php print $networks_html; ?>
 </section>

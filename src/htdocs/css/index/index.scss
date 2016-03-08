@@ -1,0 +1,8 @@
+#map {
+  height: 800px;
+}
+
+
+input[type=checkbox], input[type=radio] {
+  position: static; /* template's css is getting the way, grr */
+}
