@@ -1,6 +1,8 @@
 'use strict';
 
 var L = require('leaflet'); // aliased in browserify.js
+    //Util = require('util/Util');
+
 require('Leaflet.RestoreView/leaflet.restoreview');
 
 var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -17,20 +19,18 @@ var baseMaps = {
   'Mapquest': mq
 };
 var overlays = {
-  //'Cities1': points1,
   'Points': points
 };
 
-window.map = L.map('map', {
+var map = L.map('map', {
+  center: [38, -123],
+  zoom: 9,
   layers: [mq, points]
 });
 
-// Default map params
-if (!window.map.restoreView()) {
-  window.map.setView([38, -121], 10);
-  //map.addLayer(mq);
-}
+L.control.layers(baseMaps, overlays).addTo(map);
 
-L.control.layers(baseMaps, overlays).addTo(window.map);
-
-//console.log(points);
+map.restoreView({
+  baseMaps: baseMaps,
+  overlays: overlays
+});
