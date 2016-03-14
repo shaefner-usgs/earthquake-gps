@@ -79,7 +79,7 @@ showJson($output, $callback);
  *        Unix timestamp of eq
  */
 function getAge($timestamp) {
-  $secs_ago = $_GLOBALS['time'] - $timestamp; // how many secs ago eq occurred
+  $secs_ago = $GLOBALS['time'] - $timestamp; // how many secs ago eq occurred
   if ($secs_ago <= 60 * 60) {
     $age = 'pasthour';
   } else if ($secs_ago > 60 * 60 && $secs_ago <= 60 * 60 * 24) {
