@@ -116,6 +116,7 @@ var RestoreViewMixin = {
           }, this);
         }
       }
+
       if (overlays) {
         layers.add.forEach(function(layer) {
           var overlay = overlays[layer];
@@ -123,7 +124,6 @@ var RestoreViewMixin = {
             this.addLayer(overlay);
           }
         }, this);
-
         layers.remove.forEach(function(layer) {
           var overlay = overlays[layer];
           if (this.hasLayer(overlay)) {
