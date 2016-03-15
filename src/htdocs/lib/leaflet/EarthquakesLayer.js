@@ -5,6 +5,18 @@ var L = require('leaflet'),
 
 require('leaflet-ajax');
 
+/**
+ * Factory for Earthquakes overlay
+ *
+ * @param url {String}
+ *        URL of geojson file containing eqs
+ * @param options {Object}
+ *        Leaflet Path options
+ *
+ * @return {Object}
+ *         Leaflet geoJson featureGroup
+ */
+
 var EarthquakesLayer = function (url, options) {
   var _colors,
       _pointToLayer,
