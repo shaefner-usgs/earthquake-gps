@@ -16,7 +16,6 @@ require('leaflet-ajax');
  * @return {Object}
  *         Leaflet geoJson featureGroup
  */
-
 var EarthquakesLayer = function (url, options) {
   var _colors,
       _pointToLayer,
