@@ -44,13 +44,12 @@ var GreyscaleLayer = function (provider, options) {
   };
 
   provider = provider || 'cartodb';
-  options = Util.extend(_providers[provider], {
-    detectRetina: false
-  }, options);
+  options = Util.extend(_providers[provider], options);
 
   _url = _providers[provider].url;
   _base = L.tileLayer(_url, options);
 
+  // Esri greyscale layer doesn't inlcude labels; add them
   if (provider === 'esri') {
     _ref = L.tileLayer(
       'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}'
