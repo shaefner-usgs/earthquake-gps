@@ -1,36 +1,48 @@
 'use strict';
 
 var L = require('leaflet'); // aliased in browserify.js
-    //Util = require('util/Util');
 
-require('Leaflet.RestoreView/leaflet.restoreview');
+require('leaflet/Restoreview');
 
-var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-});
-var mq = L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png');
+// Defines the layer factories (e.g.) "L.earthquakesLayer()"
+require('leaflet/DarkLayer');
+require('leaflet/EarthquakesLayer');
+require('leaflet/FaultsLayer');
+require('leaflet/GreyscaleLayer');
+require('leaflet/SatelliteLayer');
+require('leaflet/TerrainLayer');
 
-var marker1 = L.marker([38, -121]).bindPopup('Popup');
-var marker2 = L.marker([38, -122]).bindPopup('Popup');
-var points = L.layerGroup([marker1, marker2]);
+// Map layers
+var dark = L.darkLayer(),
+    earthquakes = L.earthquakesLayer('_getEarthquakes.json.php'),
+    faults = L.faultsLayer(),
+    greyscale = L.greyscaleLayer(),
+    terrain = L.terrainLayer(),
+    satellite = L.satelliteLayer(),
+    baseLayers = {
+      'Greyscale': greyscale,
+      'Terrain': terrain,
+      'Satellite': satellite,
+      'Dark': dark
+    },
+    overlays = {
+      'Earthquakes': earthquakes,
+      'Faults': faults
+    };
 
-var baseMaps = {
-  'OpenStreetMap': osm,
-  'Mapquest': mq
-};
-var overlays = {
-  'Points': points
-};
-
+// Create map
 var map = L.map('map', {
   center: [38, -123],
-  zoom: 9,
-  layers: [mq, points]
+  layers: [greyscale, earthquakes, faults],
+  scrollWheelZoom: false,
+  zoom: 9
 });
 
-L.control.layers(baseMaps, overlays).addTo(map);
+// Add controllers
+L.control.layers(baseLayers, overlays).addTo(map);
 
+// Remember user's map settings (selected layers, map extent)
 map.restoreView({
-  baseMaps: baseMaps,
+  baseLayers: baseLayers,
   overlays: overlays
 });
