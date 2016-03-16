@@ -16,8 +16,7 @@ var TerrainLayer = function (options) {
   options = Util.extend({
     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, ' +
       'Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance ' +
-      'Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community',
-    detectRetina: false
+      'Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
   }, options);
 
   return L.tileLayer(
