@@ -14,7 +14,9 @@ var L = require('leaflet'),
  *         Leaflet tileLayer
  */
 var SatelliteLayer = function (provider, options) {
-  var _providers,
+  var _base,
+      _providers,
+      _ref,
       _url;
 
   _providers = {
@@ -34,13 +36,20 @@ var SatelliteLayer = function (provider, options) {
   };
 
   provider = provider || 'esri';
-  options = Util.extend(_providers[provider], {
-    detectRetina: false
-  }, options);
+  options = Util.extend(_providers[provider], options);
 
   _url = _providers[provider].url;
+  _base = L.tileLayer(_url, options);
 
-  return L.tileLayer(_url, options);
+  // Esri satellite layer doesn't inlcude labels; add them
+  if (provider === 'esri') {
+    _ref = L.tileLayer(
+      'http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}'
+    );
+		return L.layerGroup([_base, _ref]);
+  } else {
+    return _base;
+  }
 };
 
 L.satelliteLayer = SatelliteLayer;
