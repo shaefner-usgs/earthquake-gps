@@ -21,12 +21,20 @@ var FaultsLayer = function () {
   // L.mouseOverLayer is an extended L.layerGroup class that adds utfGrid mouseovers
   _faults = L.mouseOverLayer({
     dataUrl: _urlPrefix + 'faults/{z}/{x}/{y}.grid.json?callback={cb}',
+    tileOpts: {
+      minZoom: 6,
+      maxZoom: 17
+    },
     tileUrl: _urlPrefix + 'faults/{z}/{x}/{y}.png',
     tiptext: '{NAME}'
   });
 
   _plates = L.mouseOverLayer({
     dataUrl: _urlPrefix + 'plates/{z}/{x}/{y}.grid.json?callback={cb}',
+    tileOpts: {
+      minZoom: 0,
+      maxZoom: 5
+    },
     tileUrl: _urlPrefix + 'plates/{z}/{x}/{y}.png',
     tiptext: '{Name}'
   });
