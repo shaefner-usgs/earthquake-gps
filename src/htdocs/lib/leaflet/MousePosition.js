@@ -6,9 +6,9 @@
 // https://github.com/ardhi/Leaflet.MousePosition
 var MousePosition = L.Control.extend({
   options: {
-    position: 'bottomright',
-    separator: ' : ',
-    emptyString: 'Unavailable',
+    position: 'bottomleft',
+    separator: ', ',
+    emptyString: '',
     lngFirst: false,
     numDigits: 3,
     lngFormatter: function(n) { return [Math.abs(n).toFixed(3), '&deg;',
