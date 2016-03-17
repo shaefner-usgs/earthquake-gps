@@ -7,8 +7,14 @@ $network = safeParam('network', 'Pacific');
 
 if (!isset($TEMPLATE)) {
   $TITLE = $network . ' Network';
-  $HEAD = '';
-  $FOOT = '';
+  $HEAD = '
+    <link rel="stylesheet" href="/lib/leaflet-0.7.x/leaflet.css" />
+    <link rel="stylesheet" href="css/network/index.css" />
+  ';
+  $FOOT = '
+    <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
+    <script src="js/network/index.js"></script>
+  ';
 
   include '../conf/config.inc.php'; // app config
 
