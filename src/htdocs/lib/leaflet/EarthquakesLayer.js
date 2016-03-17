@@ -18,15 +18,9 @@ require('leaflet-ajax');
  */
 var EarthquakesLayer = function (url, options) {
   var _colors,
-      _pointToLayer,
-      _onEachFeature;
-
-  _colors = {
-    pasthour: '#f00',
-    pastday: '#f90',
-    pastweek: '#ff0',
-    pastmonth: '#ffb'
-  };
+      // methods
+      _onEachFeature,
+      _pointToLayer;
 
   options = Util.extend({
     weight: 1,
@@ -35,19 +29,11 @@ var EarthquakesLayer = function (url, options) {
     color: '#000'
   }, options);
 
-  _pointToLayer = function (feature, latlng) {
-    var fillColor,
-        props,
-        radius;
-
-    props = feature.properties;
-    fillColor = _colors[props.age];
-    radius = 3 * parseInt(Math.pow(10, (0.11 * props.mag)), 10);
-
-    options.fillColor = fillColor;
-    options.radius = radius;
-
-    return L.circleMarker(latlng, options);
+  _colors = {
+    pasthour: '#f00',
+    pastday: '#f90',
+    pastweek: '#ff0',
+    pastmonth: '#ffb'
   };
 
   _onEachFeature = function (feature, layer) {
@@ -66,9 +52,24 @@ var EarthquakesLayer = function (url, options) {
     layer.bindPopup(html, {maxWidth: '265'});
   };
 
+  _pointToLayer = function (feature, latlng) {
+    var fillColor,
+        props,
+        radius;
+
+    props = feature.properties;
+    fillColor = _colors[props.age];
+    radius = 3 * parseInt(Math.pow(10, (0.11 * props.mag)), 10);
+
+    options.fillColor = fillColor;
+    options.radius = radius;
+
+    return L.circleMarker(latlng, options);
+  };
+
   return L.geoJson.ajax(url, {
-    pointToLayer: _pointToLayer,
-    onEachFeature: _onEachFeature
+    onEachFeature: _onEachFeature,
+    pointToLayer: _pointToLayer
   });
 
 };
