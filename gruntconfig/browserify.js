@@ -16,6 +16,16 @@ var browserify = {
     }
   },
 
+  index: {
+    src: [config.src + '/htdocs/js/index/index.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/index/index.js',
+    options: {
+      external: [
+        'leaflet' // don't bundle leaflet b/c it's provided by target above
+      ]
+    }
+  },
+
   // copy via browserify so that L is 'requirable'
   leaflet: {
     src: [], // using alias to define leaflet src
@@ -27,9 +37,9 @@ var browserify = {
     }
   },
 
-  index: {
-    src: [config.src + '/htdocs/js/index/index.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/index/index.js',
+  network: {
+    src: [config.src + '/htdocs/js/network/index.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/network/index.js',
     options: {
       external: [
         'leaflet' // don't bundle leaflet b/c it's provided by target above
