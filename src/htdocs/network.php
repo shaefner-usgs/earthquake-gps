@@ -12,6 +12,7 @@ if (!isset($TEMPLATE)) {
     <link rel="stylesheet" href="css/network/index.css" />
   ';
   $FOOT = '
+    <script>var network = "' . $network . '";</script>
     <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
     <script src="js/network/index.js"></script>
   ';
