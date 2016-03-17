@@ -40,7 +40,7 @@ $networks_html .= '</ul>';
 
 <section>
   <h2>View Stations by Network</h2>
-  <div id="map"></div>
+  <div class="map"></div>
   <p class="count"><?php print $networks['count']; ?> Networks on this map</p>
   <?php print $networks_html; ?>
 </section>
