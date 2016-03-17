@@ -1,3 +1,5 @@
+/* global network */ // passed via var embedded in html page
+
 'use strict';
 
 var L = require('leaflet'); // aliased in browserify.js
@@ -15,13 +17,15 @@ require('leaflet/SatelliteLayer');
 require('leaflet/StationsLayer');
 require('leaflet/TerrainLayer');
 
+console.log('network: ', network);
+
 // Define map layers
 var dark = L.darkLayer(),
     earthquakes = L.earthquakesLayer('_getEarthquakes.json.php'),
     faults = L.faultsLayer(),
     greyscale = L.greyscaleLayer(),
     satellite = L.satelliteLayer(),
-    stations = L.stationsLayer('_getStations.json.php'),
+    stations = L.stationsLayer('_getStations.json.php?network=' + network),
     terrain = L.terrainLayer(),
 
     baseLayers = {
