@@ -20,6 +20,7 @@ $output = [
   'count' => $rsStations->rowCount(),
   'generated' => $now,
   'features' => [],
+  'network' => $network,
   'type' => 'FeatureCollection'
 ];
 
