@@ -1,5 +1,9 @@
 @import '_MousePosition.scss';
 
+input[type=checkbox], input[type=radio] {
+  position: static; /* template's css is getting the way, grr */
+}
+
 .leaflet-mouseover-tooltip {
   background-color: #fff;
   background-color: hsla(0, 0%, 100%, .75);
