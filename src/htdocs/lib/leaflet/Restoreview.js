@@ -1,55 +1,79 @@
 'use strict';
 
-var L = require('leaflet');
+var L = require('leaflet'),
+    Util = require('util/Util');
 
 /**
  * Leaflet.RestoreView plugin https://github.com/makinacorpus/Leaflet.RestoreView
  * (with added functionality for remembering selected layers)
  *
- * Usage: map.restoreView({
- *   baseLayers: <Layer Config>,
- *   overlays: <Layer Config>
- * })
+ * Usage: map.restoreView(options)
  *
- * Layers object is optional, but required for remembering selected layers
- * <Layer Config>: http://leafletjs.com/reference.html#control-layers-config
+ * @param options {Object}
+ *        optional settings
+ *        {
+ *          baseLayers: {Object <Layer Config>}, // req'd for restoring basemap
+ *          id: {String}, // req'd for saving each page's settings separately
+ *          overlays: {Object <Layer Config>}, // req'd for restoring overlays,
+ *          shareLayers: {Boolean} // share layer settings amongst all pages
+ *        }
+ *
+ * <Layer Config> : http://leafletjs.com/reference.html#control-layers-config
  */
 
 var RestoreViewMixin = {
   restoreView: function (options) {
-    var baseLayers,
+    var defaultId,
+        layerId,
         layers,
-        overlays,
         storage,
         view,
 
-        //methods
+        // methods
         _baselayerchange,
         _moveend,
         _overlayadd,
         _overlayremove;
 
+    defaultId = '_global_';
+
+    options = Util.extend({
+      baseLayers: null,
+      id: defaultId,
+      overlays: null,
+      shareLayers: false
+    }, options);
+
     storage = window.localStorage || {};
-    layers = JSON.parse(storage.mapLayers || '{"base":"", "add":[], "remove":[]}');
+    layers = JSON.parse(storage.mapLayers || '{}');
     view = JSON.parse(storage.mapView || '{}');
 
-    options = options || {};
-    baseLayers = options.baseLayers || null;
-    overlays = options.overlays || null;
+    // Store layers with a unique key unless shareLayers is 'on'
+    layerId = options.id;
+    if (options.shareLayers) {
+      layerId = defaultId;
+    }
+    // Create obj template for storing layers
+    if (!layers[layerId]) {
+      layers[layerId] = {
+        add: [],
+        remove: []
+      };
+    }
 
-    // invoked when base layer changes
+    // Invoked when base layer changes
     _baselayerchange = function (e) {
-      layers.base = e.name;
+      layers[layerId].base = e.name;
 
       storage.mapLayers = JSON.stringify(layers);
     };
 
-    // invoked when map extent change
+    // Invoked when map extent change
     _moveend = function () {
       if (!this._loaded) {
         return;  // Never access map bounds if view is not set.
       }
-      view = {
+      view[options.id] = {
         lat: this.getCenter().lat,
         lng: this.getCenter().lng,
         zoom: this.getZoom()
@@ -58,29 +82,29 @@ var RestoreViewMixin = {
       storage.mapView = JSON.stringify(view);
     };
 
-    // invoked when adding overlays
+    // Invoked when adding overlays
     _overlayadd = function (e) {
-      var add_index = layers.add.indexOf(e.name),
-          remove_index = layers.remove.indexOf(e.name);
+      var add_index = layers[layerId].add.indexOf(e.name),
+          remove_index = layers[layerId].remove.indexOf(e.name);
       if (add_index === -1) { // add layer if not already in 'add' list
-        layers.add.push(e.name);
+        layers[layerId].add.push(e.name);
       }
       if (remove_index !== -1) { // remove layer if in 'remove' list
-        layers.remove.splice(remove_index, 1);
+        layers[layerId].remove.splice(remove_index, 1);
       }
 
       storage.mapLayers = JSON.stringify(layers);
     };
 
-    // invoked when removing overlays
+    // Invoked when removing overlays
     _overlayremove = function (e) {
-      var add_index = layers.add.indexOf(e.name),
-          remove_index = layers.remove.indexOf(e.name);
+      var add_index = layers[layerId].add.indexOf(e.name),
+          remove_index = layers[layerId].remove.indexOf(e.name);
       if (remove_index === -1) { // add layer if not already in 'remove' list
-        layers.remove.push(e.name);
+        layers[layerId].remove.push(e.name);
       }
       if (add_index !== -1) { // remove layer if in 'add' list
-        layers.add.splice(add_index, 1);
+        layers[layerId].add.splice(add_index, 1);
       }
 
       storage.mapLayers = JSON.stringify(layers);
@@ -100,14 +124,19 @@ var RestoreViewMixin = {
 
     // Restore settings: map extent and chosen layers
     try {
-      this.setView(L.latLng(view.lat, view.lng), view.zoom, true);
+      this.setView(L.latLng(
+        view[options.id].lat,
+        view[options.id].lng),
+        view[options.id].zoom,
+        true
+      );
 
-      if (baseLayers) {
-        var selBaseLayer = layers.base;
+      if (options.baseLayers) {
+        var selBaseLayer = layers[layerId].base;
         if (selBaseLayer) {
-          var keys = Object.keys(baseLayers);
+          var keys = Object.keys(options.baseLayers);
           keys.forEach(function(layer) {
-            var baseLayer = baseLayers[layer];
+            var baseLayer = options.baseLayers[layer];
             if (layer === selBaseLayer) {
               this.addLayer(baseLayer);
             } else {
@@ -117,15 +146,15 @@ var RestoreViewMixin = {
         }
       }
 
-      if (overlays) {
-        layers.add.forEach(function(layer) {
-          var overlay = overlays[layer];
+      if (options.overlays) {
+        layers[layerId].add.forEach(function(layer) {
+          var overlay = options.overlays[layer];
           if (!this.hasLayer(overlay)) {
             this.addLayer(overlay);
           }
         }, this);
-        layers.remove.forEach(function(layer) {
-          var overlay = overlays[layer];
+        layers[layerId].remove.forEach(function(layer) {
+          var overlay = options.overlays[layer];
           if (this.hasLayer(overlay)) {
             this.removeLayer(overlay);
           }
