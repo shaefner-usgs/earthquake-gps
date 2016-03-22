@@ -17,8 +17,6 @@ require('leaflet/SatelliteLayer');
 require('leaflet/StationsLayer');
 require('leaflet/TerrainLayer');
 
-console.log('network: ', network);
-
 // Define map layers
 var dark = L.darkLayer(),
     earthquakes = L.earthquakesLayer('_getEarthquakes.json.php'),
@@ -56,5 +54,7 @@ L.control.scale().addTo(map);
 // Remember user's map settings (selected layers, map extent)
 map.restoreView({
   baseLayers: baseLayers,
-  overlays: overlays
+  id: network,
+  overlays: overlays,
+  shareLayers: true
 });
