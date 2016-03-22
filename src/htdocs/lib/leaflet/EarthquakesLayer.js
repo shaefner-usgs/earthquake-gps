@@ -14,7 +14,7 @@ require('leaflet-ajax');
  *        Leaflet Path options
  *
  * @return {Object}
- *         Leaflet geoJson featureGroup
+ *         Leaflet GeoJson featureGroup
  */
 var EarthquakesLayer = function (url, options) {
   var _colors,
@@ -36,6 +36,10 @@ var EarthquakesLayer = function (url, options) {
     pastmonth: '#ffb'
   };
 
+  /**
+   * Leaflet GeoJSON option: called on each created feature layer. Useful for
+   * attaching events and popups to features.
+   */
   _onEachFeature = function (feature, layer) {
     var html,
         link,
@@ -52,6 +56,12 @@ var EarthquakesLayer = function (url, options) {
     layer.bindPopup(html, {maxWidth: '265'});
   };
 
+  /**
+   * Leaflet GeoJSON option: used for creating layers for GeoJSON points
+   *
+   * @return marker {Object}
+   *         Leaflet marker
+   */
   _pointToLayer = function (feature, latlng) {
     var fillColor,
         props,

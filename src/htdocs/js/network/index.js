@@ -20,7 +20,7 @@ require('leaflet/TerrainLayer');
 // Define map layers
 var dark = L.darkLayer(),
     earthquakes = L.earthquakesLayer('_getEarthquakes.json.php'),
-    faults = L.faultsLayer(),
+    //faults = L.faultsLayer(),
     greyscale = L.greyscaleLayer(),
     satellite = L.satelliteLayer(),
     stations = L.stationsLayer('_getStations.json.php?network=' + network),
@@ -34,17 +34,22 @@ var dark = L.darkLayer(),
     },
     overlays = {
       'Stations': stations,
-      'Earthquakes': earthquakes,
-      'Faults': faults
+//      'Faults': faults,
+      'Earthquakes': earthquakes
     };
+
+console.log(stations);
 
 // Create map
 var map = L.map(document.querySelector('.map'), {
-  center: [38, -123],
-  layers: [greyscale, earthquakes, faults],
-  scrollWheelZoom: false,
-  zoom: 9
+  layers: [greyscale, earthquakes, stations],
+  scrollWheelZoom: false
 });
+
+// Set intial map extent to stations overlay
+var bounds = stations.getBounds();
+console.log(bounds);
+map.fitBounds(bounds);
 
 // Add controllers
 L.control.layers(baseLayers, overlays).addTo(map);
