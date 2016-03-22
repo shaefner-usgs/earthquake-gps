@@ -47,8 +47,11 @@ var map = L.map(document.querySelector('.map'), {
 });
 
 // Set intial map extent to stations overlay
-var bounds = stations.getBounds();
+console.log(stations.getBounds()); // featureGroup
+
+var bounds = stations.getMapBounds(); // stations overlay
 console.log(bounds);
+console.log(bounds.isValid());
 map.fitBounds(bounds);
 
 // Add controllers

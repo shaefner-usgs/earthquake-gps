@@ -16,25 +16,38 @@ var SHAPES = {
  * @param url {String}
  *        URL of geojson file containing stations
  * @param options {Object}
- *        Leaflet Path options
+ *        Leaflet Marker options
  *
  * @return {Object}
- *         Leaflet geoJson featureGroup
+ *         Leaflet GeoJson featureGroup
  */
 var StationsLayer = function (url, options) {
-  var _icons,
+  var _bounds,
+      _geojson,
+      _icons,
 
       // methods
       _getColor,
       _getIcon,
       _onEachFeature,
-      _pointToLayer;
+      _pointToLayer,
+      getMapBounds;
 
   options = Util.extend({
-
+    alt: 'GPS station'
   }, options);
 
+  _bounds = new L.LatLngBounds();
+  _icons = {};
 
+  /**
+   * Get icon color
+   *
+   * @param days {Integer}
+   *        days since station last updated
+   *
+   * @return color {String}
+   */
   _getColor = function (days) {
     var color = 'red'; //default
 
@@ -51,52 +64,77 @@ var StationsLayer = function (url, options) {
     return color;
   };
 
-
+  /**
+   * Get Leaflet icon for station
+   *
+   * @param days {Integer}
+   * @param type {String}
+   *        'campaign' or 'continuous'
+   *
+   * @return _icons[key] {Object}
+   *         Leaflet Icon
+   */
   _getIcon = function (days, type) {
     var color,
+        icon_options,
         key,
-        options,
         shape;
 
     color = _getColor(days);
     shape = SHAPES[type];
     key = shape + '+' + color;
 
-    if (typeof(_icons[key]) === 'undefined') { // don't recreate existing icons
-      options = {
-        iconUrl: '/monitoring/gps/images/pin-s-' + key + '.png',
-        iconRetinaUrl: '/monitoring/gps/images/pin-s-' + key + '-2x.png',
+    // Don't recreate existing icons
+    if (typeof(_icons[key]) === 'undefined') {
+      icon_options = {
         iconSize: [20, 30],
         iconAnchor: [10, 14],
         popupAnchor: [0.5, -10],
         labelAnchor: [5, -4],
+        iconUrl: '/monitoring/gps/img/pin-s-' + key + '.png',
+        iconRetinaUrl: '/monitoring/gps/img/pin-s-' + key + '-2x.png'
       };
-      _icons[key] = L.icon(options);
+
+      _icons[key] = L.icon(icon_options);
     }
 
     return _icons[key];
   };
 
-
+  /**
+   * Leaflet GeoJSON option: called on each created feature layer. Useful for
+   * attaching events and popups to features.
+   */
   _onEachFeature = function (/*feature, layer*/) {
 
   };
 
-
+  /**
+   * Leaflet GeoJSON option: used for creating layers for GeoJSON points
+   *
+   * @return marker {Object}
+   *         Leaflet marker
+   */
   _pointToLayer = function (feature, latlng) {
+    options.icon = _getIcon(feature.properties.days, feature.properties.type);
+    _bounds.extend(latlng);
 
-    var icon = _getIcon(feature.properties.days, feature.properties.type),
-        marker = L.marker(latlng, {
-          icon: icon
-        });
-
-    return marker;
+    return L.marker(latlng, options);
   };
 
-  return L.geoJson.ajax(url, {
+  getMapBounds = function () {
+    return _bounds;
+  };
+
+  _geojson = L.geoJson.ajax(url, {
     onEachFeature: _onEachFeature,
     pointToLayer: _pointToLayer
   });
+
+  // Attach getMapBounds method
+  _geojson.getMapBounds = getMapBounds;
+
+  return _geojson;
 };
 
 L.stationsLayer = StationsLayer;
