@@ -42,5 +42,7 @@ L.control.scale().addTo(map);
 // Remember user's map settings (selected layers, map extent)
 map.restoreView({
   baseLayers: baseLayers,
-  overlays: overlays
+  id: 'network-map',
+  overlays: overlays,
+  shareLayers: true
 });
