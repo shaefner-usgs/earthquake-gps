@@ -8,16 +8,17 @@ require('leaflet-ajax');
 /**
  * Factory for Earthquakes overlay
  *
- * @param url {String}
- *        URL of geojson file containing eqs
+ * @param data {String}
+ *        contents of geojson file containing eqs
  * @param options {Object}
  *        Leaflet Path options
  *
  * @return {Object}
  *         Leaflet GeoJson featureGroup
  */
-var EarthquakesLayer = function (url, options) {
+var EarthquakesLayer = function (data, options) {
   var _colors,
+
       // methods
       _onEachFeature,
       _pointToLayer;
@@ -77,7 +78,7 @@ var EarthquakesLayer = function (url, options) {
     return L.circleMarker(latlng, options);
   };
 
-  return L.geoJson.ajax(url, {
+  return L.geoJson(data, {
     onEachFeature: _onEachFeature,
     pointToLayer: _pointToLayer
   });
