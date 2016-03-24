@@ -13,31 +13,27 @@ var SHAPES = {
 /**
  * Factory for Stations overlay
  *
- * @param url {String}
- *        URL of geojson file containing stations
+ * @param data {String}
+ *        contents of geojson file containing stations
  * @param options {Object}
  *        Leaflet Marker options
  *
  * @return {Object}
  *         Leaflet GeoJson featureGroup
  */
-var StationsLayer = function (url, options) {
-  var _bounds,
-      _geojson,
-      _icons,
+var StationsLayer = function (data, options) {
+  var _icons,
 
       // methods
       _getColor,
       _getIcon,
       _onEachFeature,
-      _pointToLayer,
-      getMapBounds;
+      _pointToLayer;
 
   options = Util.extend({
     alt: 'GPS station'
   }, options);
 
-  _bounds = new L.LatLngBounds();
   _icons = {};
 
   /**
@@ -117,24 +113,14 @@ var StationsLayer = function (url, options) {
    */
   _pointToLayer = function (feature, latlng) {
     options.icon = _getIcon(feature.properties.days, feature.properties.type);
-    _bounds.extend(latlng);
 
     return L.marker(latlng, options);
   };
 
-  getMapBounds = function () {
-    return _bounds;
-  };
-
-  _geojson = L.geoJson.ajax(url, {
+  return L.geoJson(data, {
     onEachFeature: _onEachFeature,
     pointToLayer: _pointToLayer
   });
-
-  // Attach getMapBounds method
-  _geojson.getMapBounds = getMapBounds;
-
-  return _geojson;
 };
 
 L.stationsLayer = StationsLayer;
