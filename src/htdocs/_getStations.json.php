@@ -27,7 +27,7 @@ $output = [
 // Store results from db into features array
 while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
   $secs = 86400; // secs in one day
-  $days = ceil((strtotime($now) - strtotime($row['last_observation'])) / $secs);
+  $days = floor((strtotime($now) - strtotime($row['last_observation'])) / $secs);
 
   $feature = [
     'id' => intval($row['id']),
@@ -39,7 +39,6 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       'type' => 'Point'
     ],
     'properties' => [
-      'color' => getColor($days),
       'days' => $days,
       'last_observation' => $row['last_observation'],
       'rms' => [
