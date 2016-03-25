@@ -39,6 +39,7 @@ var RestoreViewMixin = {
         // methods
         _baselayerchange,
         _fullscreenchange,
+        _isEmpty,
         _moveend,
         _overlayadd,
         _overlayremove;
@@ -64,12 +65,15 @@ var RestoreViewMixin = {
     }
     viewId = options.id;
 
-    // Create obj template for storing layers
+    // Create obj templates for storing layers
     if (!layers[layersId]) {
       layers[layersId] = {
         add: [],
         remove: []
       };
+    }
+    if (!view[viewId]) {
+      view[viewId] = {};
     }
 
     // Invoked when base layer changes
@@ -88,6 +92,11 @@ var RestoreViewMixin = {
       }
 
       storage.mapView = JSON.stringify(view);
+    };
+
+    // Check if javascript obj contains props
+    _isEmpty = function (obj) {
+      return (Object.getOwnPropertyNames(obj).length === 0);
     };
 
     // Invoked when map extent change
@@ -145,7 +154,7 @@ var RestoreViewMixin = {
 
     // Restore settings: map extent, full screen mode and chosen layers
     try {
-      if (view[viewId]) {
+      if (!_isEmpty(view[viewId])) {
         this.setView(
           L.latLng(view[viewId].lat, view[viewId].lng),
           view[viewId].zoom,
@@ -156,7 +165,7 @@ var RestoreViewMixin = {
         }
       }
 
-      if (layers[layersId]) {
+      if (!_isEmpty(layers[layersId])) {
         var selBaseLayer = layers[layersId].base;
         if (selBaseLayer) {
           var keys = Object.keys(options.baseLayers);
