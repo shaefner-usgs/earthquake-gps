@@ -5,17 +5,23 @@ var L = require('leaflet'),
 
 /**
  * Leaflet.RestoreView plugin https://github.com/makinacorpus/Leaflet.RestoreView
- * (with added functionality for remembering selected layers)
+ * with added functionality:
+ * - remembering selected layers
+ * - fullscreen mode (compatible with https://github.com/Leaflet/Leaflet.fullscreen)
  *
  * Usage: map.restoreView(options)
  *
  * @param options {Object}
  *        optional settings
  *        {
- *          baseLayers: {Object <Layer Config>}, // req'd for restoring basemap
- *          id: {String}, // req'd for saving each page's settings separately
- *          overlays: {Object <Layer Config>}, // req'd for restoring overlays,
- *          shareLayers: {Boolean} // share layer settings amongst all pages
+ *          baseLayers: {Object <Layer Config>},
+ *              req'd for restoring basemap
+ *          id: {String},
+ *              req'd for saving each page's settings separately
+ *          overlays: {Object <Layer Config>},
+ *              req'd for restoring overlays,
+ *          shareLayers: {Boolean}
+ *              share layer settings amongst all pages
  *        }
  *
  * <Layer Config> : http://leafletjs.com/reference.html#control-layers-config
@@ -32,6 +38,7 @@ var RestoreViewMixin = {
 
         // methods
         _baselayerchange,
+        _fullscreenchange,
         _moveend,
         _overlayadd,
         _overlayremove;
@@ -72,16 +79,25 @@ var RestoreViewMixin = {
       storage.mapLayers = JSON.stringify(layers);
     };
 
+    // Invoked when fullscreen mode changes
+    _fullscreenchange = function () {
+      if (this.isFullscreen()) {
+        view[viewId].fs = true;
+      } else {
+        view[viewId].fs = false;
+      }
+
+      storage.mapView = JSON.stringify(view);
+    };
+
     // Invoked when map extent change
     _moveend = function () {
       if (!this._loaded) {
         return;  // Never access map bounds if view is not set.
       }
-      view[viewId] = {
-        lat: this.getCenter().lat,
-        lng: this.getCenter().lng,
-        zoom: this.getZoom()
-      };
+      view[viewId].lat = this.getCenter().lat;
+      view[viewId].lng = this.getCenter().lng;
+      view[viewId].zoom = this.getZoom();
 
       storage.mapView = JSON.stringify(view);
     };
@@ -93,7 +109,7 @@ var RestoreViewMixin = {
       if (add_index === -1) { // add layer if not already in 'add' list
         layers[layersId].add.push(e.name);
       }
-      if (remove_index !== -1) { // remove layer if in 'remove' list
+      if (remove_index !== -1) { // remove layer if it's in 'remove' list
         layers[layersId].remove.splice(remove_index, 1);
       }
 
@@ -107,7 +123,7 @@ var RestoreViewMixin = {
       if (remove_index === -1) { // add layer if not already in 'remove' list
         layers[layersId].remove.push(e.name);
       }
-      if (add_index !== -1) { // remove layer if in 'add' list
+      if (add_index !== -1) { // remove layer if it's in 'add' list
         layers[layersId].add.splice(add_index, 1);
       }
 
@@ -116,7 +132,8 @@ var RestoreViewMixin = {
 
     // Save settings: setup listeners which store settings in localStorage
     if (!this.__initRestore) {
-      // map extent
+      // map extent, size
+      this.on('fullscreenchange', _fullscreenchange, this);
       this.on('moveend', _moveend, this);
       // map layers
       this.on('baselayerchange', _baselayerchange, this);
@@ -126,7 +143,7 @@ var RestoreViewMixin = {
       this.__initRestore = true;
     }
 
-    // Restore settings: map extent and chosen layers
+    // Restore settings: map extent, full screen mode and chosen layers
     try {
       if (view[viewId]) {
         this.setView(
@@ -134,6 +151,9 @@ var RestoreViewMixin = {
           view[viewId].zoom,
           true
         );
+        if (view[viewId].fs) {
+          this.toggleFullscreen();
+        }
       }
 
       if (layers[layersId]) {
