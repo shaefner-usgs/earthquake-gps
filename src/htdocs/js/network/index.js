@@ -6,6 +6,7 @@ var L = require('leaflet'), // aliased in browserify.js
     Xhr = require('util/Xhr');
 
 // Leaflet plugins
+require('leaflet-fullscreen');
 require('leaflet/MousePosition');
 require('leaflet/Restoreview');
 
@@ -92,6 +93,7 @@ initialize = function () {
   map.fitBounds(bounds);
 
   // Add controllers
+  L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
   L.control.layers(baseLayers, overlays).addTo(map);
   L.control.mousePosition().addTo(map);
   L.control.scale().addTo(map);
