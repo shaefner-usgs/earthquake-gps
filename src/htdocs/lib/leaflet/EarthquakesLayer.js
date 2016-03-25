@@ -3,6 +3,8 @@
 var L = require('leaflet'),
     Util = require('util/Util');
 
+require('leaflet.label');
+
 /**
  * Factory for Earthquakes overlay
  *
@@ -40,26 +42,32 @@ var EarthquakesLayer = function (data, options) {
    * attaching events and popups to features.
    */
   _onEachFeature = function (feature, layer) {
-    var link,
-        popupContent,
-        popupData,
+    var data,
+        label,
+        labelTemplate,
+        link,
+        popup,
         popupTemplate;
 
     link = 'http://earthquake.usgs.gov/earthquakes/eventpage/' + feature.id;
-    popupTemplate = '<div class="popup eq">' +
-        '<h1>M{mag}, {place}</h1>' +
-        '<time>{time}</time>' +
-        '<p><a href="{link}" target="_blank">Details</a> &raquo;</p>' +
-      '</div>';
-    popupData = {
+    data = {
       mag: feature.properties.mag,
-      time: feature.properties.datetime,
+      datetime: feature.properties.datetime,
       place: feature.properties.place,
       link: link
     };
-    popupContent = L.Util.template(popupTemplate, popupData);
 
-    layer.bindPopup(popupContent, {maxWidth: '265'});
+    labelTemplate = 'M{mag} - {datetime}';
+    label = L.Util.template(labelTemplate, data);
+
+    popupTemplate = '<div class="popup eq">' +
+        '<h1>M{mag}, {place}</h1>' +
+        '<time>{datetime}</time>' +
+        '<p><a href="{link}" target="_blank">Details</a> &raquo;</p>' +
+      '</div>';
+    popup = L.Util.template(popupTemplate, data);
+
+    layer.bindPopup(popup, {maxWidth: '265'}).bindLabel(label);
   };
 
   /**
