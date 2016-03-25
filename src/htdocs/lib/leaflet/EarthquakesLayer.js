@@ -3,8 +3,6 @@
 var L = require('leaflet'),
     Util = require('util/Util');
 
-require('leaflet-ajax');
-
 /**
  * Factory for Earthquakes overlay
  *
