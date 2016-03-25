@@ -18,7 +18,9 @@ var postcss = {
       processors: [
         postcssImport({ // imports partials *and* 'regular' css files
           path: [
-            config.src + '/htdocs/css'
+            config.src + '/htdocs/css',
+            'node_modules/leaflet.label/dist',
+            'node_modules/leaflet-fullscreen/dist'
           ]
         }),
         precss(), // do 'most' sass things
