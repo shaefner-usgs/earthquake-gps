@@ -40,19 +40,26 @@ var EarthquakesLayer = function (data, options) {
    * attaching events and popups to features.
    */
   _onEachFeature = function (feature, layer) {
-    var html,
-        link,
-        props;
+    var link,
+        popupContent,
+        popupData,
+        popupTemplate;
 
-    props = feature.properties;
     link = 'http://earthquake.usgs.gov/earthquakes/eventpage/' + feature.id;
-    html = '<div class="popup eq">' +
-        '<h1>M' + props.mag + ', ' + props.place + '</h1>' +
-        '<time>' + props.datetime + '</time>' +
-        '<p><a href="' + link + '" target="_blank">Details</a> &raquo;</p>' +
+    popupTemplate = '<div class="popup eq">' +
+        '<h1>M{mag}, {place}</h1>' +
+        '<time>{time}</time>' +
+        '<p><a href="{link}" target="_blank">Details</a> &raquo;</p>' +
       '</div>';
+    popupData = {
+      mag: feature.properties.mag,
+      time: feature.properties.datetime,
+      place: feature.properties.place,
+      link: link
+    };
+    popupContent = L.Util.template(popupTemplate, popupData);
 
-    layer.bindPopup(html, {maxWidth: '265'});
+    layer.bindPopup(popupContent, {maxWidth: '265'});
   };
 
   /**
