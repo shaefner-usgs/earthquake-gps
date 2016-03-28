@@ -31,7 +31,7 @@ foreach ($stations['features'] as $feature) {
   $stations_html .= sprintf('<li class="%s">
       <a href="%s/%s/%s/" title="Go to station details">%s</a>
     </li>',
-    $feature['properties']['color'],
+    getColor($feature['properties']['days']),
     $MOUNT_PATH,
     $network,
     $feature['properties']['station'],

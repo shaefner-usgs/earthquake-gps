@@ -58,21 +58,3 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
 
 // Send json stream to browser
 showJson($output, $callback);
-
-/**
- * Get color classification based on the number of days since the last update
- *
- * @param $days {Int}
- */
-function getColor ($days) {
-  if ($days > 14) {
-    $color = 'red';
-  } else if ($days >= 8) {
-    $color = 'orange';
-  } else if ($days >= 4) {
-    $color = 'yellow';
-  } else if ($days >= 0) {
-    $color = 'blue';
-  }
-  return $color;
-}
