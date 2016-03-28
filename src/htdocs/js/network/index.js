@@ -19,97 +19,133 @@ require('leaflet/SatelliteLayer');
 require('leaflet/StationsLayer');
 require('leaflet/TerrainLayer');
 
-var earthquakes,
-    stations,
+var NetworkMap = function () {
+  var _this,
+      _initialize,
 
-    getEarthquakesLayer,
-    getStationsLayer,
-    initialize;
+      _earthquakes,
+      _stations,
 
-// Get stations layer
-getStationsLayer = function () {
-  Xhr.ajax({
-    url: '_getStations.json.php?network=' + network,
-    success: function (data) {
-      stations = L.stationsLayer(data);
-      initialize();
-    },
-    error: function (status) {
-      console.log(status);
+      _getEarthquakesLayer,
+      _getStationsLayer,
+      _initMap,
+      _getMapLayers;
+
+  _this = {};
+
+  _initialize = function () {
+    // Store geojson data and call _initMap() when ajax request finishes
+    _getEarthquakesLayer();
+    _getStationsLayer();
+  };
+
+  // Get earthquakes layer
+  _getEarthquakesLayer = function () {
+    Xhr.ajax({
+      url: '_getEarthquakes.json.php',
+      success: function (data) {
+        _earthquakes = L.earthquakesLayer(data);
+        _initMap();
+      },
+      error: function (status) {
+        console.log(status);
+      }
+    });
+  };
+
+  // Get stations layer
+  _getStationsLayer = function () {
+    Xhr.ajax({
+      url: '_getStations.json.php?network=' + network,
+      success: function (data) {
+        _stations = L.stationsLayer(data);
+        _initMap();
+      },
+      error: function (status) {
+        console.log(status);
+      }
+    });
+  };
+
+  _getMapLayers = function () {
+    var dark,
+  //      faults,
+        greyscale,
+        layers,
+        satellite,
+        terrain;
+
+    layers = {};
+    dark = L.darkLayer();
+    greyscale = L.greyscaleLayer();
+    satellite = L.satelliteLayer();
+    terrain = L.terrainLayer();
+    //faults = L.faultsLayer();
+
+    layers.baseLayers = {
+      'Greyscale': greyscale,
+      'Terrain': terrain,
+      'Satellite': satellite,
+      'Dark': dark
+    };
+    layers.overlays = {
+      //'Faults': faults,
+      'Earthquakes': _earthquakes
+    };
+    layers.default = [greyscale, _earthquakes];
+
+    // Add stations to overlays and layers (stored in multiple, unknown groups)
+    Object.keys(_stations.layers).forEach(function(name) {
+      layers.overlays[name] = _stations.layers[name];
+      layers.default.push(_stations.layers[name]);
+    });
+
+    return layers;
+  };
+
+  _initMap = function () {
+    if (!_stations || !_earthquakes) { // check that both layers are set
+      return;
     }
-  });
+
+    var bounds,
+        layers;
+
+    layers = _getMapLayers();
+    console.log(layers);
+
+    // Create map
+    var map = L.map(document.querySelector('.map'), {
+      layers: layers.default,
+      scrollWheelZoom: false
+    });
+
+    // Set intial map extent to contain stations overlay
+    bounds = _stations.getBounds();
+    map.fitBounds(bounds);
+
+    _stations.openPopup('AB27');
+
+    // Add controllers
+    L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
+    L.control.layers(layers.baseLayers, layers.overlays).addTo(map);
+    L.control.mousePosition().addTo(map);
+    L.control.scale().addTo(map);
+
+    // Remember user's map settings (selected layers, map extent)
+    map.restoreView({
+      baseLayers: layers.baseLayers,
+      id: network,
+      overlays: layers.overlays,
+      shareLayers: true
+    });
+  };
+
+  _initialize();
+
+  return _this;
+
 };
 
-// Get earthquakes layer
-getEarthquakesLayer = function () {
-  Xhr.ajax({
-    url: '_getEarthquakes.json.php',
-    success: function (data) {
-      earthquakes = L.earthquakesLayer(data);
-      initialize();
-    },
-    error: function (status) {
-      console.log(status);
-    }
-  });
-};
-
-// Store geojson layers and call initialize() when ajax request is finished
-getStationsLayer();
-getEarthquakesLayer();
-
-initialize = function () {
-  if (!stations || !earthquakes) { // check that both layers are set
-    return;
-  }
-
-  // Define map layers (stations and earthquakes defined separately)
-  var dark = L.darkLayer(),
-      //faults = L.faultsLayer(),
-      greyscale = L.greyscaleLayer(),
-      satellite = L.satelliteLayer(),
-      terrain = L.terrainLayer();
-
-  var baseLayers = {
-    'Greyscale': greyscale,
-    'Terrain': terrain,
-    'Satellite': satellite,
-    'Dark': dark
-  },
-  overlays = {
-    //'Faults': faults,
-    'Earthquakes': earthquakes
-  },
-  // Map layers turned on by default
-  layers = [greyscale, earthquakes];
-
-  // Add stations to overlays and layers (stored in multiple, unknown groups)
-  Object.keys(stations.layers).forEach(function(name) {
-    overlays[name] = stations.layers[name];
-    layers.push(stations.layers[name]);
-  });
-
-  // Create map
-  var map = L.map(document.querySelector('.map'), {
-    layers: layers,
-    scrollWheelZoom: false
-  });
-
-  // Set intial map extent to contain stations overlay
-  var bounds = stations.getBounds();
-  map.fitBounds(bounds);
-
-  // Add controllers
-  L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
-  L.control.layers(baseLayers, overlays).addTo(map);
-  L.control.mousePosition().addTo(map);
-  L.control.scale().addTo(map);
-
-  // Remember user's map settings (selected layers, map extent)
-  map.restoreView({
-    baseLayers: baseLayers,
-    id: network,
-    overlays: overlays,
-    shareLayers: true
-  });
-};
+NetworkMap();
+//module.exports = NetworkMap;
