@@ -34,12 +34,14 @@ var NetworkMap = function () {
   _this = {};
 
   _initialize = function () {
-    // Store geojson data and call _initMap() when ajax requests finish
+    // Get eqs, stations layers and call initMap() when finished
     _getEarthquakesLayer();
     _getStationsLayer();
   };
 
-  // Get earthquakes layer
+  /**
+   * Get earthquakes layer from geojson data via ajax
+   */
   _getEarthquakesLayer = function () {
     Xhr.ajax({
       url: '_getEarthquakes.json.php',
@@ -53,6 +55,15 @@ var NetworkMap = function () {
     });
   };
 
+  /**
+   * Get all map layers that will be displayed on map
+   *
+   * @return layers {Object} {
+   *   baseLayers: {Object}
+   *   overlays: {Object}
+   *   defaults: {Array}
+   * }
+   */
   _getMapLayers = function () {
     var dark,
   //      faults,
@@ -62,6 +73,7 @@ var NetworkMap = function () {
         terrain;
 
     layers = {};
+
     dark = L.darkLayer();
     greyscale = L.greyscaleLayer();
     satellite = L.satelliteLayer();
@@ -89,7 +101,9 @@ var NetworkMap = function () {
     return layers;
   };
 
-  // Get stations layer
+  /**
+   * Get stations layer from geojson data via ajax
+   */
   _getStationsLayer = function () {
     Xhr.ajax({
       url: '_getStations.json.php?network=' + network,
@@ -103,8 +117,9 @@ var NetworkMap = function () {
     });
   };
 
-
-
+  /**
+   * Create Leaflet map instance
+   */
   _initMap = function () {
     if (!_stations || !_earthquakes) { // check that both ajax layers are set
       return;
@@ -143,7 +158,6 @@ var NetworkMap = function () {
   _initialize();
 
   return _this;
-
 };
 
 NetworkMap();
