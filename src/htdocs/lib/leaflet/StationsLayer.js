@@ -11,13 +11,13 @@ var _DEFAULTS = {
   alt: 'GPS station'
 };
 var _SHAPES = {
-  continuous: 'square',
-  campaign: 'triangle'
+  campaign: 'triangle',
+  continuous: 'square'
 };
 var _LAYERNAMES = {
   blue: 'Past 3 days',
-  red: 'Over 14 days ago',
   orange: '8&ndash;14 days ago',
+  red: 'Over 14 days ago',
   yellow: '4&ndash;7 days ago'
 };
 
@@ -30,7 +30,11 @@ var _LAYERNAMES = {
  *        Leaflet Marker options
  *
  * @return {Object}
- *         Leaflet featureGroup
+ *         Leaflet featureGroup {
+ *           layers: {Object}
+ *           getBounds: {Function}
+ *           openPopup: {Function}
+ *         }
  */
 var StationsLayer = function (data, options) {
   var _this,
@@ -38,7 +42,7 @@ var StationsLayer = function (data, options) {
 
       _bounds,
       _icons,
-      _popups,
+      _layers,
 
       _getColor,
       _getIcon,
@@ -53,7 +57,7 @@ var StationsLayer = function (data, options) {
 
     _bounds = new L.LatLngBounds();
     _icons = {};
-    _popups = {};
+    _layers = {};
 
     L.geoJson(data, {
       onEachFeature: _onEachFeature,
@@ -143,8 +147,8 @@ var StationsLayer = function (data, options) {
       pane: 'popupPane'
     });
 
-    // Store popup so it can be accessed by getPopup()
-    _popups[data.station] = popup;
+    // Store layer so its popup can be accessed by openPopup()
+    _layers[data.station] = layer;
   };
 
   /**
@@ -171,7 +175,7 @@ var StationsLayer = function (data, options) {
     // Group stations in separate layers by type
     if (!_this.layers[name]) {
       _this.layers[name] = L.layerGroup();
-      _this.addLayer(_this.layers[name]);
+      _this.addLayer(_this.layers[name]); // add to featureGroup
     }
     _this.layers[name].addLayer(marker);
 
@@ -191,13 +195,10 @@ var StationsLayer = function (data, options) {
   };
 
   /**
-   * Get popup for station
-   *
-   * @return {String}
-   *         Popup content
+   * Open popup for a given station
    */
-  _this.getPopup = function (station) {
-    return _popups[station];
+  _this.openPopup = function (station) {
+    _layers[station].openPopup();
   };
 
   _initialize();
