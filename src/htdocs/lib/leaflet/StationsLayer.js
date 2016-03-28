@@ -30,7 +30,7 @@ var _LAYERNAMES = {
  *        Leaflet Marker options
  *
  * @return {Object}
- *         Leaflet layerGroups
+ *         Leaflet featureGroup
  */
 var StationsLayer = function (data, options) {
   var _this,
@@ -45,7 +45,7 @@ var StationsLayer = function (data, options) {
       _onEachFeature,
       _pointToLayer;
 
-  _this = {};
+  _this = L.featureGroup();
 
   _initialize = function () {
     options = Util.extend(_DEFAULTS, options);
@@ -171,6 +171,7 @@ var StationsLayer = function (data, options) {
     // Group stations in separate layers by type
     if (!_this.layers[name]) {
       _this.layers[name] = L.layerGroup();
+      _this.addLayer(_this.layers[name]);
     }
     _this.layers[name].addLayer(marker);
 
