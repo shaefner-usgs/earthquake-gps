@@ -5,6 +5,19 @@ var L = require('leaflet'),
 
 require('leaflet.label');
 
+var _DEFAULTS = {
+  weight: 1,
+  opacity: 0.9,
+  fillOpacity: 0.9,
+  color: '#000'
+};
+var _COLORS = {
+  pasthour: '#f00',
+  pastday: '#f90',
+  pastweek: '#ff0',
+  pastmonth: '#ffb'
+};
+
 /**
  * Factory for Earthquakes overlay
  *
@@ -17,24 +30,13 @@ require('leaflet.label');
  *         Leaflet GeoJson featureGroup
  */
 var EarthquakesLayer = function (data, options) {
-  var _colors,
+  var _initialize,
 
-      // methods
       _onEachFeature,
       _pointToLayer;
 
-  options = Util.extend({
-    weight: 1,
-    opacity: 0.9,
-    fillOpacity: 0.9,
-    color: '#000'
-  }, options);
-
-  _colors = {
-    pasthour: '#f00',
-    pastday: '#f90',
-    pastweek: '#ff0',
-    pastmonth: '#ffb'
+  _initialize = function () {
+    options = Util.extend({}, _DEFAULTS, options);
   };
 
   /**
@@ -82,7 +84,7 @@ var EarthquakesLayer = function (data, options) {
         radius;
 
     props = feature.properties;
-    fillColor = _colors[props.age];
+    fillColor = _COLORS[props.age];
     radius = 3 * parseInt(Math.pow(10, (0.11 * props.mag)), 10);
 
     options.fillColor = fillColor;
@@ -91,11 +93,12 @@ var EarthquakesLayer = function (data, options) {
     return L.circleMarker(latlng, options);
   };
 
+  _initialize();
+
   return L.geoJson(data, {
     onEachFeature: _onEachFeature,
     pointToLayer: _pointToLayer
   });
-
 };
 
 L.earthquakesLayer = EarthquakesLayer;
