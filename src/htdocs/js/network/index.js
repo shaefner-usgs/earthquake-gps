@@ -77,14 +77,21 @@ initialize = function () {
     'Dark': dark
   },
   overlays = {
-    'Stations': stations,
     //'Faults': faults,
     'Earthquakes': earthquakes
-  };
+  },
+  // Map layers turned on by default
+  layers = [greyscale, earthquakes];
+
+  // Add stations to overlays and layers (stored in multiple, unknown groups)
+  Object.keys(stations.layers).forEach(function(name) {
+    overlays[name] = stations.layers[name];
+    layers.push(stations.layers[name]);
+  });
 
   // Create map
   var map = L.map(document.querySelector('.map'), {
-    layers: [greyscale, earthquakes, stations],
+    layers: layers,
     scrollWheelZoom: false
   });
 
