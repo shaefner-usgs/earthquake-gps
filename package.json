@@ -1,7 +1,7 @@
 {
   "name": "earthquake-gps",
   "version": "1.0.0",
-  "description": "",
+  "description": "USGS GPS Stations and Data",
   "main": "Gruntfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
