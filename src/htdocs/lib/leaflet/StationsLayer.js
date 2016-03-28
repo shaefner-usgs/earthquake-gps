@@ -52,7 +52,7 @@ var StationsLayer = function (data, options) {
   _this = L.featureGroup();
 
   _initialize = function () {
-    options = Util.extend(_DEFAULTS, options);
+    options = Util.extend({}, _DEFAULTS, options);
     _this.layers = {};
 
     _bounds = new L.LatLngBounds();
