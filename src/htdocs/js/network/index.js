@@ -34,7 +34,7 @@ var NetworkMap = function () {
   _this = {};
 
   _initialize = function () {
-    // Store geojson data and call _initMap() when ajax request finishes
+    // Store geojson data and call _initMap() when ajax requests finish
     _getEarthquakesLayer();
     _getStationsLayer();
   };
@@ -45,20 +45,6 @@ var NetworkMap = function () {
       url: '_getEarthquakes.json.php',
       success: function (data) {
         _earthquakes = L.earthquakesLayer(data);
-        _initMap();
-      },
-      error: function (status) {
-        console.log(status);
-      }
-    });
-  };
-
-  // Get stations layer
-  _getStationsLayer = function () {
-    Xhr.ajax({
-      url: '_getStations.json.php?network=' + network,
-      success: function (data) {
-        _stations = L.stationsLayer(data);
         _initMap();
       },
       error: function (status) {
@@ -92,19 +78,35 @@ var NetworkMap = function () {
       //'Faults': faults,
       'Earthquakes': _earthquakes
     };
-    layers.default = [greyscale, _earthquakes];
+    layers.defaults = [greyscale, _earthquakes];
 
-    // Add stations to overlays and layers (stored in multiple, unknown groups)
+    // Add stations to overlays / defaults (stored in multiple, unknown groups)
     Object.keys(_stations.layers).forEach(function(name) {
       layers.overlays[name] = _stations.layers[name];
-      layers.default.push(_stations.layers[name]);
+      layers.defaults.push(_stations.layers[name]);
     });
 
     return layers;
   };
 
+  // Get stations layer
+  _getStationsLayer = function () {
+    Xhr.ajax({
+      url: '_getStations.json.php?network=' + network,
+      success: function (data) {
+        _stations = L.stationsLayer(data);
+        _initMap();
+      },
+      error: function (status) {
+        console.log(status);
+      }
+    });
+  };
+
+
+
   _initMap = function () {
-    if (!_stations || !_earthquakes) { // check that both layers are set
+    if (!_stations || !_earthquakes) { // check that both ajax layers are set
       return;
     }
 
@@ -112,19 +114,16 @@ var NetworkMap = function () {
         layers;
 
     layers = _getMapLayers();
-    console.log(layers);
 
     // Create map
     var map = L.map(document.querySelector('.map'), {
-      layers: layers.default,
+      layers: layers.defaults,
       scrollWheelZoom: false
     });
 
     // Set intial map extent to contain stations overlay
     bounds = _stations.getBounds();
     map.fitBounds(bounds);
-
-    _stations.openPopup('AB27');
 
     // Add controllers
     L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
