@@ -13,12 +13,11 @@ var _DEFAULTS = {
 };
 
 var Icon = function (options) {
-  options = Util.extend({}, _DEFAULTS, options);
-  return options;
+  return L.icon(options);
 };
 
 /**
- * Factory for creating Leaflet icons
+ * Create Leaflet icons
  *
  * @param key {String}
  *        contains 'shape+color' (e.g. 'triangle+red')
@@ -26,22 +25,15 @@ var Icon = function (options) {
  * @return _ICONS[key] {Object}
  *         Leaflet Icon
  */
-Icon.getIcon = function (key) {
-  var iconUrl,
-      iconRetinaUrl,
-      options;
+Icon.getIcon = function (key, options) {
+  options = Util.extend({}, _DEFAULTS, options);
 
-  iconUrl = '/monitoring/gps/img/pin-s-' + key + '.png';
-  iconRetinaUrl = '/monitoring/gps/img/pin-s-' + key + '-2x.png';
-
-  options = Icon({
-    iconUrl: iconUrl,
-    iconRetinaUrl: iconRetinaUrl
-  });
+  options.iconRetinaUrl = '/monitoring/gps/img/pin-s-' + key + '-2x.png';
+  options.iconUrl = '/monitoring/gps/img/pin-s-' + key + '.png';
 
   // Don't recreate existing icons
   if (!_ICONS[key]) {
-    _ICONS[key] = L.icon(options);
+    _ICONS[key] = Icon(options);
   }
 
   return _ICONS[key];
