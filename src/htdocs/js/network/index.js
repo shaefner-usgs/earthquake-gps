@@ -26,10 +26,11 @@ var NetworkMap = function () {
       _earthquakes,
       _stations,
 
+      _attachPopups,
       _getEarthquakesLayer,
+      _getMapLayers,
       _getStationsLayer,
-      _initMap,
-      _getMapLayers;
+      _initMap;
 
   _this = {};
 
@@ -37,6 +38,31 @@ var NetworkMap = function () {
     // Get eqs, stations layers and call initMap() when finished
     _getEarthquakesLayer();
     _getStationsLayer();
+    _attachPopups();
+  };
+
+  /**
+   * Attach handlers for map popups to list of stations below the map
+   */
+  _attachPopups = function () {
+    var a, i, li, lis,
+        openPopup;
+
+    openPopup = function(e) {
+      e.preventDefault();
+      _stations.openPopup(e.target.station);
+    };
+
+    lis = document.querySelectorAll('.stations li');
+    for (i = 0; i < lis.length; i ++) {
+      li = lis[i];
+      a = document.createElement('a');
+      a.station = li.querySelector('a').textContent;
+      a.setAttribute('class', 'bubble');
+      a.setAttribute('href', '#');
+      li.appendChild(a);
+      a.addEventListener('click', openPopup);
+    }
   };
 
   /**
@@ -124,7 +150,6 @@ var NetworkMap = function () {
     if (!_stations || !_earthquakes) { // check that both ajax layers are set
       return;
     }
-
     var bounds,
         layers;
 
@@ -161,4 +186,3 @@ var NetworkMap = function () {
 };
 
 NetworkMap();
-//module.exports = NetworkMap;
