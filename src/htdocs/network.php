@@ -26,7 +26,7 @@ if (!isset($TEMPLATE)) {
 }
 
 // Create HTML for station list
-$stations_html = '<ul>';
+$stations_html = '<ul class="stations">';
 foreach ($stations['features'] as $feature) {
   $stations_html .= sprintf('<li class="%s">
       <a href="%s/%s/%s/" title="Go to station details">%s</a>
