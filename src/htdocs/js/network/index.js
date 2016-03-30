@@ -106,16 +106,16 @@ var NetworkMap = function () {
 
     layers = {};
     layers.baseLayers = {
-      'Greyscale': greyscale,
       'Terrain': terrain,
       'Satellite': satellite,
+      'Greyscale': greyscale,
       'Dark': dark
     };
     layers.overlays = {
       //'Faults': faults,
       'Earthquakes': _earthquakes
     };
-    layers.defaults = [greyscale, _earthquakes];
+    layers.defaults = [terrain, _earthquakes];
 
     // Add stations to overlays / defaults (stored in multiple, unknown groups)
     Object.keys(_stations.layers).forEach(function(name) {

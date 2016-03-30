@@ -55,9 +55,9 @@ var IndexMap = function () {
 
     layers = {};
     layers.baseLayers = {
-      'Greyscale': greyscale,
       'Terrain': terrain,
       'Satellite': satellite,
+      'Greyscale': greyscale,
       'Dark': dark
     };
     layers.overlays = {
