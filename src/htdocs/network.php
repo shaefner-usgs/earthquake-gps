@@ -3,7 +3,7 @@
 include_once '../lib/functions/functions.inc.php'; // app functions
 
 // set default value so page loads without passing params
-$network = safeParam('network', 'Pacific');
+$network = safeParam('network', 'Alaska');
 
 if (!isset($TEMPLATE)) {
   $TITLE = $network . ' Network';
