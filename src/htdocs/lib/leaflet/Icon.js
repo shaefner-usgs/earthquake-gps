@@ -30,7 +30,7 @@ var Icon = function (options) {
  */
 Icon.getIcon = function (key, options) {
   // Don't recreate existing icons
-  if (!_ICONS[key]) {
+  if (!_ICONS.hasOwnProperty('key')) {
     options = Util.extend({}, _DEFAULTS, options);
 
     options.iconRetinaUrl = '/monitoring/gps/img/pin-s-' + key + '-2x.png';
