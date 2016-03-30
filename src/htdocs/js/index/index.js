@@ -89,12 +89,13 @@ var IndexMap = function () {
    */
   _initMap = function () {
     var bounds,
-        layers;
+        layers,
+        map;
 
     layers = _getMapLayers();
 
     // Create map
-    var map = L.map(document.querySelector('.map'), {
+    map = L.map(document.querySelector('.map'), {
       layers: layers.defaults,
       scrollWheelZoom: false
     });
