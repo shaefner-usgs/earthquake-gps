@@ -2,7 +2,8 @@
 
 'use strict';
 
-var L = require('leaflet'),
+var Icon = require('leaflet/Icon'),
+    L = require('leaflet'),
     Util = require('util/Util');
 
 require('leaflet.label');
@@ -47,7 +48,6 @@ var StationsLayer = function (data, options) {
       _layers,
 
       _getColor,
-      _getIcon,
       _onEachFeature,
       _pointToLayer;
 
@@ -89,35 +89,6 @@ var StationsLayer = function (data, options) {
     }
 
     return color;
-  };
-
-  /**
-   * Get Leaflet icon for station
-   *
-   * @param key {String}
-   *        contains shape + color
-   *
-   * @return _icons[key] {Object}
-   *         Leaflet Icon
-   */
-  _getIcon = function (key) {
-    var icon_options;
-
-    // Don't recreate existing icons
-    if (!_icons[key]) {
-      icon_options = {
-        iconSize: [20, 30],
-        iconAnchor: [10, 14],
-        popupAnchor: [0.5, -10],
-        labelAnchor: [5, -4],
-        iconUrl: '/monitoring/gps/img/pin-s-' + key + '.png',
-        iconRetinaUrl: '/monitoring/gps/img/pin-s-' + key + '-2x.png'
-      };
-
-      _icons[key] = L.icon(icon_options);
-    }
-
-    return _icons[key];
   };
 
   /**
@@ -170,7 +141,7 @@ var StationsLayer = function (data, options) {
     key = shape + '+' + color;
     name = _LAYERNAMES[color];
 
-    options.icon = _getIcon(key);
+    options.icon = Icon.getIcon(key);
     marker = L.marker(latlng, options);
 
     // Group stations in separate layers by type
