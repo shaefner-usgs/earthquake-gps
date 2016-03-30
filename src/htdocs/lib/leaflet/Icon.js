@@ -22,17 +22,20 @@ var Icon = function (options) {
  * @param key {String}
  *        contains 'shape+color' (e.g. 'triangle+red')
  *
+ * @param options {Object}
+ *        Leaflet Marker options (optional)
+ *
  * @return _ICONS[key] {Object}
  *         Leaflet Icon
  */
 Icon.getIcon = function (key, options) {
-  options = Util.extend({}, _DEFAULTS, options);
-
-  options.iconRetinaUrl = '/monitoring/gps/img/pin-s-' + key + '-2x.png';
-  options.iconUrl = '/monitoring/gps/img/pin-s-' + key + '.png';
-
   // Don't recreate existing icons
   if (!_ICONS[key]) {
+    options = Util.extend({}, _DEFAULTS, options);
+
+    options.iconRetinaUrl = '/monitoring/gps/img/pin-s-' + key + '-2x.png';
+    options.iconUrl = '/monitoring/gps/img/pin-s-' + key + '.png';
+
     _ICONS[key] = Icon(options);
   }
 
