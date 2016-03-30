@@ -9,6 +9,7 @@ require('leaflet.label');
 var _DEFAULTS = {
   alt: 'GPS network'
 };
+
 var _SHAPES = {
   campaign: 'triangle',
   continuous: 'square'
@@ -30,13 +31,45 @@ var NetworksLayer = function (data, options) {
 
       _icons,
 
+      _hidePoly,
       _onEachFeature,
-      _pointToLayer;
+      _pointToLayer,
+      _showPoly,
+      _style;
 
   _initialize = function () {
     options = Util.extend({}, _DEFAULTS, options);
 
     _icons = {};
+
+    // .on('mouseover', function () {
+    //   _showPoly(this.getAttribute('class'));
+    // })
+    // .on('mouseout', function () {
+    //   _hidePoly(this.getAttribute('class'));
+    // });
+  };
+
+  _hidePoly = function (polyId) {
+    var el = document.querySelector('.' + polyId);
+    el.classList.add('off');
+  };
+
+  _showPoly = function (polyId) {
+    var el = document.querySelector('.' + polyId);
+    el.classList.remove('off');
+  };
+
+  _style = function (feature) {
+    var className;
+
+    className = feature.id;
+    if (feature.geometry.type === 'Polygon') {
+      return {
+        className: className + ' off',
+        weight: 2
+      };
+    }
   };
 
   /**
@@ -44,11 +77,28 @@ var NetworksLayer = function (data, options) {
    * attaching events and popups to features.
    */
   _onEachFeature = function (feature, layer) {
-    var label = feature.properties.name;
+    var label,
+        polyId;
 
-    layer.bindLabel(label, {
-      pane: 'popupPane'
-    });
+    if (feature.geometry.type === 'Point') {
+      label = feature.properties.name;
+      layer.bindLabel(label, {
+        pane: 'popupPane'
+      });
+
+      polyId = feature.id.replace('point', 'poly');
+
+      layer.on({
+        mouseover: function () {
+          _showPoly(polyId);
+        },
+        mouseout: function () {
+          _hidePoly(polyId);
+        }
+      });
+
+
+    }
   };
 
   /**
@@ -76,7 +126,8 @@ var NetworksLayer = function (data, options) {
 
   return L.geoJson(data, {
     onEachFeature: _onEachFeature,
-    pointToLayer: _pointToLayer
+    pointToLayer: _pointToLayer,
+    style: _style
   });
 };
 

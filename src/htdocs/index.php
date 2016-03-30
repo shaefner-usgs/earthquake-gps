@@ -24,13 +24,15 @@ if (!isset($TEMPLATE)) {
 // Create HTML for network list
 $networks_html = '<ul>';
 foreach ($networks['features'] as $feature) {
-  $networks_html .= sprintf('<li>
-      <a href="./%s/" title="Go to map of stations" class="feature%d">%s</a>
-    </li>',
-    $feature['properties']['name'],
-    $feature['id'],
-    $feature['properties']['name']
-  );
+  if ($feature['geometry']['type'] === 'Point') { // skip polygons
+    $networks_html .= sprintf('<li>
+        <a href="./%s/" title="Go to map of stations" class="feature%d">%s</a>
+      </li>',
+      $feature['properties']['name'],
+      $feature['id'],
+      $feature['properties']['name']
+    );
+  }
 }
 $networks_html .= '</ul>';
 
