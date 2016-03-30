@@ -98,14 +98,13 @@ var NetworkMap = function () {
         satellite,
         terrain;
 
-    layers = {};
-
     dark = L.darkLayer();
     greyscale = L.greyscaleLayer();
     satellite = L.satelliteLayer();
     terrain = L.terrainLayer();
     //faults = L.faultsLayer();
 
+    layers = {};
     layers.baseLayers = {
       'Greyscale': greyscale,
       'Terrain': terrain,
