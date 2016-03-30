@@ -11,6 +11,7 @@ var _DEFAULTS = {
   fillOpacity: 0.9,
   color: '#000'
 };
+
 var _COLORS = {
   pasthour: '#f00',
   pastday: '#f90',
