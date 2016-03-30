@@ -145,7 +145,7 @@ var StationsLayer = function (data, options) {
     marker = L.marker(latlng, options);
 
     // Group stations in separate layers by type
-    if (!_this.layers[name]) {
+    if (!_this.layers.hasOwnProperty(name)) {
       _this.layers[name] = L.layerGroup();
       _this.addLayer(_this.layers[name]); // add to featureGroup
     }
