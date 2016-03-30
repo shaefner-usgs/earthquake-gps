@@ -23,7 +23,7 @@ var Icon = function (options) {
  *        contains 'shape+color' (e.g. 'triangle+red')
  *
  * @param options {Object}
- *        Leaflet Marker options (optional)
+ *        Leaflet Icon options (optional)
  *
  * @return _ICONS[key] {Object}
  *         Leaflet Icon
