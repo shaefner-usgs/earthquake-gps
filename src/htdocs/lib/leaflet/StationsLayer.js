@@ -10,10 +10,12 @@ require('leaflet.label');
 var _DEFAULTS = {
   alt: 'GPS station'
 };
+
 var _SHAPES = {
   campaign: 'triangle',
   continuous: 'square'
 };
+
 var _LAYERNAMES = {
   blue: 'Past 3 days',
   orange: '8&ndash;14 days ago',
@@ -92,9 +94,8 @@ var StationsLayer = function (data, options) {
   /**
    * Get Leaflet icon for station
    *
-   * @param days {Integer}
-   * @param type {String}
-   *        'campaign' or 'continuous'
+   * @param key {String}
+   *        contains shape + color
    *
    * @return _icons[key] {Object}
    *         Leaflet Icon
