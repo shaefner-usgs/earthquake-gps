@@ -26,7 +26,7 @@ var NetworkMap = function () {
       _earthquakes,
       _stations,
 
-      _attachPopups,
+      _attachPopupLinks,
       _getEarthquakesLayer,
       _getMapLayers,
       _getStationsLayer,
@@ -38,13 +38,13 @@ var NetworkMap = function () {
     // Get eqs, stations layers and call initMap() when finished
     _getEarthquakesLayer();
     _getStationsLayer();
-    _attachPopups();
+    _attachPopupLinks();
   };
 
   /**
    * Attach handlers for map popups to list of stations below the map
    */
-  _attachPopups = function () {
+  _attachPopupLinks = function () {
     var a, i, li, lis,
         openPopup;
 
