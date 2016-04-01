@@ -29,7 +29,7 @@ foreach ($networks['features'] as $feature) {
         <a href="./%s/" title="Go to map of stations" class="%s">%s</a>
       </li>',
       $feature['properties']['name'],
-      $feature['id'],
+      str_replace('point', 'link', $feature['id']),
       $feature['properties']['name']
     );
   }

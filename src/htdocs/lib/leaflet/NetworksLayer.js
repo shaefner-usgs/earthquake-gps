@@ -38,37 +38,46 @@ var NetworksLayer = function (data, options) {
       _style;
 
   _initialize = function () {
-    options = Util.extend({}, _DEFAULTS, options);
+    var i,
+        id,
+        listener,
+        networkLinks;
 
+    options = Util.extend({}, _DEFAULTS, options);
     _icons = {};
 
-    // .on('mouseover', function () {
-    //   _showPoly(this.getAttribute('class'));
-    // })
-    // .on('mouseout', function () {
-    //   _hidePoly(this.getAttribute('class'));
-    // });
+    listener = function (e) {
+      id = e.target.className.replace('link', ''); // number portion only
+
+      if (e.type === 'mouseover') {
+        _show(id);
+      } else if (e.type === 'mouseout') {
+        _hide(id);
+      }
+    };
+
+    networkLinks = document.querySelectorAll('.networks a');
+    for (i = 0; i < networkLinks.length; i ++) {
+      networkLinks[i].addEventListener('mouseover', listener);
+      networkLinks[i].addEventListener('mouseout', listener);
+    }
   };
 
   _hide = function (id) {
-    var label = document.querySelector('.point' + id),
+    var label = document.querySelector('.label' + id),
         poly = document.querySelector('.poly' + id);
 
-    if (label) {
-      label.classList.add('off');
-    }
+    label.classList.add('off');
     if (poly) {
       poly.classList.add('off');
     }
   };
 
   _show = function (id) {
-    var label = document.querySelector('.point' + id),
+    var label = document.querySelector('.label' + id),
         poly = document.querySelector('.poly' + id);
 
-    if (label) {
-      label.classList.remove('off');
-    }
+    label.classList.remove('off');
     if (poly) {
       poly.classList.remove('off');
     }
@@ -77,7 +86,7 @@ var NetworksLayer = function (data, options) {
   _style = function (feature) {
     if (feature.geometry.type === 'Polygon') {
       return {
-        className: feature.id + ' off',
+        className: feature.id + ' off', // polygons off by default
         weight: 2
       };
     }
@@ -89,17 +98,14 @@ var NetworksLayer = function (data, options) {
    */
   _onEachFeature = function (feature, layer) {
     var id,
-        label;
+        label,
+        labelId;
 
     if (feature.geometry.type === 'Point') {
+      id = feature.id.replace('point', ''); // number portion only
       label = feature.properties.name;
-      layer.bindLabel(label, {
-        pane: 'popupPane',
-        className: feature.id + ' off',
-        noHide: false
-      });
+      labelId = 'label' + id;
 
-      id = feature.id.replace('point', '');
       layer.on({
         mouseover: function () {
           _show(id);
@@ -107,6 +113,10 @@ var NetworksLayer = function (data, options) {
         mouseout: function () {
           _hide(id);
         }
+      }).bindLabel(label, {
+        className: labelId + ' off', // labels off by default
+        noHide: true,
+        pane: 'popupPane'
       });
     }
   };
@@ -124,9 +134,7 @@ var NetworksLayer = function (data, options) {
 
     shape = _SHAPES[feature.properties.type];
     key = shape + '+grey';
-
     options.icon = Icon.getIcon(key);
-
     marker = L.marker(latlng, options);
 
     return marker;
