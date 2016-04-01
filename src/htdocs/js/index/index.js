@@ -5,7 +5,6 @@ var L = require('leaflet'), // aliased in browserify.js
 
 // Leaflet plugins
 require('leaflet-fullscreen');
-require('leaflet/MousePosition');
 require('leaflet/Restoreview');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
@@ -105,6 +104,7 @@ var IndexMap = function () {
     map.fitBounds(bounds);
 
     // Add controllers
+    L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
     L.control.layers(layers.baseLayers, layers.overlays).addTo(map);
     L.control.scale().addTo(map);
 
