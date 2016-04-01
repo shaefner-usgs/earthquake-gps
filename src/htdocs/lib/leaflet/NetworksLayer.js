@@ -31,10 +31,10 @@ var NetworksLayer = function (data, options) {
 
       _icons,
 
-      _hidePoly,
+      _hide,
       _onEachFeature,
       _pointToLayer,
-      _showPoly,
+      _show,
       _style;
 
   _initialize = function () {
@@ -50,23 +50,34 @@ var NetworksLayer = function (data, options) {
     // });
   };
 
-  _hidePoly = function (polyId) {
-    var el = document.querySelector('.' + polyId);
-    el.classList.add('off');
+  _hide = function (id) {
+    var label = document.querySelector('.point' + id),
+        poly = document.querySelector('.poly' + id);
+
+    if (label) {
+      label.classList.add('off');
+    }
+    if (poly) {
+      poly.classList.add('off');
+    }
   };
 
-  _showPoly = function (polyId) {
-    var el = document.querySelector('.' + polyId);
-    el.classList.remove('off');
+  _show = function (id) {
+    var label = document.querySelector('.point' + id),
+        poly = document.querySelector('.poly' + id);
+
+    if (label) {
+      label.classList.remove('off');
+    }
+    if (poly) {
+      poly.classList.remove('off');
+    }
   };
 
   _style = function (feature) {
-    var className;
-
-    className = feature.id;
     if (feature.geometry.type === 'Polygon') {
       return {
-        className: className + ' off',
+        className: feature.id + ' off',
         weight: 2
       };
     }
@@ -77,27 +88,26 @@ var NetworksLayer = function (data, options) {
    * attaching events and popups to features.
    */
   _onEachFeature = function (feature, layer) {
-    var label,
-        polyId;
+    var id,
+        label;
 
     if (feature.geometry.type === 'Point') {
       label = feature.properties.name;
       layer.bindLabel(label, {
-        pane: 'popupPane'
+        pane: 'popupPane',
+        className: feature.id + ' off',
+        noHide: false
       });
 
-      polyId = feature.id.replace('point', 'poly');
-
+      id = feature.id.replace('point', '');
       layer.on({
         mouseover: function () {
-          _showPoly(polyId);
+          _show(id);
         },
         mouseout: function () {
-          _hidePoly(polyId);
+          _hide(id);
         }
       });
-
-
     }
   };
 
