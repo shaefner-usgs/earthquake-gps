@@ -31,6 +31,7 @@ var NetworksLayer = function (data, options) {
 
       _icons,
 
+      _attachEvents,
       _hide,
       _onEachFeature,
       _pointToLayer,
@@ -38,31 +39,43 @@ var NetworksLayer = function (data, options) {
       _style;
 
   _initialize = function () {
-    var i,
-        id,
-        listener,
-        networkLinks;
-
     options = Util.extend({}, _DEFAULTS, options);
     _icons = {};
 
-    listener = function (e) {
-      id = e.target.className.replace('link', ''); // number portion only
+    _attachEvents();
+  };
 
-      if (e.type === 'mouseover') {
-        _show(id);
-      } else if (e.type === 'mouseout') {
-        _hide(id);
-      }
+  /**
+   * Attach mouseover events to list of networks below map
+   */
+  _attachEvents = function () {
+    var i,
+        id,
+        mouseout,
+        mouseover,
+        networkLinks;
+
+    mouseout = function (e) {
+      id = e.target.className.replace('link', ''); // number portion only
+      _hide(id);
+    };
+    mouseover = function (e) {
+      id = e.target.className.replace('link', ''); // number portion only
+      _show(id);
     };
 
     networkLinks = document.querySelectorAll('.networks a');
     for (i = 0; i < networkLinks.length; i ++) {
-      networkLinks[i].addEventListener('mouseover', listener);
-      networkLinks[i].addEventListener('mouseout', listener);
+      networkLinks[i].addEventListener('mouseover', mouseover);
+      networkLinks[i].addEventListener('mouseout', mouseout);
     }
   };
 
+  /**
+   * Hide label & polygon
+   *
+   * @param id {Int} number of features to hide
+   */
   _hide = function (id) {
     var label = document.querySelector('.label' + id),
         poly = document.querySelector('.poly' + id);
@@ -70,25 +83,6 @@ var NetworksLayer = function (data, options) {
     label.classList.add('off');
     if (poly) {
       poly.classList.add('off');
-    }
-  };
-
-  _show = function (id) {
-    var label = document.querySelector('.label' + id),
-        poly = document.querySelector('.poly' + id);
-
-    label.classList.remove('off');
-    if (poly) {
-      poly.classList.remove('off');
-    }
-  };
-
-  _style = function (feature) {
-    if (feature.geometry.type === 'Polygon') {
-      return {
-        className: feature.id + ' off', // polygons off by default
-        weight: 2
-      };
     }
   };
 
@@ -137,7 +131,42 @@ var NetworksLayer = function (data, options) {
     options.icon = Icon.getIcon(key);
     marker = L.marker(latlng, options);
 
+    // Clicking marker sends user to selected network page
+    marker.href = feature.properties.name;
+    marker.on('click', function () {
+      window.location = './' + this.href + '/';
+    });
+
     return marker;
+  };
+
+  /**
+   * Show label & polygon
+   *
+   * @param id {Int} number of features to show
+   */
+  _show = function (id) {
+    var label = document.querySelector('.label' + id),
+        poly = document.querySelector('.poly' + id);
+
+    label.classList.remove('off');
+    if (poly) {
+      poly.classList.remove('off');
+    }
+  };
+
+  /**
+   * Leaflet GeoJSON option: used to get style options for vector layers
+   *
+   * @return {Obj}
+   */
+  _style = function (feature) {
+    if (feature.geometry.type === 'Polygon') {
+      return {
+        className: feature.id + ' off', // polygons off by default
+        weight: 2
+      };
+    }
   };
 
   _initialize();
