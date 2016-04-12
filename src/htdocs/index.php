@@ -22,7 +22,8 @@ if (!isset($TEMPLATE)) {
 }
 
 // Create HTML for network list
-$networks_html = '<ul class="networks">';
+$height = ceil($networks['count'] / 4) * 32;
+$networks_html = '<ul class="networks no-style" style="height: '. $height . 'px;">';
 foreach ($networks['features'] as $feature) {
   if ($feature['geometry']['type'] === 'Point') { // skip polygons
     $networks_html .= sprintf('<li>
