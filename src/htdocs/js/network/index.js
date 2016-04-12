@@ -35,9 +35,10 @@ var NetworkMap = function () {
   _this = {};
 
   _initialize = function () {
-    // Get eqs, stations layers and call initMap() when finished
+    // Get eqs, stations layers which each call initMap() when finished
     _getEarthquakesLayer();
     _getStationsLayer();
+
     _attachPopupLinks();
   };
 

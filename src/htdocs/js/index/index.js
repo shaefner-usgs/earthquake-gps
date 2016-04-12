@@ -27,7 +27,7 @@ var IndexMap = function () {
   _this = {};
 
   _initialize = function () {
-    // Get netwoks layer and call initMap() when finished
+    // Get netwoks layer which calls initMap() when finished
     _getNetworksLayer();
   };
 
