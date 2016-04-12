@@ -1,0 +1,20 @@
+ul.networks {
+	display: flex;
+	flex-flow: column wrap;
+	justify-content: flex-start;
+	align-content: space-between;
+}
+
+ul.networks li {
+	width: 24%;
+	height: 32px;
+}
+
+ul.networks a {
+	display: block;
+	background: #ccc;
+	padding: 0 4px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+  overflow: hidden;
+}
