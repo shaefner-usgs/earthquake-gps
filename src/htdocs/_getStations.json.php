@@ -7,7 +7,11 @@ include_once '../lib/functions/functions.inc.php'; // app functions
 date_default_timezone_set('UTC');
 
 $callback = safeParam('callback');
-$network = safeParam('network', 'Pacific');
+// when this script is called via importJsonToArray() in functions.inc.php,
+// $network is passed in as a function param
+if (!isset($network)) {
+  $network = safeParam('network', 'Pacific');
+}
 $now = date(DATE_RFC2822);
 
 $db = new Db;
