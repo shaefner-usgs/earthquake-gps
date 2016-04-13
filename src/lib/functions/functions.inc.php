@@ -43,10 +43,12 @@ function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
  *
  * @param $file {String}
  *        full path to json file to import (__DIR__ magic constant is useful)
+ * @param $network {String} default is NULL
+ *        GPS Network for php script that creates json file
  *
  * @return {Array} json file contents
  */
-function importJsonToArray ($file) {
+function importJsonToArray ($file, $network=NULL) {
   if (is_file($file)) {
     // Read file contents into output buffer
     ob_start();
@@ -69,14 +71,14 @@ function importJsonToArray ($file) {
  *
  * @param $name {String}
  *        The parameter name
- * @param $default {?} default is null
+ * @param $default {?} default is NULL
  *        Optional default value if the parameter was not provided.
  * @param $filter {PHP Sanitize filter} default is FILTER_SANITIZE_STRING
  *        Optional sanitizing filter to apply
  * @return $value {String}
  */
-function safeParam ($name, $default=null, $filter=FILTER_SANITIZE_STRING) {
-  $value = null;
+function safeParam ($name, $default=NULL, $filter=FILTER_SANITIZE_STRING) {
+  $value = NULL;
 
   if (isset($_POST[$name])) {
     $value = filter_input(INPUT_POST, $name, $filter);
@@ -94,10 +96,10 @@ function safeParam ($name, $default=null, $filter=FILTER_SANITIZE_STRING) {
  *
  * @param $array {Array}
  *        Data from db
- * @param $callback {String} default is null
+ * @param $callback {String} default is NULL
  *        optional callback for jsonp requests
  */
-function showJson ($array, $callback=null) {
+function showJson ($array, $callback=NULL) {
   header('Content-Type: application/json');
   header('Access-Control-Allow-Origin: *');
   header('Access-Control-Allow-Methods: *');
