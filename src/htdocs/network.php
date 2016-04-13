@@ -20,13 +20,15 @@ if (!isset($TEMPLATE)) {
   include '../conf/config.inc.php'; // app config
 
   // importJsonToArray() sets headers -> needs to run before including template
-  $stations = importJsonToArray(__DIR__ . '/_getStations.json.php');
+  $stations = importJsonToArray(__DIR__ .
+    "/_getStations.json.php", $network);
 
   include 'template.inc.php';
 }
 
 // Create HTML for station list
-$stations_html = '<ul class="stations">';
+$height = ceil($stations['count'] / 6) * 32;
+$stations_html = '<ul class="stations no-style" style="height: '. $height . 'px;">';
 foreach ($stations['features'] as $feature) {
   $stations_html .= sprintf('<li class="%s">
       <a href="%s/%s/%s/" title="Go to station details">%s</a>
