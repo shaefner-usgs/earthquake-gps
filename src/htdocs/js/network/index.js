@@ -30,7 +30,8 @@ var NetworkMap = function () {
       _getEarthquakesLayer,
       _getMapLayers,
       _getStationsLayer,
-      _initMap;
+      _initMap,
+      _showCounts;
 
   _this = {};
 
@@ -96,6 +97,7 @@ var NetworkMap = function () {
   //      faults,
         greyscale,
         layers,
+        name,
         satellite,
         terrain;
 
@@ -118,10 +120,12 @@ var NetworkMap = function () {
     };
     layers.defaults = [terrain, _earthquakes];
 
-    // Add stations to overlays / defaults (stored in multiple, unknown groups)
-    Object.keys(_stations.layers).forEach(function(name) {
-      layers.overlays[name] = _stations.layers[name];
-      layers.defaults.push(_stations.layers[name]);
+    // Add stations to overlays / defaults
+    Object.keys(_stations.layers).forEach(function(key) {
+      name = _stations.names[key] +
+        '<span class="' + key + '"></span>'; // hook to add station count
+      layers.overlays[name] = _stations.layers[key];
+      layers.defaults.push(_stations.layers[key]);
     });
 
     return layers;
@@ -178,6 +182,25 @@ var NetworkMap = function () {
       id: network,
       overlays: layers.overlays,
       shareLayers: true
+    });
+
+    // Show station counts
+    _showCounts();
+  };
+
+  /**
+   * Add count dynamically so it doesn't affect the layer name
+   *
+   * restorView plugin uses the name, and layer state can be shared by
+   * multiple pages
+   */
+  _showCounts = function () {
+    var sel;
+
+    Object.keys(_stations.layers).forEach(function(key) {
+      sel = document.querySelector('.leaflet-control .' + key);
+      sel.innerHTML = ' (' + _stations.count[key] + ')';
+      console.log(sel);
     });
   };
 

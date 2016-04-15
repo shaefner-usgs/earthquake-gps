@@ -19,9 +19,9 @@ var _SHAPES = {
 
 var _LAYERNAMES = {
   blue: 'Past 3 days',
+  yellow: '4&ndash;7 days ago',
   orange: '8&ndash;14 days ago',
-  red: 'Over 14 days ago',
-  yellow: '4&ndash;7 days ago'
+  red: 'Over 14 days ago'
 };
 
 /**
@@ -45,9 +45,10 @@ var StationsLayer = function (data, options) {
 
       _bounds,
       _icons,
-      _layers,
+      _points,
 
       _getColor,
+      _initLayers,
       _onEachFeature,
       _pointToLayer;
 
@@ -55,15 +56,31 @@ var StationsLayer = function (data, options) {
 
   _initialize = function () {
     options = Util.extend({}, _DEFAULTS, options);
-    _this.layers = {};
 
     _bounds = new L.LatLngBounds();
     _icons = {};
-    _layers = {};
+    _points = {};
+
+    _initLayers();
 
     L.geoJson(data, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
+    });
+  };
+
+  /**
+   * Create a layerGroup for each group of stations (classed by age)
+   * (also set up a count to keep track of how many stations are in each group)
+   */
+  _initLayers = function () {
+    _this.count = {};
+    _this.layers = {};
+    _this.names = _LAYERNAMES;
+    Object.keys(_LAYERNAMES).forEach(function(key) {
+      _this.count[key] = 0;
+      _this.layers[key] = L.layerGroup();
+      _this.addLayer(_this.layers[key]); // add to featureGroup
     });
   };
 
@@ -119,8 +136,8 @@ var StationsLayer = function (data, options) {
       pane: 'popupPane'
     });
 
-    // Store layer so its popup can be accessed by openPopup()
-    _layers[data.station] = layer;
+    // Store point so its popup can be accessed by openPopup()
+    _points[data.station] = layer;
   };
 
   /**
@@ -133,23 +150,18 @@ var StationsLayer = function (data, options) {
     var color,
         key,
         marker,
-        name,
         shape;
 
     color = _getColor(feature.properties.days);
     shape = _SHAPES[feature.properties.type];
     key = shape + '+' + color;
-    name = _LAYERNAMES[color];
 
     options.icon = Icon.getIcon(key);
     marker = L.marker(latlng, options);
 
     // Group stations in separate layers by type
-    if (!_this.layers.hasOwnProperty(name)) {
-      _this.layers[name] = L.layerGroup();
-      _this.addLayer(_this.layers[name]); // add to featureGroup
-    }
-    _this.layers[name].addLayer(marker);
+    _this.layers[color].addLayer(marker);
+    _this.count[color] ++;
 
     _bounds.extend(latlng);
 
@@ -170,7 +182,7 @@ var StationsLayer = function (data, options) {
    * Open popup for a given station
    */
   _this.openPopup = function (station) {
-    _layers[station].openPopup();
+    _points[station].openPopup();
   };
 
   _initialize();
