@@ -7,6 +7,7 @@ $network = safeParam('network', 'Alaska');
 
 if (!isset($TEMPLATE)) {
   $TITLE = $network . ' Network';
+  $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.x/leaflet.css" />
     <link rel="stylesheet" href="css/network/index.css" />
@@ -28,18 +29,30 @@ if (!isset($TEMPLATE)) {
 
 // Create HTML for station list
 $height = ceil($stations['count'] / 6) * 32;
+$starred = false;
 $stations_html = '<ul class="stations no-style" style="height: '. $height . 'px;">';
+
 foreach ($stations['features'] as $feature) {
+  // star high rms values
+  $star = '';
+  if ($feature['properties']['rms']['up'] > 15 ||
+    $feature['properties']['rms']['north'] > 10 ||
+    $feature['properties']['rms']['east'] > 10) {
+      $star = '<span>*</span>';
+      $starred = true;
+  }
   $stations_html .= sprintf('<li class="%s">
-      <a href="%s/%s/%s/" title="Go to station details">%s</a>
+      <a href="%s/%s/%s/" title="Go to station details">%s%s</a>
     </li>',
     getColor($feature['properties']['days']),
     $MOUNT_PATH,
     $network,
     $feature['properties']['station'],
-    strtoupper($feature['properties']['station'])
+    strtoupper($feature['properties']['station']),
+    $star
   );
 }
+
 $stations_html .= '</ul>';
 
 ?>
@@ -47,8 +60,12 @@ $stations_html .= '</ul>';
 <section>
   <div class="map"></div>
   <p class="count"><?php print $stations['count']; ?> Stations on this map</p>
-  <?php print $stations_html; ?>
-  <p>* = high RMS values</p>
+  <?php
+    print $stations_html;
+    if ($starred) {
+      print '<p>* = high RMS values</p>';
+    }
+  ?>
 </section>
 
 <section>
