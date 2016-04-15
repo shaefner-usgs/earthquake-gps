@@ -22,11 +22,11 @@ class Db {
    *
    * @param $sql {String}
    *        SQL query
-   * @param $params {Array} default is null
+   * @param $params {Array} default is NULL
    *        key-value substitution params for SQL query
    * @return $stmt {Object} - PDOStatement object
    */
-  private function _execQuery ($sql, $params=null) {
+  private function _execQuery ($sql, $params=NULL) {
     try {
       $stmt = $this->db->prepare($sql);
 
@@ -201,11 +201,11 @@ class Db {
   /**
    * Query db to get a list of stations and their associated networks
    *
-   * @param $firstchar {String/Int} default is null
+   * @param $firstchar {String/Int} default is NULL
    *        optional char to filter stations (e.g. only stations starting w 'a')
    * @return {Function}
    */
-  public function queryStationList ($firstchar=null) {
+  public function queryStationList ($firstchar=NULL) {
     $filter = "$firstchar%";
     $sql = 'SELECT r.station, r.network
       FROM nca_gps_relations r
@@ -232,7 +232,7 @@ class Db {
       LEFT JOIN nca_gps_velocities v USING (station)
       WHERE r.network = :network AND v.network = :network AND v.type = "nafixed"
       GROUP BY `station`
-      ORDER BY v.last_observation DESC';
+      ORDER BY s.station ASC';
 
     return $this->_execQuery($sql, array(
       'network' => $network
