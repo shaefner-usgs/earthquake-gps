@@ -2,6 +2,7 @@
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station List';
+  $NAVIGATION = true;
   $HEAD = '';
   $FOOT = '';
 

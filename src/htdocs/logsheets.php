@@ -7,6 +7,7 @@ $station = safeParam('station', '7adl');
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . ' Field Logs';
+  $NAVIGATION = true;
   $HEAD = '';
   $FOOT = '';
 
