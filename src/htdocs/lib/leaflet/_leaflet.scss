@@ -34,3 +34,11 @@ input[type=checkbox], input[type=radio] {
   top: 0;
   white-space: nowrap;
 }
+
+/* Quell long attributions */
+.leaflet-control-attribution {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
