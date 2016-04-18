@@ -25,6 +25,9 @@ class StationView {
     print $this->_getStationDetailsMarkup();
     print $this->_getCampaignListMarkup();
 
+    // campaign station -> photos
+    // continuous station -> kinematic plots
+
     print '<pre>';
     print var_dump($this->model);
     print '</pre>';
