@@ -10,12 +10,12 @@ if (!isset($TEMPLATE)) {
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.x/leaflet.css" />
-    <link rel="stylesheet" href="css/network/index.css" />
+    <link rel="stylesheet" href="/css/network/index.css" />
   ';
   $FOOT = '
     <script>var network = "' . $network . '";</script>
     <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
-    <script src="js/network/index.js"></script>
+    <script src="/js/network/index.js"></script>
   ';
 
   include '../conf/config.inc.php'; // app config

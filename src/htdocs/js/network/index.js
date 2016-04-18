@@ -72,7 +72,7 @@ var NetworkMap = function () {
    */
   _getEarthquakesLayer = function () {
     Xhr.ajax({
-      url: '_getEarthquakes.json.php',
+      url: '/_getEarthquakes.json.php',
       success: function (data) {
         _earthquakes = L.earthquakesLayer(data);
         _initMap();
@@ -136,7 +136,7 @@ var NetworkMap = function () {
    */
   _getStationsLayer = function () {
     Xhr.ajax({
-      url: '_getStations.json.php?network=' + network,
+      url: '/_getStations.json.php?network=' + network,
       success: function (data) {
         _stations = L.stationsLayer(data);
         _initMap();
