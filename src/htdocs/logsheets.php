@@ -8,7 +8,7 @@ $station = safeParam('station', '7adl');
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . ' Field Logs';
   $NAVIGATION = true;
-  $HEAD = '';
+  $HEAD = '<link rel="stylesheet" href"/css/logsheets/index.scss" />';
   $FOOT = '';
 
   include '../conf/config.inc.php'; // app config
