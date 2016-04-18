@@ -52,9 +52,9 @@ $rsStationChars = $db->queryStationChars();
 // Create html for jumplist
 $nav_html = '<nav class="jumplist">';
 while ($row = $rsStationChars->fetch(PDO::FETCH_ASSOC)) {
-  $link_html = '<a href="%s/stationlist/%s/">%s</a>';
+  $link_html = '<a href="%s/stations/%s/">%s</a>';
   if ($row['alphanum'] === $filter) {
-    $link_html = '<a href="%s/stationlist/%s/"><strong>%s</strong></a>';
+    $link_html = '<a href="%s/stations/%s/"><strong>%s</strong></a>';
   }
   $nav_html .= sprintf($link_html,
     $MOUNT_PATH,
