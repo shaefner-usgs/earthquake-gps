@@ -10,6 +10,7 @@ include '../conf/config.inc.php'; // app config
  *   [photos] => Array (
  *     [(date)] => Array (
  *       PhotoModel Object (
+ *         [code] => String
  *         [date] => Int
  *         [file] => String
  *         [type] => String
