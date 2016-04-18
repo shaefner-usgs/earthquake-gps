@@ -1,15 +1,19 @@
 <?php
 
 $section = '/monitoring/gps';
+$url = $_SERVER['REQUEST_URI'];
 
+// Set up page matches for 'Data' tab
 $matches = false;
-if (preg_match("@^/monitoring/gps/?(index.php)?$@", $_SERVER['REQUEST_URI']) ||
-  $_SERVER['REQUEST_URI'] === "$section/kinematic.php" ||
-  $_SERVER['REQUEST_URI'] === "$section/network.php" ||
-  $_SERVER['REQUEST_URI'] === "$section/qc.php" ||
-  $_SERVER['REQUEST_URI'] === "$section/station.php" ||
-  $_SERVER['REQUEST_URI'] === "$section/photos.php" ||
-  $_SERVER['REQUEST_URI'] === "$section/logsheets.php") {
+if (
+  // index
+  preg_match("@^$section/?(index.php)?$@", $url) ||
+  // network
+  preg_match("@^$section/[\w-]+/?$@", $url) ||
+  // station
+  preg_match("@^$section/[\w-]+/\w{4}/?$@", $url) ||
+  // kinematic, logs, photos, qc
+  preg_match("@^$section/[\w-]+/\w{4}/(kinematic|logs|photos|qc)/?$@", $url)) {
     $matches = true;
 }
 
