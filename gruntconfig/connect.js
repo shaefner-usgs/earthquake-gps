@@ -23,7 +23,7 @@ var connect = {
   options: {
     hostname: '*' // allow access by others
   },
-  
+
   proxies: [
     {
       context: config.ini.MOUNT_PATH + '/data', // data on dev server
@@ -48,6 +48,26 @@ var connect = {
     {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/?$',
       to: '/network.php?network=$1'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/?$',
+      to: '/station.php?network=$1&station=$2'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/kinematic/?$',
+      to: '/kinematic.php?station=$1'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/logs/?$',
+      to: '/logsheets.php?station=$1'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/photos/?$',
+      to: '/photos.php?station=$1'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/qc/?$',
+      to: '/qc.php?station=$1'
     },
     {
       from: '^' + config.ini.MOUNT_PATH + '/?(.*)$',
