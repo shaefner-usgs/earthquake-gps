@@ -18,6 +18,7 @@ module.exports = function (grunt) {
     'copy:c3',
     'copy:d3',
     'copy:leaflet',
+    'configureRewriteRules',
     'configureProxies:dev', // don't need to define
     'connect:template',
     'connect:dev',

@@ -2,26 +2,11 @@
 
 var config = require('./config');
 
-var rewrites = [
-  {
-    from: '^' + config.ini.MOUNT_PATH + '/stations/?(\w)?/?$',
-    to: '/stationlist.php?filter=$1'
-  },
-  {
-    from: '^' + config.ini.MOUNT_PATH + '/([\w-]+)/?$',
-    to: '/network.php?network=$1'
-  },
-  {
-    from: '^' + config.ini.MOUNT_PATH + '/?(.*)$',
-    to: '/$1'
-  }
-];
-
 // handle proxies for template, rewrites, php parsing
 var addMiddleware = function (connect, options, middlewares) {
   middlewares.unshift(
     require('grunt-connect-proxy/lib/utils').proxyRequest,
-    require('http-rewrite-middleware').getMiddleware(rewrites),
+    require('grunt-connect-rewrite/lib/utils').rewriteRequest,
     require('gateway')(options.base[0], {
       '.php': 'php-cgi',
       'env': {
@@ -38,6 +23,7 @@ var connect = {
   options: {
     hostname: '*' // allow access by others
   },
+  
   proxies: [
     {
       context: config.ini.MOUNT_PATH + '/data', // data on dev server
@@ -51,6 +37,21 @@ var connect = {
       rewrite: {
         '^/theme': ''
       }
+    }
+  ],
+
+  rules: [
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/stations/?([a-z0-9])?/?$',
+      to: '/stationlist.php?filter=$1'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/?$',
+      to: '/network.php?network=$1'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/?(.*)$',
+      to: '/$1'
     }
   ],
 
