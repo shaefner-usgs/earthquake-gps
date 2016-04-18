@@ -4,6 +4,14 @@ var config = require('./config');
 
 var rewrites = [
   {
+    from: '^' + config.ini.MOUNT_PATH + '/stations/?(\w)?/?$',
+    to: '/stationlist.php?filter=$1'
+  },
+  {
+    from: '^' + config.ini.MOUNT_PATH + '/([\w-]+)/?$',
+    to: '/network.php?network=$1'
+  },
+  {
     from: '^' + config.ini.MOUNT_PATH + '/?(.*)$',
     to: '/$1'
   }
