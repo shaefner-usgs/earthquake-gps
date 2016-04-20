@@ -80,9 +80,9 @@ function importJsonToArray ($file, $network=NULL) {
 function safeParam ($name, $default=NULL, $filter=FILTER_SANITIZE_STRING) {
   $value = NULL;
 
-  if (isset($_POST[$name])) {
+  if (isset($_POST[$name]) && $_POST[$name] !== '') {
     $value = filter_input(INPUT_POST, $name, $filter);
-  } else if (isset($_GET[$name])) {
+  } else if (isset($_GET[$name]) && $_GET[$name] !== '') {
     $value = filter_input(INPUT_GET, $name, $filter);
   } else {
     $value = $default;
