@@ -9,7 +9,7 @@ if (
   // index
   preg_match("@^$section/?(index.php)?$@", $url) ||
   // network
-  preg_match("@^$section/[\w-]+/?$@", $url) ||
+  preg_match("@^$section/(?!stations)[\w-]+/?$@", $url) ||
   // station
   preg_match("@^$section/[\w-]+/\w{4}/?$@", $url) ||
   // kinematic, logs, photos, qc
@@ -21,7 +21,7 @@ $NAVIGATION =
   navGroup('GPS',
     navItem("$section/", 'Data', $matches) .
     navItem("$section/stations/", 'Station List') .
-    navItem("$sectionabout.php", 'About')
+    navItem("$section/about.php", 'About')
   );
 
 print $NAVIGATION;
