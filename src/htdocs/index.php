@@ -50,7 +50,7 @@ $networks_html .= '</ul>';
 
 <section>
   <h2>View Stations Alphabetically</h2>
-  <p><a href="stationlist/">Station List</a></p>
+  <p><a href="stations/">Station List</a></p>
 </section>
 
 <section>
