@@ -59,7 +59,7 @@ $stations_html .= '</ul>';
 
 <section>
   <div class="map"></div>
-  <p class="count"><?php print $stations['count']; ?> Stations on this map</p>
+  <h3 class="count"><?php print $stations['count']; ?> stations on this map</h3>
   <?php
     print $stations_html;
     if ($starred) {
