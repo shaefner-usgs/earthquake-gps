@@ -3,7 +3,7 @@
 var L = require('leaflet'),
     Util = require('util/Util');
 
-require('leaflet.label');
+require('leaflet-label');
 
 var _DEFAULTS = {
   weight: 1,
