@@ -9,8 +9,8 @@ $network = safeParam('network', 'Pacific');
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . " ($network Network)";
   $NAVIGATION = true;
-  $HEAD = '';
-  $FOOT = '';
+  $HEAD = '<link rel="stylesheet" href="/css/station/index.css" />';
+  $FOOT = '<script src="/js/station/index.js"></script>';
 
   include '../lib/classes/Db.class.php'; // db connector, queries
   include '../lib/classes/StationModel.class.php'; // model
@@ -28,8 +28,8 @@ $networkList = array();
 while ($row = $rsNetworkList->fetch(PDO::FETCH_ASSOC)) {
   array_push($networkList, $row['network']);
 }
-// Add currently selected network if it's not already in the list (this would
-// happen if user is viewing a "hidden" network)
+// Add currently selected network if it's not already in the list
+// (this would happen if user is viewing a "hidden" network)
 if (!in_array($network, $networkList)) {
   array_push($networkList, $network);
 }
