@@ -18,12 +18,8 @@
     float: left;
     padding-right: 4px;
 
-    &:after {
+    &:not(:last-child):after {
       content: ',\00a0';
-    }
-
-    &:last-child:after {
-      content: '';
     }
   }
 }
