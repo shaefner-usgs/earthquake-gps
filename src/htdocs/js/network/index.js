@@ -191,7 +191,7 @@ var NetworkMap = function () {
   /**
    * Add count dynamically so it doesn't affect the layer name
    *
-   * restorView plugin uses the name, and layer state can be shared by
+   * restoreView plugin uses the name, and layer state can be shared by
    * multiple pages
    */
   _showCounts = function () {
@@ -200,7 +200,6 @@ var NetworkMap = function () {
     Object.keys(_stations.layers).forEach(function(key) {
       sel = document.querySelector('.leaflet-control .' + key);
       sel.innerHTML = ' (' + _stations.count[key] + ')';
-      console.log(sel);
     });
   };
 
