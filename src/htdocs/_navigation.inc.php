@@ -13,8 +13,11 @@ if (
   // station
   preg_match("@^$section/[\w-]+/\w{4}/?$@", $url) ||
   // kinematic, logs, photos, qc
-  preg_match("@^$section/[\w-]+/\w{4}/(kinematic|logs|photos|qc)/?$@", $url)) {
-    $matches = true;
+  preg_match("@^$section/[\w-]+/\w{4}/(kinematic|logs|photos|qc)/?$@", $url) ||
+  // plots.php
+  $url === "$section/plots.php"
+) {
+  $matches = true;
 }
 
 $NAVIGATION =
