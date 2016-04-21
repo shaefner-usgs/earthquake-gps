@@ -1,25 +1,28 @@
 h2 {
-	border-top: 1px solid #eee;
-	padding-top: 1.3em;
-}
-h2:first-child {
-	border: 0;
-	padding: 0;
+  border-top: 1px solid #eee;
+  padding-top: 1.3em;
+
+  &:first-child {
+    border: 0;
+    padding: 0;
+  }
 }
 
 .photos {
-    display: flex;
-	flex-flow: row wrap;
-}
-.photos li {
-	padding-right: 5px;
-}
-.photos h3 {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	width: 100%;
-  margin: 8px 0;
+  display: flex;
+  flex-flow: row wrap;
+
+  h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    margin: 8px 0;
+  }
+
+  li {
+    padding-right: 5px;
+  }
 }
 
 .n {
