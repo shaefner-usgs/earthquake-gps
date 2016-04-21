@@ -19,7 +19,7 @@ var postcss = {
         postcssImport({ // imports partials *and* 'regular' css files
           path: [
             config.src + '/htdocs/css',
-            'node_modules/leaflet-label/dist',
+            'node_modules/leaflet.label/dist',
             'node_modules/leaflet-fullscreen/dist',
             'node_modules/hazdev-tablist/src/tablist'
           ]

@@ -4,7 +4,7 @@ var Icon = require('leaflet/Icon'),
     L = require('leaflet'),
     Util = require('util/Util');
 
-require('leaflet-label');
+require('leaflet.label');
 
 var _DEFAULTS = {
   alt: 'GPS network'
