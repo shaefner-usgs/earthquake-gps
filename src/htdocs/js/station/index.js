@@ -14,7 +14,9 @@ var Plots = function (el) {
   _this = {};
 
   _initialize = function () {
-    _addListeners();
+    if (el) {
+      _addListeners();
+    }
   };
 
   /**
