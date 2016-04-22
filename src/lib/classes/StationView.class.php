@@ -74,7 +74,7 @@ class StationView {
               <li><a href="' . $imgSrc90 . '">Past 90 days</a></li>
               <li><a href="' . $imgSrc365 . '">Past year</a></li>
               <li><a href="' . $imgSrc730 . '">Past 2 years</a></li>
-              <li><a href="' . $imgSrc . '">All data</a></li>
+              <li><a href="' . $imgSrc . '" class="sel">All data</a></li>
             </ul>';
           $toggle = 'toggle';
         }

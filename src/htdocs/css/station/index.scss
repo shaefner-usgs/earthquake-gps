@@ -31,14 +31,21 @@ mark {
 }
 
 .nav-toggle {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 
   li {
-  	padding-right: 3px;
+    padding-right: 3px;
 
     &:not(:last-child):after {
-    	content: ' |';
+      content: ' |';
     }
+  }
+
+  .sel {
+    text-decoration: none;
+    color: inherit !important;
+    cursor: text;
+    font-weight: bold;
   }
 }
