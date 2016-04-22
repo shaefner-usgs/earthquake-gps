@@ -2,30 +2,39 @@
 
 var TabList = require('tablist/TabList');
 
-var initNavToggle,
-    togglePlot;
+var Plots = function (el) {
+  var _this,
+      _initialize,
 
-togglePlot = function (e) {
-  var img;
+      _togglePlot,
+      _addListeners;
 
-  e.preventDefault();
-  img = document.querySelector('.toggle');
-  img.setAttribute('src', e.srcElement.href);
+  _this = {};
+
+  _initialize = function () {
+    _addListeners();
+  };
+
+  _addListeners = function () {
+    var as;
+
+    as = el.querySelectorAll('a');
+    [].slice.call(as).forEach(function(a) {
+      a.addEventListener('click', _togglePlot);
+    });
+  };
+
+  _togglePlot = function (e) {
+    var img;
+
+    e.preventDefault();
+    img = el.parentNode.querySelector('.toggle');
+    img.setAttribute('src', e.srcElement.href);
+  };
+
+  _initialize();
 };
 
-initNavToggle = function () {
-  var i,
-      navToggleAs;
-
-  navToggleAs = document.querySelectorAll('.nav-toggle a');
-  //[].slice.call(navToggleAs).forEach(function(a) {
-  for (i = 0; i < navToggleAs.length; i ++) {
-    console.log(navToggleAs[i]);
-    navToggleAs[i].addEventListener('click', togglePlot);
-  }
-  //});
-};
-
-initNavToggle();
+Plots(document.querySelector('.nav-toggle'));
 
 TabList.tabbifyAll();
