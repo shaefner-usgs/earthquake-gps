@@ -29,3 +29,16 @@ mark {
     color: red;
   }
 }
+
+.nav-toggle {
+	display: flex;
+	flex-wrap: wrap;
+
+  li {
+  	padding-right: 3px;
+
+    &:not(:last-child):after {
+    	content: ' |';
+    }
+  }
+}

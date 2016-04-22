@@ -68,7 +68,7 @@ class StationView {
           $imgSrc365 = str_replace('.png', '_365.png', $imgSrc);
           $imgSrc730 = str_replace('.png', '_730.png', $imgSrc);
           $nav = '
-            <ul>
+            <ul class="nav-toggle no-style">
               <li><a href="' . $imgSrc30 . '">Past 30 days</a></li>
               <li><a href="' . $imgSrc90 . '">Past 90 days</a></li>
               <li><a href="' . $imgSrc365 . '">Past year</a></li>
