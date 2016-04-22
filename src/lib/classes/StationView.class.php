@@ -59,6 +59,7 @@ class StationView {
         $this->model->station . '/' . $type;
       $file = $this->model->station . '.png';
       $nav = '';
+      $toggle = '';
 
       if (is_file("$baseDir/$imgPath/$file")) {
         $imgSrc = "$baseUri/$imgPath/$file";
@@ -75,6 +76,7 @@ class StationView {
               <li><a href="' . $imgSrc730 . '">Past 2 years</a></li>
               <li><a href="' . $imgSrc . '">All data</a></li>
             </ul>';
+          $toggle = 'toggle';
         }
         $html .= sprintf('
           <section class="panel" data-title="%s">
@@ -82,13 +84,14 @@ class StationView {
               <h3>%s</h3>
             </header>
             %s
-            <img src="%s" alt="Plot showing %s data" />
+            <img src="%s" class="%s" alt="Plot showing %s data" />
             %s
           </section>',
           $name,
           $name,
           $nav,
           $imgSrc,
+          $toggle,
           $name,
           $explanation
         );
