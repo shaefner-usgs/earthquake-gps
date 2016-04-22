@@ -1,5 +1,13 @@
 <?php
 
+/* TODO:
+
+    1 add links above Map
+    2 add mouseover labels for list below map
+    3 add alert for network not found
+    4 add legend
+*/
+
 include_once '../lib/functions/functions.inc.php'; // app functions
 
 // set default value so page loads without passing params
@@ -55,6 +63,9 @@ foreach ($stations['features'] as $feature) {
 
 $stations_html .= '</ul>';
 
+$kmlLastYear = "$MOUNT_PATH/{$network}_lastyear.kmz";
+$kmlNumYears = "$MOUNT_PATH/{$network}_nobs.kmz";
+
 ?>
 
 <section>
@@ -71,8 +82,12 @@ $stations_html .= '</ul>';
 <section>
   <h2>Google Earth Files</h2>
   <ul>
-    <li><a href="">Sorted by number of years occupied</a></li>
-    <li><a href="">Sorted by last year occupied</a></li>
+    <li>
+      <a href="<?php print $kmlNumYears; ?>">Sorted by number of years occupied</a>
+    </li>
+    <li>
+      <a href="<?php print $kmlLastYear; ?>">Sorted by last year occupied</a>
+    </li>
   </ul>
 </section>
 
