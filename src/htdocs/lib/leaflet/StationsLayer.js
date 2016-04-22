@@ -115,24 +115,37 @@ var StationsLayer = function (data, options) {
   _onEachFeature = function (feature, layer) {
     var data,
         label,
+        mountPath,
         popup,
-        popupTemplate;
+        popupTemplate,
+        station;
 
+    mountPath = '/monitoring/gps';
+    station = feature.properties.station;
     data = {
+      baseUri: mountPath + '/' + network + '/' + station,
+      imgSrc: mountPath + '/data/networks/' + network + '/' + station +
+        '/nafixed/' + station + '.png',
       lat: Math.round(feature.geometry.coordinates[1] * 1000) / 1000,
       lon: Math.round(feature.geometry.coordinates[0] * 1000) / 1000,
       network: network,
-      station: feature.properties.station.toUpperCase()
+      station: station.toUpperCase()
     };
     popupTemplate = '<div class="popup station">' +
-        '<h1>Station {station}</h1>' +
+        '<h2>Station {station}</h2>' +
         '<span>({lat}, {lon})</span>' +
-        '<p>{network}</p>' +
+        '<ul class="no-style pipelist">' +
+          '<li><a href="{baseUri}/">Station Details</a></li>' +
+          '<li><a href="{baseUri}/logs/">Field Logs</a></li>' +
+          '<li><a href="{baseUri}/photos/">Photos</a></p></li>' +
+        '</ul>' +
+        '<a href="{baseUri}/"><img src="{imgSrc}" alt="plot" /></a>' +
       '</div>';
     popup = L.Util.template(popupTemplate, data);
-    label = feature.properties.station.toUpperCase();
+    label = station.toUpperCase();
 
     layer.bindPopup(popup).bindLabel(label, {
+      minWidth: 250,
       pane: 'popupPane'
     });
 
