@@ -15,6 +15,14 @@ class StationView {
     $this->model = $model;
   }
 
+  private function _getBackLink () {
+    return sprintf('<p class="back">&laquo; <a href="%s/%s/">Back to %s network</a></p>',
+      $GLOBALS['MOUNT_PATH'],
+      $this->model->network,
+      $this->model->network
+    );
+  }
+
   private function _getCampaignList () {
     return '<h2>Campaign List</h2>';
   }
@@ -125,5 +133,6 @@ class StationView {
     // print '</pre>';
 
     print $this->_getDisclaimer();
+    print $this->_getBackLink();
   }
 }

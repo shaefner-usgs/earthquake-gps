@@ -75,3 +75,7 @@ $stations_html .= '</ul>';
     <li><a href="">Sorted by last year occupied</a></li>
   </ul>
 </section>
+
+<p class="back">&laquo;
+  <a href="<?php print $MOUNT_PATH; ?>/">Back to all networks</a>
+</p>
