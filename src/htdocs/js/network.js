@@ -1,4 +1,4 @@
-/* global network */ // passed via var embedded in html page
+/* global NETWORK */ // passed via var embedded in html page
 
 'use strict';
 
@@ -136,7 +136,7 @@ var NetworkMap = function () {
    */
   _getStationsLayer = function () {
     Xhr.ajax({
-      url: '/_getStations.json.php?network=' + network,
+      url: '/_getStations.json.php?network=' + NETWORK,
       success: function (data) {
         _stations = L.stationsLayer(data);
         _initMap();
@@ -179,7 +179,7 @@ var NetworkMap = function () {
     // Remember user's map settings (selected layers, map extent)
     map.restoreView({
       baseLayers: layers.baseLayers,
-      id: network,
+      id: NETWORK,
       overlays: layers.overlays,
       shareLayers: true
     });

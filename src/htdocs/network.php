@@ -9,6 +9,7 @@
 */
 
 include_once '../lib/functions/functions.inc.php'; // app functions
+include_once '../conf/config.inc.php'; // app config
 
 // set default value so page loads without passing params
 $network = safeParam('network', 'Alaska');
@@ -21,12 +22,11 @@ if (!isset($TEMPLATE)) {
     <link rel="stylesheet" href="/css/network.css" />
   ';
   $FOOT = '
-    <script>var network = "' . $network . '";</script>
+    <script>var NETWORK = "' . $network . '";</script>
+    <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
     <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
     <script src="/js/network.js"></script>
   ';
-
-  include '../conf/config.inc.php'; // app config
 
   // importJsonToArray() sets headers -> needs to run before including template
   $stations = importJsonToArray(__DIR__ .

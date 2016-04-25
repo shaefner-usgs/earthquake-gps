@@ -1,3 +1,5 @@
+/* global MOUNT_PATH */ // passed via var embedded in html page
+
 'use strict';
 
 var L = require('leaflet'),
@@ -33,8 +35,8 @@ Icon.getIcon = function (key, options) {
   if (!_ICONS.hasOwnProperty('key')) {
     options = Util.extend({}, _DEFAULTS, options);
 
-    options.iconRetinaUrl = '/monitoring/gps/img/pin-s-' + key + '-2x.png';
-    options.iconUrl = '/monitoring/gps/img/pin-s-' + key + '.png';
+    options.iconRetinaUrl = MOUNT_PATH + '/img/pin-s-' + key + '-2x.png';
+    options.iconUrl = MOUNT_PATH + '/img/pin-s-' + key + '.png';
 
     _ICONS[key] = Icon(options);
   }

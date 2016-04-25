@@ -1,3 +1,5 @@
+/* global MOUNT_PATH */ // passed via var embedded in html page
+
 'use strict';
 
 var Application = require('qc/Application');
@@ -73,5 +75,5 @@ app = Application({
   ],
 
   // qc data url
-  'url': '/monitoring/gps/qc/qc.coco.json'
+  'url': MOUNT_PATH + '/qc/qc.coco.json'
 });

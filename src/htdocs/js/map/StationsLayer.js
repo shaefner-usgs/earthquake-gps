@@ -1,4 +1,4 @@
-/* global network */ // passed via var embedded in html page
+/* global NETWORK, MOUNT_PATH */ // passed via var embedded in html page
 
 'use strict';
 
@@ -115,20 +115,18 @@ var StationsLayer = function (data, options) {
   _onEachFeature = function (feature, layer) {
     var data,
         label,
-        mountPath,
         popup,
         popupTemplate,
         station;
 
-    mountPath = '/monitoring/gps';
     station = feature.properties.station;
     data = {
-      baseUri: mountPath + '/' + network + '/' + station,
-      imgSrc: mountPath + '/data/networks/' + network + '/' + station +
+      baseUri: MOUNT_PATH + '/' + NETWORK + '/' + station,
+      imgSrc: MOUNT_PATH + '/data/networks/' + NETWORK + '/' + station +
         '/nafixed/' + station + '.png',
       lat: Math.round(feature.geometry.coordinates[1] * 1000) / 1000,
       lon: Math.round(feature.geometry.coordinates[0] * 1000) / 1000,
-      network: network,
+      network: NETWORK,
       station: station.toUpperCase()
     };
     popupTemplate = '<div class="popup station">' +
