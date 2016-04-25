@@ -1,5 +1,7 @@
 <?php
 
+include_once '../conf/config.inc.php'; // app config
+
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Data';
   $NAVIGATION = true;
@@ -10,9 +12,9 @@ if (!isset($TEMPLATE)) {
   $FOOT = '
     <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
     <script src="js/index.js"></script>
+    <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
   ';
 
-  include '../conf/config.inc.php'; // app config
   include '../lib/functions/functions.inc.php'; // app functions
 
   // importJsonToArray() sets headers -> needs to run before including template
