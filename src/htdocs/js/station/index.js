@@ -80,43 +80,4 @@ var Plots = function (el) {
 
 Plots(document.querySelector('.nav-toggle'));
 
-//TabList.tabbifyAll();
-
-// Temporary hack: implement these methods here b/c class method tabbifyOne
-// is wiping out my event listeners
-
-var tabbifyOne = function (el) {
-  var tabs = [],
-      panels,
-      panel,
-      i, len,
-      tablist;
-
-  panels = el.querySelectorAll('.panel');
-  for (i = 0, len = panels.length; i < len; i++) {
-    panel = panels[i];
-    tabs.push({
-      'title': panel.getAttribute('data-title') ||
-          panel.querySelector('header').innerHTML,
-      'content': panel,
-      'selected': panel.getAttribute('data-selected') === 'true'
-    });
-  }
-
-  tablist = TabList({
-    'tabs': tabs
-  });
-
-  el.parentNode.replaceChild(tablist.el, el);
-};
-
-var tabbifyAll = function () {
-  var lists,
-      i;
-  lists = document.querySelectorAll('.tablist');
-  for (i = lists.length - 1; i >= 0; i--) {
-    tabbifyOne(lists[i]);
-  }
-};
-
-tabbifyAll();
+TabList.tabbifyAll();
