@@ -3,7 +3,7 @@
 var L = require('leaflet');
 
 //require('leaflet/Utfgrid');
-require('leaflet/MouseOverLayer');
+require('map/MouseOverLayer');
 
 /**
  * Factory for Faults overlay

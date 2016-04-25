@@ -5,11 +5,11 @@ if (!isset($TEMPLATE)) {
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.x/leaflet.css" />
-    <link rel="stylesheet" href="css/index/index.css" />
+    <link rel="stylesheet" href="css/index.css" />
   ';
   $FOOT = '
     <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
-    <script src="js/index/index.js"></script>
+    <script src="js/index.js"></script>
   ';
 
   include '../conf/config.inc.php'; // app config

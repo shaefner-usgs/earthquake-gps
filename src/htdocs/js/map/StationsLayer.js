@@ -2,7 +2,7 @@
 
 'use strict';
 
-var Icon = require('leaflet/Icon'),
+var Icon = require('map/Icon'),
     L = require('leaflet'),
     Util = require('util/Util');
 

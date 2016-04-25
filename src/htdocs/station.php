@@ -9,8 +9,8 @@ $network = safeParam('network', 'Pacific');
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . " ($network Network)";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="/css/station/index.css" />';
-  $FOOT = '<script src="/js/station/index.js"></script>';
+  $HEAD = '<link rel="stylesheet" href="/css/station.css" />';
+  $FOOT = '<script src="/js/station.js"></script>';
 
   include '../lib/classes/Db.class.php'; // db connector, queries
   include '../lib/classes/StationModel.class.php'; // model

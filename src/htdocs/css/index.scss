@@ -1,5 +1,5 @@
-@import '../../lib/leaflet/_leaflet.scss';
-@import '../_maplist.scss';
+@import '_maplist.scss';
+@import 'map/_leaflet.scss';
 
 .map {
   height: 700px;

@@ -7,17 +7,17 @@ var L = require('leaflet'), // aliased in browserify.js
 
 // Leaflet plugins
 require('leaflet-fullscreen');
-require('leaflet/MousePosition');
-require('leaflet/Restoreview');
+require('map/MousePosition');
+require('map/Restoreview');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
-require('leaflet/DarkLayer');
-require('leaflet/EarthquakesLayer');
-require('leaflet/FaultsLayer');
-require('leaflet/GreyscaleLayer');
-require('leaflet/SatelliteLayer');
-require('leaflet/StationsLayer');
-require('leaflet/TerrainLayer');
+require('map/DarkLayer');
+require('map/EarthquakesLayer');
+require('map/FaultsLayer');
+require('map/GreyscaleLayer');
+require('map/SatelliteLayer');
+require('map/StationsLayer');
+require('map/TerrainLayer');
 
 var NetworkMap = function () {
   var _this,

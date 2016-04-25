@@ -2,7 +2,7 @@
 
 var L = require('leaflet');
 
-require('leaflet/Utfgrid');
+require('map/Utfgrid');
 
 var CLASSES = 'leaflet-mouseover-tooltip';
 

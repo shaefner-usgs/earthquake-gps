@@ -21,7 +21,7 @@ var postcss = {
             config.src + '/htdocs/css',
             'node_modules/leaflet.label/dist',
             'node_modules/leaflet-fullscreen/dist',
-            'node_modules/hazdev-tablist/src/tablist'
+            'node_modules/hazdev-tablist/src'
           ]
         }),
         precss(), // do 'most' sass things

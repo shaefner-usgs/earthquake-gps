@@ -9,7 +9,6 @@ var browserify = {
       debug: true, // create sourcemaps
       paths: [ // ordered list of where to find required components
         config.src + '/htdocs/js',
-        config.src + '/htdocs/lib',
         'node_modules/hazdev-webutils/src',
         'node_modules/hazdev-tablist/src',
         'node_modules/leaflet'
@@ -18,8 +17,8 @@ var browserify = {
   },
 
   index: {
-    src: [config.src + '/htdocs/js/index/index.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/index/index.js',
+    src: [config.src + '/htdocs/js/index.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/index.js',
     options: {
       external: [
         'leaflet' // don't bundle leaflet b/c it's provided by target above
@@ -39,8 +38,8 @@ var browserify = {
   },
 
   network: {
-    src: [config.src + '/htdocs/js/network/index.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/network/index.js',
+    src: [config.src + '/htdocs/js/network.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/network.js',
     options: {
       external: [
         'leaflet' // don't bundle leaflet b/c it's provided by target above
@@ -49,8 +48,8 @@ var browserify = {
   },
 
   station: {
-    src: [config.src + '/htdocs/js/station/index.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/station/index.js',
+    src: [config.src + '/htdocs/js/station.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/station.js',
     options: {
       external: [
         'leaflet' // don't bundle leaflet b/c it's provided by target above
@@ -59,8 +58,8 @@ var browserify = {
   },
 
   qc: {
-    src: [config.src + '/htdocs/js/qc/index.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/qc/index.js'
+    src: [config.src + '/htdocs/js/qc.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/qc.js'
   }
 
 };

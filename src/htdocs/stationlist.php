@@ -3,7 +3,7 @@
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station List';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="/css/stationlist/index.css" />';
+  $HEAD = '<link rel="stylesheet" href="/css/stationlist.css" />';
   $FOOT = '';
 
   include '../conf/config.inc.php'; // app config

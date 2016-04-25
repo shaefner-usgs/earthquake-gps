@@ -5,14 +5,14 @@ var L = require('leaflet'), // aliased in browserify.js
 
 // Leaflet plugins
 require('leaflet-fullscreen');
-require('leaflet/Restoreview');
+require('map/Restoreview');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
-require('leaflet/DarkLayer');
-require('leaflet/GreyscaleLayer');
-require('leaflet/NetworksLayer.js');
-require('leaflet/SatelliteLayer');
-require('leaflet/TerrainLayer');
+require('map/DarkLayer');
+require('map/GreyscaleLayer');
+require('map/NetworksLayer.js');
+require('map/SatelliteLayer');
+require('map/TerrainLayer');
 
 var IndexMap = function () {
   var _this,

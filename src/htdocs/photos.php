@@ -8,7 +8,7 @@ $station = safeParam('station', '7adl');
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . ' Photos';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="/css/photos/index.css" />';
+  $HEAD = '<link rel="stylesheet" href="/css/photos.css" />';
   $FOOT = '';
 
   include '../conf/config.inc.php'; // app config
