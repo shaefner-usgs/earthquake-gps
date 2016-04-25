@@ -1,4 +1,4 @@
-ul.networks, ul.stations {
+.networks, .stations {
   display: flex;
   flex-flow: column wrap;
   justify-content: flex-start;
@@ -34,11 +34,11 @@ ul.networks, ul.stations {
   }
 }
 
-ul.networks > li {
+.networks > li {
   width: 24%;
 }
 
-ul.stations {
+.stations {
   > li {
     width: 16%;
   }
