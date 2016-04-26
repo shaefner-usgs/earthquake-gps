@@ -19,7 +19,7 @@ module.exports = function (grunt) {
     'copy:d3',
     'copy:leaflet',
     'configureRewriteRules',
-    'configureProxies:dev', // don't need to define
+    'configureProxies:dev', // don't need to define (defined by module)
     'connect:template',
     'connect:dev',
     'postcss:dev',
