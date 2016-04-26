@@ -34,12 +34,22 @@ var copy = {
   },
 
   leaflet: {
-    cwd: 'node_modules/leaflet/dist',
-    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet-0.7.x',
     expand: true,
+    cwd: 'node_modules/leaflet/dist',
+    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet-0.7.7',
+    rename: function (dest, src) {
+      var newName;
+
+      // swap -src version to be default and add -min to compressed version
+      // this is nice for debugging but allows production to use default
+      // version as compressed
+      newName = src.replace('leaflet.js', 'leaflet-min.js');
+      newName = newName.replace('leaflet-src.js', 'leaflet.js');
+
+      return dest + '/' + newName;
+    },
     src: [
-      'leaflet.css',
-      'images/*'
+      '**/*'
     ]
   },
 

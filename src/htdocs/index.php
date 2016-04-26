@@ -10,7 +10,7 @@ if (!isset($TEMPLATE)) {
     <link rel="stylesheet" href="css/index.css" />
   ';
   $FOOT = '
-    <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
+    <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
     <script src="js/index.js"></script>
     <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
   ';
