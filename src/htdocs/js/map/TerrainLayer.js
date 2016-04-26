@@ -1,7 +1,9 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet'),
-    Util = require('util/Util');
+
+var Util = require('util/Util');
+
 
 /**
  * Factory for ESRI Terrain base layer
@@ -24,6 +26,7 @@ var TerrainLayer = function (options) {
     options
   );
 };
+
 
 L.terrainLayer = TerrainLayer;
 

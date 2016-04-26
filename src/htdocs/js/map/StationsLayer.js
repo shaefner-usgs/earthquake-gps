@@ -1,9 +1,8 @@
-/* global NETWORK, MOUNT_PATH */ // passed via var embedded in html page
-
+/* global L, NETWORK, MOUNT_PATH */ // passed via var embedded in html page
 'use strict';
 
+
 var Icon = require('map/Icon'),
-    L = require('leaflet'),
     Util = require('util/Util');
 
 require('leaflet.label');
@@ -23,6 +22,7 @@ var _LAYERNAMES = {
   orange: '8&ndash;14 days ago',
   red: 'Over 14 days ago'
 };
+
 
 /**
  * Factory for Stations overlay
@@ -52,6 +52,7 @@ var StationsLayer = function (data, options) {
       _onEachFeature,
       _pointToLayer;
 
+
   _this = L.featureGroup();
 
   _initialize = function () {
@@ -68,6 +69,7 @@ var StationsLayer = function (data, options) {
       pointToLayer: _pointToLayer
     });
   };
+
 
   /**
    * Create a layerGroup for each group of stations (classed by age)
@@ -196,10 +198,11 @@ var StationsLayer = function (data, options) {
     _points[station].openPopup();
   };
 
-  _initialize();
 
+  _initialize();
   return _this;
 };
+
 
 L.stationsLayer = StationsLayer;
 

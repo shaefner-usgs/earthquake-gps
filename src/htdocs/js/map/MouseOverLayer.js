@@ -1,6 +1,6 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet');
 
 require('map/Utfgrid');
 

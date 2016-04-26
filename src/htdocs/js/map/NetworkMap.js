@@ -44,8 +44,6 @@ var NetworkMap = function (options) {
     // Get eqs, stations layers which each call initMap() when finished
     _getEarthquakesLayer();
     _getStationsLayer();
-
-    _attachPopupLinks();
   };
 
 
@@ -164,6 +162,8 @@ var NetworkMap = function (options) {
         layers,
         map;
 
+    _attachPopupLinks();
+
     layers = _getMapLayers();
 
     // Create map
@@ -191,7 +191,7 @@ var NetworkMap = function (options) {
     });
 
     // Show station counts
-    //_showCounts();
+    _showCounts();
   };
 
   /**
@@ -210,7 +210,7 @@ var NetworkMap = function (options) {
   };
 
 
-  _initialize();
+  _initialize(options);
   options = null;
   return _this;
 };

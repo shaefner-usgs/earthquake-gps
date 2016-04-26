@@ -1,7 +1,9 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet'),
-    Util = require('util/Util');
+
+var Util = require('util/Util');
+
 
 /**
  * Leaflet.RestoreView plugin https://github.com/makinacorpus/Leaflet.RestoreView
@@ -26,7 +28,6 @@ var L = require('leaflet'),
  *
  * <Layer Config> : http://leafletjs.com/reference.html#control-layers-config
  */
-
 var RestoreViewMixin = {
   restoreView: function (options) {
     var defaultId,

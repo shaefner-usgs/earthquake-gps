@@ -1,9 +1,8 @@
-/* global MOUNT_PATH */ // passed via var embedded in html page
-
+/* global L, MOUNT_PATH */ // passed via var embedded in html page
 'use strict';
 
-var L = require('leaflet'),
-    Util = require('util/Util');
+
+var Util = require('util/Util');
 
 var _ICONS = {};
 
@@ -17,6 +16,7 @@ var _DEFAULTS = {
 var Icon = function (options) {
   return L.icon(options);
 };
+
 
 /**
  * Create Leaflet icons
@@ -43,5 +43,6 @@ Icon.getIcon = function (key, options) {
 
   return _ICONS[key];
 };
+
 
 module.exports = Icon;

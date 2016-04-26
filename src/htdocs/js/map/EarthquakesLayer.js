@@ -1,7 +1,8 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet'),
-    Util = require('util/Util');
+
+var Util = require('util/Util');
 
 require('leaflet.label');
 
@@ -18,6 +19,7 @@ var _COLORS = {
   pastweek: '#ff0',
   pastmonth: '#ffb'
 };
+
 
 /**
  * Factory for Earthquakes overlay
@@ -36,9 +38,11 @@ var EarthquakesLayer = function (data, options) {
       _onEachFeature,
       _pointToLayer;
 
+
   _initialize = function () {
     options = Util.extend({}, _DEFAULTS, options);
   };
+
 
   /**
    * Leaflet GeoJSON option: called on each created feature layer. Useful for
@@ -101,6 +105,7 @@ var EarthquakesLayer = function (data, options) {
     pointToLayer: _pointToLayer
   });
 };
+
 
 L.earthquakesLayer = EarthquakesLayer;
 

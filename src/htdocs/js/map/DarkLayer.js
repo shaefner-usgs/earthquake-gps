@@ -1,7 +1,9 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet'),
-    Util = require('util/Util');
+
+var Util = require('util/Util');
+
 
 /**
  * Factory for Dark base layer
@@ -26,6 +28,7 @@ var DarkLayer = function (options) {
     options
   );
 };
+
 
 L.darkLayer = DarkLayer;
 

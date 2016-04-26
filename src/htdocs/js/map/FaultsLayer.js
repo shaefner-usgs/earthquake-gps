@@ -1,9 +1,10 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet');
 
-//require('leaflet/Utfgrid');
+require('map/Utfgrid');
 require('map/MouseOverLayer');
+
 
 /**
  * Factory for Faults overlay
@@ -41,6 +42,7 @@ var FaultsLayer = function () {
 
   return L.layerGroup([_plates, _faults]);
 };
+
 
 L.faultsLayer = FaultsLayer;
 

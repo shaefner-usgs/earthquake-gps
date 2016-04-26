@@ -1,6 +1,6 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet');
 
 /*!
  * Copyright (c) 2012, Smartrak, David Leaver
@@ -412,7 +412,5 @@ L.UtfGrid = (L.Layer || L.Class).extend({
 L.utfGrid = function (url, options) {
 	return new L.UtfGrid(url, options);
 };
-
-
 
 }(window));

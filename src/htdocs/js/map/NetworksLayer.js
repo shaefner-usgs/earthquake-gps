@@ -1,7 +1,8 @@
+/* global L */
 'use strict';
 
+
 var Icon = require('map/Icon'),
-    L = require('leaflet'),
     Util = require('util/Util');
 
 require('leaflet.label');
@@ -14,6 +15,7 @@ var _SHAPES = {
   campaign: 'triangle',
   continuous: 'square'
 };
+
 
 /**
  * Factory for Earthquakes overlay
@@ -38,12 +40,14 @@ var NetworksLayer = function (data, options) {
       _show,
       _style;
 
+
   _initialize = function () {
     options = Util.extend({}, _DEFAULTS, options);
     _icons = {};
 
     _attachEvents();
   };
+
 
   /**
    * Attach mouseover events to list of networks below map
@@ -169,6 +173,7 @@ var NetworksLayer = function (data, options) {
     }
   };
 
+
   _initialize();
 
   return L.geoJson(data, {
@@ -177,6 +182,7 @@ var NetworksLayer = function (data, options) {
     style: _style
   });
 };
+
 
 L.networksLayer = NetworksLayer;
 

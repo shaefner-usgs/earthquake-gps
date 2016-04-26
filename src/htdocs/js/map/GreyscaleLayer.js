@@ -1,7 +1,9 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet'),
-    Util = require('util/Util');
+
+var Util = require('util/Util');
+
 
 /**
  * Factory for Greyscale base layer
@@ -59,6 +61,7 @@ var GreyscaleLayer = function (provider, options) {
     return _base;
   }
 };
+
 
 L.greyscaleLayer = GreyscaleLayer;
 

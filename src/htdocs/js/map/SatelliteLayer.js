@@ -1,7 +1,9 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet'),
-    Util = require('util/Util');
+
+var Util = require('util/Util');
+
 
 /**
  * Factory for Satellite base layer
@@ -51,6 +53,7 @@ var SatelliteLayer = function (provider, options) {
     return _base;
   }
 };
+
 
 L.satelliteLayer = SatelliteLayer;
 
