@@ -19,13 +19,13 @@ if (!isset($TEMPLATE)) {
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.x/leaflet.css" />
-    <link rel="stylesheet" href="/css/network.css" />
+    <link rel="stylesheet" href="' . $MOUNT_PATH . '/css/network.css" />
   ';
   $FOOT = '
     <script>var NETWORK = "' . $network . '";</script>
     <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
-    <script src="/js/network.js"></script>
+    <script src="' . $MOUNT_PATH . '/js/network.js"></script>
   ';
 
   // importJsonToArray() sets headers -> needs to run before including template

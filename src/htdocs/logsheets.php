@@ -14,7 +14,7 @@ $station = safeParam('station', '7adl');
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . ' Field Logs';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href"/css/logsheets.scss" />';
+  $HEAD = '<link rel="stylesheet" href"' . $MOUNT_PATH . '/css/logsheets.scss" />';
   $FOOT = '';
 
   include 'template.inc.php';

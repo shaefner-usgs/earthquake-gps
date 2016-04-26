@@ -14,7 +14,7 @@ $station = safeParam('station', '7adl');
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . ' Photos';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="/css/photos.css" />';
+  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/photos.css" />';
   $FOOT = '';
 
   include 'template.inc.php';

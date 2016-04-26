@@ -7,7 +7,7 @@ include_once '../lib/classes/Db.class.php'; // db connector, queries
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station List';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="/css/stationlist.css" />';
+  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/stationlist.css" />';
   $FOOT = '';
 
   include 'template.inc.php';
