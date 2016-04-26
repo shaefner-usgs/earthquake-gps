@@ -9,8 +9,8 @@ var browserify = {
       debug: true, // create sourcemaps
       paths: [ // ordered list of where to find required components
         config.src + '/htdocs/js',
-        'node_modules/hazdev-webutils/src',
-        'node_modules/hazdev-tablist/src'
+        'node_modules/hazdev-tablist/src',
+        'node_modules/hazdev-webutils/src'
       ]
     }
   },
