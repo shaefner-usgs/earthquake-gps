@@ -1,9 +1,8 @@
-/* global NETWORK */ // passed via var embedded in html page
-
+/* global L, NETWORK */ // NETWORK passed via var embedded in html page
 'use strict';
 
-var L = require('leaflet'), // aliased in browserify.js
-    Xhr = require('util/Xhr');
+
+var Xhr = require('util/Xhr');
 
 // Leaflet plugins
 require('leaflet-fullscreen');
@@ -19,11 +18,13 @@ require('map/SatelliteLayer');
 require('map/StationsLayer');
 require('map/TerrainLayer');
 
-var NetworkMap = function () {
+
+var NetworkMap = function (options) {
   var _this,
       _initialize,
 
       _earthquakes,
+      _el,
       _stations,
 
       _attachPopupLinks,
@@ -33,15 +34,20 @@ var NetworkMap = function () {
       _initMap,
       _showCounts;
 
+
   _this = {};
 
-  _initialize = function () {
+  _initialize = function (options) {
+    options = options || {};
+    _el = options.el || document.createElement('div');
+
     // Get eqs, stations layers which each call initMap() when finished
     _getEarthquakesLayer();
     _getStationsLayer();
 
     _attachPopupLinks();
   };
+
 
   /**
    * Attach handlers for map popups to list of stations below the map
@@ -161,7 +167,7 @@ var NetworkMap = function () {
     layers = _getMapLayers();
 
     // Create map
-    map = L.map(document.querySelector('.map'), {
+    map = L.map(_el, {
       layers: layers.defaults,
       scrollWheelZoom: false
     });
@@ -185,7 +191,7 @@ var NetworkMap = function () {
     });
 
     // Show station counts
-    _showCounts();
+    //_showCounts();
   };
 
   /**
@@ -203,9 +209,11 @@ var NetworkMap = function () {
     });
   };
 
-  _initialize();
 
+  _initialize();
+  options = null;
   return _this;
 };
 
-NetworkMap();
+
+module.exports = NetworkMap;

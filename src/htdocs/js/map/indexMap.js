@@ -1,7 +1,8 @@
+/* global L */
 'use strict';
 
-var L = require('leaflet'), // aliased in browserify.js
-    Xhr = require('util/Xhr');
+
+var Xhr = require('util/Xhr');
 
 // Leaflet plugins
 require('leaflet-fullscreen');
@@ -14,22 +15,29 @@ require('map/NetworksLayer.js');
 require('map/SatelliteLayer');
 require('map/TerrainLayer');
 
-var IndexMap = function () {
+
+var IndexMap = function (options) {
   var _this,
       _initialize,
 
+      _el,
       _networks,
 
       _getMapLayers,
       _getNetworksLayer,
       _initMap;
 
+
   _this = {};
 
-  _initialize = function () {
+  _initialize = function (options) {
+    options = options || {};
+    _el = options.el || document.createElement('div');
+
     // Get netwoks layer which calls initMap() when finished
     _getNetworksLayer();
   };
+
 
   /**
    * Get all map layers that will be displayed on map
@@ -94,7 +102,7 @@ var IndexMap = function () {
     layers = _getMapLayers();
 
     // Create map
-    map = L.map(document.querySelector('.map'), {
+    map = L.map(_el, {
       layers: layers.defaults,
       scrollWheelZoom: false
     });
@@ -117,9 +125,11 @@ var IndexMap = function () {
     });
   };
 
-  _initialize();
 
+  _initialize(options);
+  options = null;
   return _this;
 };
 
-IndexMap();
+
+module.exports = IndexMap;
