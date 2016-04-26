@@ -1,6 +1,12 @@
 <?php
 
+include_once '../conf/config.inc.php'; // app config
 include_once '../lib/functions/functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
+
+include_once '../lib/classes/PhotoModel.class.php'; // model
+include_once '../lib/classes/PhotoCollection.class.php'; // collection
+include_once '../lib/classes/PhotosView.class.php'; // view
 
 // set default value so page loads without passing params
 $station = safeParam('station', '7adl');
@@ -11,11 +17,6 @@ if (!isset($TEMPLATE)) {
   $HEAD = '<link rel="stylesheet" href="/css/photos.css" />';
   $FOOT = '';
 
-  include '../conf/config.inc.php'; // app config
-  include '../lib/classes/Db.class.php'; // db connector, queries
-  include '../lib/classes/PhotoModel.class.php'; // model
-  include '../lib/classes/PhotoCollection.class.php'; // collection
-  include '../lib/classes/PhotosView.class.php'; // view
   include 'template.inc.php';
 }
 

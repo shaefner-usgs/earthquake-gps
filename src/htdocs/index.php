@@ -1,6 +1,7 @@
 <?php
 
 include_once '../conf/config.inc.php'; // app config
+include_once '../lib/functions/functions.inc.php'; // app functions
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Data';
@@ -14,8 +15,6 @@ if (!isset($TEMPLATE)) {
     <script src="js/index.js"></script>
     <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
   ';
-
-  include '../lib/functions/functions.inc.php'; // app functions
 
   // importJsonToArray() sets headers -> needs to run before including template
   $networks = importJsonToArray(__DIR__ . '/_getNetworks.json.php');

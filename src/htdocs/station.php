@@ -1,6 +1,10 @@
 <?php
 
 include_once '../lib/functions/functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
+
+include_once '../lib/classes/StationModel.class.php'; // model
+include_once '../lib/classes/StationView.class.php'; // view
 
 // set default values so page loads without passing params
 $station = safeParam('station', 'aoa1');
@@ -12,9 +16,6 @@ if (!isset($TEMPLATE)) {
   $HEAD = '<link rel="stylesheet" href="/css/station.css" />';
   $FOOT = '<script src="/js/station.js"></script>';
 
-  include '../lib/classes/Db.class.php'; // db connector, queries
-  include '../lib/classes/StationModel.class.php'; // model
-  include '../lib/classes/StationView.class.php'; // view
   include 'template.inc.php';
 }
 
