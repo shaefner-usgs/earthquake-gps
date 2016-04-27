@@ -7,7 +7,7 @@ if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Data';
   $NAVIGATION = true;
   $HEAD = '
-    <link rel="stylesheet" href="/lib/leaflet-0.7.x/leaflet.css" />
+    <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
     <link rel="stylesheet" href="css/index.css" />
   ';
   $FOOT = '
