@@ -1,4 +1,4 @@
-/* global L, NETWORK */ // NETWORK passed via var embedded in html page
+/* global L, NETWORK */
 'use strict';
 
 
@@ -44,6 +44,8 @@ var NetworkMap = function (options) {
     // Get eqs, stations layers which each call initMap() when finished
     _getEarthquakesLayer();
     _getStationsLayer();
+
+    _attachPopupLinks();
   };
 
 
@@ -142,7 +144,9 @@ var NetworkMap = function (options) {
     Xhr.ajax({
       url: '/_getStations.json.php?network=' + NETWORK,
       success: function (data) {
-        _stations = L.stationsLayer(data);
+        _stations = L.stationsLayer({
+          data: data
+        });
         _initMap();
       },
       error: function (status) {
@@ -161,8 +165,6 @@ var NetworkMap = function (options) {
     var bounds,
         layers,
         map;
-
-    _attachPopupLinks();
 
     layers = _getMapLayers();
 

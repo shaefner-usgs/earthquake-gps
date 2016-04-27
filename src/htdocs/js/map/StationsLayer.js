@@ -7,16 +7,23 @@ var Icon = require('map/Icon'),
 
 require('leaflet.label');
 
-var _DEFAULTS = {
+var _DEFAULTS,
+    _LAYERNAMES,
+    _MARKER_DEFAULTS,
+    _SHAPES;
+
+_MARKER_DEFAULTS = {
   alt: 'GPS station'
 };
-
-var _SHAPES = {
+_DEFAULTS = {
+  data: {},
+  markerOptions: _MARKER_DEFAULTS
+};
+_SHAPES = {
   campaign: 'triangle',
   continuous: 'square'
 };
-
-var _LAYERNAMES = {
+_LAYERNAMES = {
   blue: 'Past 3 days',
   yellow: '4&ndash;7 days ago',
   orange: '8&ndash;14 days ago',
@@ -28,23 +35,23 @@ var _LAYERNAMES = {
  * Factory for Stations overlay
  *
  * @param data {String}
- *        contents of geojson file containing stations
+ *     contents of geojson file containing stations
  * @param options {Object}
- *        Leaflet Marker options
  *
- * @return {Object}
- *         Leaflet featureGroup {
- *           layers: {Object}
- *           getBounds: {Function}
- *           openPopup: {Function}
- *         }
+ * @return {L.FeatureGroup}
+ *     {
+ *       layers: {Object}
+ *       getBounds: {Function}
+ *       openPopup: {Function}
+ *     }
  */
-var StationsLayer = function (data, options) {
+var StationsLayer = function (options) {
   var _this,
       _initialize,
 
       _bounds,
       _icons,
+      _markerOptions,
       _points,
 
       _getColor,
@@ -55,8 +62,9 @@ var StationsLayer = function (data, options) {
 
   _this = L.featureGroup();
 
-  _initialize = function () {
+  _initialize = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
+    _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
 
     _bounds = new L.LatLngBounds();
     _icons = {};
@@ -64,7 +72,7 @@ var StationsLayer = function (data, options) {
 
     _initLayers();
 
-    L.geoJson(data, {
+    L.geoJson(options.data, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });
@@ -79,7 +87,7 @@ var StationsLayer = function (data, options) {
     _this.count = {};
     _this.layers = {};
     _this.names = _LAYERNAMES;
-    Object.keys(_LAYERNAMES).forEach(function(key) {
+    Object.keys(_LAYERNAMES).forEach(function (key) {
       _this.count[key] = 0;
       _this.layers[key] = L.layerGroup();
       _this.addLayer(_this.layers[key]); // add to featureGroup
@@ -90,7 +98,7 @@ var StationsLayer = function (data, options) {
    * Get icon color
    *
    * @param days {Integer}
-   *        days since station last updated
+   *     days since station last updated
    *
    * @return color {String}
    */
@@ -156,8 +164,10 @@ var StationsLayer = function (data, options) {
   /**
    * Leaflet GeoJSON option: used for creating layers for GeoJSON points
    *
-   * @return marker {Object}
-   *         Leaflet marker
+   * @param feature {Object}
+   * @param latlng {L.LatLng}
+   *
+   * @return marker {L.Marker}
    */
   _pointToLayer = function (feature, latlng) {
     var color,
@@ -169,8 +179,8 @@ var StationsLayer = function (data, options) {
     shape = _SHAPES[feature.properties.type];
     key = shape + '+' + color;
 
-    options.icon = Icon.getIcon(key);
-    marker = L.marker(latlng, options);
+    _markerOptions.icon = Icon.getIcon(key);
+    marker = L.marker(latlng, _markerOptions);
 
     // Group stations in separate layers by type
     _this.layers[color].addLayer(marker);
@@ -184,8 +194,7 @@ var StationsLayer = function (data, options) {
   /**
    * Get bounds for station layers
    *
-   * @return {Object}
-   *         Leaflet latLngBounds
+   * @return {L.LatLngBounds}
    */
   _this.getBounds = function () {
     return _bounds;
@@ -193,13 +202,16 @@ var StationsLayer = function (data, options) {
 
   /**
    * Open popup for a given station
+   *
+   * @param station {String}
    */
   _this.openPopup = function (station) {
     _points[station].openPopup();
   };
 
 
-  _initialize();
+  _initialize(options);
+  options = null;
   return _this;
 };
 
