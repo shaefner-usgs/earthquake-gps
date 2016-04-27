@@ -14,13 +14,25 @@ var copy = {
     ]
   },
 
+  dist: {
+    cwd: config.build + '/' + config.src,
+    dest: config.dist,
+    expand: true,
+    src: [
+      '**/*',
+      '!**/*.css',
+      '!**/*.js'
+    ]
+  },
+
   c3: {
     cwd: 'node_modules/c3',
     dest: config.build + '/' + config.src + '/htdocs/lib/c3',
     expand: true,
     src: [
       'c3.css',
-      'c3.js'
+      'c3.js',
+      '!c3.min.js'
     ]
   },
 
@@ -29,7 +41,8 @@ var copy = {
     dest: config.build + '/' + config.src + '/htdocs/lib/d3',
     expand: true,
     src: [
-      'd3.js'
+      'd3.js',
+      '!d3.min.js'
     ]
   },
 
@@ -49,7 +62,8 @@ var copy = {
       return dest + '/' + newName;
     },
     src: [
-      '**/*'
+      '**/*',
+      '!leaflet.js'
     ]
   },
 

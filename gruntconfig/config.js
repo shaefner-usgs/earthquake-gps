@@ -9,6 +9,7 @@ var iniConfig = require('ini').parse(require('fs')
 var config = {
   build: '.build',
   buildPort: BASE_PORT,
+  dist: 'dist',
   etc: 'etc',
   ini: iniConfig,
   liveReloadPort: BASE_PORT + 9,

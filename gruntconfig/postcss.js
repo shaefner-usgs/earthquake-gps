@@ -1,6 +1,7 @@
 'use strict';
 
 var autoprefixer = require('autoprefixer'),
+    cssnano = require('cssnano'),
     postcssImport = require('postcss-import'),
     precss = require('precss');
 
@@ -33,6 +34,20 @@ var postcss = {
     src: [
       '**/*.scss',  // import any other css files from here
       '!**/_*.scss'
+    ]
+  },
+  dist: {
+    cwd: config.build + '/' + config.src + '/htdocs',
+    dest: config.dist + '/htdocs',
+    expand: true,
+    options: {
+      map: false,
+      processors: [
+        cssnano()
+      ]
+    },
+    src: [
+      '**/*.css'
     ]
   }
 };

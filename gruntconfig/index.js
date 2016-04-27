@@ -7,6 +7,7 @@ var gruntConfig = {
   copy: require('./copy'),
   jshint: require('./jshint'),
   postcss: require('./postcss'),
+  uglify: require('./uglify'),
   watch: require('./watch'),
 
   // Define tasks array
@@ -18,6 +19,7 @@ var gruntConfig = {
     'grunt-contrib-copy',
     'grunt-contrib-jshint',
     'grunt-postcss',
+    'grunt-contrib-uglify',
     'grunt-contrib-watch',
   ]
 };

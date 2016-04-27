@@ -10,19 +10,30 @@ module.exports = function (grunt) {
   // Load grunt tasks
   gruntConfig.tasks.forEach(grunt.loadNpmTasks);
 
-  // Setup cli tasks
-  grunt.registerTask('default', [
+  grunt.registerTask('build', [
     'jshint', // check first for errors
     'browserify',
     'copy:dev',
     'copy:c3',
     'copy:d3',
     'copy:leaflet',
+    'postcss:dev'
+  ]);
+
+  // Setup cli tasks
+  grunt.registerTask('default', [
+    'build',
     'configureRewriteRules',
     'configureProxies:dev', // don't need to define (defined by module)
     'connect:template',
     'connect:dev',
-    'postcss:dev',
     'watch'
+  ]);
+
+  grunt.registerTask('dist', [
+    'build',
+    'copy:dist',
+    'postcss:dist',
+    'uglify'
   ]);
 };
