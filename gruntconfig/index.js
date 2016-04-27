@@ -3,6 +3,7 @@
 var gruntConfig = {
   // Import config files for tasks
   browserify: require('./browserify'),
+  clean: require('./clean'),
   connect: require('./connect'),
   copy: require('./copy'),
   jshint: require('./jshint'),
@@ -15,6 +16,7 @@ var gruntConfig = {
     'grunt-browserify',
     'grunt-connect-proxy', // webserver proxy plugin
     'grunt-connect-rewrite', // webserver rewrite plugin
+    'grunt-contrib-clean',
     'grunt-contrib-connect', // webserver
     'grunt-contrib-copy',
     'grunt-contrib-jshint',

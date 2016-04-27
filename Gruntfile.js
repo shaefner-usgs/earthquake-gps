@@ -11,12 +11,14 @@ module.exports = function (grunt) {
   gruntConfig.tasks.forEach(grunt.loadNpmTasks);
 
   grunt.registerTask('build', [
-    'jshint', // check first for errors
+    'clean', // clean first
+    'jshint', // then check for errors
     'browserify',
     'copy:dev',
     'copy:c3',
     'copy:d3',
     'copy:leaflet',
+    'copy:leaflet_fullscreen',
     'postcss:dev'
   ]);
 
@@ -31,9 +33,14 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('dist', [
+    'clean:dist',
     'build',
     'copy:dist',
     'postcss:dist',
-    'uglify'
+    'uglify',
+    'configureRewriteRules',
+    'configureProxies:dist', // don't need to define (defined by module)
+    'connect:template',
+    'connect:dist:keepalive'
   ]);
 };
