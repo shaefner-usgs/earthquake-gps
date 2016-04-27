@@ -10,10 +10,9 @@ var Util = require('util/Util');
  *
  * @param provider {String} default is 'esri'
  * @param options {Object}
- *        Leaflet tileLayer options
+ *     L.TileLayer options
  *
- * @return {Object}
- *         Leaflet tileLayer
+ * @return {L.TileLayer}
  */
 var SatelliteLayer = function (provider, options) {
   var _base,

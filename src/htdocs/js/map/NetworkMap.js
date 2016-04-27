@@ -19,6 +19,11 @@ require('map/StationsLayer');
 require('map/TerrainLayer');
 
 
+/**
+ * Factory for leaflet map instance on the 'network' page
+ *
+ * @param options {Object}
+ */
 var NetworkMap = function (options) {
   var _this,
       _initialize,
@@ -92,11 +97,12 @@ var NetworkMap = function (options) {
   /**
    * Get all map layers that will be displayed on map
    *
-   * @return layers {Object} {
-   *   baseLayers: {Object}
-   *   overlays: {Object}
-   *   defaults: {Array}
-   * }
+   * @return layers {Object}
+   *     {
+   *       baseLayers: {Object}
+   *       overlays: {Object}
+   *       defaults: {Array}
+   *     }
    */
   _getMapLayers = function () {
     var dark,

@@ -10,10 +10,9 @@ var Util = require('util/Util');
  *
  * @param provider {String} default is 'cartodb'
  * @param options {Object}
- *        Leaflet tileLayer options
+ *      L.TileLayer options
  *
- * @return {Object}
- *         Leaflet tileLayer or layerGroup
+ * @return {L.TileLayer}
  */
 var GreyscaleLayer = function (provider, options) {
   var _base,

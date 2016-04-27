@@ -1,4 +1,4 @@
-/* global L, NETWORK, MOUNT_PATH */ // passed via var embedded in html page
+/* global L, NETWORK, MOUNT_PATH */
 'use strict';
 
 
@@ -6,6 +6,7 @@ var Icon = require('map/Icon'),
     Util = require('util/Util');
 
 require('leaflet.label');
+
 
 var _DEFAULTS,
     _LAYERNAMES,
@@ -35,7 +36,7 @@ _LAYERNAMES = {
  * Factory for Stations overlay
  *
  * @param data {String}
- *     contents of geojson file containing stations
+ *     Geojson data
  * @param options {Object}
  *
  * @return {L.FeatureGroup}
@@ -121,6 +122,9 @@ var StationsLayer = function (options) {
   /**
    * Leaflet GeoJSON option: called on each created feature layer. Useful for
    * attaching events and popups to features.
+   *
+   * @param feature {Object}
+   * @param layer (L.Layer)
    */
   _onEachFeature = function (feature, layer) {
     var data,

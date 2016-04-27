@@ -7,11 +7,14 @@ var Icon = require('map/Icon'),
 
 require('leaflet.label');
 
-var _DEFAULTS = {
+
+var _DEFAULTS,
+    _SHAPES;
+
+_DEFAULTS = {
   alt: 'GPS network'
 };
-
-var _SHAPES = {
+_SHAPES = {
   campaign: 'triangle',
   continuous: 'square'
 };
@@ -21,12 +24,10 @@ var _SHAPES = {
  * Factory for Earthquakes overlay
  *
  * @param data {String}
- *        contents of geojson file containing networks
+ *     Geojson data
  * @param options {Object}
- *        Leaflet Marker options
  *
- * @return {Object}
- *         Leaflet GeoJson featureGroup
+ * @return {L.FeatureGroup}
  */
 var NetworksLayer = function (data, options) {
   var _initialize,
@@ -78,7 +79,8 @@ var NetworksLayer = function (data, options) {
   /**
    * Hide label & polygon
    *
-   * @param id {Int} number of features to hide
+   * @param id {Int}
+   *     id number of features to hide
    */
   _hide = function (id) {
     var label = document.querySelector('.label' + id),
@@ -93,6 +95,9 @@ var NetworksLayer = function (data, options) {
   /**
    * Leaflet GeoJSON option: called on each created feature layer. Useful for
    * attaching events and popups to features.
+   *
+   * @param feature {Object}
+   * @param layer (L.Layer)
    */
   _onEachFeature = function (feature, layer) {
     var id,
@@ -122,8 +127,10 @@ var NetworksLayer = function (data, options) {
   /**
    * Leaflet GeoJSON option: used for creating layers for GeoJSON points
    *
-   * @return marker {Object}
-   *         Leaflet marker
+   * @param feature {Object}
+   * @param latlng {L.LatLng}
+   *
+   * @return marker {L.Marker}
    */
   _pointToLayer = function (feature, latlng) {
     var key,
@@ -147,7 +154,8 @@ var NetworksLayer = function (data, options) {
   /**
    * Show label & polygon
    *
-   * @param id {Int} number of features to show
+   * @param id {Int}
+   *     id number of features to show
    */
   _show = function (id) {
     var label = document.querySelector('.label' + id),
@@ -162,7 +170,9 @@ var NetworksLayer = function (data, options) {
   /**
    * Leaflet GeoJSON option: used to get style options for vector layers
    *
-   * @return {Obj}
+   * @param feature {Object}
+   *
+   * @return {Object}
    */
   _style = function (feature) {
     if (feature.geometry.type === 'Polygon') {

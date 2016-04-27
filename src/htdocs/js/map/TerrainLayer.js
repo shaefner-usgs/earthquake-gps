@@ -9,10 +9,9 @@ var Util = require('util/Util');
  * Factory for ESRI Terrain base layer
  *
  * @param options {Object}
- *        Leaflet tileLayer options
+ *     L.TileLayer options
  *
- * @return {Object}
- *         Leaflet tileLayer
+ * @return {L.TileLayer}
  */
 var TerrainLayer = function (options) {
   options = Util.extend({

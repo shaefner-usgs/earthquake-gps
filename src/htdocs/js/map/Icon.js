@@ -1,17 +1,20 @@
-/* global L, MOUNT_PATH */ // passed via var embedded in html page
+/* global L, MOUNT_PATH */
 'use strict';
 
 
 var Util = require('util/Util');
 
-var _ICONS = {};
 
-var _DEFAULTS = {
+var _DEFAULTS,
+    _ICONS;
+
+_DEFAULTS = {
   iconSize: [20, 30],
   iconAnchor: [10, 14],
   popupAnchor: [0.5, -10],
   labelAnchor: [5, -4]
 };
+_ICONS = {};
 
 var Icon = function (options) {
   return L.icon(options);
@@ -22,13 +25,12 @@ var Icon = function (options) {
  * Create Leaflet icons
  *
  * @param key {String}
- *        contains 'shape+color' (e.g. 'triangle+red')
+ *     contains 'shape+color' (e.g. 'triangle+red')
  *
  * @param options {Object}
- *        Leaflet Icon options (optional)
+ *     Leaflet Icon options (optional)
  *
- * @return _ICONS[key] {Object}
- *         Leaflet Icon
+ * @return _ICONS[key] {L.Icon}
  */
 Icon.getIcon = function (key, options) {
   // Don't recreate existing icons

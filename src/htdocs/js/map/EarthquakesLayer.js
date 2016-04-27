@@ -6,31 +6,33 @@ var Util = require('util/Util');
 
 require('leaflet.label');
 
-var _DEFAULTS = {
+
+var _COLORS,
+    _DEFAULTS;
+
+_COLORS = {
+  pasthour: '#f00',
+  pastday: '#f90',
+  pastweek: '#ff0',
+  pastmonth: '#ffb'
+};
+_DEFAULTS = {
   weight: 1,
   opacity: 0.9,
   fillOpacity: 0.9,
   color: '#000'
 };
 
-var _COLORS = {
-  pasthour: '#f00',
-  pastday: '#f90',
-  pastweek: '#ff0',
-  pastmonth: '#ffb'
-};
-
 
 /**
  * Factory for Earthquakes overlay
  *
- * @param data {String}
- *        contents of geojson file containing eqs
+ * @param data {Object}
+ *     Geojson data
  * @param options {Object}
- *        Leaflet Path options
+ *     L.Path options
  *
- * @return {Object}
- *         Leaflet GeoJson featureGroup
+ * @return {L.FeatureGroup}
  */
 var EarthquakesLayer = function (data, options) {
   var _initialize,
@@ -47,6 +49,9 @@ var EarthquakesLayer = function (data, options) {
   /**
    * Leaflet GeoJSON option: called on each created feature layer. Useful for
    * attaching events and popups to features.
+   *
+   * @param feature {Object}
+   * @param layer (L.Layer)
    */
   _onEachFeature = function (feature, layer) {
     var data,
@@ -80,8 +85,10 @@ var EarthquakesLayer = function (data, options) {
   /**
    * Leaflet GeoJSON option: used for creating layers for GeoJSON points
    *
-   * @return marker {Object}
-   *         Leaflet marker
+   * @param feature {Object}
+   * @param latlng {L.LatLng}
+   *
+   * @return marker {L.CircleMarker}
    */
   _pointToLayer = function (feature, latlng) {
     var fillColor,

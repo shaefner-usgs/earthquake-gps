@@ -9,10 +9,9 @@ var Util = require('util/Util');
  * Factory for Dark base layer
  *
  * @param options {Object}
- *        Leaflet tileLayer options
+ *     L.TileLayer options
  *
- * @return {Object}
- *         Leaflet tileLayer
+ * @return {L.TileLayer}
  */
 var DarkLayer = function (options) {
   options = Util.extend({

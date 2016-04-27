@@ -9,8 +9,7 @@ require('map/MouseOverLayer');
 /**
  * Factory for Faults overlay
  *
- * @return {Object}
- *         Leaflet layerGroup
+ * @return {L.LayerGroup}
  */
 var FaultsLayer = function () {
   var _faults,
