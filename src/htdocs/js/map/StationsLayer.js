@@ -20,15 +20,15 @@ _DEFAULTS = {
   data: {},
   markerOptions: _MARKER_DEFAULTS
 };
-_SHAPES = {
-  campaign: 'triangle',
-  continuous: 'square'
-};
 _LAYERNAMES = {
   blue: 'Past 3 days',
   yellow: '4&ndash;7 days ago',
   orange: '8&ndash;14 days ago',
   red: 'Over 14 days ago'
+};
+_SHAPES = {
+  campaign: 'triangle',
+  continuous: 'square'
 };
 
 

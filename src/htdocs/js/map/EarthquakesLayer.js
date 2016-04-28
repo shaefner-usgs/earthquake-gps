@@ -8,7 +8,8 @@ require('leaflet.label');
 
 
 var _COLORS,
-    _DEFAULTS;
+    _DEFAULTS,
+    _MARKER_DEFAULTS;
 
 _COLORS = {
   pasthour: '#f00',
@@ -16,11 +17,15 @@ _COLORS = {
   pastweek: '#ff0',
   pastmonth: '#ffb'
 };
-_DEFAULTS = {
+_MARKER_DEFAULTS = {
   weight: 1,
   opacity: 0.9,
   fillOpacity: 0.9,
   color: '#000'
+};
+_DEFAULTS = {
+  data: {},
+  markerOptions: _MARKER_DEFAULTS
 };
 
 
@@ -34,15 +39,24 @@ _DEFAULTS = {
  *
  * @return {L.FeatureGroup}
  */
-var EarthquakesLayer = function (data, options) {
+var EarthquakesLayer = function (options) {
   var _initialize,
+      _this,
+
+      _markerOptions,
 
       _onEachFeature,
       _pointToLayer;
 
 
-  _initialize = function () {
+  _initialize = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
+    _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
+
+    _this = L.geoJson(options.data, {
+      onEachFeature: _onEachFeature,
+      pointToLayer: _pointToLayer
+    });
   };
 
 
@@ -99,18 +113,15 @@ var EarthquakesLayer = function (data, options) {
     fillColor = _COLORS[props.age];
     radius = 3 * parseInt(Math.pow(10, (0.11 * props.mag)), 10);
 
-    options.fillColor = fillColor;
-    options.radius = radius;
+    _markerOptions.fillColor = fillColor;
+    _markerOptions.radius = radius;
 
-    return L.circleMarker(latlng, options);
+    return L.circleMarker(latlng, _markerOptions);
   };
 
-  _initialize();
-
-  return L.geoJson(data, {
-    onEachFeature: _onEachFeature,
-    pointToLayer: _pointToLayer
-  });
+  _initialize(options);
+  options = null;
+  return _this;
 };
 
 

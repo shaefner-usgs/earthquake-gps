@@ -9,10 +9,15 @@ require('leaflet.label');
 
 
 var _DEFAULTS,
+    _MARKER_DEFAULTS,
     _SHAPES;
 
-_DEFAULTS = {
+_MARKER_DEFAULTS = {
   alt: 'GPS network'
+};
+_DEFAULTS = {
+  data: {},
+  markerOptions: _MARKER_DEFAULTS
 };
 _SHAPES = {
   campaign: 'triangle',
@@ -29,10 +34,12 @@ _SHAPES = {
  *
  * @return {L.FeatureGroup}
  */
-var NetworksLayer = function (data, options) {
+var NetworksLayer = function (options) {
   var _initialize,
+      _this,
 
       _icons,
+      _markerOptions,
 
       _attachEvents,
       _hide,
@@ -44,9 +51,17 @@ var NetworksLayer = function (data, options) {
 
   _initialize = function () {
     options = Util.extend({}, _DEFAULTS, options);
+    _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
+
     _icons = {};
 
     _attachEvents();
+
+    _this = L.geoJson(options.data, {
+      onEachFeature: _onEachFeature,
+      pointToLayer: _pointToLayer,
+      style: _style
+    });
   };
 
 
@@ -139,8 +154,8 @@ var NetworksLayer = function (data, options) {
 
     shape = _SHAPES[feature.properties.type];
     key = shape + '+grey';
-    options.icon = Icon.getIcon(key);
-    marker = L.marker(latlng, options);
+    _markerOptions.icon = Icon.getIcon(key);
+    marker = L.marker(latlng, _markerOptions);
 
     // Clicking marker sends user to selected network page
     marker.href = feature.properties.name;
@@ -184,13 +199,10 @@ var NetworksLayer = function (data, options) {
   };
 
 
-  _initialize();
+  _initialize(options);
+  options = null;
+  return _this;
 
-  return L.geoJson(data, {
-    onEachFeature: _onEachFeature,
-    pointToLayer: _pointToLayer,
-    style: _style
-  });
 };
 
 

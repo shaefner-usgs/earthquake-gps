@@ -85,7 +85,9 @@ var NetworkMap = function (options) {
     Xhr.ajax({
       url: '/_getEarthquakes.json.php',
       success: function (data) {
-        _earthquakes = L.earthquakesLayer(data);
+        _earthquakes = L.earthquakesLayer({
+          data: data
+        });
         _initMap();
       },
       error: function (status) {
@@ -106,7 +108,7 @@ var NetworkMap = function (options) {
    */
   _getMapLayers = function () {
     var dark,
-  //      faults,
+        faults,
         greyscale,
         layers,
         name,
@@ -117,7 +119,7 @@ var NetworkMap = function (options) {
     greyscale = L.greyscaleLayer();
     satellite = L.satelliteLayer();
     terrain = L.terrainLayer();
-    //faults = L.faultsLayer();
+    faults = L.faultsLayer();
 
     layers = {};
     layers.baseLayers = {
@@ -127,7 +129,7 @@ var NetworkMap = function (options) {
       'Dark': dark
     };
     layers.overlays = {
-      //'Faults': faults,
+      'Faults': faults,
       'Earthquakes': _earthquakes
     };
     layers.defaults = [terrain, _earthquakes];

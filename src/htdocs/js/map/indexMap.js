@@ -88,7 +88,9 @@ var IndexMap = function (options) {
     Xhr.ajax({
       url: '_getNetworks.json.php',
       success: function (data) {
-        _networks = L.networksLayer(data);
+        _networks = L.networksLayer({
+          data: data
+        });
         _initMap();
       },
       error: function (status) {
