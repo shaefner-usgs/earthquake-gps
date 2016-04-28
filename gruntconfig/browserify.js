@@ -9,8 +9,20 @@ var browserify = {
       debug: true, // create sourcemaps
       paths: [ // ordered list of where to find required components
         config.src + '/htdocs/js',
+        config.src + '/htdocs/lib',
         'node_modules/hazdev-webutils/src',
+        'node_modules/hazdev-tablist/src',
         'node_modules/leaflet'
+      ]
+    }
+  },
+
+  index: {
+    src: [config.src + '/htdocs/js/index/index.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/index/index.js',
+    options: {
+      external: [
+        'leaflet' // don't bundle leaflet b/c it's provided by target above
       ]
     }
   },
@@ -26,10 +38,19 @@ var browserify = {
     }
   },
 
-  // example leaflet instance
-  map: {
-    src: [config.src + '/htdocs/js/map/index.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/map/index.js',
+  network: {
+    src: [config.src + '/htdocs/js/network/index.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/network/index.js',
+    options: {
+      external: [
+        'leaflet' // don't bundle leaflet b/c it's provided by target above
+      ]
+    }
+  },
+
+  station: {
+    src: [config.src + '/htdocs/js/station/index.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/station/index.js',
     options: {
       external: [
         'leaflet' // don't bundle leaflet b/c it's provided by target above

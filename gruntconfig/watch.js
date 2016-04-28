@@ -48,7 +48,7 @@ var watch = {
     ],
     tasks: [
       'jshint:dev', // check for errors first
-      'browserify:qc'
+      'browserify'
     ]
   }
 

@@ -2,6 +2,7 @@
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'Quality Control Plots';
+  $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="lib/c3/c3.css" />
     <link rel="stylesheet" href="css/qc/index.css" />

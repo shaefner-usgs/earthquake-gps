@@ -1,0 +1,44 @@
+@import 'leaflet.fullscreen.css';
+@import 'leaflet.label.css';
+@import '_MousePosition.scss';
+
+/* leaflet fullscreen plugin icons - override image paths */
+.leaflet-control-fullscreen a {
+  background-image: url(/img/fullscreen.png);
+}
+@media
+  (-webkit-min-device-pixel-ratio:2),
+  (min-resolution:192dpi) {
+    .leaflet-control-fullscreen a {
+      background-image: url(/img/fullscreen@2x.png);
+    }
+  }
+
+ /* template's css is getting the way, grr */
+input[type=checkbox], input[type=radio] {
+  position: static;
+}
+
+/* UtfGrid mouseovers */
+.leaflet-mouseover-tooltip {
+  background-color: #fff;
+  background-color: hsla(0, 0%, 100%, .75);
+  border: 1px solid #333;
+  border-radius: 3px;
+  display: none;
+  font-size: 12px;
+  left: 0;
+  margin: -1.75em 0 0;
+  padding: 2px 4px;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+/* Quell long attributions */
+.leaflet-control-attribution {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}

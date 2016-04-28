@@ -1,0 +1,32 @@
+@import 'TabList.scss';
+@import '../_index.scss';
+
+.tablist-panel {
+  overflow: auto;
+  padding: 0 1em 1em;
+
+  h3 {
+    display: none; /* hides in js env only (.tablist-panel added by tabs js) */
+  }
+
+  img {
+    display: block;
+    float: left;
+    margin: 1em 1em 1em 0;
+  }
+}
+
+mark {
+  background: none;
+  padding: 0;
+
+  &.blue {
+    color: blue;
+  }
+  &.green {
+    color: green;
+  }
+  &.red {
+    color: red;
+  }
+}

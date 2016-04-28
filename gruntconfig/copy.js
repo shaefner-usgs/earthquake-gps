@@ -41,6 +41,15 @@ var copy = {
       'leaflet.css',
       'images/*'
     ]
+  },
+
+  leaflet_fullscreen: {
+    cwd: 'node_modules/leaflet-fullscreen/dist',
+    dest: config.build + '/' + config.src + '/htdocs/img',
+    expand: true,
+    src: [
+      '*.png'
+    ]
   }
 };
 
