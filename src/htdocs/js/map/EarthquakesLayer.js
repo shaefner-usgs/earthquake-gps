@@ -32,10 +32,11 @@ _DEFAULTS = {
 /**
  * Factory for Earthquakes overlay
  *
- * @param data {Object}
- *     Geojson data
  * @param options {Object}
- *     L.Path options
+ *     {
+ *       data: {String} Geojson data
+ *       markerOptions: {Object} L.Path options
+ *     }
  *
  * @return {L.FeatureGroup}
  */

@@ -35,9 +35,11 @@ _SHAPES = {
 /**
  * Factory for Stations overlay
  *
- * @param data {String}
- *     Geojson data
  * @param options {Object}
+ *     {
+ *       data: {String} Geojson data
+ *       markerOptions: {Object} L.Marker options
+ *     }
  *
  * @return {L.FeatureGroup}
  *     {
