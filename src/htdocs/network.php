@@ -9,7 +9,7 @@
 */
 
 include_once '../conf/config.inc.php'; // app config
-include_once '../lib/functions/functions.inc.php'; // app functions
+include_once '../lib/_functions.inc.php'; // app functions
 
 // set default value so page loads without passing params
 $network = safeParam('network', 'Alaska');
