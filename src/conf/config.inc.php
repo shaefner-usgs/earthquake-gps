@@ -10,15 +10,3 @@ $DB_DSN = $CONFIG['DB_DSN'];
 $DB_USER = $CONFIG['DB_USER'];
 $DB_PASS = $CONFIG['DB_PASS'];
 $MOUNT_PATH = $CONFIG['MOUNT_PATH'];
-
-// Using NO_DB guard allows pages that do not need database connection to use
-// this same configuration file without adding in database overhead.
-//
-// try {
-//   if (!(isset($NO_DB) && $NO_DB)) {
-//     $DB = new PDO($CONFIG['DB_DSN'], $CONFIG['DB_USER'], $CONFIG['DB_PASS']);
-//     $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//   }
-// } catch (PDOException $e) {
-//   print 'Error: ' . $e->getMessage();
-// }
