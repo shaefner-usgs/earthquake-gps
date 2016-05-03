@@ -11,15 +11,40 @@
     -webkit-column-break-inside: avoid; /* Chrome, Safari */
     break-inside: avoid; /* IE 10+, Opera */
     page-break-inside: avoid; /* Theoretically FF 20+ */
-    display:table; /* FF; also enforces consistent margins on top of cols */
+    display: table; /* FF; also enforces consistent margins on top of cols */
   }
 
   ul li {
     float: left;
-    padding-right: 4px;
 
     &:not(:last-child):after {
-      content: ',\00a0';
+      content: ',';
+      padding-right: 5px;
+    }
+  }
+}
+
+/* 'better' jumplist:
+  1. doesn't wrap pipes at beginning of new lines
+  2. makes entire region clickable between pipes
+*/
+.jumplist {
+  /* first override 'default' rules */
+  > a {
+    margin: 0;
+
+    + a:before {
+      content: '';
+      margin: 0;
+    }
+
+    /* now set 'new' rules */
+    padding-left: .75em;
+
+    &:not(:last-child):after {
+      color: #ccc;
+      content: '|';
+      margin: 0 0 0 .75em;
     }
   }
 }
