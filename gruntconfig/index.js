@@ -20,9 +20,9 @@ var gruntConfig = {
     'grunt-contrib-connect', // webserver
     'grunt-contrib-copy',
     'grunt-contrib-jshint',
-    'grunt-postcss',
     'grunt-contrib-uglify',
     'grunt-contrib-watch',
+    'grunt-postcss'
   ]
 };
 
