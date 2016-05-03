@@ -1,4 +1,4 @@
-/* global L */
+/* global L, MOUNT_PATH */
 'use strict';
 
 
@@ -86,7 +86,7 @@ var IndexMap = function (options) {
    */
   _getNetworksLayer = function () {
     Xhr.ajax({
-      url: '_getNetworks.json.php',
+      url: MOUNT_PATH + '/_getNetworks.json.php',
       success: function (data) {
         _networks = L.networksLayer({
           data: data

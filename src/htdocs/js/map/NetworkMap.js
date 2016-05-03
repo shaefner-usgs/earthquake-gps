@@ -1,4 +1,4 @@
-/* global L, NETWORK */
+/* global L, MOUNT_PATH, NETWORK */
 'use strict';
 
 
@@ -83,7 +83,7 @@ var NetworkMap = function (options) {
    */
   _getEarthquakesLayer = function () {
     Xhr.ajax({
-      url: '/_getEarthquakes.json.php',
+      url: MOUNT_PATH + '/_getEarthquakes.json.php',
       success: function (data) {
         _earthquakes = L.earthquakesLayer({
           data: data
@@ -150,7 +150,7 @@ var NetworkMap = function (options) {
    */
   _getStationsLayer = function () {
     Xhr.ajax({
-      url: '/_getStations.json.php?network=' + NETWORK,
+      url: MOUNT_PATH + '/_getStations.json.php?network=' + NETWORK,
       success: function (data) {
         _stations = L.stationsLayer({
           data: data

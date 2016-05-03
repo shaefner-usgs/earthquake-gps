@@ -12,8 +12,8 @@ if (!isset($TEMPLATE)) {
   ';
   $FOOT = '
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
-    <script src="js/index.js"></script>
     <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
+    <script src="js/index.js"></script>
   ';
 
   // importJsonToArray() sets headers -> needs to run before including template
