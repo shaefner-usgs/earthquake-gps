@@ -67,9 +67,9 @@ var Plots = function (el) {
     links = _getLinks();
     links.forEach(function(link) {
       if (link === target) {
-        link.classList.add('sel');
+        link.classList.add('selected');
       } else {
-        link.classList.remove('sel');
+        link.classList.remove('selected');
       }
     });
   };
