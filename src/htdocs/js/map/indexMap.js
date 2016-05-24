@@ -30,8 +30,8 @@ var IndexMap = function (options) {
       _networks,
 
       _getMapLayers,
-      _loadNetworksLayer,
-      _initMap;
+      _initMap,
+      _loadNetworksLayer;
 
 
   _this = {};
@@ -61,9 +61,9 @@ var IndexMap = function (options) {
         satellite,
         terrain;
 
+    _networks = L.networksLayer(); // data added via ajax in _loadNetworksLayer
     _loadNetworksLayer();
 
-    _networks = L.networksLayer(); // data added via ajax in _loadNetworksLayer
     dark = L.darkLayer();
     greyscale = L.greyscaleLayer();
     satellite = L.satelliteLayer();
