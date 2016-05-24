@@ -17,6 +17,10 @@
  /* template's css is getting the way, grr */
 input[type=checkbox], input[type=radio] {
   position: static;
+  display: inline;
+  width: auto;
+  height: auto;
+  opacity: 1;
 }
 
 /* UtfGrid mouseovers */
