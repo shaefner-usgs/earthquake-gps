@@ -160,7 +160,7 @@ var NetworkMap = function (options) {
 
         // Set map extent to stored bounds or to extent of points
         mapView = JSON.parse(window.localStorage.getItem('mapView')) || {};
-        if (!mapView.hasOwnProperty('networks')) {
+        if (!mapView.hasOwnProperty(NETWORK)) {
           bounds = _stations.getBounds();
           _map.fitBounds(bounds);
         }
