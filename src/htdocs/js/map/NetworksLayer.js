@@ -39,8 +39,8 @@ _SHAPES = {
  * @return {L.FeatureGroup}
  */
 var NetworksLayer = function (options) {
-  var _initialize,
-      _this,
+  var _this,
+      _initialize,
 
       _icons,
       _markerOptions,
