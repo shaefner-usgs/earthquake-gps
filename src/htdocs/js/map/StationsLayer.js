@@ -162,8 +162,9 @@ var StationsLayer = function (options) {
     popup = L.Util.template(popupTemplate, data);
     label = station.toUpperCase();
 
-    layer.bindPopup(popup).bindLabel(label, {
-      minWidth: 250,
+    layer.bindPopup(popup, {
+      minWidth: 250
+    }).bindLabel(label, {
       pane: 'popupPane'
     });
 
