@@ -62,8 +62,7 @@ var copy = {
       return dest + '/' + newName;
     },
     src: [
-      '**/*',
-      '!leaflet.js'
+      '**/*'
     ]
   },
 
