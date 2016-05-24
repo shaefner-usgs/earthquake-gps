@@ -26,7 +26,7 @@ _SHAPES = {
 
 
 /**
- * Factory for Earthquakes overlay
+ * Factory for Networks overlay
  *
  * @param data {String}
  *     Geojson data
@@ -59,13 +59,13 @@ var NetworksLayer = function (options) {
 
     _icons = {};
 
-    _attachEvents();
-
-    _this = L.geoJson(options.data, {
+    _this = L.geoJson(null, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer,
       style: _style
     });
+
+    _attachEvents();
   };
 
 
