@@ -30,13 +30,14 @@ var NetworkMap = function (options) {
 
       _earthquakes,
       _el,
+      _map,
       _stations,
 
       _attachPopupLinks,
-      _getEarthquakesLayer,
       _getMapLayers,
-      _getStationsLayer,
       _initMap,
+      _loadEarthquakesLayer,
+      _loadStationsLayer,
       _showCounts;
 
 
@@ -46,10 +47,7 @@ var NetworkMap = function (options) {
     options = options || {};
     _el = options.el || document.createElement('div');
 
-    // Get eqs, stations layers which each call initMap() when finished
-    _getEarthquakesLayer();
-    _getStationsLayer();
-
+    _initMap();
     _attachPopupLinks();
   };
 
@@ -79,24 +77,6 @@ var NetworkMap = function (options) {
   };
 
   /**
-   * Get earthquakes layer from geojson data via ajax
-   */
-  _getEarthquakesLayer = function () {
-    Xhr.ajax({
-      url: MOUNT_PATH + '/_getEarthquakes.json.php',
-      success: function (data) {
-        _earthquakes = L.earthquakesLayer({
-          data: data
-        });
-        _initMap();
-      },
-      error: function (status) {
-        console.log(status);
-      }
-    });
-  };
-
-  /**
    * Get all map layers that will be displayed on map
    *
    * @return layers {Object}
@@ -114,6 +94,11 @@ var NetworkMap = function (options) {
         name,
         satellite,
         terrain;
+
+    _earthquakes = L.earthquakesLayer(); // data added via ajax
+    _loadEarthquakesLayer();
+    _stations = L.stationsLayer(); // data added via ajax
+    _loadStationsLayer();
 
     dark = L.darkLayer();
     greyscale = L.greyscaleLayer();
@@ -146,16 +131,41 @@ var NetworkMap = function (options) {
   };
 
   /**
+   * Get earthquakes layer from geojson data via ajax
+   */
+  _loadEarthquakesLayer = function () {
+    Xhr.ajax({
+      url: MOUNT_PATH + '/_getEarthquakes.json.php',
+      success: function (data) {
+        _earthquakes.addData(data);
+      },
+      error: function (status) {
+        console.log(status);
+      }
+    });
+  };
+
+  /**
    * Get stations layer from geojson data via ajax
    */
-  _getStationsLayer = function () {
+  _loadStationsLayer = function () {
     Xhr.ajax({
       url: MOUNT_PATH + '/_getStations.json.php?network=' + NETWORK,
       success: function (data) {
-        _stations = L.stationsLayer({
-          data: data
-        });
-        _initMap();
+        var bounds,
+            mapView;
+
+        _stations.addData(data);
+
+        // Set map extent to stored bounds or to extent of points
+        mapView = JSON.parse(window.localStorage.getItem('mapView')) || {};
+        if (!mapView.hasOwnProperty('networks')) {
+          bounds = _stations.getBounds();
+          _map.fitBounds(bounds);
+        }
+
+        // Show station counts
+        _showCounts();
       },
       error: function (status) {
         console.log(status);
@@ -167,41 +177,29 @@ var NetworkMap = function (options) {
    * Create Leaflet map instance
    */
   _initMap = function () {
-    if (!_stations || !_earthquakes) { // check that both ajax layers are set
-      return;
-    }
-    var bounds,
-        layers,
-        map;
+    var layers;
 
     layers = _getMapLayers();
 
     // Create map
-    map = L.map(_el, {
+    _map = L.map(_el, {
       layers: layers.defaults,
       scrollWheelZoom: false
     });
 
-    // Set intial map extent to contain stations overlay
-    bounds = _stations.getBounds();
-    map.fitBounds(bounds);
-
     // Add controllers
-    L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
-    L.control.layers(layers.baseLayers, layers.overlays).addTo(map);
-    L.control.mousePosition().addTo(map);
-    L.control.scale().addTo(map);
+    L.control.fullscreen({ pseudoFullscreen: true }).addTo(_map);
+    L.control.layers(layers.baseLayers, layers.overlays).addTo(_map);
+    L.control.mousePosition().addTo(_map);
+    L.control.scale().addTo(_map);
 
     // Remember user's map settings (selected layers, map extent)
-    map.restoreView({
+    _map.restoreView({
       baseLayers: layers.baseLayers,
       id: NETWORK,
       overlays: layers.overlays,
       shareLayers: true
     });
-
-    // Show station counts
-    _showCounts();
   };
 
   /**
