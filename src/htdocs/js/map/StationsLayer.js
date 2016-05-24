@@ -43,7 +43,9 @@ _SHAPES = {
  *
  * @return {L.FeatureGroup}
  *     {
+ *       count: {Object}
  *       layers: {Object}
+ *       name: {Object}
  *       getBounds: {Function}
  *       openPopup: {Function}
  *     }
@@ -60,10 +62,10 @@ var StationsLayer = function (options) {
       _getColor,
       _initLayers,
       _onEachFeature,
-      _pointToLayer;
+      _pointToLayer,
+      getBounds,
+      openPopup;
 
-
-  _this = L.featureGroup();
 
   _initialize = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
@@ -73,12 +75,14 @@ var StationsLayer = function (options) {
     _icons = {};
     _points = {};
 
-    _initLayers();
-
-    L.geoJson(options.data, {
+    _this = L.geoJson(null, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });
+    _this.getBounds = getBounds;
+    _this.openPopup = openPopup;
+
+    _initLayers();
   };
 
 
@@ -197,12 +201,13 @@ var StationsLayer = function (options) {
     return marker;
   };
 
+
   /**
    * Get bounds for station layers
    *
    * @return {L.LatLngBounds}
    */
-  _this.getBounds = function () {
+  getBounds = function () {
     return _bounds;
   };
 
@@ -211,7 +216,7 @@ var StationsLayer = function (options) {
    *
    * @param station {String}
    */
-  _this.openPopup = function (station) {
+  openPopup = function (station) {
     _points[station].openPopup();
   };
 
