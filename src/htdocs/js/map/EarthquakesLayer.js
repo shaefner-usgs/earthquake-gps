@@ -54,7 +54,7 @@ var EarthquakesLayer = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
     _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
 
-    _this = L.geoJson(options.data, {
+    _this = L.geoJson(null, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });
