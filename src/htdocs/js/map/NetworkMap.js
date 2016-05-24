@@ -97,6 +97,7 @@ var NetworkMap = function (options) {
 
     _earthquakes = L.earthquakesLayer(); // data added via ajax
     _loadEarthquakesLayer();
+
     _stations = L.stationsLayer(); // data added via ajax
     _loadStationsLayer();
 
