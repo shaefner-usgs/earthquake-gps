@@ -9,24 +9,24 @@
 @media
   (-webkit-min-device-pixel-ratio:2),
   (min-resolution:192dpi) {
-    .leaflet-control-fullscreen a {
-      background-image: url(/img/fullscreen@2x.png);
-    }
+  .leaflet-control-fullscreen a {
+    background-image: url(/img/fullscreen@2x.png);
   }
+}
 
- /* template's css is getting the way, grr */
+/* template's css is getting the way, grr */
 input[type=checkbox], input[type=radio] {
-  position: static;
   display: inline;
-  width: auto;
   height: auto;
   opacity: 1;
+  position: static;
+  width: auto;
 }
 
 /* UtfGrid mouseovers */
 .leaflet-mouseover-tooltip {
-  background-color: #fff;
   background-color: hsla(0, 0%, 100%, .75);
+  background-color: #fff;
   border: 1px solid #333;
   border-radius: 3px;
   display: none;
@@ -41,8 +41,8 @@ input[type=checkbox], input[type=radio] {
 
 /* Quell long attributions */
 .leaflet-control-attribution {
-  white-space: nowrap;
+  max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 300px;
+  white-space: nowrap;
 }

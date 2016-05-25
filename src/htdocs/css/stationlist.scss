@@ -2,16 +2,16 @@
   columns: 4 200px;
 
   h3 {
-    margin: 1em 0 0 0;
     font-weight: normal;
+    margin: 1em 0 0 0;
   }
 
+  /* avoid splitting network lists between columns */
   > li {
-    /* avoid splitting network lists between columns */
-    -webkit-column-break-inside: avoid; /* Chrome, Safari */
     break-inside: avoid; /* IE 10+, Opera */
-    page-break-inside: avoid; /* Theoretically FF 20+ */
+    -webkit-column-break-inside: avoid; /* Chrome, Safari */
     display: table; /* FF; also enforces consistent margins on top of cols */
+    page-break-inside: avoid; /* Theoretically FF 20+ */
   }
 
   ul li {

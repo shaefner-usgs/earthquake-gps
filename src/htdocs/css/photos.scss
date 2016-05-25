@@ -13,11 +13,11 @@ h2 {
   flex-flow: row wrap;
 
   h3 {
-    white-space: nowrap;
+    margin: 8px 0;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     width: 100%;
-    margin: 8px 0;
   }
 
   li {
