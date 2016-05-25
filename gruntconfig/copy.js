@@ -14,13 +14,25 @@ var copy = {
     ]
   },
 
+  dist: {
+    cwd: config.build + '/' + config.src,
+    dest: config.dist,
+    expand: true,
+    src: [
+      '**/*',
+      '!**/*.css',
+      '!**/*.js'
+    ]
+  },
+
   c3: {
     cwd: 'node_modules/c3',
     dest: config.build + '/' + config.src + '/htdocs/lib/c3',
     expand: true,
     src: [
       'c3.css',
-      'c3.js'
+      'c3.js',
+      '!c3.min.js'
     ]
   },
 
@@ -29,17 +41,28 @@ var copy = {
     dest: config.build + '/' + config.src + '/htdocs/lib/d3',
     expand: true,
     src: [
-      'd3.js'
+      'd3.js',
+      '!d3.min.js'
     ]
   },
 
   leaflet: {
-    cwd: 'node_modules/leaflet/dist',
-    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet-0.7.x',
     expand: true,
+    cwd: 'node_modules/leaflet/dist',
+    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet-0.7.7',
+    rename: function (dest, src) {
+      var newName;
+
+      // swap -src version to be default and add -min to compressed version
+      // this is nice for debugging but allows production to use default
+      // version as compressed
+      newName = src.replace('leaflet.js', 'leaflet-min.js');
+      newName = newName.replace('leaflet-src.js', 'leaflet.js');
+
+      return dest + '/' + newName;
+    },
     src: [
-      'leaflet.css',
-      'images/*'
+      '**/*'
     ]
   },
 

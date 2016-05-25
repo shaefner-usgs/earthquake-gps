@@ -1,6 +1,12 @@
 <?php
 
-include_once '../lib/functions/functions.inc.php'; // app functions
+include_once '../conf/config.inc.php'; // app config
+include_once '../lib/_functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
+
+include_once '../lib/classes/Photo.class.php'; // model
+include_once '../lib/classes/PhotoCollection.class.php'; // collection
+include_once '../lib/classes/PhotoView.class.php'; // view
 
 // set default value so page loads without passing params
 $station = safeParam('station', '7adl');
@@ -8,14 +14,9 @@ $station = safeParam('station', '7adl');
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . ' Photos';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="/css/photos/index.css" />';
+  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/photos.css" />';
   $FOOT = '';
 
-  include '../conf/config.inc.php'; // app config
-  include '../lib/classes/Db.class.php'; // db connector, queries
-  include '../lib/classes/PhotoModel.class.php'; // model
-  include '../lib/classes/PhotoCollection.class.php'; // collection
-  include '../lib/classes/PhotosView.class.php'; // view
   include 'template.inc.php';
 }
 
@@ -37,12 +38,12 @@ if ($station_exists) {
   // Add photos to collection
   $photoCollection = new PhotoCollection($station);
   foreach ($files as $file) {
-    $photoModel = new PhotoModel($file);
+    $photoModel = new Photo($file);
     $photoCollection->add($photoModel);
   }
 
   // Render HTML
-  $view = new PhotosView($photoCollection);
+  $view = new PhotoView($photoCollection);
   $view->render();
 } else {
   print '<p class="alert error">ERROR: Station Not Found</p>';

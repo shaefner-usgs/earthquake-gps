@@ -1,19 +1,20 @@
 <?php
 
+include_once '../conf/config.inc.php'; // app config
+include_once '../lib/_functions.inc.php'; // app functions
+
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Data';
   $NAVIGATION = true;
   $HEAD = '
-    <link rel="stylesheet" href="/lib/leaflet-0.7.x/leaflet.css" />
-    <link rel="stylesheet" href="css/index/index.css" />
+    <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
+    <link rel="stylesheet" href="css/index.css" />
   ';
   $FOOT = '
-    <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
-    <script src="js/index/index.js"></script>
+    <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
+    <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
+    <script src="js/index.js"></script>
   ';
-
-  include '../conf/config.inc.php'; // app config
-  include '../lib/functions/functions.inc.php'; // app functions
 
   // importJsonToArray() sets headers -> needs to run before including template
   $networks = importJsonToArray(__DIR__ . '/_getNetworks.json.php');

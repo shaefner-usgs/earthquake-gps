@@ -8,7 +8,8 @@
     4 add legend
 */
 
-include_once '../lib/functions/functions.inc.php'; // app functions
+include_once '../conf/config.inc.php'; // app config
+include_once '../lib/_functions.inc.php'; // app functions
 
 // set default value so page loads without passing params
 $network = safeParam('network', 'Alaska');
@@ -17,16 +18,15 @@ if (!isset($TEMPLATE)) {
   $TITLE = $network . ' Network';
   $NAVIGATION = true;
   $HEAD = '
-    <link rel="stylesheet" href="/lib/leaflet-0.7.x/leaflet.css" />
-    <link rel="stylesheet" href="/css/network/index.css" />
+    <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
+    <link rel="stylesheet" href="' . $MOUNT_PATH . '/css/network.css" />
   ';
   $FOOT = '
-    <script>var network = "' . $network . '";</script>
-    <script src="/lib/leaflet-0.7.x/leaflet.js"></script>
-    <script src="/js/network/index.js"></script>
+    <script>var NETWORK = "' . $network . '";</script>
+    <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
+    <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
+    <script src="' . $MOUNT_PATH . '/js/network.js"></script>
   ';
-
-  include '../conf/config.inc.php'; // app config
 
   // importJsonToArray() sets headers -> needs to run before including template
   $stations = importJsonToArray(__DIR__ .

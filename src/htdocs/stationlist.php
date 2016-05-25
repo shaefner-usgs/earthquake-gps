@@ -1,14 +1,15 @@
 <?php
 
+include_once '../conf/config.inc.php'; // app config
+include_once '../lib/_functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
+
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station List';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="/css/stationlist/index.css" />';
+  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/stationlist.css" />';
   $FOOT = '';
 
-  include '../conf/config.inc.php'; // app config
-  include '../lib/functions/functions.inc.php'; // app functions
-  include '../lib/classes/Db.class.php'; // db connector, queries
   include 'template.inc.php';
 }
 

@@ -1,0 +1,10 @@
+@import '_maplist.scss';
+@import 'map/_leaflet.scss';
+
+.map {
+  height: 700px;
+}
+
+.off {
+  display: none;
+}

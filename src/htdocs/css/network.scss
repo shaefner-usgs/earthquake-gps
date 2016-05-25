@@ -1,0 +1,11 @@
+@import '_common.scss';
+@import '_maplist.scss';
+@import 'map/_leaflet.scss';
+
+.map {
+  height: 800px;
+}
+
+.popup img {
+  width: 250px;
+}

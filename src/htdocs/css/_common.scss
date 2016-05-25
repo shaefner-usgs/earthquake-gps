@@ -1,0 +1,16 @@
+.pipelist {
+  display: flex;
+  flex-wrap: wrap;
+
+  > li + li:before {
+    content: '|';
+    padding: 0 3px;
+  }
+
+  .selected {
+    color: inherit !important;
+    cursor: text;
+    font-weight: bold;
+    text-decoration: none;
+  }
+}

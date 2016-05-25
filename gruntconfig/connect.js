@@ -90,6 +90,19 @@ var connect = {
     }
   },
 
+  // web server for dist folder
+  dist: {
+    options: {
+      base: [ // Document roots
+        config.dist + '/htdocs'
+      ],
+      middleware: addMiddleware,
+      open: 'http://localhost:' + config.distPort + config.ini.MOUNT_PATH +
+        '/index.php',
+      port: config.distPort
+    }
+  },
+
   // web server for template
   template: {
     options: {
