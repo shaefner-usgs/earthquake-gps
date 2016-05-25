@@ -14,11 +14,9 @@ class LogsheetView {
       // loop thru each logsheet (grouped by date)
       foreach ($this->_collection->logsheets as $date => $logsheets) {
         print '<h2>' . date('F j, Y', strtotime($date)) . '</h2>';
-        print '<ul>';
+        print '<ul class="no-style pipelist">';
         foreach ($logsheets as $logsheet) {
-          printf ('<li>
-              <a href="%s/%s">%s</a>
-            </li>',
+          printf ('<li><a href="%s/%s">%s</a></li>',
             $this->_collection->path,
             $logsheet->file,
             $logsheet->type
