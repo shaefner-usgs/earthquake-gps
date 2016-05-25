@@ -62,10 +62,10 @@ var StationsLayer = function (options) {
       _getColor,
       _initLayers,
       _onEachFeature,
-      _pointToLayer,
-      getBounds,
-      openPopup;
+      _pointToLayer;
 
+
+  _this = L.featureGroup();
 
   _initialize = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
@@ -75,14 +75,12 @@ var StationsLayer = function (options) {
     _icons = {};
     _points = {};
 
-    _this = L.geoJson(null, {
+    _initLayers();
+
+    L.geoJson(options.data, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });
-    _this.getBounds = getBounds;
-    _this.openPopup = openPopup;
-
-    _initLayers();
   };
 
 
@@ -208,7 +206,7 @@ var StationsLayer = function (options) {
    *
    * @return {L.LatLngBounds}
    */
-  getBounds = function () {
+  _this.getBounds = function () {
     return _bounds;
   };
 
@@ -217,7 +215,7 @@ var StationsLayer = function (options) {
    *
    * @param station {String}
    */
-  openPopup = function (station) {
+  _this.openPopup = function (station) {
     _points[station].openPopup();
   };
 

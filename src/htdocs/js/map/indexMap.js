@@ -26,7 +26,6 @@ var IndexMap = function (options) {
       _initialize,
 
       _el,
-      _map,
       _networks,
 
       _getMapLayers,
@@ -40,7 +39,8 @@ var IndexMap = function (options) {
     options = options || {};
     _el = options.el || document.createElement('div');
 
-    _initMap();
+    // Load netwoks layer which calls initMap() when finished
+    _loadNetworksLayer();
   };
 
 
@@ -60,9 +60,6 @@ var IndexMap = function (options) {
         layers,
         satellite,
         terrain;
-
-    _networks = L.networksLayer(); // data added via ajax in _loadNetworksLayer
-    _loadNetworksLayer();
 
     dark = L.darkLayer();
     greyscale = L.greyscaleLayer();
@@ -85,23 +82,16 @@ var IndexMap = function (options) {
   };
 
   /**
-   * Load geojson network layer via ajax, then add it to the layer
+   * Load networks layer from geojson data via ajax
    */
   _loadNetworksLayer = function () {
     Xhr.ajax({
       url: MOUNT_PATH + '/_getNetworks.json.php',
       success: function (data) {
-        var bounds,
-            mapView;
-
-        _networks.addData(data);
-
-        // Set map extent to stored bounds or to extent of points
-        mapView = JSON.parse(window.localStorage.getItem('mapView')) || {};
-        if (!mapView.hasOwnProperty('networks')) {
-          bounds = _networks.getBounds();
-          _map.fitBounds(bounds);
-        }
+        _networks = L.networksLayer({
+          data: data
+        });
+        _initMap();
       },
       error: function (status) {
         console.log(status);
@@ -113,23 +103,29 @@ var IndexMap = function (options) {
    * Create Leaflet map instance
    */
   _initMap = function () {
-    var layers;
+    var bounds,
+        layers,
+        map;
 
     layers = _getMapLayers();
 
     // Create map
-    _map = L.map(_el, {
+    map = L.map(_el, {
       layers: layers.defaults,
       scrollWheelZoom: false
     });
 
+    // Set intial map extent to contain networks overlay
+    bounds = _networks.getBounds();
+    map.fitBounds(bounds);
+    
     // Add controllers
-    L.control.fullscreen({ pseudoFullscreen: true }).addTo(_map);
-    L.control.layers(layers.baseLayers, layers.overlays).addTo(_map);
-    L.control.scale().addTo(_map);
+    L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
+    L.control.layers(layers.baseLayers, layers.overlays).addTo(map);
+    L.control.scale().addTo(map);
 
     // Remember user's map settings (selected layers, map extent)
-    _map.restoreView({
+    map.restoreView({
       baseLayers: layers.baseLayers,
       id: 'networks',
       overlays: layers.overlays,

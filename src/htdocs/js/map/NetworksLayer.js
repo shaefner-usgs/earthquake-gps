@@ -59,7 +59,7 @@ var NetworksLayer = function (options) {
 
     _icons = {};
 
-    _this = L.geoJson(null, {
+    _this = L.geoJson(options.data, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer,
       style: _style

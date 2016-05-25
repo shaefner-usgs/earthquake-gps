@@ -41,8 +41,8 @@ _DEFAULTS = {
  * @return {L.FeatureGroup}
  */
 var EarthquakesLayer = function (options) {
-  var _initialize,
-      _this,
+  var _this,
+      _initialize,
 
       _markerOptions,
 
@@ -54,7 +54,7 @@ var EarthquakesLayer = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
     _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
 
-    _this = L.geoJson(null, {
+    _this = L.geoJson(options.data, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });
