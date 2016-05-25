@@ -1,6 +1,6 @@
 <?php
 
-class PhotosView {
+class PhotoView {
   private $_collection;
 
   public function __construct (PhotoCollection $collection) {

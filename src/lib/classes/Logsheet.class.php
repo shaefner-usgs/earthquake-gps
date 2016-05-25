@@ -11,7 +11,7 @@
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
-class LogsheetModel {
+class Logsheet {
   public $date;
   public $file;
   public $type;

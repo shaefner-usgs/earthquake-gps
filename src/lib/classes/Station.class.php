@@ -9,7 +9,7 @@ include '../conf/config.inc.php'; // app config
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
-class StationModel {
+class Station {
   private $data = array();
 
   public function __construct ($networks = null) {

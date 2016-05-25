@@ -4,9 +4,9 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-include_once '../lib/classes/LogsheetModel.class.php'; // model
+include_once '../lib/classes/Logsheet.class.php'; // model
 include_once '../lib/classes/LogsheetCollection.class.php'; // collection
-include_once '../lib/classes/LogsheetsView.class.php'; // view
+include_once '../lib/classes/LogsheetView.class.php'; // view
 
 // set default value so page loads without passing params
 $station = safeParam('station', '7adl');
@@ -39,7 +39,7 @@ if ($station_exists) {
   // Add logsheets to collection
   $logsheetCollection = new LogsheetCollection($station);
   foreach ($files as $file) {
-    $logsheetModel = new LogsheetModel($file);
+    $logsheetModel = new Logsheet($file);
     $logsheetCollection->add($logsheetModel);
   }
 
@@ -47,7 +47,7 @@ if ($station_exists) {
   $logsheetCollection->sort();
 
   // Render HTML
-  $view = new LogsheetsView($logsheetCollection);
+  $view = new LogsheetView($logsheetCollection);
   $view->render();
 } else {
   print '<p class="alert error">ERROR: Station Not Found</p>';

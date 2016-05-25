@@ -11,7 +11,7 @@ include '../conf/config.inc.php'; // app config
 class StationView {
   private $model;
 
-  public function __construct (StationModel $model) {
+  public function __construct (Station $model) {
     $this->model = $model;
   }
 

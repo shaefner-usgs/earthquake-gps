@@ -1,6 +1,6 @@
 <?php
 
-class LogsheetsView {
+class LogsheetView {
   private $_collection;
 
   public function __construct (LogsheetCollection $collection) {

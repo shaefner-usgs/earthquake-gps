@@ -3,7 +3,7 @@
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-include_once '../lib/classes/StationModel.class.php'; // model
+include_once '../lib/classes/Station.class.php'; // model
 include_once '../lib/classes/StationView.class.php'; // view
 
 // set default values so page loads without passing params
@@ -41,7 +41,7 @@ $rsStation = $db->queryStation($station, $network);
 // Create the station model using the station details and $networkList array
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
-  'StationModel',
+  'Station',
   array($networkList)
 );
 $stationModel = $rsStation->fetch();

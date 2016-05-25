@@ -12,7 +12,7 @@
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
-class PhotoModel {
+class Photo {
   public $code;
   public $date;
   public $file;
