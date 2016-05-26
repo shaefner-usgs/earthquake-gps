@@ -161,7 +161,8 @@ var StationsLayer = function (options) {
     label = station.toUpperCase();
 
     layer.bindPopup(popup, {
-      minWidth: 250
+      autoPanPadding: L.point(50, 50),
+      minWidth: 256,
     }).bindLabel(label, {
       pane: 'popupPane'
     });
