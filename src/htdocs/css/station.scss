@@ -1,6 +1,10 @@
 @import 'tablist/TabList.scss';
 @import '_common.scss';
 
+.map {
+  height: 300px;
+}
+
 .tablist-panel {
   overflow: auto;
   padding: 0 1em 1em;

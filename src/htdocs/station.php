@@ -13,8 +13,16 @@ $network = safeParam('network', 'Pacific');
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . " ($network Network)";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/station.css" />';
-  $FOOT = '<script src="' . $MOUNT_PATH . '/js/station.js"></script>';
+  $HEAD = '
+    <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
+    <link rel="stylesheet" href="' . $MOUNT_PATH . '/css/station.css" />
+  ';
+  $FOOT = '
+    <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
+    <script>var NETWORK = "' . $network . '";</script>
+    <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
+    <script src="' . $MOUNT_PATH . '/js/station.js"></script>
+  ';
 
   include 'template.inc.php';
 }

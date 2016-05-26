@@ -72,6 +72,7 @@ class StationView {
       if (is_file("$baseDir/$imgPath/$file")) {
         $imgSrc = "$baseUri/$imgPath/$file";
         if ($type === 'cleaned') {
+          $toggle = 'toggle';
           $imgSrc30 = str_replace('.png', '_30.png', $imgSrc);
           $imgSrc90 = str_replace('.png', '_90.png', $imgSrc);
           $imgSrc365 = str_replace('.png', '_365.png', $imgSrc);
@@ -84,7 +85,6 @@ class StationView {
               <li><a href="' . $imgSrc730 . '">Past 2 years</a></li>
               <li><a href="' . $imgSrc . '" class="selected">All data</a></li>
             </ul>';
-          $toggle = 'toggle';
         }
         $html .= sprintf('
           <section class="panel" data-title="%s">
@@ -122,6 +122,8 @@ class StationView {
     // print $this->_getCampaignList();
     //
     // print '</section>';
+
+    print $this->_getMap();
 
     print $this->_getPlots();
 
