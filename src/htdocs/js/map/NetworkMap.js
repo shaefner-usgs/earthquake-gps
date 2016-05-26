@@ -63,7 +63,7 @@ var NetworkMap = function (options) {
 
     openPopup = function(e) {
       e.preventDefault();
-      _stations.openPopup(e.target.station);
+      _stations.openPopup(e.target.station.match(/\w+/)); // ignore '*' in name
     };
 
     lis = document.querySelectorAll('.stations li');
