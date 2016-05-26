@@ -42,7 +42,7 @@ $rsStation = $db->queryStation($station, $network);
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
   'Station',
-  array($networkList)
+  $networkList
 );
 $stationModel = $rsStation->fetch();
 
