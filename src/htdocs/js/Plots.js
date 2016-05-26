@@ -48,7 +48,7 @@ var Plots = function (options) {
   /**
    * Swap plot image
    *
-   * @param e {Object}
+   * @param e {Event}
    */
   _togglePlot = function (e) {
     var img;
