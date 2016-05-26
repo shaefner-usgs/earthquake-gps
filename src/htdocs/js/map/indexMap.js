@@ -118,7 +118,7 @@ var IndexMap = function (options) {
     // Set intial map extent to contain networks overlay
     bounds = _networks.getBounds();
     map.fitBounds(bounds);
-    
+
     // Add controllers
     L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
     L.control.layers(layers.baseLayers, layers.overlays).addTo(map);
@@ -129,7 +129,7 @@ var IndexMap = function (options) {
       baseLayers: layers.baseLayers,
       id: 'networks',
       overlays: layers.overlays,
-      shareLayers: false
+      shareLayers: true
     });
   };
 
