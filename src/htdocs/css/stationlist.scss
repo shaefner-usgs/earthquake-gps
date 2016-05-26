@@ -43,6 +43,7 @@
 
     &:not(:last-child):after {
       color: #ccc;
+      display: inline-block;
       content: '|';
       margin: 0 0 0 .75em;
     }
