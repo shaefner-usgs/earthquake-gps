@@ -132,7 +132,7 @@ var NetworkMap = function (options) {
    */
   _loadEarthquakesLayer = function () {
     Xhr.ajax({
-      url: MOUNT_PATH + '/_getEarthquakes.json.php',
+      url: 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson',
       success: function (data) {
         _earthquakes = L.earthquakesLayer({
           data: data
