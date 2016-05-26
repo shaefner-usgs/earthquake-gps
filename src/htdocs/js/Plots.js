@@ -1,9 +1,11 @@
 'use strict';
 
 
-var Plots = function (el) {
+var Plots = function (options) {
   var _this,
       _initialize,
+
+      _el,
 
       _addListeners,
       _getLinks,
@@ -14,14 +16,16 @@ var Plots = function (el) {
   _this = {};
 
   _initialize = function () {
-    if (el) {
-      _addListeners();
-    }
+    options = options || {};
+    _el = options.el || document.createElement('div');
+
+    // add EventListeners
+    _addListeners();
   };
 
 
   /**
-   * Add EventListeners to toggle links
+   * EventListeners to toggle plots by date range
    */
   _addListeners = function () {
     var links;
@@ -38,7 +42,7 @@ var Plots = function (el) {
    * @return {Array} (not a NodeList)
    */
   _getLinks = function () {
-    return [].slice.call(el.querySelectorAll('a'));
+    return [].slice.call(_el.querySelectorAll('a'));
   };
 
   /**
@@ -50,7 +54,7 @@ var Plots = function (el) {
     var img;
 
     e.preventDefault();
-    img = el.parentNode.querySelector('.toggle');
+    img = _el.parentNode.querySelector('.toggle');
     img.setAttribute('src', e.target.href);
 
     _toggleSel(e.target);
