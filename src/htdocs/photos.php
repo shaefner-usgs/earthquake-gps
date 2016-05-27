@@ -8,11 +8,14 @@ include_once '../lib/classes/Photo.class.php'; // model
 include_once '../lib/classes/PhotoCollection.class.php'; // collection
 include_once '../lib/classes/PhotoView.class.php'; // view
 
-// set default value so page loads without passing params
+// set default values so page loads without passing params
 $station = safeParam('station', '7adl');
+$network = safeParam('network', 'WindKetchFlat_SGPS');
+
+$name = strtoupper($station);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($station) . ' Photos';
+  $TITLE = "GPS Station $name Photos";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/photos.css" />';
   $FOOT = '';
@@ -35,6 +38,12 @@ if ($station_exists) {
   );
   $files = getDirContents($dir);
 
+  $uri = sprintf('%s/%s/%s/',
+    $MOUNT_PATH,
+    $network,
+    $station
+  );
+
   // Add photos to collection
   $photoCollection = new PhotoCollection($station);
   foreach ($files as $file) {
@@ -48,3 +57,9 @@ if ($station_exists) {
 } else {
   print '<p class="alert error">ERROR: Station Not Found</p>';
 }
+
+?>
+
+<p class="back">&laquo;
+  <a href="<?php print $uri; ?>">Back to Station <?php print $name; ?></a>
+</p>

@@ -8,11 +8,14 @@ include_once '../lib/classes/Logsheet.class.php'; // model
 include_once '../lib/classes/LogsheetCollection.class.php'; // collection
 include_once '../lib/classes/LogsheetView.class.php'; // view
 
-// set default value so page loads without passing params
+// set default values so page loads without passing params
 $station = safeParam('station', '7adl');
+$network = safeParam('network', 'WindKetchFlat_SGPS');
+
+$name = strtoupper($station);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($station) . ' Field Logs';
+  $TITLE = "GPS Station $name Field Logs";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/logsheets.css" />';
   $FOOT = '';
@@ -36,6 +39,12 @@ if ($station_exists) {
   // sort ASC so that 'Front' page (1) is listed before 'Back' page (2)
   $files = getDirContents($dir, $order=SCANDIR_SORT_ASCENDING);
 
+  $uri = sprintf('%s/%s/%s/',
+    $MOUNT_PATH,
+    $network,
+    $station
+  );
+
   // Add logsheets to collection
   $logsheetCollection = new LogsheetCollection($station);
   foreach ($files as $file) {
@@ -54,3 +63,7 @@ if ($station_exists) {
 }
 
 ?>
+
+<p class="back">&laquo;
+  <a href="<?php print $uri; ?>">Back to Station <?php print $name; ?></a>
+</p>
