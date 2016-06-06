@@ -11,7 +11,7 @@ $network = safeParam('network', 'Pacific');
 $station = safeParam('station', 'aoa1');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($station) . " ($network Network)";
+  $TITLE = 'GPS Station ' . strtoupper($station) . " <em>($network Network)</em>";
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
