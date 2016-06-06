@@ -1,4 +1,4 @@
-/* global L, MOUNT_PATH */
+/* global L, MOUNT_PATH, NETWORK, STATION */
 'use strict';
 
 
@@ -8,6 +8,12 @@ var Xhr = require('util/Xhr');
 require('map/StationsLayer');
 require('map/TerrainLayer');
 
+
+/**
+ * Factory for leaflet map instance on the 'station' page
+ *
+ * @param options {Object}
+ */
 var StationMap = function (options) {
   var _this,
       _initialize,
@@ -24,30 +30,43 @@ var StationMap = function (options) {
   _initialize = function (options) {
     options = options || {};
     _el = options.el || document.createElement('div');
-console.log(_el);
+
     // Load stations layer which calls initMap() when finished
     _loadStationsLayer();
   };
 
 
+  /**
+   * Create Leaflet map instance
+   */
   _initMap = function () {
-    var map;
-console.log(_el);
+    var bounds,
+        map;
+
+    // bounds contain only selected station
+    bounds = _stations.getBounds();
+
     // Create map
     map = L.map(_el, {
       layers: [L.terrainLayer(), _stations],
       scrollWheelZoom: false,
-      center: [38, -123],
-      zoom: 4
+      center: bounds.getCenter(),
+      zoom: 7
     });
+
+    _stations.openPopup(STATION.toUpperCase());
   };
 
+  /**
+   * Load stations layer from geojson data via ajax
+   */
   _loadStationsLayer = function () {
     Xhr.ajax({
-      url: MOUNT_PATH + '/_getStations.json.php',
+      url: MOUNT_PATH + '/_getStations.json.php?network=' + NETWORK,
       success: function (data) {
         _stations = L.stationsLayer({
-          data: data
+          data: data,
+          station: STATION
         });
         _initMap();
       },
@@ -61,7 +80,6 @@ console.log(_el);
   _initialize(options);
   options = null;
   return _this;
-
 };
 
 
