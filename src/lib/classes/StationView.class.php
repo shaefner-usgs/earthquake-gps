@@ -40,6 +40,7 @@ class StationView {
   }
 
   private function _getPlots () {
+    $downloads = '';
     $explanation = '
       <p>These plots depict the north, east and up components of
       the station as a function of time. <a href="/monitoring/gps/plots.php">More
@@ -50,15 +51,13 @@ class StationView {
         <li><mark class="red">Red</mark>: earthquakes</li>
         <li><mark class="blue">Blue</mark>: manually entered</li>
       </ul>';
+    $html = '<div class="tablist">';
 
     $types = [
       'itrf2008' => 'ITRF2008',
       'nafixed' => 'NA-fixed',
-      'filtered' => 'Filtered NA-fixed',
       'cleaned' => 'Detrended'
     ];
-
-    $html = '<div class="tablist">';
 
     foreach ($types as $type => $name) {
       $baseDir = $GLOBALS['DATA_DIR'];
@@ -66,7 +65,6 @@ class StationView {
       $imgPath = 'networks/' . $this->model->network . '/' .
         $this->model->station . '/' . $type;
       $file = $this->model->station . '.png';
-      $nav = '';
 
       if (is_file("$baseDir/$imgPath/$file")) {
         $imgSrc = "$baseUri/$imgPath/$file";
@@ -85,10 +83,12 @@ class StationView {
         $html .= sprintf('
           <section class="panel" data-title="%s">
             <header>
-              <h3>%s</h3>
+              <h2>%s</h2>
             </header>
             %s
             <img src="%s" class="toggle" alt="Plot showing %s data" />
+            %s
+            <h3>Downloads</h3>
             %s
           </section>',
           $name,
@@ -96,7 +96,8 @@ class StationView {
           $nav,
           $imgSrc,
           $name,
-          $explanation
+          $explanation,
+          $downloads
         );
       }
     }
