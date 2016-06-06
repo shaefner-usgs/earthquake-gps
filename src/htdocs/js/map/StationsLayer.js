@@ -146,6 +146,11 @@ var StationsLayer = function (options) {
     key = options.shape + '+' + options.color;
     _markerOptions.icon = Icon.getIcon(key);
 
+    _markerOptions.zIndexOffset = 0;
+    if (options.selected) {
+      _markerOptions.zIndexOffset = 1000;
+    }
+
     return L.marker(options.latlng, _markerOptions);
   };
 
@@ -249,6 +254,7 @@ var StationsLayer = function (options) {
   _pointToLayer = function (feature, latlng) {
     var color,
         marker,
+        selected,
         shape;
 
     shape = _SHAPES[feature.properties.type];
@@ -256,15 +262,20 @@ var StationsLayer = function (options) {
     if (_station) { // user viewing a Station page
       // Highlight the selected station only
       color = 'grey';
+      selected = false;
+
       if (feature.properties.station === _station) {
         color = 'blue';
+        selected = true;
 
         _bounds.extend(latlng);
       }
+
       marker = _getMarker({
         color: color,
-        shape: shape,
-        latlng: latlng
+        latlng: latlng,
+        selected: selected,
+        shape: shape
       });
 
       // Add marker to layer
@@ -283,8 +294,8 @@ var StationsLayer = function (options) {
       color = _getColor(feature.properties.days);
       marker = _getMarker({
         color: color,
-        shape: shape,
-        latlng: latlng
+        latlng: latlng,
+        shape: shape
       });
 
       // Group stations in separate layers by type
