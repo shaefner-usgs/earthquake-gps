@@ -9,8 +9,8 @@ include_once '../lib/classes/LogsheetCollection.class.php'; // collection
 include_once '../lib/classes/LogsheetView.class.php'; // view
 
 // set default values so page loads without passing params
-$station = safeParam('station', '7adl');
 $network = safeParam('network', 'WindKetchFlat_SGPS');
+$station = safeParam('station', '7adl');
 
 $name = strtoupper($station);
 
