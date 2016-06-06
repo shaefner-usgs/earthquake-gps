@@ -2,23 +2,10 @@
 @import '_common.scss';
 @import 'map/_leaflet.scss';
 
-.map {
-  height: 300px;
-}
-
-.tablist-panel {
-  overflow: auto;
-  padding: 0 1em 1em;
-
-  h3 {
-    display: none; /* hides in js env only (.tablist-panel added by tabs js) */
-  }
-
-  img {
-    display: block;
-    float: left;
-    margin: 1em 1em 1em 0;
-  }
+h1 em {
+  font-size: .8em;
+  font-style: normal;
+  font-weight: normal;
 }
 
 mark {
@@ -33,5 +20,35 @@ mark {
   }
   &.red {
     color: red;
+  }
+}
+
+.map {
+  height: 300px;
+}
+
+.popup {
+  dt {
+    font-weight: normal;
+    margin-top: 1em;
+  }
+  dd {
+    color: #666;
+    margin: .2em 0 0;
+  }
+}
+
+.tablist-panel {
+  overflow: auto;
+  padding: 0 1em 1em;
+
+  h3 {
+    display: none; /* hides in js env only (.tablist-panel added by tabs js) */
+  }
+
+  img {
+    display: block;
+    float: left;
+    margin: 1em 1em 1em 0;
   }
 }
