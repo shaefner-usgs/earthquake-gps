@@ -23,6 +23,11 @@ input[type=checkbox], input[type=radio] {
   width: auto;
 }
 
+/* use template's color for links in popups */
+.leaflet-popup-content a {
+  color: #306ac2;
+}
+
 /* UtfGrid mouseovers */
 .leaflet-mouseover-tooltip {
   background-color: hsla(0, 0%, 100%, .75);
