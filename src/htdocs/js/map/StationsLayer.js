@@ -196,11 +196,10 @@ var StationsLayer = function (options) {
       popupTemplate = '<div class="popup">' +
           '<h2>Station {station}</h2>' +
           '<dl>' +
-            '<dt>Lat, Lon (Elevation)</dt><dd>{lat}, {lon}, ({elevation}m)</dd>' +
+            '<dt>Lat, Lon (Elevation)</dt><dd>{lat}, {lon} ({elevation}m)</dd>' +
             '<dt>X, Y, Z Position</dt><dd>{x}, {y}, {z}</dd>' +
           '</dl>' +
-          '<p><a href="https://maps.google.com/">Google Map</a></p>' +
-          //https://www.google.com/maps/place/@39.603921,-120.1095495,16z/data=
+          '<p><a href="https://www.google.com/maps/dir//{lat},{lon}/data=!4m2!4m1!3e0">Google Map</a></p>' +
         '</div>';
     }
     popup = L.Util.template(popupTemplate, data);
