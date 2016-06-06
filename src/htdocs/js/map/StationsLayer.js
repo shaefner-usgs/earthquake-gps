@@ -18,7 +18,8 @@ _MARKER_DEFAULTS = {
 };
 _DEFAULTS = {
   data: {},
-  markerOptions: _MARKER_DEFAULTS
+  markerOptions: _MARKER_DEFAULTS,
+  station: null
 };
 _LAYERNAMES = {
   blue: 'Past 3 days',
@@ -78,10 +79,11 @@ var StationsLayer = function (options) {
     _icons = {};
     _points = {};
 
-    // Station user is currently viewing (not passed from Network map)
-    _station = options.station;
-
-    if (!_station) {
+    if (options.station) {
+      // Station user is currently viewing (not passed from Network map)
+      _station = options.station;
+    } else {
+      // Network map classes stations by age...set up individual layers
       _initLayers();
     }
 
