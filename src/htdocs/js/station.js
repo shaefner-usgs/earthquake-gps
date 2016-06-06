@@ -5,7 +5,15 @@ var Plots = require ('Plots'),
     TabList = require('tablist/TabList');
 
 Plots({
-  el: document.querySelector('.nav-toggle')
+  el: document.querySelector('.itrf2008')
+});
+
+Plots({
+  el: document.querySelector('.nafixed')
+});
+
+Plots({
+  el: document.querySelector('.cleaned')
 });
 
 StationMap({

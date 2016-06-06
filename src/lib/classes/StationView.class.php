@@ -67,39 +67,34 @@ class StationView {
         $this->model->station . '/' . $type;
       $file = $this->model->station . '.png';
       $nav = '';
-      $toggle = '';
 
       if (is_file("$baseDir/$imgPath/$file")) {
         $imgSrc = "$baseUri/$imgPath/$file";
-        if ($type === 'cleaned') {
-          $toggle = 'toggle';
-          $imgSrc30 = str_replace('.png', '_30.png', $imgSrc);
-          $imgSrc90 = str_replace('.png', '_90.png', $imgSrc);
-          $imgSrc365 = str_replace('.png', '_365.png', $imgSrc);
-          $imgSrc730 = str_replace('.png', '_730.png', $imgSrc);
-          $nav = '
-            <ul class="nav-toggle no-style pipelist">
-              <li><a href="' . $imgSrc30 . '">Past 30 days</a></li>
-              <li><a href="' . $imgSrc90 . '">Past 90 days</a></li>
-              <li><a href="' . $imgSrc365 . '">Past year</a></li>
-              <li><a href="' . $imgSrc730 . '">Past 2 years</a></li>
-              <li><a href="' . $imgSrc . '" class="selected">All data</a></li>
-            </ul>';
-        }
+        $imgSrc30 = str_replace('.png', '_30.png', $imgSrc);
+        $imgSrc90 = str_replace('.png', '_90.png', $imgSrc);
+        $imgSrc365 = str_replace('.png', '_365.png', $imgSrc);
+        $imgSrc730 = str_replace('.png', '_730.png', $imgSrc);
+        $nav = '
+          <ul class="' . $type . ' no-style pipelist">
+            <li><a href="' . $imgSrc30 . '">Past 30 days</a></li>
+            <li><a href="' . $imgSrc90 . '">Past 90 days</a></li>
+            <li><a href="' . $imgSrc365 . '">Past year</a></li>
+            <li><a href="' . $imgSrc730 . '">Past 2 years</a></li>
+            <li><a href="' . $imgSrc . '" class="selected">All data</a></li>
+          </ul>';
         $html .= sprintf('
           <section class="panel" data-title="%s">
             <header>
               <h3>%s</h3>
             </header>
             %s
-            <img src="%s" class="%s" alt="Plot showing %s data" />
+            <img src="%s" class="toggle" alt="Plot showing %s data" />
             %s
           </section>',
           $name,
           $name,
           $nav,
           $imgSrc,
-          $toggle,
           $name,
           $explanation
         );
