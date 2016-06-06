@@ -226,7 +226,8 @@ class Db {
    */
   public function queryStations ($network) {
     $sql = 'SELECT s.id, s.station, s.lat, s.lon, s.destroyed, s.showcoords,
-      r.stationtype, v.last_observation, v.up_rms, v.north_rms, v.east_rms
+      s.elevation, s.x, s.y, s.z, r.stationtype,
+      v.last_observation, v.up_rms, v.north_rms, v.east_rms
       FROM nca_gps_stations s
       LEFT JOIN nca_gps_relations r USING (station)
       LEFT JOIN nca_gps_velocities v USING (station)
