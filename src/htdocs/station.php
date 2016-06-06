@@ -7,8 +7,8 @@ include_once '../lib/classes/Station.class.php'; // model
 include_once '../lib/classes/StationView.class.php'; // view
 
 // set default values so page loads without passing params
-$station = safeParam('station', 'aoa1');
 $network = safeParam('network', 'Pacific');
+$station = safeParam('station', 'aoa1');
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . " ($network Network)";
@@ -18,8 +18,11 @@ if (!isset($TEMPLATE)) {
     <link rel="stylesheet" href="' . $MOUNT_PATH . '/css/station.css" />
   ';
   $FOOT = '
-    <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
-    <script>var NETWORK = "' . $network . '";</script>
+    <script>
+      var MOUNT_PATH = "' . $MOUNT_PATH . '",
+          NETWORK = "' . $network . '",
+          STATION = "' . $station . '";
+    </script>
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
     <script src="' . $MOUNT_PATH . '/js/station.js"></script>
   ';
