@@ -45,6 +45,7 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
     ],
     'properties' => [
       'days' => $days,
+      'elevation' => $row['elevation'],
       'last_observation' => $row['last_observation'],
       'rms' => [
         'east' => floatval($row['east_rms']),
@@ -53,7 +54,10 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       ],
       'showcoords' => intval($row['showcoords']),
       'station' => $row['station'],
-      'type' => $row['stationtype']
+      'type' => $row['stationtype'],
+      'x' => $row['x'],
+      'y' => $row['y'],
+      'z' => $row['z']
     ],
     'type' => 'Feature'
   ];
