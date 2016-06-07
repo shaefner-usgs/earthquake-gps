@@ -47,16 +47,16 @@ class StationView {
       detailed explanation</a> &raquo;</p>
       <p>Dashed lines show offsets due to:</p>
       <ul class="no-style">
-        <li><mark class="green">Green</mark>: antenna changes from site logs</li>
-        <li><mark class="red">Red</mark>: earthquakes</li>
-        <li><mark class="blue">Blue</mark>: manually entered</li>
+        <li><mark class="green">Green</mark> &ndash; antenna changes from site logs</li>
+        <li><mark class="red">Red</mark> &ndash; earthquakes</li>
+        <li><mark class="blue">Blue</mark> &ndash; manually entered</li>
       </ul>';
     $html = '<div class="tablist">';
 
     $types = [
       'itrf2008' => 'ITRF2008',
       'nafixed' => 'NA-fixed',
-      'cleaned' => 'Detrended'
+      'cleaned' => 'Cleaned'
     ];
 
     foreach ($types as $type => $name) {
@@ -72,14 +72,22 @@ class StationView {
         $imgSrc90 = str_replace('.png', '_90.png', $imgSrc);
         $imgSrc365 = str_replace('.png', '_365.png', $imgSrc);
         $imgSrc730 = str_replace('.png', '_730.png', $imgSrc);
-        $nav = '
-          <ul class="' . $type . ' no-style pipelist">
-            <li><a href="' . $imgSrc30 . '">Past 30 days</a></li>
-            <li><a href="' . $imgSrc90 . '">Past 90 days</a></li>
-            <li><a href="' . $imgSrc365 . '">Past year</a></li>
-            <li><a href="' . $imgSrc730 . '">Past 2 years</a></li>
-            <li><a href="' . $imgSrc . '" class="selected">All data</a></li>
-          </ul>';
+        $imgSrcTrend = str_replace('.png', '_wtrend.png', $imgSrc);
+        $nav = '<nav class="' . $type . '">
+            <span>Detrended:</span>
+            <ul class="no-style pipelist">
+              <li><a href="' . $imgSrc30 . '">Past 30 days</a></li>
+              <li><a href="' . $imgSrc90 . '">Past 90 days</a></li>
+              <li><a href="' . $imgSrc365 . '">Past year</a></li>
+              <li><a href="' . $imgSrc730 . '">Past 2 years</a></li>
+              <li><a href="' . $imgSrc . '" class="selected">All data</a></li>
+            </ul>';
+        $nav .= '
+            <span>Trended:</span>
+            <ul class="no-style pipelist">
+              <li><a href="' . $imgSrcTrend . '">All data</a></li>
+            </ul>
+          </nav>';
         $html .= sprintf('
           <section class="panel" data-title="%s">
             <header>

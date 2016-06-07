@@ -10,16 +10,28 @@ h1 em {
 
 mark {
   background: none;
-  padding: 0;
+  color: #fff;
+  padding: 0 2px;
 
   &.blue {
-    color: blue;
+    background: #0ff;
   }
   &.green {
-    color: green;
+    background: #0f0;
   }
   &.red {
-    color: red;
+    background: #f00;
+  }
+}
+
+.panel nav {
+  overflow: hidden;
+  width: 100%;
+
+  span {
+    display: inline-block;
+    float: left;
+    margin: 1em .5em 0 0;
   }
 }
 
@@ -50,5 +62,6 @@ mark {
     display: block;
     float: left;
     margin: 1em 1em 1em 0;
+    width: 490px;
   }
 }
