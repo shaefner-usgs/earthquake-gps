@@ -35,12 +35,24 @@ class StationView {
       (errant observations) sometimes contaminates the velocities.</small></p>';
   }
 
+  private function _getFile ($type, $suffix) {
+    $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
+    $dataPath = $this->_getPath($type);
+    $file = "$baseUri/$dataPath/" . $this->model->station . $suffix;
+
+    return $file;
+  }
+
   private function _getMap () {
     return '<div class="map"></div>';
   }
 
+  private function _getPath ($type) {
+    return 'networks/' . $this->model->network . '/' . $this->model->station .
+      '/' . $type;
+  }
+
   private function _getPlots () {
-    $downloads = '';
     $explanation = '
       <p>These plots depict the north, east and up components of
       the station as a function of time. <a href="/monitoring/gps/plots.php">More
@@ -61,33 +73,54 @@ class StationView {
 
     foreach ($types as $type => $name) {
       $baseDir = $GLOBALS['DATA_DIR'];
+      $baseImg = $this->model->station . '.png';
       $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
-      $imgPath = 'networks/' . $this->model->network . '/' .
-        $this->model->station . '/' . $type;
-      $file = $this->model->station . '.png';
+      $dataPath = $this->_getPath($type);
 
-      if (is_file("$baseDir/$imgPath/$file")) {
-        $imgSrc = "$baseUri/$imgPath/$file";
-        $imgSrc30 = str_replace('.png', '_30.png', $imgSrc);
-        $imgSrc90 = str_replace('.png', '_90.png', $imgSrc);
-        $imgSrc365 = str_replace('.png', '_365.png', $imgSrc);
-        $imgSrc730 = str_replace('.png', '_730.png', $imgSrc);
-        $imgSrcTrend = str_replace('.png', '_wtrend.png', $imgSrc);
-        $nav = '<nav class="' . $type . '">
+      $baseImgSrc = "$baseUri/$dataPath/$baseImg";
+
+      if (is_file("$baseDir/$dataPath/$baseImg")) {
+        $toggle = '
+          <nav class="' . $type . '">
             <span>Detrended:</span>
             <ul class="no-style pipelist">
-              <li><a href="' . $imgSrc30 . '">Past 30 days</a></li>
-              <li><a href="' . $imgSrc90 . '">Past 90 days</a></li>
-              <li><a href="' . $imgSrc365 . '">Past year</a></li>
-              <li><a href="' . $imgSrc730 . '">Past 2 years</a></li>
-              <li><a href="' . $imgSrc . '" class="selected">All data</a></li>
-            </ul>';
-        $nav .= '
+              <li><a href="' . $this->_getFile($type, '_30.png') . '">Past 30 days</a></li>
+              <li><a href="' . $this->_getFile($type, '_90.png') . '">Past 90 days</a></li>
+              <li><a href="' . $this->_getFile($type, '_365.png') . '">Past year</a></li>
+              <li><a href="' . $this->_getFile($type, '_730.png') . '">Past 2 years</a></li>
+              <li><a href="' . $this->_getFile($type, '.png') . '" class="selected">All data</a></li>
+            </ul>
             <span>Trended:</span>
             <ul class="no-style pipelist">
-              <li><a href="' . $imgSrcTrend . '">All data</a></li>
+              <li><a href="' . $this->_getFile($type, '_wtrend.png') . '">All data</a></li>
             </ul>
           </nav>';
+        $downloads = '
+          <nav class="downloads">
+            <span>Plot:</span>
+            <ul class="no-style pipelist">
+              <li><a href="' . $this->_getFile($type, '.gmt.gz') . '">
+                <abbr title="Generic Mapping Tools">GMT</abbr> Script
+              </a></li>
+            </ul>
+            <span>Raw Data:</span>
+            <ul class="no-style pipelist">
+              <li><a href="' . $this->_getFile($type, '.rneu') .'">All</a></li>
+            </ul>
+            <span>Detrended Data:</span>
+            <ul class="no-style pipelist">
+              <li><a href="' . $this->_getFile($type, '_N.data.gz') .'">North</a></li>
+              <li><a href="' . $this->_getFile($type, '_E.data.gz') .'">East</a></li>
+              <li><a href="' . $this->_getFile($type, '_U.data.gz') .'">Up</a></li>
+            </ul>
+            <span>Trended Data:</span>
+            <ul class="no-style pipelist">
+              <li><a href="' . $this->_getFile($type, '_N_wtrend.data.gz') .'">North</a></li>
+              <li><a href="' . $this->_getFile($type, '_E_wtrend.data.gz') .'">East</a></li>
+              <li><a href="' . $this->_getFile($type, '_U_wtrend.data.gz') .'">Up</a></li>
+            </ul>
+          </nav>
+        ';
         $html .= sprintf('
           <section class="panel" data-title="%s">
             <header>
@@ -101,8 +134,8 @@ class StationView {
           </section>',
           $name,
           $name,
-          $nav,
-          $imgSrc,
+          $toggle,
+          $baseImgSrc,
           $name,
           $explanation,
           $downloads
