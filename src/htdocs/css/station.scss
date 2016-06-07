@@ -24,14 +24,21 @@ mark {
   }
 }
 
-.panel nav {
-  overflow: hidden;
-  width: 100%;
+.panel {
+  margin-top: 1em;
+  
+  nav {
+    overflow: hidden;
 
-  span {
-    display: inline-block;
-    float: left;
-    margin: 1em .5em 0 0;
+    span {
+      display: inline-block;
+      float: left;
+      margin: .5em 5px 0 0;
+    }
+
+    ul {
+      margin-top: .5em;
+    }
   }
 }
 
