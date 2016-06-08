@@ -55,43 +55,39 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_ASSOC)) {
   $type = trim($row['type']);
 
   // Shared props
-  $velocities[$type] = [
-    'velocity' => [
-      'north' => $row['north_velocity'],
-      'east' => $row['east_velocity'],
-      'up' => $row['up_velocity']
-    ],
-    'sigma' => [
-      'north' => $row['north_sigma'],
-      'east' => $row['east_sigma'],
-      'up' => $row['up_sigma']
-    ]
+  $north = [
+    'velocity' => $row['north_velocity'],
+    'sigma' => $row['north_sigma']
+  ];
+  $east = [
+    'velocity' => $row['east_velocity'],
+    'sigma' => $row['east_sigma']
+  ];
+  $up = [
+    'velocity' => $row['up_velocity'],
+    'sigma' => $row['up_sigma']
   ];
 
   // Props based on type (cleaned, itrf2008, nafixed)
   if ($type === 'cleaned') {
-    $velocities[$type]['flickernoise'] = [
-      'north' => $row['flickernoisenorth'],
-      'east' => $row['flickernoiseeast'],
-      'up' => $row['flickernoiseup']
-    ];
-    $velocities[$type]['randomwalk'] = [
-      'north' => $row['randomwalknorth'],
-      'east' => $row['randomwalkeast'],
-      'up' => $row['randomwalkup']
-    ];
-    $velocities[$type]['whitenoise'] = [
-      'north' => $row['whitenoisenorth'],
-      'east' => $row['whitenoiseeast'],
-      'up' => $row['whitenoiseup']
-    ];
+    $north['flickernoise'] = $row['flickernoisenorth'];
+    $north['randomwalk'] = $row['randomwalknorth'];
+    $north['whitenoise'] = $row['whitenoisenorth'];
+    $east['flickernoise'] = $row['flickernoiseeast'];
+    $east['randomwalk'] = $row['randomwalkeast'];
+    $east['whitenoise'] = $row['whitenoiseeast'];
+    $up['flickernoise'] = $row['flickernoiseup'];
+    $up['randomwalk'] = $row['randomwalkup'];
+    $up['whitenoise'] = $row['whitenoiseup'];
   } else {
-    $velocities[$type]['rms'] = [
-      'north' => $row['north_rms'],
-      'east' => $row['east_rms'],
-      'up' => $row['up_rms']
-    ];
+    $north['rms'] = $row['north_rms'];
+    $east['rms'] = $row['east_rms'];
+    $up['rms'] = $row['up_rms'];
   }
+
+  $velocities[$type]['north'] = $north;
+  $velocities[$type]['east'] = $east;
+  $velocities[$type]['up'] = $up;
 }
 
 // Db query result: station details for selected station and network
