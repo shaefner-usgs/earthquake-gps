@@ -51,10 +51,13 @@ var Plots = function (options) {
    * @param e {Event}
    */
   _togglePlot = function (e) {
-    var img;
+    var alt,
+        img;
 
     e.preventDefault();
     img = _el.parentNode.querySelector('.toggle');
+    alt = img.getAttribute('alt').replace(/\(.*\)/, '(' + e.target.textContent + ')');
+    img.setAttribute('alt', alt);
     img.setAttribute('src', e.target.href);
 
     _toggleSel(e.target);
