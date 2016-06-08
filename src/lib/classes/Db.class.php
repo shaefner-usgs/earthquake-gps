@@ -255,4 +255,18 @@ class Db {
       'station' => $station
     ));
   }
+
+  /**
+   * Query db to get velocities data for a given station and network
+   */
+  public function queryVelocities($station, $network) {
+    $sql = 'SELECT * FROM nca_gps_velocities
+      WHERE station = :station AND network = :network
+      ORDER BY last_observation ASC';
+
+    return $this->_execQuery($sql, array(
+      'network' => $network,
+      'station' => $station
+    ));
+  }
 }
