@@ -5,19 +5,20 @@ include '../conf/config.inc.php'; // app config
 /**
  * Station model
  * - populates fields from db query using magic __set method
- * - also sets up other properites (e.g. links, map, and networkList)
+ * - also sets up other properites (e.g. links, networkList, and velocities)
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Station {
   private $data = array();
 
-  public function __construct ($networks = null) {
+  public function __construct ($networkList = null, $velocities = null) {
+
     $this->data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
       . '/' . $this->station;
-    $this->data['networkList']= $networks;
+    $this->data['networkList'] = $networkList;
+    $this->data['velocities'] = $velocities;
     $this->data['links'] = $this->_getLinkList();
-    $this->data['map'] = $this->_getMapImg();
   }
 
   public function __get ($name) {
@@ -39,6 +40,7 @@ class Station {
   }
 
   private function _getLinkList () {
+    $kinematic = $this->stationPath . '/kinematic/';
     $logs = $this->stationPath . '/logs/';
     $ngs = $this->_getNgsLink();
     $photos = $this->stationPath . '/photos/';
@@ -52,15 +54,8 @@ class Station {
       'Weather' => $weather,
       'NGS Datasheets' => $ngs
     );
-    return $links;
-  }
 
-  private function _getMapImg () {
-    return sprintf(
-      'http://maps.google.com/?q=%f,%f+(Station+7ADL)&t=p&z=10',
-      $this->lat,
-      $this->lon
-    );
+    return $links;
   }
 
   private function _getNgsLink () {
