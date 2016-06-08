@@ -98,13 +98,13 @@ class StationView {
         $downloads = '
           <nav class="downloads">
             <span>Plot:</span>
-            <ul class="no-style pipelist">
+            <ul class="no-style">
               <li><a href="' . $this->_getFile($type, '.gmt.gz') . '">
                 <abbr title="Generic Mapping Tools">GMT</abbr> Script
               </a></li>
             </ul>
             <span>Raw Data:</span>
-            <ul class="no-style pipelist">
+            <ul class="no-style">
               <li><a href="' . $this->_getFile($type, '.rneu') .'">All</a></li>
             </ul>
             <span>Detrended Data:</span>
@@ -127,7 +127,7 @@ class StationView {
               <h2>%s</h2>
             </header>
             %s
-            <img src="%s" class="toggle" alt="Plot showing %s data" />
+            <img src="%s" class="toggle" alt="Plot showing %s data (All data)" />
             %s
             <h3>Downloads</h3>
             %s
