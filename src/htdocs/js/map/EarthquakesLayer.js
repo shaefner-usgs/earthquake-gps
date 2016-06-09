@@ -128,7 +128,10 @@ var EarthquakesLayer = function (options) {
       '</div>';
     popup = L.Util.template(popupTemplate, data);
 
-    layer.bindPopup(popup, {maxWidth: '265'}).bindLabel(label);
+    layer.bindPopup(popup, {
+      autoPanPadding: L.point(50, 50),
+      maxWidth: '265'
+    }).bindLabel(label);
   };
 
   /**
