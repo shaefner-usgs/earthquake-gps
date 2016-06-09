@@ -48,12 +48,20 @@ class Station {
     $weather = $this->_getWeatherLink();
 
     $links = array(
-      'Field Logs' => $logs,
       'Photos' => $photos,
+      'Field Logs' => $logs,
       'Quality Control Data' => $qc,
+      '5-minute Kinematic Results' => $kinematic,
       'Weather' => $weather,
-      'NGS Datasheets' => $ngs
+      '<abbr title="National Geodetic Survey">NGS</abbr> Datasheets' => $ngs
     );
+
+    // campaign stations don't have kinematic; continous don't have photos
+    if ($this->stationtype === 'campaign') {
+      unset($links['5-minute Kinematic Results']);
+    } else if ($this->stationtype === 'continuous') {
+      unset($links['Photos']);
+    }
 
     return $links;
   }
