@@ -50,7 +50,6 @@ if (!in_array($network, $networkList)) {
 $rsVelocities = $db->queryVelocities($station, $network);
 
 // Create an array of velocities by type
-$velocities = [];
 while ($row = $rsVelocities->fetch(PDO::FETCH_ASSOC)) {
   $type = trim($row['type']);
 
