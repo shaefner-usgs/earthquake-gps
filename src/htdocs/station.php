@@ -70,15 +70,15 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_ASSOC)) {
 
   // Props based on type (cleaned, itrf2008, nafixed)
   if ($type === 'cleaned') {
-    $north['flickernoise'] = $row['flickernoisenorth'];
-    $north['randomwalk'] = $row['randomwalknorth'];
     $north['whitenoise'] = $row['whitenoisenorth'];
-    $east['flickernoise'] = $row['flickernoiseeast'];
-    $east['randomwalk'] = $row['randomwalkeast'];
+    $north['randomwalk'] = $row['randomwalknorth'];
+    $north['flickernoise'] = $row['flickernoisenorth'];
     $east['whitenoise'] = $row['whitenoiseeast'];
-    $up['flickernoise'] = $row['flickernoiseup'];
-    $up['randomwalk'] = $row['randomwalkup'];
+    $east['randomwalk'] = $row['randomwalkeast'];
+    $east['flickernoise'] = $row['flickernoiseeast'];
     $up['whitenoise'] = $row['whitenoiseup'];
+    $up['randomwalk'] = $row['randomwalkup'];
+    $up['flickernoise'] = $row['flickernoiseup'];
   } else {
     $north['rms'] = $row['north_rms'];
     $east['rms'] = $row['east_rms'];
