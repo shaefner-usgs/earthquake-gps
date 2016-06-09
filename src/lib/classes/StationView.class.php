@@ -227,11 +227,11 @@ class StationView {
     // print $this->_getLinkList();
     // print '</section>';
 
+    print $this->_getLinkList();
     print $this->_getMap();
     print $this->_getData();
-    print $this->_getDisclaimer();
-    print $this->_getLinkList();
     print $this->_getCampaignList();
+    print $this->_getDisclaimer();
     print $this->_getBackLink();
 
     // print '<pre>';
