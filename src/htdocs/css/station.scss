@@ -24,9 +24,17 @@ mark {
   }
 }
 
+.downloads + h3 {
+  clear: left;
+}
+
+.empty {
+  border: 0;
+}
+
 .panel {
   margin-top: 1em;
-  
+
   nav {
     overflow: hidden;
 
