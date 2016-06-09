@@ -27,57 +27,15 @@ class StationView {
     return '<h2>Campaign List</h2>';
   }
 
-  private function _getDisclaimer () {
-    return '<p><small>These results are preliminary. The station positions are
-      unchecked and should not be used for any engineering applications. There
-      may be errors in the antenna heights. The velocities are very dependent
-      on the length of the span of observations. The presence of outliers
-      (errant observations) sometimes contaminates the velocities.</small></p>';
-  }
-
-  private function _getFile ($type, $suffix) {
-    $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
-    $dataPath = $this->_getPath($type);
-    $file = "$baseUri/$dataPath/" . $this->model->station . $suffix;
-
-    return $file;
-  }
-
-  private function _getMap () {
-    return '<div class="map"></div>';
-  }
-
-  private function _getPath ($type) {
-    return 'networks/' . $this->model->network . '/' . $this->model->station .
-      '/' . $type;
-  }
-
-  private function _getPlots () {
-    $lookup = [
-      'flickernoise' => 'Flicker Noise',
-      'randomwalk' => 'Random Walk',
-      'rms' => 'RMS (mm)',
-      'sigma' => 'Uncertainty (mm/yr)	',
-      'velocity' => 'Velocity (mm/yr)	',
-      'whitenoise' => 'White Noise'
-    ];
-    $explanation = '
-      <p>These plots depict the north, east and up components of
-      the station as a function of time. <a href="/monitoring/gps/plots.php">More
-      detailed explanation</a> &raquo;</p>
-      <p>Dashed lines show offsets due to:</p>
-      <ul class="no-style">
-        <li><mark class="green">Green</mark> &ndash; antenna changes from site logs</li>
-        <li><mark class="red">Red</mark> &ndash; earthquakes</li>
-        <li><mark class="blue">Blue</mark> &ndash; manually entered</li>
-      </ul>';
-    $html = '<div class="tablist">';
-
+  private function _getData () {
+    $data = '<div class="tablist">';
     $types = [
       'itrf2008' => 'ITRF2008',
       'nafixed' => 'NA-fixed',
       'cleaned' => 'Cleaned'
     ];
+
+    $explanation = $this->_getExplanation();
 
     foreach ($types as $type => $name) {
       $baseDir = $GLOBALS['DATA_DIR'];
@@ -87,67 +45,12 @@ class StationView {
 
       $baseImgSrc = "$baseUri/$dataPath/$baseImg";
 
+      $navDownloads = $this->_getNavDownloads($type);
+      $navPlots = $this->_getNavPlots($type);
+      $table = $this->_getTable($type);
+
       if (is_file("$baseDir/$dataPath/$baseImg")) {
-        $toggle = '
-          <nav class="' . $type . '">
-            <span>Detrended:</span>
-            <ul class="no-style pipelist">
-              <li><a href="' . $this->_getFile($type, '_30.png') . '">Past 30 days</a></li>
-              <li><a href="' . $this->_getFile($type, '_90.png') . '">Past 90 days</a></li>
-              <li><a href="' . $this->_getFile($type, '_365.png') . '">Past year</a></li>
-              <li><a href="' . $this->_getFile($type, '_730.png') . '">Past 2 years</a></li>
-              <li><a href="' . $this->_getFile($type, '.png') . '" class="selected">All data</a></li>
-            </ul>
-            <span>Trended:</span>
-            <ul class="no-style pipelist">
-              <li><a href="' . $this->_getFile($type, '_wtrend.png') . '">All data</a></li>
-            </ul>
-          </nav>';
-
-        $downloads = '
-          <nav class="downloads">
-            <span>Plot:</span>
-            <ul class="no-style">
-              <li><a href="' . $this->_getFile($type, '.gmt.gz') . '">
-                <abbr title="Generic Mapping Tools">GMT</abbr> Script
-              </a></li>
-            </ul>
-            <span>Raw Data:</span>
-            <ul class="no-style">
-              <li><a href="' . $this->_getFile($type, '.rneu') .'">All</a></li>
-            </ul>
-            <span>Detrended Data:</span>
-            <ul class="no-style pipelist">
-              <li><a href="' . $this->_getFile($type, '_N.data.gz') .'">North</a></li>
-              <li><a href="' . $this->_getFile($type, '_E.data.gz') .'">East</a></li>
-              <li><a href="' . $this->_getFile($type, '_U.data.gz') .'">Up</a></li>
-            </ul>
-            <span>Trended Data:</span>
-            <ul class="no-style pipelist">
-              <li><a href="' . $this->_getFile($type, '_N_wtrend.data.gz') .'">North</a></li>
-              <li><a href="' . $this->_getFile($type, '_E_wtrend.data.gz') .'">East</a></li>
-              <li><a href="' . $this->_getFile($type, '_U_wtrend.data.gz') .'">Up</a></li>
-            </ul>
-          </nav>
-        ';
-
-        $table = '<table>';
-        $rows = '';
-        foreach($this->model->velocities[$type] as $direction => $data) {
-          $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
-          $header = '<tr><td class="empty"></td>';
-          foreach($data as $key => $value) {
-            $rows .= "<td>$value</td>";
-            $header .= '<th>' . $lookup[$key] . '</th>';
-          }
-          $rows .= '</tr>';
-          $header .= '</tr>';
-        }
-        $table .= $header;
-        $table .= $rows;
-        $table .= '</table>';
-
-        $html .= sprintf('
+        $data .= sprintf('
           <section class="panel" data-title="%s">
             <header>
               <h2>%s</h2>
@@ -162,36 +65,150 @@ class StationView {
           </section>',
           $name,
           $name,
-          $toggle,
+          $navPlots,
           $baseImgSrc,
           $name,
           $explanation,
-          $downloads,
+          $navDownloads,
           $table
         );
       }
     }
-    $html .= '</div>';
+    $data .= '</div>';
 
-    return $html;
+    return $data;
   }
 
-  private function _getStationDetails () {
+  private function _getDisclaimer () {
+    return '<p><small>These results are preliminary. The station positions are
+      unchecked and should not be used for any engineering applications. There
+      may be errors in the antenna heights. The velocities are very dependent
+      on the length of the span of observations. The presence of outliers
+      (errant observations) sometimes contaminates the velocities.</small></p>';
+  }
+
+  private function _getExplanation () {
+    return '<p>These plots depict the north, east and up components of
+      the station as a function of time. <a href="/monitoring/gps/plots.php">
+      More detailed explanation</a> &raquo;</p>
+      <p>Dashed lines show offsets due to:</p>
+      <ul class="no-style">
+        <li><mark class="green">Green</mark> &ndash; antenna changes from site logs</li>
+        <li><mark class="red">Red</mark> &ndash; earthquakes</li>
+        <li><mark class="blue">Blue</mark> &ndash; manually entered</li>
+      </ul>';
+  }
+
+  private function _getFileName ($type, $suffix) {
+    $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
+    $dataPath = $this->_getPath($type);
+    $fileName = "$baseUri/$dataPath/" . $this->model->station . $suffix;
+
+    return $fileName;
+  }
+
+  private function _getLinkList () {
     return '<h2>Station Details</h2>';
+  }
+
+  private function _getMap () {
+    return '<div class="map"></div>';
+  }
+
+  private function _getNavDownloads ($type) {
+    $navDownloads = '
+      <nav class="downloads">
+        <span>Plot:</span>
+        <ul class="no-style">
+          <li><a href="' . $this->_getFileName($type, '.gmt.gz') . '">
+            <abbr title="Generic Mapping Tools">GMT</abbr> Script
+          </a></li>
+        </ul>
+        <span>Raw Data:</span>
+        <ul class="no-style">
+          <li><a href="' . $this->_getFileName($type, '.rneu') .'">All</a></li>
+        </ul>
+        <span>Detrended Data:</span>
+        <ul class="no-style pipelist">
+          <li><a href="' . $this->_getFileName($type, '_N.data.gz') .'">North</a></li>
+          <li><a href="' . $this->_getFileName($type, '_E.data.gz') .'">East</a></li>
+          <li><a href="' . $this->_getFileName($type, '_U.data.gz') .'">Up</a></li>
+        </ul>
+        <span>Trended Data:</span>
+        <ul class="no-style pipelist">
+          <li><a href="' . $this->_getFileName($type, '_N_wtrend.data.gz') .'">North</a></li>
+          <li><a href="' . $this->_getFileName($type, '_E_wtrend.data.gz') .'">East</a></li>
+          <li><a href="' . $this->_getFileName($type, '_U_wtrend.data.gz') .'">Up</a></li>
+        </ul>
+      </nav>';
+
+    return $navDownloads;
+  }
+
+  private function _getNavPlots ($type) {
+    $navPlots = '
+      <nav class="plots ' . $type . '">
+        <span>Detrended:</span>
+        <ul class="no-style pipelist">
+          <li><a href="' . $this->_getFileName($type, '_30.png') . '">Past 30 days</a></li>
+          <li><a href="' . $this->_getFileName($type, '_90.png') . '">Past 90 days</a></li>
+          <li><a href="' . $this->_getFileName($type, '_365.png') . '">Past year</a></li>
+          <li><a href="' . $this->_getFileName($type, '_730.png') . '">Past 2 years</a></li>
+          <li><a href="' . $this->_getFileName($type, '.png') . '" class="selected">All data</a></li>
+        </ul>
+        <span>Trended:</span>
+        <ul class="no-style pipelist">
+          <li><a href="' . $this->_getFileName($type, '_wtrend.png') . '">All data</a></li>
+        </ul>
+      </nav>';
+
+    return $navPlots;
+  }
+
+  private function _getPath ($type) {
+    return 'networks/' . $this->model->network . '/' . $this->model->station .
+      '/' . $type;
+  }
+
+  private function _getTable ($type) {
+    $lookup = [
+      'flickernoise' => 'Flicker Noise',
+      'randomwalk' => 'Random Walk',
+      'rms' => 'RMS (mm)',
+      'sigma' => 'Uncertainty (mm/yr)	',
+      'velocity' => 'Velocity (mm/yr)	',
+      'whitenoise' => 'White Noise'
+    ];
+
+    $rows = '';
+    $table = '<table>';
+
+    foreach($this->model->velocities[$type] as $direction => $data) {
+      $header = '<tr><td class="empty"></td>';
+      $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
+      foreach($data as $key => $value) {
+        $header .= '<th>' . $lookup[$key] . '</th>';
+        $rows .= "<td>$value</td>";
+      }
+      $header .= '</tr>';
+      $rows .= '</tr>';
+    }
+
+    $table .= $header;
+    $table .= $rows;
+    $table .= '</table>';
+
+    return $table;
   }
 
   public function render () {
 
     // print '<section class="row">';
-    //
-    // print $this->_getStationDetails();
-    // print $this->_getCampaignList();
-    //
+    // print $this->_getLinkList();
     // print '</section>';
 
     print $this->_getMap();
-
-    print $this->_getPlots();
+    print $this->_getData();
 
     // campaign station -> photos
     // continuous station -> kinematic plots
@@ -201,6 +218,7 @@ class StationView {
     // print '</pre>';
 
     print $this->_getDisclaimer();
+    print $this->_getCampaignList();
     print $this->_getBackLink();
   }
 }
