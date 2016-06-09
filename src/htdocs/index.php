@@ -1,5 +1,24 @@
 <?php
 
+/* TODO
+
+1. media queries:
+  - station page: content R of plots
+  - map heights
+2. add links to network pages
+3. round eq mags to 1 decimal place
+4. QC, kinematic pages
+5. mouseovers clipped at edge of page
+
+Ask Jerry
+
+1. showcoords = 0 (none flagged; do we need? If so, do what?)
+2. don't send empty plots...handle programmatically
+
+dynamic GE files??
+
+*/
+
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 
