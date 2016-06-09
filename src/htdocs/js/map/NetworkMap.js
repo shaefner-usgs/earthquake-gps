@@ -112,7 +112,7 @@ var NetworkMap = function (options) {
     };
     layers.overlays = {
       'Faults': faults,
-      'Earthquakes': _earthquakes
+      'M2.5+ Earthquakes': _earthquakes
     };
     layers.defaults = [terrain, _earthquakes];
 
