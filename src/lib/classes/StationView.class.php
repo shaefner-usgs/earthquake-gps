@@ -53,6 +53,14 @@ class StationView {
   }
 
   private function _getPlots () {
+    $lookup = [
+      'flickernoise' => 'Flicker Noise',
+      'randomwalk' => 'Random Walk',
+      'rms' => 'RMS (mm)',
+      'sigma' => 'Uncertainty (mm/yr)	',
+      'velocity' => 'Velocity (mm/yr)	',
+      'whitenoise' => 'White Noise'
+    ];
     $explanation = '
       <p>These plots depict the north, east and up components of
       the station as a function of time. <a href="/monitoring/gps/plots.php">More
@@ -95,6 +103,7 @@ class StationView {
               <li><a href="' . $this->_getFile($type, '_wtrend.png') . '">All data</a></li>
             </ul>
           </nav>';
+
         $downloads = '
           <nav class="downloads">
             <span>Plot:</span>
@@ -121,6 +130,23 @@ class StationView {
             </ul>
           </nav>
         ';
+
+        $table = '<table>';
+        $rows = '';
+        foreach($this->model->velocities[$type] as $direction => $data) {
+          $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
+          $header = '<tr><td class="empty"></td>';
+          foreach($data as $key => $value) {
+            $rows .= "<td>$value</td>";
+            $header .= '<th>' . $lookup[$key] . '</th>';
+          }
+          $rows .= '</tr>';
+          $header .= '</tr>';
+        }
+        $table .= $header;
+        $table .= $rows;
+        $table .= '</table>';
+
         $html .= sprintf('
           <section class="panel" data-title="%s">
             <header>
@@ -131,6 +157,8 @@ class StationView {
             %s
             <h3>Downloads</h3>
             %s
+            <h3>Table</h3>
+            %s
           </section>',
           $name,
           $name,
@@ -138,7 +166,8 @@ class StationView {
           $baseImgSrc,
           $name,
           $explanation,
-          $downloads
+          $downloads,
+          $table
         );
       }
     }
