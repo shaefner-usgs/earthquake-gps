@@ -10,8 +10,9 @@ h1 em {
 
 mark {
   background: none;
+  border-radius: 3px;
   color: #fff;
-  padding: 0 2px;
+  padding: 0 3px;
 
   &.blue {
     background: #0ff;
@@ -32,6 +33,10 @@ mark {
   border: 0;
 }
 
+.map {
+  height: 300px;
+}
+
 .panel {
   margin-top: 1em;
 
@@ -50,18 +55,14 @@ mark {
   }
 }
 
-.map {
-  height: 300px;
-}
-
 .popup {
-  dt {
-    font-weight: normal;
-    margin-top: 1em;
-  }
   dd {
     color: #666;
     margin: .2em 0 0;
+  }
+  dt {
+    font-weight: normal;
+    margin-top: 1em;
   }
 }
 
