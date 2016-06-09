@@ -5,10 +5,12 @@
 1. media queries:
   - station page: content R of plots
   - map heights
-2. add links to network pages
-3. round eq mags to 1 decimal place
+2. pipelist "broken" when wrapping
+3. add links to network pages
 4. QC, kinematic pages
-5. mouseovers clipped at edge of page
+5. nothing happens if layer off and you click popup icon
+6. legend / layer list organization (Stations label)
+7. mouseovers clipped at edge of page
 
 Ask Jerry
 
