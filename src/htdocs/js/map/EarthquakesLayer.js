@@ -112,7 +112,7 @@ var EarthquakesLayer = function (options) {
 
     props = feature.properties;
     data = {
-      mag: props.mag,
+      mag: Math.round(props.mag * 10) / 10,
       time: Moment.utc(props.time).format('ddd, MMM D HH:mm:ss') + ' UTC',
       place: props.place,
       url: props.url
