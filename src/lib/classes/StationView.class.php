@@ -1,7 +1,5 @@
 <?php
 
-include '../conf/config.inc.php'; // app config
-
 /**
  * Station view
  * - creates the HTML for station.php
@@ -24,7 +22,20 @@ class StationView {
   }
 
   private function _getCampaignList () {
-    return '<h2>Campaign List</h2>';
+    $campaignList = '<h2>Campaign List</h2>';
+    $networks = $this->model->networkList;
+
+    $campaignList .= '<ul>';
+    foreach($networks as $network) {
+      $campaignList .= sprintf('<li><a href="%s/%s/">%s</a></li>',
+        $GLOBALS['MOUNT_PATH'],
+        $network,
+        $network
+      );
+    }
+    $campaignList .= '</ul>';
+
+    return $campaignList;
   }
 
   private function _getData () {
@@ -37,7 +48,7 @@ class StationView {
 
     $explanation = $this->_getExplanation();
 
-    foreach ($types as $type => $name) {
+    foreach($types as $type => $name) {
       $baseDir = $GLOBALS['DATA_DIR'];
       $baseImg = $this->model->station . '.png';
       $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
@@ -99,16 +110,25 @@ class StationView {
       </ul>';
   }
 
-  private function _getFileName ($type, $suffix) {
+  private function _getHref ($type, $suffix) {
     $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
     $dataPath = $this->_getPath($type);
-    $fileName = "$baseUri/$dataPath/" . $this->model->station . $suffix;
+    $href = "$baseUri/$dataPath/" . $this->model->station . $suffix;
 
-    return $fileName;
+    return $href;
   }
 
   private function _getLinkList () {
-    return '<h2>Station Details</h2>';
+    $linkList = '<h2>Station Details</h2>';
+    $links = $this->model->links;
+
+    $linkList .= '<ul>';
+    foreach($links as $key => $value) {
+      $linkList .= '<li><a href="' . $value . '">' . $key . '</a></li>';
+    }
+    $linkList .= '</ul>';
+
+    return $linkList;
   }
 
   private function _getMap () {
@@ -120,25 +140,25 @@ class StationView {
       <nav class="downloads">
         <span>Plot:</span>
         <ul class="no-style">
-          <li><a href="' . $this->_getFileName($type, '.gmt.gz') . '">
+          <li><a href="' . $this->_getHref($type, '.gmt.gz') . '">
             <abbr title="Generic Mapping Tools">GMT</abbr> Script
           </a></li>
         </ul>
         <span>Raw Data:</span>
         <ul class="no-style">
-          <li><a href="' . $this->_getFileName($type, '.rneu') .'">All</a></li>
+          <li><a href="' . $this->_getHref($type, '.rneu') .'">All</a></li>
         </ul>
         <span>Detrended Data:</span>
         <ul class="no-style pipelist">
-          <li><a href="' . $this->_getFileName($type, '_N.data.gz') .'">North</a></li>
-          <li><a href="' . $this->_getFileName($type, '_E.data.gz') .'">East</a></li>
-          <li><a href="' . $this->_getFileName($type, '_U.data.gz') .'">Up</a></li>
+          <li><a href="' . $this->_getHref($type, '_N.data.gz') .'">North</a></li>
+          <li><a href="' . $this->_getHref($type, '_E.data.gz') .'">East</a></li>
+          <li><a href="' . $this->_getHref($type, '_U.data.gz') .'">Up</a></li>
         </ul>
         <span>Trended Data:</span>
         <ul class="no-style pipelist">
-          <li><a href="' . $this->_getFileName($type, '_N_wtrend.data.gz') .'">North</a></li>
-          <li><a href="' . $this->_getFileName($type, '_E_wtrend.data.gz') .'">East</a></li>
-          <li><a href="' . $this->_getFileName($type, '_U_wtrend.data.gz') .'">Up</a></li>
+          <li><a href="' . $this->_getHref($type, '_N_wtrend.data.gz') .'">North</a></li>
+          <li><a href="' . $this->_getHref($type, '_E_wtrend.data.gz') .'">East</a></li>
+          <li><a href="' . $this->_getHref($type, '_U_wtrend.data.gz') .'">Up</a></li>
         </ul>
       </nav>';
 
@@ -150,15 +170,15 @@ class StationView {
       <nav class="plots ' . $type . '">
         <span>Detrended:</span>
         <ul class="no-style pipelist">
-          <li><a href="' . $this->_getFileName($type, '_30.png') . '">Past 30 days</a></li>
-          <li><a href="' . $this->_getFileName($type, '_90.png') . '">Past 90 days</a></li>
-          <li><a href="' . $this->_getFileName($type, '_365.png') . '">Past year</a></li>
-          <li><a href="' . $this->_getFileName($type, '_730.png') . '">Past 2 years</a></li>
-          <li><a href="' . $this->_getFileName($type, '.png') . '" class="selected">All data</a></li>
+          <li><a href="' . $this->_getHref($type, '_30.png') . '">Past 30 days</a></li>
+          <li><a href="' . $this->_getHref($type, '_90.png') . '">Past 90 days</a></li>
+          <li><a href="' . $this->_getHref($type, '_365.png') . '">Past year</a></li>
+          <li><a href="' . $this->_getHref($type, '_730.png') . '">Past 2 years</a></li>
+          <li><a href="' . $this->_getHref($type, '.png') . '" class="selected">All data</a></li>
         </ul>
         <span>Trended:</span>
         <ul class="no-style pipelist">
-          <li><a href="' . $this->_getFileName($type, '_wtrend.png') . '">All data</a></li>
+          <li><a href="' . $this->_getHref($type, '_wtrend.png') . '">All data</a></li>
         </ul>
       </nav>';
 
@@ -182,8 +202,9 @@ class StationView {
 
     $rows = '';
     $table = '<table>';
+    $types = $this->model->velocities[$type];
 
-    foreach($this->model->velocities[$type] as $direction => $data) {
+    foreach($types as $direction => $data) {
       $header = '<tr><td class="empty"></td>';
       $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
       foreach($data as $key => $value) {
@@ -202,23 +223,19 @@ class StationView {
   }
 
   public function render () {
-
     // print '<section class="row">';
     // print $this->_getLinkList();
     // print '</section>';
 
     print $this->_getMap();
     print $this->_getData();
-
-    // campaign station -> photos
-    // continuous station -> kinematic plots
+    print $this->_getDisclaimer();
+    print $this->_getLinkList();
+    print $this->_getCampaignList();
+    print $this->_getBackLink();
 
     // print '<pre>';
     // print var_dump($this->model);
     // print '</pre>';
-
-    print $this->_getDisclaimer();
-    print $this->_getCampaignList();
-    print $this->_getBackLink();
   }
 }
