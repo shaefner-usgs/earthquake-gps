@@ -25,6 +25,17 @@ mark {
   }
 }
 
+.column {
+  h2 {
+    font-size: 1em;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+/* Table header */
 .downloads + h3 {
   clear: left;
 }
@@ -35,6 +46,7 @@ mark {
 
 .map {
   height: 300px;
+  margin-bottom: 1em;
 }
 
 .panel {
