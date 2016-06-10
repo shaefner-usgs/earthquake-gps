@@ -56,11 +56,11 @@ class StationView {
 
       $baseImgSrc = "$baseUri/$dataPath/$baseImg";
 
-      $navDownloads = $this->_getNavDownloads($type);
-      $navPlots = $this->_getNavPlots($type);
-      $table = $this->_getTable($type);
-
       if (is_file("$baseDir/$dataPath/$baseImg")) {
+        $navDownloads = $this->_getNavDownloads($type);
+        $navPlots = $this->_getNavPlots($type);
+        $table = $this->_getTable($type);
+
         $data .= sprintf('
           <section class="panel" data-title="%s">
             <header>
@@ -71,7 +71,7 @@ class StationView {
             %s
             <h3>Downloads</h3>
             %s
-            <h3>Table</h3>
+            <h3>Velocities and Uncertainties</h3>
             %s
           </section>',
           $name,
@@ -201,41 +201,50 @@ class StationView {
     ];
 
     $rows = '';
-    $table = '<table>';
-    $types = $this->model->velocities[$type];
+    $table = '';
+    if ($this->model->velocities[$type]) {
+      $components = $this->model->velocities[$type];
 
-    foreach($types as $direction => $data) {
-      $header = '<tr><td class="empty"></td>';
-      $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
-      foreach($data as $key => $value) {
-        $header .= '<th>' . $lookup[$key] . '</th>';
-        $rows .= "<td>$value</td>";
+      $table = '<table>';
+      foreach($components as $direction => $data) {
+        $header = '<tr><td class="empty"></td>';
+        $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
+        foreach($data as $key => $value) {
+          $header .= '<th>' . $lookup[$key] . '</th>';
+          $rows .= "<td>$value</td>";
+        }
+        $header .= '</tr>';
+        $rows .= '</tr>';
       }
-      $header .= '</tr>';
-      $rows .= '</tr>';
-    }
 
-    $table .= $header;
-    $table .= $rows;
-    $table .= '</table>';
+      $table .= $header;
+      $table .= $rows;
+      $table .= '</table>';
+    }
 
     return $table;
   }
 
   public function render () {
-    // print '<section class="row">';
-    // print $this->_getLinkList();
-    // print '</section>';
+    print '<section class="row">';
 
-    print $this->_getLinkList();
+    print '<div class="column two-of-three">';
     print $this->_getMap();
-    print $this->_getData();
+    print '</div>';
+
+    print '<div class="column one-of-three">';
+    print $this->_getLinkList();
     print $this->_getCampaignList();
+    print '</div>';
+
+    print '</section>';
+
+    print $this->_getData();
     print $this->_getDisclaimer();
     print $this->_getBackLink();
 
-    // print '<pre>';
-    // print var_dump($this->model);
-    // print '</pre>';
+    print '<pre>';
+    print var_dump($this->model);
+    print '</pre>';
   }
 }
