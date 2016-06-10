@@ -243,8 +243,8 @@ class StationView {
     print $this->_getDisclaimer();
     print $this->_getBackLink();
 
-    print '<pre>';
-    print var_dump($this->model);
-    print '</pre>';
+    // print '<pre>';
+    // print var_dump($this->model);
+    // print '</pre>';
   }
 }
