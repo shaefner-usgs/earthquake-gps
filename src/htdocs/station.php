@@ -26,6 +26,7 @@ if (!isset($TEMPLATE)) {
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
     <script src="' . $MOUNT_PATH . '/js/station.js"></script>
   ';
+  $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
 }

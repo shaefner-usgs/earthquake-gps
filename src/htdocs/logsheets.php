@@ -18,7 +18,7 @@ if (!isset($TEMPLATE)) {
   $TITLE = "GPS Station $name Field Logs";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/logsheets.css" />';
-  $FOOT = '';
+  $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
 }

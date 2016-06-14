@@ -18,7 +18,7 @@ if (!isset($TEMPLATE)) {
   $TITLE = "GPS Station $name Photos";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/photos.css" />';
-  $FOOT = '';
+  $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
 }

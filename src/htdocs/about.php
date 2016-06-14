@@ -3,6 +3,7 @@
 if (!isset($TEMPLATE)) {
   $TITLE = 'About GPS';
   $NAVIGATION = true;
+  $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
 }

@@ -36,6 +36,7 @@ if (!isset($TEMPLATE)) {
     <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
     <script src="js/index.js"></script>
   ';
+  $CONTACT = 'jsvarc';
 
   // importJsonToArray() sets headers -> needs to run before including template
   $networks = importJsonToArray(__DIR__ . '/_getNetworks.json.php');

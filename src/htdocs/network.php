@@ -27,6 +27,7 @@ if (!isset($TEMPLATE)) {
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
     <script src="' . $MOUNT_PATH . '/js/network.js"></script>
   ';
+  $CONTACT = 'jsvarc';
 
   // importJsonToArray() sets headers -> needs to run before including template
   $stations = importJsonToArray(__DIR__ .

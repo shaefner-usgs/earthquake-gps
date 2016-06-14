@@ -15,6 +15,7 @@ if (!isset($TEMPLATE)) {
     <script src="/lib/c3/c3.js"></script>
     <script src="' . $MOUNT_PATH . '/js/qc.js"></script>
   ';
+  $CONTACT = 'jsvarc';
 
   include_once 'template.inc.php';
 }
