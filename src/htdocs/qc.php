@@ -23,5 +23,7 @@ if (!isset($TEMPLATE)) {
 ?>
 
 <div id="application">
-  <noscript>Try javascript</noscript>
+  <noscript>
+    <p class="alert info">Javascript must be enabled to view these plots.</p>
+  </noscript>
 </div>
