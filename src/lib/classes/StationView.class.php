@@ -41,8 +41,8 @@ class StationView {
   private function _getData () {
     $data = '<div class="tablist">';
     $types = [
-      'itrf2008' => 'ITRF2008',
       'nafixed' => 'NA-fixed',
+      'itrf2008' => 'ITRF2008',
       'cleaned' => 'Cleaned'
     ];
 
