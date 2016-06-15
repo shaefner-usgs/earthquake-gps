@@ -65,17 +65,19 @@ var Factory = function (options) {
       return data;
     }
 
-    if (end) {
-      end = end.getTime();
-    }
-    if (start) {
-      start = start.getTime();
-    }
-
     // find start/end index
     dates = _data.date;
     startIndex = dates.length;
     endIndex = null;
+
+    if (end) {
+      end = end.getTime();
+    }
+    if (start) {
+      startIndex = -1; // for case where there's no data in range
+      start = start.getTime();
+    }
+
     // dates are in decreasing order
     dates.some(function (d, index) {
       d = d.getTime();
