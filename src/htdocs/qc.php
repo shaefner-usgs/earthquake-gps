@@ -6,7 +6,7 @@ include_once '../lib/_functions.inc.php'; // app functions
 $station = safeParam('station', 'coco');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'Quality Control Plots';
+  $TITLE = 'GPS Station ' . strtoupper($station) . ' Quality Control Data';
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/c3/c3.css" />
