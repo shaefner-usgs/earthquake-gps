@@ -10,36 +10,36 @@ class StationView {
   private $model;
 
   public function __construct (Station $model) {
-    $this->model = $model;
+    $this->_model = $model;
   }
 
   private function _getBackLink () {
     return sprintf('<p class="back">&laquo; <a href="%s/%s/">Back to %s network</a></p>',
       $GLOBALS['MOUNT_PATH'],
-      $this->model->network,
-      $this->model->network
+      $this->_model->network,
+      $this->_model->network
     );
   }
 
   private function _getCampaignList () {
-    $campaignList = '<h2>Campaign List</h2>';
-    $networks = $this->model->networkList;
+    $campaignListHtml = '<h2>Campaign List</h2>';
+    $networks = $this->_model->networkList;
 
-    $campaignList .= '<ul>';
+    $campaignListHtml .= '<ul>';
     foreach($networks as $network) {
-      $campaignList .= sprintf('<li><a href="%s/%s/">%s</a></li>',
+      $campaignListHtml .= sprintf('<li><a href="%s/%s/">%s</a></li>',
         $GLOBALS['MOUNT_PATH'],
         $network,
         $network
       );
     }
-    $campaignList .= '</ul>';
+    $campaignListHtml .= '</ul>';
 
-    return $campaignList;
+    return $campaignListHtml;
   }
 
   private function _getData () {
-    $data = '<div class="tablist">';
+    $dataHtml = '<div class="tablist">';
     $types = [
       'nafixed' => 'NA-fixed',
       'itrf2008' => 'ITRF2008',
@@ -50,7 +50,7 @@ class StationView {
 
     foreach($types as $type => $name) {
       $baseDir = $GLOBALS['DATA_DIR'];
-      $baseImg = $this->model->station . '.png';
+      $baseImg = $this->_model->station . '.png';
       $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
       $dataPath = $this->_getPath($type);
 
@@ -61,7 +61,7 @@ class StationView {
         $navPlots = $this->_getNavPlots($type);
         $table = $this->_getTable($type);
 
-        $data .= sprintf('
+        $dataHtml .= sprintf('
           <section class="panel" data-title="%s">
             <header>
               <h2>%s</h2>
@@ -85,9 +85,9 @@ class StationView {
         );
       }
     }
-    $data .= '</div>';
+    $dataHtml .= '</div>';
 
-    return $data;
+    return $dataHtml;
   }
 
   private function _getDisclaimer () {
@@ -113,22 +113,22 @@ class StationView {
   private function _getHref ($type, $suffix) {
     $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
     $dataPath = $this->_getPath($type);
-    $href = "$baseUri/$dataPath/" . $this->model->station . $suffix;
+    $href = "$baseUri/$dataPath/" . $this->_model->station . $suffix;
 
     return $href;
   }
 
   private function _getLinkList () {
-    $linkList = '<h2>Station Details</h2>';
-    $links = $this->model->links;
+    $linkListHtml = '<h2>Station Details</h2>';
+    $links = $this->_model->links;
 
-    $linkList .= '<ul>';
+    $linkListHtml .= '<ul>';
     foreach($links as $key => $value) {
-      $linkList .= '<li><a href="' . $value . '">' . $key . '</a></li>';
+      $linkListHtml .= '<li><a href="' . $value . '">' . $key . '</a></li>';
     }
-    $linkList .= '</ul>';
+    $linkListHtml .= '</ul>';
 
-    return $linkList;
+    return $linkListHtml;
   }
 
   private function _getMap () {
@@ -136,7 +136,7 @@ class StationView {
   }
 
   private function _getNavDownloads ($type) {
-    $navDownloads = '
+    $navDownloadsHtml = '
       <nav class="downloads">
         <span>Plot:</span>
         <ul class="no-style">
@@ -162,11 +162,11 @@ class StationView {
         </ul>
       </nav>';
 
-    return $navDownloads;
+    return $navDownloadsHtml;
   }
 
   private function _getNavPlots ($type) {
-    $navPlots = '
+    $navPlotsHtml = '
       <nav class="plots ' . $type . '">
         <span>Detrended:</span>
         <ul class="no-style pipelist">
@@ -182,11 +182,11 @@ class StationView {
         </ul>
       </nav>';
 
-    return $navPlots;
+    return $navPlotsHtml;
   }
 
   private function _getPath ($type) {
-    return 'networks/' . $this->model->network . '/' . $this->model->station .
+    return 'networks/' . $this->_model->network . '/' . $this->_model->station .
       '/' . $type;
   }
 
@@ -201,11 +201,11 @@ class StationView {
     ];
 
     $rows = '';
-    $table = '';
-    if ($this->model->velocities[$type]) {
-      $components = $this->model->velocities[$type];
+    $tableHtml = '';
+    if ($this->_model->velocities[$type]) {
+      $components = $this->_model->velocities[$type];
 
-      $table = '<table>';
+      $tableHtml = '<table>';
       foreach($components as $direction => $data) {
         $header = '<tr><td class="empty"></td>';
         $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
@@ -217,12 +217,12 @@ class StationView {
         $rows .= '</tr>';
       }
 
-      $table .= $header;
-      $table .= $rows;
-      $table .= '</table>';
+      $tableHtml .= $header;
+      $tableHtml .= $rows;
+      $tableHtml .= '</table>';
     }
 
-    return $table;
+    return $tableHtml;
   }
 
   public function render () {
@@ -244,7 +244,7 @@ class StationView {
     print $this->_getBackLink();
 
     // print '<pre>';
-    // print var_dump($this->model);
+    // print var_dump($this->_model);
     // print '</pre>';
   }
 }
