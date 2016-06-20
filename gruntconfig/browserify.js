@@ -20,19 +20,24 @@ var browserify = {
     dest: config.build + '/' + config.src + '/htdocs/js/index.js'
   },
 
+  kinematic: {
+    src: [config.src + '/htdocs/js/kinematic.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/kinematic.js'
+  },
+
   network: {
     src: [config.src + '/htdocs/js/network.js'],
     dest: config.build + '/' + config.src + '/htdocs/js/network.js'
   },
 
-  station: {
-    src: [config.src + '/htdocs/js/station.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/station.js'
-  },
-
   qc: {
     src: [config.src + '/htdocs/js/qc.js'],
     dest: config.build + '/' + config.src + '/htdocs/js/qc.js'
+  },
+
+  station: {
+    src: [config.src + '/htdocs/js/station.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/station.js'
   }
 
 };
