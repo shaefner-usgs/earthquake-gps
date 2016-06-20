@@ -1,5 +1,6 @@
 'use strict';
 
+
 var NetworkMap = require('map/NetworkMap');
 
 NetworkMap({

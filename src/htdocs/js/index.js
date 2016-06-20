@@ -1,5 +1,6 @@
 'use strict';
 
+
 var IndexMap = require('map/IndexMap');
 
 IndexMap({

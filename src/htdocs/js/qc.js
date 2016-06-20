@@ -1,6 +1,6 @@
 /* global MOUNT_PATH, STATION */ // passed via var embedded in html page
-
 'use strict';
+
 
 var Application = require('qc/Application');
 

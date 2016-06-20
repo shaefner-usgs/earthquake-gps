@@ -1,5 +1,6 @@
 'use strict';
 
+
 var TimeSeries = require('TimeSeries');
 
 var graphs = [];
