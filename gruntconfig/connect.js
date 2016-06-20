@@ -54,8 +54,8 @@ var connect = {
       to: '/station.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/kinematic/?$',
-      to: '/kinematic.php?station=$1'
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic/?$',
+      to: '/kinematic.php?network=$1&station=$2'
     },
     {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/logs/?$',
@@ -66,8 +66,8 @@ var connect = {
       to: '/photos.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/qc/?$',
-      to: '/qc.php?station=$1'
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/?$',
+      to: '/qc.php?network=$1&station=$2'
     },
     {
       from: '^' + config.ini.MOUNT_PATH + '/?(.*)$',
