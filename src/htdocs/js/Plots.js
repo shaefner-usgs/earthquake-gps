@@ -1,6 +1,11 @@
 'use strict';
 
 
+/**
+ * Class for dynamically swapping plot images on GPS station page
+ *
+ * @param options {Object}
+ */
 var Plots = function (options) {
   var _this,
       _initialize,
