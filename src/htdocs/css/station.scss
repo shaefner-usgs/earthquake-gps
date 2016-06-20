@@ -44,6 +44,13 @@ mark {
   border: 0;
 }
 
+.image {
+  float: left;
+  height: 404px;
+  margin: 1em 1em 2em 0;
+  width: 490px;
+}
+
 .map {
   height: 300px;
   margin-bottom: 1em;
@@ -84,12 +91,5 @@ mark {
 
   h2 {
     display: none; /* hides in js env only (.tablist-panel added by tabs js) */
-  }
-
-  img {
-    display: block;
-    float: left;
-    margin: 1em 1em 2em 0;
-    width: 490px;
   }
 }
