@@ -66,7 +66,7 @@ var Plots = function (options) {
     alt = img.getAttribute('alt').replace(/\(.*\)/, '(' + e.target.textContent + ')');
     img.setAttribute('alt', alt);
     if (e.target.href.indexOf('#no-data') !== -1) {
-      img.setAttribute('src', MOUNT_PATH + '/img/nodata.png');
+      img.setAttribute('src', MOUNT_PATH + '/img/no-data.png');
     } else {
       img.setAttribute('src', e.target.href);
     }
