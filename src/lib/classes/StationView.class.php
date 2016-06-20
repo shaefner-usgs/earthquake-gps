@@ -67,7 +67,9 @@ class StationView {
               <h2>%s</h2>
             </header>
             %s
-            <img src="%s" class="toggle" alt="Plot showing %s data (All data)" />
+            <div class="image">
+              <img src="%s" class="toggle" alt="Plot showing %s data (All data)" />
+            </div>
             %s
             <h3>Downloads</h3>
             %s
@@ -111,9 +113,15 @@ class StationView {
   }
 
   private function _getHref ($type, $suffix) {
+    $baseDir = $GLOBALS['DATA_DIR'];
     $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
     $dataPath = $this->_getPath($type);
-    $href = "$baseUri/$dataPath/" . $this->_model->station . $suffix;
+    $file = $this->_model->station . $suffix;
+    $href = "$baseUri/$dataPath/$file";
+
+    if (preg_match('/png$/', $file) && !is_file("$baseDir/$dataPath/$file")) {
+      $href = "#no-data";
+    }
 
     return $href;
   }

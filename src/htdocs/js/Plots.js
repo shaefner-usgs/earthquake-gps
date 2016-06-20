@@ -1,3 +1,4 @@
+/* global MOUNT_PATH */
 'use strict';
 
 
@@ -60,10 +61,15 @@ var Plots = function (options) {
         img;
 
     e.preventDefault();
+
     img = _el.parentNode.querySelector('.toggle');
     alt = img.getAttribute('alt').replace(/\(.*\)/, '(' + e.target.textContent + ')');
     img.setAttribute('alt', alt);
-    img.setAttribute('src', e.target.href);
+    if (e.target.href.indexOf('#no-data') !== -1) {
+      img.setAttribute('src', MOUNT_PATH + '/img/nodata.png');
+    } else {
+      img.setAttribute('src', e.target.href);
+    }
 
     _toggleSel(e.target);
   };
