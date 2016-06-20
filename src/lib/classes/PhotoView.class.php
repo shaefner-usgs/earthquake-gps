@@ -7,16 +7,27 @@ class PhotoView {
     $this->_collection = $collection;
   }
 
-  public function render () {
+  private function _getBackLink () {
+    return sprintf('<p class="back">&laquo;
+        <a href="%s/%s/%s/">Back to station %s</a>
+      </p>',
+      $GLOBALS['MOUNT_PATH'],
+      $this->_collection->network,
+      $this->_collection->station,
+      strtoupper($this->_collection->station)
+    );
+  }
+
+  private function _getPhotos () {
     if (!$this->_collection->photos) {
-      print '<p class="alert warning">No Photos Found</p>';
+      $photosHtml = '<p class="alert info">No Photos Found</p>';
     } else {
       // loop thru each photo (grouped by date taken)
       foreach ($this->_collection->photos as $date => $photos) {
-        print '<h2>' . date('F j, Y', strtotime($date)) . '</h2>';
-        print '<ul class="no-style photos">';
+        $photosHtml = '<h2>' . date('F j, Y', strtotime($date)) . '</h2>';
+        $photosHtml .= '<ul class="no-style photos">';
         foreach ($photos as $photo) {
-          printf('<li class="%s">
+          $photosHtml .= sprintf('<li class="%s">
               <h3>%s</h3>
               <a href="%s/screen/%s">
                 <img src="%s/thumb/%s" alt="thumbnail image (%s)"/>
@@ -31,8 +42,15 @@ class PhotoView {
             $photo->type
           );
         }
-        print '</ul>';
+        $photosHtml .= '</ul>';
       }
     }
+
+    return $photosHtml;
+  }
+
+  public function render () {
+    print $this->_getPhotos();
+    print $this->_getBackLink();
   }
 }

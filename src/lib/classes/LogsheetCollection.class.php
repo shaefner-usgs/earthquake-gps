@@ -6,6 +6,7 @@ include '../conf/config.inc.php'; // app config
  * Collection of station logsheets grouped by date
  *
  * LogsheetCollection Object (
+ *   [network] => String
  *   [path] => String
  *   [logsheets] => Array (
  *     [(date)] => Array (
@@ -22,11 +23,14 @@ include '../conf/config.inc.php'; // app config
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
- class LogsheetCollection {
-   public $path;
-   public $logsheets;
+class LogsheetCollection {
+  public $network;
+  public $path;
+  public $logsheets;
+  public $station;
 
-   public function __construct ($station) {
+  public function __construct ($station, $network) {
+    $this->network = $network;
     $this->path = sprintf('%s/data/stations/%s.dir/%s/logsheets',
       $GLOBALS['MOUNT_PATH'],
       substr($station, 0, 1),
