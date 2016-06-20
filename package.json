@@ -21,6 +21,7 @@
     "c3": "^0.4.11-rc4",
     "cssnano": "^3.5.2",
     "d3": "^3.5.12",
+    "dygraphs": "^1.1.1",
     "gateway": "^1.0.0",
     "grunt": "^0.4.5",
     "grunt-browserify": "^4.0.1",
