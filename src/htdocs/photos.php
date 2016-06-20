@@ -38,14 +38,8 @@ if ($station_exists) {
   );
   $files = getDirContents($dir);
 
-  $uri = sprintf('%s/%s/%s/',
-    $MOUNT_PATH,
-    $network,
-    $station
-  );
-
   // Add photos to collection
-  $photoCollection = new PhotoCollection($station);
+  $photoCollection = new PhotoCollection($station, $network);
   foreach ($files as $file) {
     $photoModel = new Photo($file);
     $photoCollection->add($photoModel);
@@ -57,9 +51,3 @@ if ($station_exists) {
 } else {
   print '<p class="alert error">ERROR: Station Not Found</p>';
 }
-
-?>
-
-<p class="back">&laquo;
-  <a href="<?php print $uri; ?>">Back to Station <?php print $name; ?></a>
-</p>

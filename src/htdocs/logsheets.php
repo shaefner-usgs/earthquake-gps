@@ -39,14 +39,8 @@ if ($station_exists) {
   // sort ASC so that 'Front' page (1) is listed before 'Back' page (2)
   $files = getDirContents($dir, $order=SCANDIR_SORT_ASCENDING);
 
-  $uri = sprintf('%s/%s/%s/',
-    $MOUNT_PATH,
-    $network,
-    $station
-  );
-
   // Add logsheets to collection
-  $logsheetCollection = new LogsheetCollection($station);
+  $logsheetCollection = new LogsheetCollection($station, $network);
   foreach ($files as $file) {
     $logsheetModel = new Logsheet($file);
     $logsheetCollection->add($logsheetModel);
@@ -61,9 +55,3 @@ if ($station_exists) {
 } else {
   print '<p class="alert error">ERROR: Station Not Found</p>';
 }
-
-?>
-
-<p class="back">&laquo;
-  <a href="<?php print $uri; ?>">Back to Station <?php print $name; ?></a>
-</p>
