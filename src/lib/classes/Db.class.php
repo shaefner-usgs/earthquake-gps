@@ -249,7 +249,7 @@ class Db {
   public function queryTimeSeries ($station) {
     $sql = 'SELECT * FROM nca_gps_timeseries
       WHERE station = :station
-      ORDER BY `epoch` DESC';
+      ORDER BY `epoch` ASC';
 
     return $this->_execQuery($sql, array(
       'station' => $station
