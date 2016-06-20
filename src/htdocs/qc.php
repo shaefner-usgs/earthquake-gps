@@ -3,7 +3,8 @@
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 
-$station = safeParam('station', 'coco');
+$network = safeParam('network', 'SFBayArea');
+$station = safeParam('station', 'p271');
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . ' Quality Control Data';
@@ -24,6 +25,13 @@ if (!isset($TEMPLATE)) {
   include_once 'template.inc.php';
 }
 
+$backLink = sprintf('%s/%s/%s/',
+  $MOUNT_PATH,
+  $network,
+  $station
+);
+$name = strtoupper($station);
+
 ?>
 
 <div id="application">
@@ -31,3 +39,7 @@ if (!isset($TEMPLATE)) {
     <p class="alert info">Javascript must be enabled to view these plots.</p>
   </noscript>
 </div>
+
+<p class="back">&laquo;
+  <a href="<?php print $backLink; ?>">Back to station <?php print $name; ?></a>
+</p>
