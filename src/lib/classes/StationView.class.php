@@ -27,9 +27,10 @@ class StationView {
 
     $campaignListHtml .= '<ul>';
     foreach($networks as $network) {
-      $campaignListHtml .= sprintf('<li><a href="%s/%s/">%s</a></li>',
+      $campaignListHtml .= sprintf('<li><a href="%s/%s/%s/">%s</a></li>',
         $GLOBALS['MOUNT_PATH'],
         $network,
+        $this->_model->station,
         $network
       );
     }
