@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/shaefner-usgs/earthquake-gps",
   "devDependencies": {
+    "SimplBox": "git+ssh://git@github.com:shaefner-usgs/SimplBox",
     "autoprefixer": "^6.1.2",
     "c3": "^0.4.11-rc4",
     "cssnano": "^3.5.2",
