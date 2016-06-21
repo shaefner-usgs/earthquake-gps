@@ -57,6 +57,7 @@ var TimeSeries = function (options) {
       },
       color: _color,
       digitsAfterDecimal: 4,
+      gridLinePattern: [3, 3],
       height: 200,
       labelsDivWidth: 300,
       panEdgeFraction: 0.1,

@@ -1,9 +1,19 @@
 @import '_common.scss';
 
-.page-content > div {
-  margin-top: 1.5em;
+.dygraph-title {
+  font-family: Merriweather,Times,serif;
+  margin: 0;
 }
 
 .plot {
   height: 200px;
+}
+
+.plots {
+  border: 1px solid #ddd;
+  padding: 0 1em 1em;
+
+  > div {
+    margin: 1.8em 0;
+  }
 }

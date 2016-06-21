@@ -40,7 +40,13 @@ var _C3_DEFAULTS = {
   },
   point: {
     show: true,
-    r: 2
+    r: 0.5,
+    focus: {
+      expand: {
+        enabled: true,
+        r: 3
+      }
+    }
   }
 };
 

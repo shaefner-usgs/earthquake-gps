@@ -1,3 +1,11 @@
 @import '_common.scss';
 @import 'qc/_NavigationView.scss';
 @import 'qc/_PlotView.scss';
+
+h2 {
+  text-align: center;
+}
+
+.c3-grid line {
+  stroke: #DADADA;
+}
