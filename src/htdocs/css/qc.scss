@@ -2,10 +2,19 @@
 @import 'qc/_NavigationView.scss';
 @import 'qc/_PlotView.scss';
 
+$height: 320px;
+
 h2 {
   text-align: center;
 }
 
 .c3-grid line {
   stroke: #DADADA;
+}
+
+.plot, .loading {
+  height: $height;
+}
+.loading {
+  padding-top: calc($height/2 - 30px);
 }

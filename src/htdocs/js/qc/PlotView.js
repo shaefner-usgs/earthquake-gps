@@ -123,7 +123,7 @@ var PlotView = function (options) {
 
     if (data === null) {
       _this.el.classList.add('nodata');
-      _c3El.innerHTML = '';
+      _c3El.innerHTML = '<p class="loading">Loading&hellip;</p>';
       return;
     }
 
