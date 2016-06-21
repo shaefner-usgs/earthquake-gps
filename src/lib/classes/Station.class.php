@@ -56,7 +56,7 @@ class Station {
       '<abbr title="National Geodetic Survey">NGS</abbr> Datasheets' => $ngs
     );
 
-    // campaign stations don't have kinematic; continous don't have photos
+    // campaign stations don't have kinematic data; continous don't have photos
     if ($this->stationtype === 'campaign') {
       unset($links['5-minute Kinematic Results']);
     } else if ($this->stationtype === 'continuous') {
