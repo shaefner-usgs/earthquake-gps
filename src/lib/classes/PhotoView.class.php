@@ -29,9 +29,7 @@ class PhotoView {
         foreach ($photos as $photo) {
           $photosHtml .= sprintf('<li class="%s">
               <h3>%s</h3>
-              <a href="%s/screen/%s">
-                <img src="%s/thumb/%s" alt="thumbnail image (%s)"/>
-              </a>
+              <a href="%s/screen/%s" data-simplbox><img src="%s/thumb/%s" alt="%s"/></a>
             </li>',
             $photo->code,
             $photo->type,

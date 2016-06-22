@@ -1,9 +1,24 @@
 @import '_common.scss';
 
-.page-content > div {
-  margin-top: 1.5em;
+$height: 200px;
+
+.dygraph-title {
+  font-family: Merriweather,Times,serif;
+  margin: 0;
 }
 
-.plot {
-  height: 200px;
+.plot, .loading {
+  height: $height;
+}
+.loading {
+  padding-top: calc($height/2 - 20px);
+}
+
+.plots {
+  border: 1px solid #ddd;
+  padding: 0 1em 0;
+
+  > div {
+    margin: 1.8em 0;
+  }
 }

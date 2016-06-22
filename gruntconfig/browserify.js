@@ -30,6 +30,11 @@ var browserify = {
     dest: config.build + '/' + config.src + '/htdocs/js/network.js'
   },
 
+  photos: {
+    src: [config.src + '/htdocs/js/photos.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/photos.js'
+  },
+
   qc: {
     src: [config.src + '/htdocs/js/qc.js'],
     dest: config.build + '/' + config.src + '/htdocs/js/qc.js'

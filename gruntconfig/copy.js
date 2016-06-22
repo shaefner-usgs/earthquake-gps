@@ -82,6 +82,15 @@ var copy = {
     src: [
       '*.png'
     ]
+  },
+
+  simplbox: {
+    cwd: 'node_modules/SimplBox',
+    dest: config.build + '/' + config.src + '/htdocs/lib/simplbox',
+    expand: true,
+    src: [
+      'simplbox.js'
+    ]
   }
 };
 

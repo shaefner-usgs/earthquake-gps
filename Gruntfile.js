@@ -20,6 +20,7 @@ module.exports = function (grunt) {
     'copy:dygraph',
     'copy:leaflet',
     'copy:leaflet_fullscreen',
+    'copy:simplbox',
     'postcss:dev'
   ]);
 
