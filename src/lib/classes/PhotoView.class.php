@@ -23,13 +23,17 @@ class PhotoView {
       $photosHtml = '<p class="alert info">No Photos Found</p>';
     } else {
       // loop thru each photo (grouped by date taken)
+      $count = 0;
+      $total = $this->_collection->count;
       foreach ($this->_collection->photos as $date => $photos) {
-        $photosHtml = '<h2>' . date('F j, Y', strtotime($date)) . '</h2>';
+        $dateString = date('F j, Y', strtotime($date));
+        $photosHtml = '<h2>' . $dateString . '</h2>';
         $photosHtml .= '<ul class="no-style photos">';
         foreach ($photos as $photo) {
+          $count ++;
           $photosHtml .= sprintf('<li class="%s">
               <h3>%s</h3>
-              <a href="%s/screen/%s" data-simplbox><img src="%s/thumb/%s" alt="%s"/></a>
+              <a href="%s/screen/%s" data-simplbox><img src="%s/thumb/%s" alt="%s: %s (%d of %d)"/></a>
             </li>',
             $photo->code,
             $photo->type,
@@ -37,7 +41,10 @@ class PhotoView {
             $photo->file,
             $this->_collection->path,
             $photo->file,
-            $photo->type
+            $dateString,
+            $photo->type,
+            $count,
+            $total
           );
         }
         $photosHtml .= '</ul>';
