@@ -20,7 +20,9 @@ var preLoadIconOn = function () {
       },
       overlayOff = function () {
           var el = document.getElementById('simplbox-overlay');
-          el.parentNode.removeChild(el);
+          if (el) {
+            el.parentNode.removeChild(el);
+          }
       },
       closeButtonOn = function (base) {
           var div = document.createElement('div');
@@ -55,7 +57,9 @@ var preLoadIconOn = function () {
       },
       closeButtonOff = function () {
           var el = document.getElementById('simplbox-close');
-          el.parentNode.removeChild(el);
+          if (el) {
+            el.parentNode.removeChild(el);
+          }
       },
       captionOff = function () {
         var el = document.getElementById('simplbox-caption');
