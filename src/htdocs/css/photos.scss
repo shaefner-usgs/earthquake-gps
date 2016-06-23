@@ -1,9 +1,5 @@
 @import '_common.scss';
-
-/* Removes infamous 300ms touch delay */
-html {
-  touch-action: manipulation;
-}
+@import '_simplbox.scss';
 
 h2 {
   border-top: 1px solid #eee;
@@ -52,9 +48,4 @@ h2 {
 }
 .misc {
   order: 7;
-}
-
-#simplbox {
-  z-index: 9999;
-  touch-action: none; /* Removes touch action */
 }
