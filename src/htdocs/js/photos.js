@@ -25,8 +25,8 @@ var preLoadIconOn = function () {
       closeButtonOn = function (base) {
           var div = document.createElement('div');
           div.setAttribute('id', 'simplbox-close');
+          div.innerHTML = '<i class="material-icons">cancel</i>';
           document.body.appendChild(div);
-          div = document.getElementById('simplbox-close');
           base.API_AddEvent(div, 'click touchend', function () {
               base.API_RemoveImageElement();
               return false;
