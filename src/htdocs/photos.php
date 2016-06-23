@@ -44,10 +44,13 @@ if ($station_exists) {
 
   // Add photos to collection
   $photoCollection = new PhotoCollection($station, $network);
+  $count = 0;
   foreach ($files as $file) {
+    $count ++;
     $photoModel = new Photo($file);
     $photoCollection->add($photoModel);
   }
+  $photoCollection->setCount($count);
 
   // Render HTML
   $view = new PhotoView($photoCollection);

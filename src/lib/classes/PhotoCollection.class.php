@@ -6,6 +6,7 @@ include '../conf/config.inc.php'; // app config
  * Collection of station photos grouped by date
  *
  * PhotoCollection Object (
+ *   [count] => Int
  *   [network] => String
  *   [path] => String
  *   [photos] => Array (
@@ -25,6 +26,7 @@ include '../conf/config.inc.php'; // app config
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class PhotoCollection {
+  public $count;
   public $network;
   public $path;
   public $photos;
@@ -52,5 +54,9 @@ class PhotoCollection {
       $this->photos[$date] = [];
     }
     array_push($this->photos[$date], $photo);
+  }
+
+  public function setCount ($count) {
+    $this->count = $count;
   }
 }
