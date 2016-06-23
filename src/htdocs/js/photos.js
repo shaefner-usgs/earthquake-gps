@@ -1,7 +1,7 @@
-///* global SimplBox */
+/* global SimplBox */
 'use strict';
 
-/* jshint ignore:start */
+
 var preLoadIconOn = function () {
           var div1 = document.createElement('div'),
               div2 = document.createElement('div');
@@ -32,9 +32,36 @@ var preLoadIconOn = function () {
               return false;
           });
       },
+      addCssClass = function () {
+        var id = SimplBox.options.imageElementId;
+        document.getElementById(id).classList.add('material-icons');
+      },
+      addClickHandler = function (base) {
+        var id = SimplBox.options.imageElementId,
+            div = document.getElementById(id);
+
+        base.API_AddEvent(div, 'click touchend', function (e) {
+          var divPos = div.getBoundingClientRect(),
+              divX = e.clientX - divPos.left;
+
+          // navigate left or right depending on where user clicked
+          if ((div.clientWidth / divX) > 2) {
+            base.leftAnimationFunction();
+          } else {
+            base.rightAnimationFunction();
+          }
+          return false;
+        });
+      },
       closeButtonOff = function () {
           var el = document.getElementById('simplbox-close');
           el.parentNode.removeChild(el);
+      },
+      captionOff = function () {
+        var el = document.getElementById('simplbox-caption');
+        if (el) {
+          el.parentNode.removeChild(el);
+        }
       },
       captionOn = function (base) {
           var documentFragment = document.createDocumentFragment(),
@@ -47,12 +74,6 @@ var preLoadIconOn = function () {
           newElement.appendChild(newText);
           documentFragment.appendChild(newElement);
           document.body.appendChild(documentFragment);
-      },
-      captionOff = function () {
-          var el = document.getElementById('simplbox-caption');
-          if (el) {
-            el.parentNode.removeChild(el);
-          }
       };
 
 
@@ -77,9 +98,9 @@ var simplbox = new SimplBox(thumbs, {
   },
   onImageLoadEnd: function () {
       preLoadIconOff();
+      addClickHandler(simplbox);
+      addCssClass();
   }
 });
 
 simplbox.init();
-
-/* jshint ignore:end */

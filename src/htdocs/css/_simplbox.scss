@@ -6,6 +6,29 @@ html {
 #simplbox {
   touch-action: none; /* Removes touch action */
   z-index: 9999;
+
+  &:after, &:before {
+    position: absolute;
+    background: rgba(0,0,0,0.5);
+    top: 46%;
+    transition: opacity 0.25s ease-out;
+    color: #fff;
+    padding: 10px;
+    opacity: 0;
+  }
+
+  &:after {
+    content: '\e5c8';
+    right: 0;
+  }
+  &:before {
+    content: '\e5c4';
+    left: 0;
+  }
+
+  &:hover:after, &:hover:before {
+    opacity: 1;
+  }
 }
 
 #simplbox-loading {
