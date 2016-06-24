@@ -33,6 +33,7 @@ class PhotoCollection {
   public $station;
 
   public function __construct ($station, $network) {
+    $this->count = 0;
     $this->network = $network;
     $this->path = sprintf('%s/data/stations/%s.dir/%s/photos',
       $GLOBALS['MOUNT_PATH'],
@@ -54,9 +55,11 @@ class PhotoCollection {
       $this->photos[$date] = [];
     }
     array_push($this->photos[$date], $photo);
+
+    $this->_incrementCount();
   }
 
-  public function setCount ($count) {
-    $this->count = $count;
+  private function _incrementCount () {
+    $this->count ++;
   }
 }
