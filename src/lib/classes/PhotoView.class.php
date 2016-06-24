@@ -22,12 +22,14 @@ class PhotoView {
     if (!$this->_collection->photos) {
       $photosHtml = '<p class="alert info">No Photos Found</p>';
     } else {
-      // loop thru each photo (grouped by date taken)
+      $photosHtml = '';
       $count = 0;
       $total = $this->_collection->count;
+
+      // loop thru each photo (grouped by date taken)
       foreach ($this->_collection->photos as $date => $photos) {
         $dateString = date('F j, Y', strtotime($date));
-        $photosHtml = '<h2>' . $dateString . '</h2>';
+        $photosHtml .= '<h2>' . $dateString . '</h2>';
         $photosHtml .= '<ul class="no-style photos">';
         foreach ($photos as $photo) {
           $count ++;
