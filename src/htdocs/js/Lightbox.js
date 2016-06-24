@@ -109,16 +109,16 @@ var Lightbox = function (options) {
   _captionOn = function (base) {
     var div,
         fragment,
-        text;
+        title;
 
     fragment = document.createDocumentFragment();
     div = document.createElement('div');
-    text = document.createTextNode(base.m_Alt);
+    title = base.m_Alt.replace(/\(/, '<small>(').replace(/\)/, ')</small>');
 
     _componentOff('simplbox-caption');
 
     div.setAttribute('id', 'simplbox-caption');
-    div.appendChild(text);
+    div.innerHTML = title;
     fragment.appendChild(div);
     document.body.appendChild(fragment);
   };
