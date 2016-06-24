@@ -48,6 +48,7 @@ if ($station_exists) {
     $photoModel = new Photo($file);
     $photoCollection->add($photoModel);
   }
+  $photoCollection->sort();
 
   // Render HTML
   $view = new PhotoView($photoCollection);
