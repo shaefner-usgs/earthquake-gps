@@ -36,6 +36,7 @@ class PhotoView {
           $photosHtml .= sprintf('<li class="%s">
               <h3>%s</h3>
               <a href="%s/screen/%s" data-simplbox><img src="%s/thumb/%s" alt="%s: %s (%d of %d)"/></a>
+              <a class="fullsize" href="%s/full/%s">Full Resolution</a>
             </li>',
             $photo->code,
             $photo->type,
@@ -46,7 +47,9 @@ class PhotoView {
             $dateString,
             $photo->type,
             $count,
-            $total
+            $total,
+            $this->_collection->path,
+            $photo->file
           );
         }
         $photosHtml .= '</ul>';
