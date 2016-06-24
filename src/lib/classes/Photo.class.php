@@ -18,16 +18,6 @@ class Photo {
   public $file;
   public $type;
 
-  private $_types = [
-    'bay' => 'Bayonet',
-    'bm' => 'Benchmark',
-    'e' => 'East',
-    'misc' => 'Miscellaneous',
-    'n' => 'North',
-    's' => 'South',
-    'w' => 'West'
-  ];
-
   public function __construct ($file) {
     $this->file = $file;
 
@@ -43,10 +33,19 @@ class Photo {
     $photo = preg_match('/\w{4}_(\d{8})([A-Za-z]+)\d*\.\w+/',
       $this->file, $matches
     );
+    $types = [
+      'bay' => 'Bayonet',
+      'bm' => 'Benchmark',
+      'e' => 'East',
+      'misc' => 'Miscellaneous',
+      'n' => 'North',
+      's' => 'South',
+      'w' => 'West'
+    ];
     if ($photo) {
       $this->code = $matches[2];
       $this->date = (int) $matches[1];
-      $this->type = $this->_types[$matches[2]];
+      $this->type = $types[$matches[2]];
     }
   }
 }
