@@ -107,8 +107,8 @@ var Lightbox = function (options) {
    * Add caption
    */
   _captionOn = function (base) {
-    var fragment,
-        div,
+    var div,
+        fragment,
         text;
 
     fragment = document.createDocumentFragment();
@@ -127,7 +127,9 @@ var Lightbox = function (options) {
    * Add close button
    */
   _closeButtonOn = function (base) {
-    var div = document.createElement('div');
+    var div;
+
+    div = document.createElement('div');
     div.setAttribute('id', 'simplbox-close');
     div.innerHTML = '<i class="material-icons">cancel</i>';
     document.body.appendChild(div);
@@ -156,7 +158,9 @@ var Lightbox = function (options) {
    * Add screen overlay
    */
   _overlayOn = function () {
-    var div = document.createElement('div');
+    var div;
+
+    div = document.createElement('div');
     div.setAttribute('id', 'simplbox-overlay');
     document.body.appendChild(div);
   };
@@ -165,11 +169,14 @@ var Lightbox = function (options) {
    * Add loading spinner
    */
   _preLoadIconOn = function () {
-    var div1 = document.createElement('div'),
-        div2 = document.createElement('div');
-        div1.setAttribute('id', 'simplbox-loading');
-        div1.appendChild(div2);
-      document.body.appendChild(div1);
+    var div1,
+        div2;
+
+    div1 = document.createElement('div');
+    div2 = document.createElement('div');
+    div1.setAttribute('id', 'simplbox-loading');
+    div1.appendChild(div2);
+    document.body.appendChild(div1);
   };
 
 
