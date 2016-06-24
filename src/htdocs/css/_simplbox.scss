@@ -9,7 +9,7 @@ html {
   z-index: 9999;
 
   &:after, &:before {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, .5);
     color: #fff;
     opacity: 0;
     padding: 10px;
@@ -32,6 +32,31 @@ html {
   }
 }
 
+#simplbox-caption {
+  background-color: rgba(255, 245, 235, .9);
+  font-size: 20px;
+  left: 0;
+  padding: 5px;
+  position: fixed;
+  right: 0;
+  text-align: center;
+  top: 0;
+  z-index: 10001;
+}
+
+#simplbox-close {
+  color: #a19a94;
+  cursor: pointer;
+  position: fixed;
+  right: 20px;
+  top: 5px;
+  z-index: 10002;
+
+  .material-icons {
+    font-size: 30px;
+  }
+}
+
 #simplbox-loading {
   left: 50%;
   position: fixed;
@@ -48,7 +73,6 @@ html {
   transform-origin: 8px 8px;
   width: 8px;
 }
-
 @keyframes loader {
   0% {
     opacity: 1;
@@ -65,18 +89,6 @@ html {
     transform: rotate(0deg) scale(1.5);
   }
 }
-#simplbox-close {
-  color: #a19a94;
-  cursor: pointer;
-  position: fixed;
-  right: 20px;
-  top: 5px;
-  z-index: 10002;
-
-  .material-icons {
-    font-size: 30px;
-  }
-}
 
 #simplbox-overlay {
   background-color: rgba(0, 0, 0, .9);
@@ -86,16 +98,4 @@ html {
   right: 0;
   top: 0;
   z-index: 9998;
-}
-
-#simplbox-caption {
-  background-color: rgba(255, 245, 235, .9);
-  font-size: 20px;
-  left: 0;
-  padding: 5px;
-  position: fixed;
-  right: 0;
-  text-align: center;
-  top: 0;
-  z-index: 10001;
 }
