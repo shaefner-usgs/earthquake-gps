@@ -4,11 +4,12 @@ html {
 }
 
 #simplbox {
+  box-shadow: 5px 5px 50px rgba(0, 0, 0, 1);
   touch-action: none; /* Removes touch action */
   z-index: 9999;
 
   &:after, &:before {
-    background: rgba(0,0,0,.5);
+    background: rgba(0, 0, 0, 0.5);
     color: #fff;
     opacity: 0;
     padding: 10px;
