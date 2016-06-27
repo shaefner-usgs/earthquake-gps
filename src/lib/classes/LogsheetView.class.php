@@ -22,9 +22,10 @@ class LogsheetView {
     if (!$this->_collection->logsheets) {
       $logSheetsHtml = '<p class="alert info">No Logsheets Found</p>';
     } else {
+      $logSheetsHtml = '';
       // loop thru each logsheet (grouped by date)
       foreach ($this->_collection->logsheets as $date => $logsheets) {
-        $logSheetsHtml = '<h2>' . date('F j, Y', strtotime($date)) . '</h2>';
+        $logSheetsHtml .= '<h2>' . date('F j, Y', strtotime($date)) . '</h2>';
         $logSheetsHtml .= '<ul class="no-style pipelist">';
         foreach ($logsheets as $logsheet) {
           $logSheetsHtml .= sprintf ('<li><a href="%s/%s">%s</a></li>',
