@@ -67,6 +67,6 @@ class LogsheetCollection {
     elseif ($order === 'ASC') {
       return ksort($this->logsheets);
     }
-    throw new Exception('ERROR: Invalid sort order paramerter');
+    throw new Exception('ERROR: Invalid sort order parameter');
   }
 }
