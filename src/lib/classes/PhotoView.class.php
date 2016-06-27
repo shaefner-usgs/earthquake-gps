@@ -35,8 +35,8 @@ class PhotoView {
           $count ++;
           $photosHtml .= sprintf('<li class="%s">
               <h3>%s</h3>
-              <a href="%s/screen/%s" data-simplbox><img src="%s/thumb/%s" alt="%s: %s (%d of %d)"/></a>
-              <a class="fullsize" href="%s/full/%s">Full Resolution</a>
+              <a href="%s/screen/%s" data-simplbox><img width="144" height="144" src="%s/thumb/%s" alt="%s: %s (%d of %d)"/></a>
+              <a class="fullsize" href="%s/full/%s"><i class="material-icons" title="Full resolution photo">file_download</i></a>
             </li>',
             $photo->code,
             $photo->type,

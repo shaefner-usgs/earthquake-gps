@@ -12,7 +12,29 @@ h2 {
 }
 
 .fullsize {
+  background: rgba(0, 0, 0, .5);
+  bottom: 10px;
+  color: #fff;
+  display: inline;
+  line-height: 1;
+  padding: 3px;
   position: absolute;
+  right: 4px;
+  transition: background .25s ease-out;
+  z-index: 100;
+
+  &:active {
+    color: #0ff !important;
+  }
+  &:hover {
+    background: #000;
+  }
+  &:visited {
+    color: #fff;
+  }
+  &.hide {
+    opacity: 0;
+  }
 }
 
 .photos {
@@ -28,11 +50,15 @@ h2 {
   }
 
   li {
-    padding-right: 8px;
+    margin-right: 8px;
     position: relative;
 
+    img {
+      z-index: 10;
+    }
+
     img:hover {
-      box-shadow: 2px 2px 12px 1px rgba(0, 0, 0, 0.25);
+      box-shadow: 2px 2px 12px 1px rgba(0, 0, 0, .25);
     }
   }
 }
