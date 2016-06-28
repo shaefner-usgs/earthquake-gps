@@ -11,8 +11,11 @@ var _C3_DEFAULTS = {
     x: {
       type: 'timeseries',
       tick: {
-        format: '%m/%d/%y',
-        fit: false
+        culling: {
+          max: 6
+        },
+        format: '%Y-%m-%d',
+        fit: true
       }
     },
     y: {
