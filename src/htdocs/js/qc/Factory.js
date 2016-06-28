@@ -80,7 +80,7 @@ var Factory = function (options) {
 
     // dates are in decreasing order
     dates.some(function (d, index) {
-      d = d.getTime();
+      d = new Date(d).getTime();
       if (end) {
         if (endIndex === null && d <= end) {
           // first matching end time
@@ -119,9 +119,6 @@ var Factory = function (options) {
       data = JSON.parse(data);
     }
     _data = data;
-    _data.date = _data.date.map(function (d) {
-      return new Date(d);
-    });
 
     _this.trigger('ready');
   };
