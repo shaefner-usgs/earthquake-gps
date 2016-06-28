@@ -186,12 +186,12 @@ var StationsLayer = function (options) {
           '<h2>Station {station}</h2>' +
           '<span>({lat}, {lon})</span>' +
           '<ul class="no-style pipelist">' +
-            '<li><a href="{baseUri}/">Station Details</a></li>' +
-            '<li><a href="{baseUri}/logs/">Field Logs</a></li>';
+            '<li><a href="{baseUri}/">Station Details</a></li>';
       if (feature.properties.type === 'campaign') {
         popupTemplate += '<li><a href="{baseUri}/photos/">Photos</a></li>';
       }
-      popupTemplate += '</ul>' +
+      popupTemplate += '<li><a href="{baseUri}/logs/">Field Logs</a></li>' +
+          '</ul>' +
           '<a href="{baseUri}/"><img src="{imgSrc}" alt="plot" /></a>' +
         '</div>';
     } else { // using layer on station page
