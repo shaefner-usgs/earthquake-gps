@@ -73,7 +73,7 @@ var NetworkMap = function (options) {
       a.station = li.querySelector('a').textContent;
       a.setAttribute('class', 'bubble');
       a.setAttribute('href', '#');
-      a.setAttribute('title', 'Open popup on map');
+      a.setAttribute('title', 'View on map');
       li.appendChild(a);
       a.addEventListener('click', openPopup);
     }
