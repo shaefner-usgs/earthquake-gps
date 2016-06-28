@@ -7,9 +7,6 @@ var Util = require('util/Util'),
 
 
 var _C3_DEFAULTS = {
-  padding: {
-    right: 50
-  },
   axis: {
     x: {
       type: 'timeseries',
@@ -37,6 +34,9 @@ var _C3_DEFAULTS = {
     y: {
       show: true
     }
+  },
+  padding: {
+    right: 50
   },
   point: {
     show: true,
