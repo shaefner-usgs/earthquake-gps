@@ -36,6 +36,24 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+// Create HTML for link list
+$links = [
+  'GPS waypoints' => "data/networks/$network/${network}.gpx",
+  'Most recent XYZ positions' => "data/networks/$network/${network}_xyz_file",
+  'ITRF2008 XYZ time series' => "data/networks/$network/${network}_xyz_files.tar.gz",
+  'Stations not updated in the past 7 days' => "$network/notupdated/"
+];
+
+$links_html = '<ul class="pipelist no-style">';
+foreach($links as $name => $link) {
+  $links_html .= sprintf('<li><a href="%s/%s">%s</a></li>',
+    $MOUNT_PATH,
+    $link,
+    $name
+  );
+}
+$links_html .= '</ul>';
+
 // Create HTML for station list
 $height = ceil($stations['count'] / 6) * 32;
 $starred = false;
@@ -68,6 +86,8 @@ $kmlLastYear = "$MOUNT_PATH/{$network}_lastyear.kmz";
 $kmlNumYears = "$MOUNT_PATH/{$network}_nobs.kmz";
 
 ?>
+
+<?php print $links_html; ?>
 
 <section>
   <div class="map"></div>
