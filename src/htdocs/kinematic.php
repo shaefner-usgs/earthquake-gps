@@ -36,6 +36,12 @@ $name = strtoupper($station);
 
 ?>
 
+<nav>
+  <button class="pan left"><i class="material-icons">chevron_left</i> Left</button>
+  <button class="pan right">Right <i class="material-icons">chevron_right</i></button>
+  <button class="reset"><i class="material-icons">refresh</i> Reset</button>
+</nav>
+
 <section class="plots">
   <div class="north plot"><p class="loading">Loading&hellip;</p></div>
   <div class="east plot"><p class="loading">Loading&hellip;</p></div>

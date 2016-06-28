@@ -5,7 +5,7 @@ var TimeSeries = require('TimeSeries');
 
 var graphs = [];
 
-TimeSeries({
+var north = TimeSeries({
   direction: 'north',
   color: 'rgb(204,40,40)',
   el: document.querySelector('.north'),
@@ -27,19 +27,35 @@ TimeSeries({
 });
 
 
-  // zoom and pan controls
-  // only need to manipulate one (e.g. north) timeseries plot;
-  // they're all bound together by drawCallback when created
+// zoom and pan controls
+// only need to manipulate one (e.g. north) timeseries plot;
+// they're all bound together by drawCallback when created
 
-  // $('#reset').addClass('disabled');
-  //
-  // $('#reset').on('click', function(e) {
-  //   e.preventDefault();
-  //   north.reset();
-  //   $('#reset').addClass('disabled');
-  // });
-  // $('#left, #right').on('click', function(e) {
-  //   e.preventDefault();
-  //   var dir = ($(this).attr('id') === 'left' ? -1 : 1);
-  //   north.pan(dir);
-  // });
+var disableReset,
+    pan,
+    reset;
+
+pan = document.querySelectorAll('.pan');
+reset = document.querySelector('.reset');
+
+disableReset = function () {
+  reset.setAttribute('disabled', 'disabled');
+};
+
+// Pan graphs left / right
+Array.prototype.slice.call(pan).forEach(function(button) {
+  button.addEventListener('click', function() {
+    var dir = this.classList.contains('left') ? -1 : 1;
+    console.log('value: ', this.classList.contains('left'));
+    north.pan(dir); // all graphs are synced
+    reset.removeAttribute('disabled');
+  });
+});
+
+// Reset graphs
+reset.addEventListener('click', function() {
+  north.reset(); // all graphs are synced
+  disableReset();
+});
+
+disableReset();

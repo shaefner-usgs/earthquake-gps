@@ -102,7 +102,7 @@ var TimeSeries = function (options) {
 
       // enable reset link when zoomed in
       zoomCallback: function(/*minDate, maxDate, yRanges*/) {
-        document.querySelector('.reset').classList.remove('disabled');
+        document.querySelector('.reset').removeAttribute('disabled');
       }
     });
 
