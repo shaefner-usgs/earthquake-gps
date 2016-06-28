@@ -5,19 +5,17 @@
 1. media queries:
   - station page: content R of plots
   - map heights
-2. pipelist "broken" when wrapping
-3. add links to network pages
-4. QC, kinematic pages
-5. nothing happens if layer off and you click popup icon
-6. legend / layer list organization (Stations label)
-7. mouseovers clipped at edge of page
+2. nothing happens if layer off and you click popup icon
+3. legend / layer list organization (Stations label)
+4. fault mouseovers clipped at edge of page
 
 Ask Jerry
 
 1. showcoords = 0 (none flagged; do we need? If so, do what?)
 2. don't send empty plots...handle programmatically
+3. QC tables?
 
-dynamic GE files??
+dynamic GE, gpx, etc files??
 
 */
 
