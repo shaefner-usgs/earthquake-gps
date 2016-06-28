@@ -36,6 +36,8 @@ $name = strtoupper($station);
 
 ?>
 
+<p>Click and drag on a plot to zoom in. Hold shift while dragging to pan.</p>
+
 <nav>
   <button class="pan left"><i class="material-icons">chevron_left</i> Left</button>
   <button class="pan right">Right <i class="material-icons">chevron_right</i></button>
