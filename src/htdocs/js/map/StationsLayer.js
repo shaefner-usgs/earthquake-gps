@@ -181,18 +181,20 @@ var StationsLayer = function (options) {
       y: feature.properties.y,
       z: feature.properties.z
     };
-    if (type === 'network') {
+    if (type === 'network') { // using layer on network page
       popupTemplate = '<div class="popup station">' +
           '<h2>Station {station}</h2>' +
           '<span>({lat}, {lon})</span>' +
           '<ul class="no-style pipelist">' +
             '<li><a href="{baseUri}/">Station Details</a></li>' +
-            '<li><a href="{baseUri}/logs/">Field Logs</a></li>' +
-            '<li><a href="{baseUri}/photos/">Photos</a></p></li>' +
-          '</ul>' +
+            '<li><a href="{baseUri}/logs/">Field Logs</a></li>';
+      if (feature.properties.type === 'campaign') {
+        popupTemplate += '<li><a href="{baseUri}/photos/">Photos</a></li>';
+      }
+      popupTemplate += '</ul>' +
           '<a href="{baseUri}/"><img src="{imgSrc}" alt="plot" /></a>' +
         '</div>';
-    } else {
+    } else { // using layer on station page
       popupTemplate = '<div class="popup">' +
           '<h2>Station {station}</h2>' +
           '<dl>' +
