@@ -1,11 +1,15 @@
 'use strict';
 
 
-var TimeSeries = require('TimeSeries');
+var Navigation = require('kinematic/Navigation'),
+    TimeSeries = require('kinematic/TimeSeries');
 
-var graphs = [];
+var graphs,
+    ts;
 
-var north = TimeSeries({
+graphs = [];
+
+ts = TimeSeries({
   direction: 'north',
   color: 'rgb(204,40,40)',
   el: document.querySelector('.north'),
@@ -26,36 +30,4 @@ TimeSeries({
   graphs: graphs
 });
 
-
-// zoom and pan controls
-// only need to manipulate one (e.g. north) timeseries plot;
-// they're all bound together by drawCallback when created
-
-var disableReset,
-    pan,
-    reset;
-
-pan = document.querySelectorAll('.pan');
-reset = document.querySelector('.reset');
-
-disableReset = function () {
-  reset.setAttribute('disabled', 'disabled');
-};
-
-// Pan graphs left / right
-Array.prototype.slice.call(pan).forEach(function(button) {
-  button.addEventListener('click', function() {
-    var dir = this.classList.contains('left') ? -1 : 1;
-    console.log('value: ', this.classList.contains('left'));
-    north.pan(dir); // all graphs are synced
-    reset.removeAttribute('disabled');
-  });
-});
-
-// Reset graphs
-reset.addEventListener('click', function() {
-  north.reset(); // all graphs are synced
-  disableReset();
-});
-
-disableReset();
+Navigation(ts);
