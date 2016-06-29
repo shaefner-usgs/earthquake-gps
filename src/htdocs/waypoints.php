@@ -3,10 +3,12 @@
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 
+$expires = date(DATE_RFC2822);
 $network = safeParam('network', 'Pacific');
 $stations = importJsonToArray(__DIR__ . "/_getStations.json.php", $network);
 $timestamp = date('Y-m-d\TH:i:s\Z');
 
+// Create XML
 $header = '<?xml version="1.0" encoding="UTF-8"?>
 <gpx
   version="1.0"
@@ -47,12 +49,13 @@ $bounds = sprintf('<bounds minlat="%F" minlon="%F" maxlat="%F" maxlon="%F"/>',
 
 $footer = "</gpx>";
 
-$expires = date(DATE_RFC2822);
+// Set headers
 header('Cache-control: no-cache, must-revalidate');
 header("Expires: $expires");
 header('Content-Type: application/xml');
 header('Content-Disposition: attachment; filename="' . $network . '.gpx"');
 
+// Send output
 print "$header\n";
 print "$time\n";
 print $bounds;
