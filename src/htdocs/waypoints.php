@@ -51,9 +51,9 @@ $footer = "</gpx>";
 
 // Set headers
 header('Cache-control: no-cache, must-revalidate');
-header("Expires: $expires");
-header('Content-Type: application/xml');
 header('Content-Disposition: attachment; filename="' . $network . '.gpx"');
+header('Content-Type: application/xml');
+header("Expires: $expires");
 
 // Send output
 print "$header\n";
