@@ -1,6 +1,14 @@
 'use strict';
 
 
+
+/**
+ * Navigation class: zoom and pan controls
+ * (only need to manipulate one graph; they're bound together when created)
+ *
+ * @param timeseries {Object}
+ *   Reference to one of the timeseries graphs
+ */
 var Navigation = function (timeseries) {
   var _this,
       _initialize,
@@ -32,7 +40,7 @@ var Navigation = function (timeseries) {
   };
 
   /**
-   * Add click events to pan graphs left / right
+   * Add click handlers to pan graphs left / right
    */
   _initPan = function () {
     Array.prototype.slice.call(_panButtons).forEach(function(button) {
@@ -45,7 +53,7 @@ var Navigation = function (timeseries) {
   };
 
   /**
-   * Add click event to reset graphs
+   * Add click handler to reset graphs
    */
   _initReset = function () {
     _resetButton.addEventListener('click', function() {
