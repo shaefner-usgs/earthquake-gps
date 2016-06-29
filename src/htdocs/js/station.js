@@ -1,7 +1,7 @@
 'use strict';
 
 
-var Plots = require ('Plots'),
+var Plots = require ('station/Plots'),
     StationMap = require('map/StationMap'),
     TabList = require('tablist/TabList');
 
