@@ -2,10 +2,8 @@
 
 /* TODO:
 
-    1 add links above Map
-    2 add mouseover labels for list below map
-    3 add alert for network not found
-    4 add legend
+    1 add mouseover labels for list below map
+    2 add legend
 */
 
 include_once '../conf/config.inc.php'; // app config
@@ -36,9 +34,14 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+// Check to see if this is a valid network
+if ($stations['count'] === 0) {
+  print '<p class="alert info">Network Not Found</p>';
+} else { // Begin: valid network block
+
 // Create HTML for link list
 $links = [
-  'GPS waypoints' => "data/networks/$network/${network}.gpx",
+  'GPS waypoints' => "$network/waypoints/",
   'Most recent XYZ positions' => "data/networks/$network/${network}_xyz_file",
   'ITRF2008 XYZ time series' => "data/networks/$network/${network}_xyz_files.tar.gz",
   'Stations not updated in the past 7 days' => "$network/notupdated/"
@@ -87,7 +90,9 @@ $kmlNumYears = "$MOUNT_PATH/{$network}_nobs.kmz";
 
 ?>
 
-<?php print $links_html; ?>
+<section>
+  <?php print $links_html; ?>
+</section>
 
 <section>
   <div class="map"></div>
@@ -111,6 +116,8 @@ $kmlNumYears = "$MOUNT_PATH/{$network}_nobs.kmz";
     </li>
   </ul>
 </section>
+
+<?php } // End: valid network block ?>
 
 <p class="back">&laquo;
   <a href="<?php print $MOUNT_PATH; ?>/">Back to all networks</a>
