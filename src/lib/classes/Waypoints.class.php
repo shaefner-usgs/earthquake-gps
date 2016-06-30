@@ -43,6 +43,7 @@ class Waypoints {
       </wpt>';
       $body .= "\n$wpt";
 
+      // Store station lat, lon in array for calculating bounds of all stations
       array_push($this->_lats, $lat);
       array_push($this->_lons, $lon);
     }
