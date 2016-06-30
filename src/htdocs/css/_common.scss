@@ -2,6 +2,26 @@
   margin-top: 2em;
 }
 
+.legend {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0;
+
+  img {
+    height: 25px;
+    position: absolute;
+  }
+  li {
+    padding: .5em 1.25em 0 0;
+    position: relative;
+    white-space: nowrap;
+  }
+  span {
+    display: inline-block;
+    margin-left: 25px;
+  }
+}
+
 .pipelist {
   display: flex;
   flex-wrap: wrap;

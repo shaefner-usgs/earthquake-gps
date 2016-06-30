@@ -2,8 +2,7 @@
 
 /* TODO:
 
-    1 add mouseover labels for list below map
-    2 add legend
+    add mouseover labels for list below map
 */
 
 include_once '../conf/config.inc.php'; // app config
@@ -57,6 +56,29 @@ foreach($links as $name => $link) {
 }
 $links_html .= '</ul>';
 
+// Create HTML for legend
+$legend_icons = [
+  'triangle+grey' => 'Campaign',
+  'square+grey' => 'Continuous',
+  'blue' => 'Past 3 days',
+  'yellow' => '4&mdash;7 days ago',
+  'orange' => '8&mdash;14 days ago',
+  'red' => 'Over 14 days ago'
+];
+
+$legend_html = '<ul class="legend no-style">';
+foreach ($legend_icons as $key => $description) {
+  $legend_html .= sprintf('<li>
+      <img src="%s/img/pin-s-%s-2x.png" alt="%s icon" /><span>%s</span>
+    </li>',
+    $MOUNT_PATH,
+    $key,
+    $key,
+    $description
+  );
+}
+$legend_html .= '</ul>';
+
 // Create HTML for station list
 $height = ceil($stations['count'] / 6) * 32;
 $starred = false;
@@ -96,6 +118,7 @@ $kmlNumYears = "$MOUNT_PATH/{$network}_nobs.kmz";
 
 <section>
   <div class="map"></div>
+  <?php print $legend_html; ?>
   <h3 class="count"><?php print $stations['count']; ?> stations on this map</h3>
   <?php
     print $stations_html;

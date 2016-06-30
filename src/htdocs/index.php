@@ -42,6 +42,25 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+// Create HTML for legend
+$legend_icons = [
+  'triangle+grey' => 'Campaign',
+  'square+grey' => 'Continuous'
+];
+
+$legend_html = '<ul class="legend no-style">';
+foreach ($legend_icons as $key => $description) {
+  $legend_html .= sprintf('<li>
+      <img src="%s/img/pin-s-%s-2x.png" alt="%s icon" /><span>%s</span>
+    </li>',
+    $MOUNT_PATH,
+    $key,
+    $key,
+    $description
+  );
+}
+$legend_html .= '</ul>';
+
 // Create HTML for network list
 $height = ceil($networks['count'] / 4) * 32;
 $networks_html = '<ul class="networks no-style" style="height: '. $height . 'px;">';
@@ -65,6 +84,7 @@ $networks_html .= '</ul>';
 <section>
   <h2>View Stations by Network</h2>
   <div class="map"></div>
+  <?php print $legend_html; ?>
   <h3 class="count"><?php print $networks['count']; ?> networks on this map</h3>
   <?php print $networks_html; ?>
 </section>
