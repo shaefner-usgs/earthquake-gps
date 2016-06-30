@@ -41,6 +41,11 @@ var connect = {
   ],
 
   rules: [
+    // {
+    //   from: '^(' + config.ini.MOUNT_PATH + ')(.*)/+$',
+    //   to: 'http://localhost:' + config.buildPort + '$1$2',
+    //   redirect: 'permanent'
+    // },
     {
       from: '^' + config.ini.MOUNT_PATH + '/stations/?([a-z0-9])?/?$',
       to: '/stationlist.php?filter=$1'
@@ -48,6 +53,14 @@ var connect = {
     {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/?$',
       to: '/network.php?network=$1'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/notupdated/?$',
+      to: '/notupdated.php?network=$1'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/waypoints/?$',
+      to: '/waypoints.php?network=$1'
     },
     {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/?$',
