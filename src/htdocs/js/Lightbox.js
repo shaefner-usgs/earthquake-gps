@@ -131,7 +131,7 @@ var Lightbox = function (options) {
 
     div = document.createElement('div');
     div.setAttribute('id', 'simplbox-close');
-    div.innerHTML = '<i class="material-icons">cancel</i>';
+    div.innerHTML = '<i class="material-icons">&#xE5C9;</i>';
     document.body.appendChild(div);
     base.API_AddEvent(div, 'click touchend', function () {
       base.API_RemoveImageElement();
