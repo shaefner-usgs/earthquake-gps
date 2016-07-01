@@ -109,6 +109,7 @@ $stations_html .= '</ul>';
 
 $kmlLastYear = "$MOUNT_PATH/{$network}_lastyear.kmz";
 $kmlNumYears = "$MOUNT_PATH/{$network}_nobs.kmz";
+$dynKml = "$MOUNT_PATH/{$network}/kml/";
 
 ?>
 
@@ -136,6 +137,9 @@ $kmlNumYears = "$MOUNT_PATH/{$network}_nobs.kmz";
     </li>
     <li>
       <a href="<?php print $kmlLastYear; ?>">Sorted by last year occupied</a>
+    </li>
+    <li>
+      <a href="<?php print $dynKml; ?>">Dynamic KML</a>
     </li>
   </ul>
 </section>

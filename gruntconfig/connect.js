@@ -55,6 +55,10 @@ var connect = {
       to: '/network.php?network=$1'
     },
     {
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/kml/?$',
+      to: '/kml.php?network=$1'
+    },
+    {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/notupdated/?$',
       to: '/notupdated.php?network=$1'
     },
