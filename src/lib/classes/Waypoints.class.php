@@ -33,7 +33,7 @@ class Waypoints {
       $ele = number_format($row['elevation'], 2, '.', '');
       $lat = number_format($row['lat'], 5, '.', '');
       $lon = number_format($row['lon'], 5, '.', '');
-      $station = strtoupper($station);
+      $station = strtoupper($row['station']);
       $wpt = '  <wpt lat="' . $lat . '" lon="' . $lon . '">
         <ele>' . $ele . '</ele>
         <name>' . $station . '</name>
