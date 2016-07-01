@@ -60,7 +60,7 @@ var connect = {
     },
     {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/notupdated/?$',
-      to: '/notupdated.php?network=$1'
+      to: '/notupdated.csv.php?network=$1'
     },
     {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/waypoints/?$',
