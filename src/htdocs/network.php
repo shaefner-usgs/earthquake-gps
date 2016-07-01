@@ -61,8 +61,8 @@ $legend_icons = [
   'triangle+grey' => 'Campaign',
   'square+grey' => 'Continuous',
   'blue' => 'Past 3 days',
-  'yellow' => '4&mdash;7 days ago',
-  'orange' => '8&mdash;14 days ago',
+  'yellow' => '4&ndash;7 days ago',
+  'orange' => '8&ndash;14 days ago',
   'red' => 'Over 14 days ago'
 ];
 
