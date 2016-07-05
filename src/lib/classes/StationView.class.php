@@ -147,12 +147,6 @@ class StationView {
   private function _getNavDownloads ($type) {
     $navDownloadsHtml = '
       <nav class="downloads">
-        <span>Plot:</span>
-        <ul class="no-style">
-          <li><a href="' . $this->_getHref($type, '.gmt.gz') . '">
-            <abbr title="Generic Mapping Tools">GMT</abbr> Script
-          </a></li>
-        </ul>
         <span>Raw Data:</span>
         <ul class="no-style">
           <li><a href="' . $this->_getHref($type, '.rneu') .'">All</a></li>
