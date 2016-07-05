@@ -134,7 +134,7 @@ var TimeSeries = function (options) {
    */
   _loadData = function () {
     Xhr.ajax({
-      url: MOUNT_PATH + '/_getKinematic.txt.php?direction=' + _direction + '&station=' + STATION,
+      url: MOUNT_PATH + '/_getKinematic.csv.php?direction=' + _direction + '&station=' + STATION,
       success: _draw,
       error: function (status) {
         console.log(status);
