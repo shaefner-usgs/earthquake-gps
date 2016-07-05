@@ -47,7 +47,7 @@ var NetworkMap = function (options) {
     _el = options.el || document.createElement('div');
 
     // Load eqs, stations layers which each call initMap() when finished
-    _loadEarthquakesLayer();
+    //_loadEarthquakesLayer();
     _loadStationsLayer();
 
     _attachPopupLinks();
@@ -58,24 +58,42 @@ var NetworkMap = function (options) {
    * Attach handlers for map popups to list of stations below the map
    */
   _attachPopupLinks = function () {
-    var a, i, li, lis,
-        openPopup;
+    var a, i, li, lis, newA, station,
 
-    openPopup = function(e) {
+        hideLabel,
+        openPopup,
+        showLabel;
+
+    hideLabel = function (e) {
+      _stations.hideLabel(e.target.station);
+    };
+
+    showLabel = function (e) {
+      _stations.showLabel(e.target.station);
+    };
+
+    openPopup = function (e) {
       e.preventDefault();
-      _stations.openPopup(e.target.station.match(/\w+/)); // ignore '*' in name
+      _stations.openPopup(e.target.station);
     };
 
     lis = document.querySelectorAll('.stations li');
     for (i = 0; i < lis.length; i ++) {
       li = lis[i];
-      a = document.createElement('a');
-      a.station = li.querySelector('a').textContent;
-      a.setAttribute('class', 'bubble');
-      a.setAttribute('href', '#');
-      a.setAttribute('title', 'View on map');
-      li.appendChild(a);
-      a.addEventListener('click', openPopup);
+      // get station name (ignore '*' that indicates high rms value)
+      a = li.querySelector('a');
+      station = a.textContent.match(/\w+/);
+      a.station = station;
+      a.addEventListener('mouseover', showLabel, true);
+      a.addEventListener('mouseout', hideLabel, true);
+
+      newA = document.createElement('a');
+      newA.setAttribute('class', 'bubble');
+      newA.setAttribute('href', '#');
+      newA.setAttribute('title', 'View on map');
+      newA.station = station;
+      li.appendChild(newA);
+      newA.addEventListener('click', openPopup);
     }
   };
 
@@ -112,10 +130,10 @@ var NetworkMap = function (options) {
       'Dark': dark
     };
     layers.overlays = {
-      'Faults': faults,
-      'M2.5+ Earthquakes': _earthquakes
+      'Faults': faults//,
+      //'M2.5+ Earthquakes': _earthquakes
     };
-    layers.defaults = [terrain, _earthquakes];
+    layers.defaults = [terrain/*, _earthquakes*/];
 
     // Add stations to overlays / defaults
     Object.keys(_stations.layers).forEach(function(key) {
@@ -169,7 +187,7 @@ var NetworkMap = function (options) {
    */
   _initMap = function () {
     if (!_stations || !_earthquakes) { // check that both ajax layers are set
-      return;
+      //return;
     }
     var bounds,
         layers,

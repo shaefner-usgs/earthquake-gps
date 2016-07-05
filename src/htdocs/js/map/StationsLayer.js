@@ -318,6 +318,14 @@ var StationsLayer = function (options) {
     return _bounds;
   };
 
+  _this.hideLabel = function (station) {
+    _points[station].hideLabel();
+  };
+
+  _this.showLabel = function (station) {
+    _points[station].showLabel();
+  };
+  
   /**
    * Open popup for a given station
    *
