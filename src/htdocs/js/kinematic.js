@@ -24,9 +24,9 @@ TimeSeries({
 });
 
 TimeSeries({
-  direction: 'vertical',
+  direction: 'up',
   color: 'rgb(40,40,204)',
-  el: document.querySelector('.vertical'),
+  el: document.querySelector('.up'),
   graphs: graphs
 });
 

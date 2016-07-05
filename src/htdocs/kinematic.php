@@ -47,7 +47,7 @@ $name = strtoupper($station);
 <section class="plots">
   <div class="north plot"><p class="loading">Loading&hellip;</p></div>
   <div class="east plot"><p class="loading">Loading&hellip;</p></div>
-  <div class="vertical plot"><p class="loading">Loading&hellip;</p></div>
+  <div class="up plot"><p class="loading">Loading&hellip;</p></div>
   <p>
     <a href="<?php print $downloadLink; ?>">Download data</a>
   </p>

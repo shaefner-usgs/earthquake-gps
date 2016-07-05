@@ -16,10 +16,10 @@ $db = new Db;
 $rsTimeSeries = $db->queryTimeSeries($station);
 
 // Set header
-if (preg_match('/^north|east|vertical$/', $direction)) {
+if (preg_match('/^north|east|up$/', $direction)) {
   $header = sprintf("Datetime-UTC, %s\n", ucfirst($direction));
 } else {
-  $header = "Datetime-UTC, Datetime-J2000, North, East, Vertical\n";
+  $header = "Datetime-UTC, Datetime-J2000, North, East, Up\n";
 }
 $output = $header;
 
@@ -32,7 +32,11 @@ while ($row = $rsTimeSeries->fetch(PDO::FETCH_ASSOC)) {
 
 	// show only chosen component - for timeseries plot
 	if ($direction) {
-		$values = floatval($row[$direction]);
+    $column = $direction;
+    if ($direction === 'up') {
+      $column = 'vertical'; // db field is 'vertical' for up component
+    }
+    $values = floatval($row[$column]);
 	}
 	// or, show all components (plus J2000 time) - download option
 	else {
