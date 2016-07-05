@@ -318,14 +318,15 @@ var StationsLayer = function (options) {
     return _bounds;
   };
 
+  /**
+   * Hide label for a given station
+   *
+   * @param station {String}
+   */
   _this.hideLabel = function (station) {
     _points[station].hideLabel();
   };
 
-  _this.showLabel = function (station) {
-    _points[station].showLabel();
-  };
-  
   /**
    * Open popup for a given station
    *
@@ -333,6 +334,15 @@ var StationsLayer = function (options) {
    */
   _this.openPopup = function (station) {
     _points[station].openPopup();
+  };
+
+  /**
+   * Show label for a given station
+   *
+   * @param station {String}
+   */
+  _this.showLabel = function (station) {
+    _points[station].showLabel();
   };
 
 

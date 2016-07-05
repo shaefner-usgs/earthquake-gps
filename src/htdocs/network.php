@@ -1,10 +1,5 @@
 <?php
 
-/* TODO:
-
-    add mouseover labels for list below map
-*/
-
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 

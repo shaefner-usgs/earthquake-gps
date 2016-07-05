@@ -32,7 +32,7 @@ var NetworkMap = function (options) {
       _el,
       _stations,
 
-      _attachPopupLinks,
+      _addEvents,
       _getMapLayers,
       _initMap,
       _loadEarthquakesLayer,
@@ -50,14 +50,14 @@ var NetworkMap = function (options) {
     //_loadEarthquakesLayer();
     _loadStationsLayer();
 
-    _attachPopupLinks();
+    _addEvents();
   };
 
 
   /**
    * Attach handlers for map popups to list of stations below the map
    */
-  _attachPopupLinks = function () {
+  _addEvents = function () {
     var a, i, li, lis, newA, station,
 
         hideLabel,
@@ -68,13 +68,13 @@ var NetworkMap = function (options) {
       _stations.hideLabel(e.target.station);
     };
 
-    showLabel = function (e) {
-      _stations.showLabel(e.target.station);
-    };
-
     openPopup = function (e) {
       e.preventDefault();
       _stations.openPopup(e.target.station);
+    };
+
+    showLabel = function (e) {
+      _stations.showLabel(e.target.station);
     };
 
     lis = document.querySelectorAll('.stations li');
@@ -83,17 +83,24 @@ var NetworkMap = function (options) {
       // get station name (ignore '*' that indicates high rms value)
       a = li.querySelector('a');
       station = a.textContent.match(/\w+/);
-      a.station = station;
-      a.addEventListener('mouseover', showLabel, true);
-      a.addEventListener('mouseout', hideLabel, true);
 
+      // add label events to station buttons
+      a.station = station;
+      a.addEventListener('click', hideLabel);
+      a.addEventListener('mouseout', hideLabel);
+      a.addEventListener('mouseover', showLabel);
+
+      // add popup icons / events to station buttons
       newA = document.createElement('a');
       newA.setAttribute('class', 'bubble');
       newA.setAttribute('href', '#');
-      newA.setAttribute('title', 'View on map');
-      newA.station = station;
+      newA.setAttribute('title', 'View station popup');
       li.appendChild(newA);
+
+      newA.station = station;
       newA.addEventListener('click', openPopup);
+      newA.addEventListener('mouseout', hideLabel);
+      newA.addEventListener('mouseover', showLabel);
     }
   };
 
