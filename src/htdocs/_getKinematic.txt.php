@@ -27,28 +27,28 @@ $output = $header;
 while ($row = $rsTimeSeries->fetch(PDO::FETCH_ASSOC)) {
   // J2000 time (epoch field) starts at 12 noon on 1 January 2000 UTC
   $secs_1970_2000 = mktime(12, 0, 0, 01, 01, 2000);
-	$timestamp = $row['epoch'] + $secs_1970_2000;
-	$date = date('Y/m/d H:i:s', $timestamp);
+  $timestamp = $row['epoch'] + $secs_1970_2000;
+  $date = date('Y/m/d H:i:s', $timestamp);
 
-	// show only chosen component - for timeseries plot
-	if ($direction) {
+  // show only chosen component - for timeseries plot
+  if ($direction) {
     $column = $direction;
     if ($direction === 'up') {
       $column = 'vertical'; // db field is 'vertical' for up component
     }
     $values = floatval($row[$column]);
-	}
-	// or, show all components (plus J2000 time) - download option
-	else {
-		$values = sprintf('%s, %f, %f, %f',
+  }
+  // or, show all components (plus J2000 time) - download option
+  else {
+    $values = sprintf('%s, %f, %f, %f',
       $row['epoch'],
       floatval($row['north']),
       floatval($row['east']),
       floatval($row['vertical'])
     );
-	}
+  }
 
-	$output .= "$date, $values\n";
+  $output .= "$date, $values\n";
 }
 
 // Send txt stream to browser
