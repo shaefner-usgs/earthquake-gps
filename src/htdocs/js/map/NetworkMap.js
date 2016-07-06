@@ -91,13 +91,14 @@ var NetworkMap = function (options) {
       a.addEventListener('mouseout', hideLabel);
       a.addEventListener('mouseover', showLabel);
 
-      // add popup icons / events to station buttons
+      // add popup icons to station buttons
       newA = document.createElement('a');
       newA.setAttribute('class', 'bubble');
       newA.setAttribute('href', '#');
       newA.setAttribute('title', 'View station popup');
       li.appendChild(newA);
 
+      // add popup, label events to popup icons
       newA.station = station;
       newA.addEventListener('click', openPopup);
       newA.addEventListener('mouseout', hideLabel);
@@ -138,8 +139,11 @@ var NetworkMap = function (options) {
       'Dark': dark
     };
     layers.overlays = {
-      'Faults': faults,
-      'M2.5+ Earthquakes': _earthquakes
+      'Stations': {},
+      'Geology': {
+        'Faults': faults,
+        'M2.5+ Earthquakes': _earthquakes
+      }
     };
     layers.defaults = [terrain, _earthquakes];
 
@@ -147,7 +151,7 @@ var NetworkMap = function (options) {
     Object.keys(_stations.layers).forEach(function(key) {
       name = _stations.names[key] +
         '<span class="' + key + '"></span>'; // hook to add station count
-      layers.overlays[name] = _stations.layers[key];
+      layers.overlays.Stations[name] = _stations.layers[key];
       layers.defaults.push(_stations.layers[key]);
     });
 
@@ -195,7 +199,7 @@ var NetworkMap = function (options) {
    */
   _initMap = function () {
     if (!_stations || !_earthquakes) { // check that both ajax layers are set
-      //return;
+      return;
     }
     var bounds,
         layers,
@@ -215,7 +219,7 @@ var NetworkMap = function (options) {
 
     // Add controllers
     L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
-    L.control.layers(layers.baseLayers, layers.overlays).addTo(map);
+    L.control.groupedLayers(layers.baseLayers, layers.overlays).addTo(map);
     L.control.mousePosition().addTo(map);
     L.control.scale().addTo(map);
 
