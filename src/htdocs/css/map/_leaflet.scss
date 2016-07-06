@@ -28,17 +28,37 @@ input[type=checkbox], input[type=radio] {
   color: #306ac2;
 }
 
+/* Leaflet label mouseovers */
+.leaflet-label {
+  background: rgba(255, 255, 255, .85);
+  border-color: rgba(0, 0, 0, .25);
+  border-width: 2px;
+  color: #000;
+  font-weight: 500;
+  padding: 2px 6px;
+}
+.leaflet-label:before {
+  left: -8px;
+  top: 6px;
+}
+.leaflet-label:after {
+  right: -8px;
+  top: 6px;
+}
+
 /* UtfGrid mouseovers */
 .leaflet-mouseover-tooltip {
-  background-color: hsla(0, 0%, 100%, .75);
-  background-color: #fff;
-  border: 1px solid #333;
-  border-radius: 3px;
+  background: #fff;
+  background: rgba(255, 255, 255, .85);
+  border: 2px solid;
+  border-color: rgba(0, 0, 0, .25);
+  border-radius: 4px;
   display: none;
-  font-size: 12px;
-  left: 0;
-  margin: -1.75em 0 0;
-  padding: 2px 4px;
+  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  left: 12px;
+  margin: -.5em 0 0;
+  padding: 2px 6px;
   position: absolute;
   top: 0;
   white-space: nowrap;
