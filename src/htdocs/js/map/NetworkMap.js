@@ -47,7 +47,7 @@ var NetworkMap = function (options) {
     _el = options.el || document.createElement('div');
 
     // Load eqs, stations layers which each call initMap() when finished
-    //_loadEarthquakesLayer();
+    _loadEarthquakesLayer();
     _loadStationsLayer();
 
     _addEvents();
@@ -55,7 +55,7 @@ var NetworkMap = function (options) {
 
 
   /**
-   * Attach handlers for map popups to list of stations below the map
+   * Attach handlers for map popups & labels to list of stations below the map
    */
   _addEvents = function () {
     var a, i, li, lis, newA, station,
@@ -137,10 +137,10 @@ var NetworkMap = function (options) {
       'Dark': dark
     };
     layers.overlays = {
-      'Faults': faults//,
-      //'M2.5+ Earthquakes': _earthquakes
+      'Faults': faults,
+      'M2.5+ Earthquakes': _earthquakes
     };
-    layers.defaults = [terrain/*, _earthquakes*/];
+    layers.defaults = [terrain, _earthquakes];
 
     // Add stations to overlays / defaults
     Object.keys(_stations.layers).forEach(function(key) {
