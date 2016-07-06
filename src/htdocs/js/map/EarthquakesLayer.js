@@ -20,9 +20,9 @@ _COLORS = {
 };
 _MARKER_DEFAULTS = {
   weight: 1,
-  opacity: 0.9,
+  opacity: 0.5,
   fillOpacity: 0.9,
-  color: '#000'
+  color: '#333'
 };
 _DEFAULTS = {
   data: {},
