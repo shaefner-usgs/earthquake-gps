@@ -18,7 +18,7 @@ class Kml {
   }
 
   /**
-   * Get waypoints XML
+   * Get placemark XML
    *
    * @return $body {Xml}
    */
@@ -38,7 +38,7 @@ class Kml {
           <coordinates>' . $row['lon'] . ',' . $row['lat'] . ',0</coordinates>
         </Point>
         <description></description>>
-        <Snippet>' . $row['lat'] . ',' . $row['lon'] . '</Snippet>>
+        <Snippet>' . $row['lat'] . ',' . $row['lon'] . '</Snippet>
       </Placemark>';
       $body .= "\n$placeMark";
 
@@ -89,9 +89,8 @@ class Kml {
    * Render XML content
    */
   public function render () {
-    $body = $this->_getBody();
-    print $this->_getHeader(); // header depends on arrays set by _getBody()
-    print $body;
+    print $this->_getHeader();
+    print $this->_getBody();
     print $this->_getFooter();
   }
 
