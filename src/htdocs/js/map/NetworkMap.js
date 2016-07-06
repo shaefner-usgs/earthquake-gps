@@ -6,6 +6,7 @@ var Xhr = require('util/Xhr');
 
 // Leaflet plugins
 require('leaflet-fullscreen');
+require('leaflet-groupedlayercontrol');
 require('map/MousePosition');
 require('map/Restoreview');
 
