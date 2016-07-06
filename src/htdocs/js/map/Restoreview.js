@@ -8,7 +8,8 @@ var Util = require('util/Util');
 /**
  * Leaflet.RestoreView plugin https://github.com/makinacorpus/Leaflet.RestoreView
  * with added functionality:
- * - remembering selected layers
+ * - remembering selected layers, including grouped layers
+ *    (compatible with https://github.com/ismyrnow/Leaflet.groupedlayercontrol)
  * - fullscreen mode (compatible with https://github.com/Leaflet/Leaflet.fullscreen)
  *
  * Usage: map.restoreView(options)
@@ -40,12 +41,13 @@ var RestoreViewMixin = {
         // methods
         _baselayerchange,
         _fullscreenchange,
+        _getIndex,
         _isEmpty,
         _moveend,
         _overlayadd,
         _overlayremove;
 
-    defaultId = '_global_'; // will be shared amongst all pages if not set
+    defaultId = '_global_'; // used to share settings on all pages if id not set
 
     options = Util.extend({
       baseLayers: null,
@@ -95,6 +97,19 @@ var RestoreViewMixin = {
       storage.mapView = JSON.stringify(view);
     };
 
+    // Get array index of layer containing layerName, or return -1
+    _getIndex = function (layers, layerName) {
+      var r = -1;
+
+      layers.forEach(function(layer, i) {
+        if (layer.name === layerName) {
+          r = i;
+        }
+      });
+
+      return r;
+    };
+
     // Check if javascript obj contains props
     _isEmpty = function (obj) {
       return (Object.getOwnPropertyNames(obj).length === 0);
@@ -114,13 +129,22 @@ var RestoreViewMixin = {
 
     // Invoked when adding overlays
     _overlayadd = function (e) {
-      var add_index = layers[layersId].add.indexOf(e.name),
-          remove_index = layers[layersId].remove.indexOf(e.name);
-      if (add_index === -1) { // add layer if not already in 'add' list
-        layers[layersId].add.push(e.name);
+      var addIndex = _getIndex(layers[layersId].add, e.name),
+          group = null,
+          removeIndex = _getIndex(layers[layersId].remove, e.name);
+
+      if (e.group) {
+        group = e.group.name;
       }
-      if (remove_index !== -1) { // remove layer if it's in 'remove' list
-        layers[layersId].remove.splice(remove_index, 1);
+
+      if (addIndex === -1) { // add layer if not already in 'add' list
+        layers[layersId].add.push({
+          group: group,
+          name: e.name
+        });
+      }
+      if (removeIndex !== -1) { // remove layer if it's in 'remove' list
+        layers[layersId].remove.splice(removeIndex, 1);
       }
 
       storage.mapLayers = JSON.stringify(layers);
@@ -128,13 +152,22 @@ var RestoreViewMixin = {
 
     // Invoked when removing overlays
     _overlayremove = function (e) {
-      var add_index = layers[layersId].add.indexOf(e.name),
-          remove_index = layers[layersId].remove.indexOf(e.name);
-      if (remove_index === -1) { // add layer if not already in 'remove' list
-        layers[layersId].remove.push(e.name);
+      var addIndex = _getIndex(layers[layersId].add, e.name),
+          group = null,
+          removeIndex = _getIndex(layers[layersId].remove, e.name);
+
+      if (e.group) {
+        group = e.group.name;
       }
-      if (add_index !== -1) { // remove layer if it's in 'add' list
-        layers[layersId].add.splice(add_index, 1);
+
+      if (removeIndex === -1) { // add layer if not already in 'remove' list
+        layers[layersId].remove.push({
+          group: group,
+          name: e.name
+        });
+      }
+      if (addIndex !== -1) { // remove layer if it's in 'add' list
+        layers[layersId].add.splice(addIndex, 1);
       }
 
       storage.mapLayers = JSON.stringify(layers);
@@ -180,15 +213,25 @@ var RestoreViewMixin = {
           }, this);
         }
 
-        layers[layersId].add.forEach(function(layerName) {
-          var overlay = options.overlays[layerName];
+        layers[layersId].add.forEach(function(layer) {
+          var overlay;
+          if (layer.group) {
+            overlay = options.overlays[layer.group][layer.name];
+          } else {
+            overlay = options.overlays[layer.name];
+          }
           if (overlay && !this.hasLayer(overlay)) {
             this.addLayer(overlay);
           }
         }, this);
 
-        layers[layersId].remove.forEach(function(layerName) {
-          var overlay = options.overlays[layerName];
+        layers[layersId].remove.forEach(function(layer) {
+          var overlay;
+          if (layer.group) {
+            overlay = options.overlays[layer.group][layer.name];
+          } else {
+            overlay = options.overlays[layer.name];
+          }
           if (overlay && this.hasLayer(overlay)) {
             this.removeLayer(overlay);
           }
