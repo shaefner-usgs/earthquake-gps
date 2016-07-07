@@ -41,57 +41,57 @@ var connect = {
   ],
 
   rules: [
-    // {
-    //   from: '^(' + config.ini.MOUNT_PATH + ')(.*)/+$',
-    //   to: 'http://localhost:' + config.buildPort + '$1$2',
-    //   redirect: 'permanent'
-    // },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/stations/?([a-z0-9])?/?$',
+      from: '^(' + config.ini.MOUNT_PATH + ')(.*)/+$',
+      to: 'http://localhost:' + config.buildPort + '$1$2',
+      redirect: 'permanent'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/stations/?([a-z0-9])?$',
       to: '/stationlist.php?filter=$1'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)$',
       to: '/network.php?network=$1'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/kml/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/kml$',
       to: '/kml.php?network=$1'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/notupdated/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/notupdated$',
       to: '/notupdated.php?network=$1'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/waypoints/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/waypoints$',
       to: '/waypoints.php?network=$1'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})$',
       to: '/station.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic$',
       to: '/kinematic.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic/data/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic/data$',
       to: '/_getKinematic.csv.php?station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/logs/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/logs$',
       to: '/logsheets.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/photos/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/photos$',
       to: '/photos.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc$',
       to: '/qc.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table/?$',
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table$',
       to: '/qctable.php?network=$1&station=$2'
     },
     {
