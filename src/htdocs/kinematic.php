@@ -28,7 +28,7 @@ $backLink = sprintf('%s/%s/%s/',
   $network,
   $station
 );
-$downloadLink = sprintf('%s/_getKinematic.txt.php?station=%s',
+$downloadLink = sprintf('%s/_getKinematic.csv.php?station=%s',
   $MOUNT_PATH,
   $station
 );
