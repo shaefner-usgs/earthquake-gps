@@ -75,6 +75,10 @@ var connect = {
       to: '/kinematic.php?network=$1&station=$2'
     },
     {
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic/data/?$',
+      to: '/_getKinematic.csv.php?station=$2'
+    },
+    {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/logs/?$',
       to: '/logsheets.php?network=$1&station=$2'
     },
@@ -85,6 +89,10 @@ var connect = {
     {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/?$',
       to: '/qc.php?network=$1&station=$2'
+    },
+    {
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table/?$',
+      to: '/qctable.php?network=$1&station=$2'
     },
     {
       from: '^' + config.ini.MOUNT_PATH + '/?(.*)$',
