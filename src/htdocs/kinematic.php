@@ -13,8 +13,10 @@ if (!isset($TEMPLATE)) {
     <link rel="stylesheet" href="../../css/kinematic.css" />
   ';
   $FOOT = '
-    <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
-    <script>var STATION = "' . $station . '";</script>
+    <script>
+      var MOUNT_PATH = "' . $MOUNT_PATH . '",
+          STATION = "' . $station . '";
+    </script>
     <script src="/lib/dygraph/dygraph-combined.js"></script>
     <script src="../../js/kinematic.js"></script>
   ';

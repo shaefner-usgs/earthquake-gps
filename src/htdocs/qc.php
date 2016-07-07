@@ -14,8 +14,10 @@ if (!isset($TEMPLATE)) {
     <link rel="stylesheet" href="../../css/qc.css" />
   ';
   $FOOT = '
-    <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
-    <script>var STATION = "' . $station . '";</script>
+    <script>
+      var MOUNT_PATH = "' . $MOUNT_PATH . '",
+          STATION = "' . $station . '";
+    </script>
     <script src="../../lib/d3/d3.js"></script>
     <script src="../../lib/c3/c3.js"></script>
     <script src="../../js/qc.js"></script>
