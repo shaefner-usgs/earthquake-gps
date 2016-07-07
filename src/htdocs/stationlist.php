@@ -8,7 +8,6 @@ if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station List';
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../css/stationlist.css" />';
-  $FOOT = '';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
