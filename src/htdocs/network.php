@@ -11,13 +11,13 @@ if (!isset($TEMPLATE)) {
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
-    <link rel="stylesheet" href="' . $MOUNT_PATH . '/css/network.css" />
+    <link rel="stylesheet" href="css/network.css" />
   ';
   $FOOT = '
     <script>var NETWORK = "' . $network . '";</script>
     <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
-    <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
-    <script src="' . $MOUNT_PATH . '/js/network.js"></script>
+    <script src="lib/leaflet-0.7.7/leaflet.js"></script>
+    <script src="js/network.js"></script>
   ';
   $CONTACT = 'jsvarc';
 
@@ -35,16 +35,15 @@ if ($stations['count'] === 0) {
 
 // Create HTML for link list
 $links = [
-  'GPS waypoints' => "$network/waypoints/",
+  'GPS waypoints' => "$network/waypoints",
   'Most recent XYZ positions' => "data/networks/$network/${network}_xyz_file",
   'ITRF2008 XYZ time series' => "data/networks/$network/${network}_xyz_files.tar.gz",
-  'Stations not updated in the past 7 days' => "$network/notupdated/"
+  'Stations not updated in the past 7 days' => "$network/notupdated"
 ];
 
 $links_html = '<ul class="pipelist no-style">';
 foreach($links as $name => $link) {
-  $links_html .= sprintf('<li><a href="%s/%s">%s</a></li>',
-    $MOUNT_PATH,
+  $links_html .= sprintf('<li><a href="%s">%s</a></li>',
     $link,
     $name
   );
@@ -64,9 +63,8 @@ $legend_icons = [
 $legend_html = '<ul class="legend no-style">';
 foreach ($legend_icons as $key => $description) {
   $legend_html .= sprintf('<li>
-      <img src="%s/img/pin-s-%s-2x.png" alt="%s icon" /><span>%s</span>
+      <img src="img/pin-s-%s-2x.png" alt="%s icon" /><span>%s</span>
     </li>',
-    $MOUNT_PATH,
     $key,
     $key,
     $description
@@ -89,10 +87,9 @@ foreach ($stations['features'] as $feature) {
       $starred = true;
   }
   $stations_html .= sprintf('<li class="%s">
-      <a href="%s/%s/%s/" title="Go to station details">%s%s</a>
+      <a href="%s/%s" title="Go to station details">%s%s</a>
     </li>',
     getColor($feature['properties']['days']),
-    $MOUNT_PATH,
     $network,
     $feature['properties']['station'],
     strtoupper($feature['properties']['station']),
@@ -102,9 +99,9 @@ foreach ($stations['features'] as $feature) {
 
 $stations_html .= '</ul>';
 
-$kmlLastYear = "$MOUNT_PATH/{$network}_lastyear.kmz";
-$kmlNumYears = "$MOUNT_PATH/{$network}_nobs.kmz";
-$dynKml = "$MOUNT_PATH/{$network}/kml/";
+$kmlLastYear = "$network/{$network}_lastyear.kmz";
+$kmlNumYears = "$network/{$network}_nobs.kmz";
+$dynKml = "$network/kml";
 
 ?>
 
@@ -142,5 +139,5 @@ $dynKml = "$MOUNT_PATH/{$network}/kml/";
 <?php } // End: valid network block ?>
 
 <p class="back">&laquo;
-  <a href="<?php print $MOUNT_PATH; ?>/">Back to all networks</a>
+  <a href="<?php print $MOUNT_PATH; ?>">Back to all networks</a>
 </p>

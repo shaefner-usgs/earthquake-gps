@@ -10,20 +10,20 @@ if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station ' . strtoupper($station) . ' Kinematic Data';
   $NAVIGATION = true;
   $HEAD = '
-    <link rel="stylesheet" href="' . $MOUNT_PATH . '/css/kinematic.css" />
+    <link rel="stylesheet" href="../../css/kinematic.css" />
   ';
   $FOOT = '
     <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
     <script>var STATION = "' . $station . '";</script>
     <script src="/lib/dygraph/dygraph-combined.js"></script>
-    <script src="' . $MOUNT_PATH . '/js/kinematic.js"></script>
+    <script src="../../js/kinematic.js"></script>
   ';
   $CONTACT = 'jsvarc';
 
   include_once 'template.inc.php';
 }
 
-$backLink = sprintf('%s/%s/%s/',
+$backLink = sprintf('%s/%s/%s',
   $MOUNT_PATH,
   $network,
   $station

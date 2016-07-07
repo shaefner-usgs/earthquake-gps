@@ -1,4 +1,4 @@
-/* global L */
+/* global L, MOUNT_PATH */
 'use strict';
 
 
@@ -164,7 +164,7 @@ var NetworksLayer = function (options) {
     // Clicking marker sends user to selected network page
     marker.href = feature.properties.name;
     marker.on('click', function () {
-      window.location = './' + this.href + '/';
+      window.location = MOUNT_PATH + '/' + this.href;
     });
 
     return marker;

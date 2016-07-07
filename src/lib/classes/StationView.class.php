@@ -14,7 +14,7 @@ class StationView {
   }
 
   private function _getBackLink () {
-    return sprintf('<p class="back">&laquo; <a href="%s/%s/">Back to %s network</a></p>',
+    return sprintf('<p class="back">&laquo; <a href="%s/%s">Back to %s network</a></p>',
       $GLOBALS['MOUNT_PATH'],
       $this->_model->network,
       $this->_model->network
@@ -27,7 +27,7 @@ class StationView {
 
     $campaignListHtml .= '<ul>';
     foreach($networks as $network) {
-      $campaignListHtml .= sprintf('<li><a href="%s/%s/%s/">%s</a></li>',
+      $campaignListHtml .= sprintf('<li><a href="%s/%s/%s">%s</a></li>',
         $GLOBALS['MOUNT_PATH'],
         $network,
         $this->_model->station,

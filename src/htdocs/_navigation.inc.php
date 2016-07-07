@@ -24,8 +24,8 @@ if (
 
 $NAVIGATION =
   navGroup('GPS',
-    navItem("$section/", 'Data', $matches) .
-    navItem("$section/stations/", 'Station List') .
+    navItem("$section", 'Data', $matches) .
+    navItem("$section/stations", 'Station List') .
     navItem("$section/about.php", 'About')
   );
 

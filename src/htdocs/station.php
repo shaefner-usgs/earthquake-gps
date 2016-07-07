@@ -15,7 +15,7 @@ if (!isset($TEMPLATE)) {
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
-    <link rel="stylesheet" href="' . $MOUNT_PATH . '/css/station.css" />
+    <link rel="stylesheet" href="../css/station.css" />
   ';
   $FOOT = '
     <script>
@@ -24,7 +24,7 @@ if (!isset($TEMPLATE)) {
           STATION = "' . $station . '";
     </script>
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
-    <script src="' . $MOUNT_PATH . '/js/station.js"></script>
+    <script src="../js/station.js"></script>
   ';
   $CONTACT = 'jsvarc';
 

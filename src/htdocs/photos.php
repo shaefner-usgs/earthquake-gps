@@ -17,10 +17,10 @@ $name = strtoupper($station);
 if (!isset($TEMPLATE)) {
   $TITLE = "GPS Station $name Photos";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/photos.css" />';
+  $HEAD = '<link rel="stylesheet" href="../../css/photos.css" />';
   $FOOT = '
-    <script src="' . $MOUNT_PATH . '/lib/simplbox/simplbox.js"></script>
-    <script src="' . $MOUNT_PATH . '/js/photos.js"></script>
+    <script src="../../lib/simplbox/simplbox.js"></script>
+    <script src="../../js/photos.js"></script>
   ';
   $CONTACT = 'jsvarc';
 

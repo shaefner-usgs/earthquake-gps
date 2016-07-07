@@ -10,7 +10,7 @@ $network = safeParam('network', 'Pacific');
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/notupdated.css" />';
+  $HEAD = '<link rel="stylesheet" href="../css/notupdated.css" />';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
@@ -34,7 +34,7 @@ while($row = $rsLastUpdated->fetch()) {
 
 $table_html .= '</table>';
 
-$backlink = sprintf('<a href="%s/%s/">Back to %s network</a>',
+$backlink = sprintf('<a href="%s/%s">Back to %s network</a>',
   $MOUNT_PATH,
   $network,
   $network
