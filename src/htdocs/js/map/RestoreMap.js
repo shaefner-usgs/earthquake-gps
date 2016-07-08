@@ -11,7 +11,7 @@
  *     (compatible with https://github.com/ismyrnow/Leaflet.groupedlayercontrol)
  * - remembers fullscreen mode
  *     (compatible with https://github.com/Leaflet/Leaflet.fullscreen)
- * - options to share layer settings across site
+ * - option to share layer settings across site
  *
  * Usage: map.RestoreMap(options)
  *
