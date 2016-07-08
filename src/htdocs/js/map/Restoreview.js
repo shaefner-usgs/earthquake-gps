@@ -2,15 +2,13 @@
 'use strict';
 
 
-var Util = require('util/Util');
-
-
 /**
  * Leaflet.RestoreView plugin https://github.com/makinacorpus/Leaflet.RestoreView
  * with added functionality:
  * - remembering selected layers, including grouped layers
- *    (compatible with https://github.com/ismyrnow/Leaflet.groupedlayercontrol)
- * - fullscreen mode (compatible with https://github.com/Leaflet/Leaflet.fullscreen)
+ *     (compatible with https://github.com/ismyrnow/Leaflet.groupedlayercontrol)
+ * - remembering fullscreen mode
+ *     (compatible with https://github.com/Leaflet/Leaflet.fullscreen)
  *
  * Usage: map.restoreView(options)
  *
@@ -18,13 +16,17 @@ var Util = require('util/Util');
  *        optional settings
  *        {
  *          baseLayers: {Object <Layer Config>},
- *              req'd for restoring basemap
+ *              req'd for restoring basemap setting
  *          id: {String},
  *              req'd for saving each page's settings separately
+ *          layerStorage {String <'local' | 'session'>}
+ *              local: persist layer settings
  *          overlays: {Object <Layer Config>},
- *              req'd for restoring overlays,
+ *              req'd for restoring overlay settings,
  *          shareLayers: {Boolean}
  *              share layer settings amongst all pages
+ *          viewStorage {String <'local' | 'session'>}
+ *              local: persist map view settings
  *        }
  *
  * <Layer Config> : http://leafletjs.com/reference.html#control-layers-config
@@ -32,8 +34,9 @@ var Util = require('util/Util');
 var RestoreViewMixin = {
   restoreView: function (options) {
     var defaultId,
-        layersId,
         layers,
+        layersId,
+        map,
         storage,
         view,
         viewId,
@@ -42,59 +45,84 @@ var RestoreViewMixin = {
         _baselayerchange,
         _fullscreenchange,
         _getIndex,
+        _getOverlay,
+        _initialize,
+        _initSaveSettings,
         _isEmpty,
         _moveend,
         _overlayadd,
-        _overlayremove;
+        _overlayremove,
+        _restoreSettings,
+        _setLayers;
 
-    defaultId = '_global_'; // used to share settings on all pages if id not set
+    map = this;
 
-    options = Util.extend({
-      baseLayers: null,
-      id: defaultId,
-      overlays: null,
-      shareLayers: false
-    }, options);
 
-    storage = window.localStorage || {};
-    layers = JSON.parse(storage.mapLayers || '{}');
-    view = JSON.parse(storage.mapView || '{}');
+    _initialize = function () {
+      options = L.extend({
+        baseLayers: null,
+        id: null,
+        layerStorage: 'local',
+        overlays: null,
+        shareLayers: false,
+        viewStorage: 'session'
+      }, options);
 
-    // Store settings with unique id from user (or defaultId if not supplied)
-    // If shareLayers is 'on', then always use (shared) defaultId for layers
-    layersId = options.id;
-    if (options.shareLayers) {
-      layersId = defaultId;
-    }
-    viewId = options.id;
-
-    // Create obj templates for storing layers
-    if (!layers[layersId]) {
-      layers[layersId] = {
-        add: [],
-        remove: []
+      // setup local/sessionStorage for layers and map views
+      storage = {
+        local: window.localStorage || {},
+        session: window.sessionStorage || {}
       };
-    }
-    if (!view[viewId]) {
-      view[viewId] = {};
-    }
+      layers = JSON.parse(storage[options.layerStorage].mapLayers || '{}');
+      view = JSON.parse(storage[options.viewStorage].mapView || '{}');
 
-    // Invoked when base layer changes
+      // default key used to store settings
+      defaultId = '_global_';
+
+      // Use defaultId if unique id not supplied
+      if (!options.id) {
+        options.id = defaultId;
+      }
+
+      // If shareLayers is 'on', then always use defaultId for layer settings
+      layersId = options.id;
+      if (options.shareLayers) {
+        layersId = defaultId;
+      }
+      viewId = options.id;
+
+      // Create obj templates for storing layers and views
+      if (!layers[layersId]) {
+        layers[layersId] = {
+          add: [],
+          remove: []
+        };
+      }
+      if (!view[viewId]) {
+        view[viewId] = {};
+      }
+
+      _initSaveSettings();
+      _restoreSettings();
+    };
+
+
+    // Handler for when base layer changes
     _baselayerchange = function (e) {
       layers[layersId].base = e.name;
 
-      storage.mapLayers = JSON.stringify(layers);
+      storage[options.layerStorage].mapLayers = JSON.stringify(layers);
     };
 
-    // Invoked when fullscreen mode changes
+    // Handler for when fullscreen mode changes
     _fullscreenchange = function () {
-      if (this.isFullscreen()) {
+      if (map.isFullscreen()) {
         view[viewId].fs = true;
       } else {
         view[viewId].fs = false;
       }
 
-      storage.mapView = JSON.stringify(view);
+      storage[options.viewStorage].mapView = JSON.stringify(view);
     };
 
     // Get array index of layer containing layerName, or return -1
@@ -110,137 +138,150 @@ var RestoreViewMixin = {
       return r;
     };
 
+    _getOverlay = function (layer) {
+      var overlay;
+
+      if (layer.group) {
+        overlay = options.overlays[layer.group][layer.name];
+      } else {
+        overlay = options.overlays[layer.name];
+      }
+
+      return overlay;
+    };
+
+    // Setup listeners to store settings in local/sessionStorage
+    _initSaveSettings = function () {
+      if (!map.__initRestore) {
+        // map extent, size
+        map.on('fullscreenchange', _fullscreenchange, map);
+        map.on('moveend', _moveend, map);
+
+        // map layers
+        map.on('baselayerchange', _baselayerchange, map);
+        map.on('overlayadd', _overlayadd, map);
+        map.on('overlayremove', _overlayremove, map);
+
+        map.__initRestore = true;
+      }
+    };
+
     // Check if javascript obj contains props
     _isEmpty = function (obj) {
       return (Object.getOwnPropertyNames(obj).length === 0);
     };
 
-    // Invoked when map extent change
+    // Handler for when map extent change
     _moveend = function () {
-      if (!this._loaded) {
-        return;  // Never access map bounds if view is not set.
+      if (!map._loaded) {
+        return; // don't access map bounds if view is not set
       }
-      view[viewId].lat = this.getCenter().lat;
-      view[viewId].lng = this.getCenter().lng;
-      view[viewId].zoom = this.getZoom();
+      view[viewId].lat = map.getCenter().lat;
+      view[viewId].lng = map.getCenter().lng;
+      view[viewId].zoom = map.getZoom();
 
-      storage.mapView = JSON.stringify(view);
+      storage[options.viewStorage].mapView = JSON.stringify(view);
     };
 
-    // Invoked when adding overlays
+    // Handler for when overlays are added
     _overlayadd = function (e) {
-      var addIndex = _getIndex(layers[layersId].add, e.name),
-          group = null,
-          removeIndex = _getIndex(layers[layersId].remove, e.name);
+      _setLayers(e, 'add');
 
-      if (e.group) {
-        group = e.group.name;
-      }
-
-      if (addIndex === -1) { // add layer if not already in 'add' list
-        layers[layersId].add.push({
-          group: group,
-          name: e.name
-        });
-      }
-      if (removeIndex !== -1) { // remove layer if it's in 'remove' list
-        layers[layersId].remove.splice(removeIndex, 1);
-      }
-
-      storage.mapLayers = JSON.stringify(layers);
+      storage[options.layerStorage].mapLayers = JSON.stringify(layers);
     };
 
-    // Invoked when removing overlays
+    // Handler for when overlays are removed
     _overlayremove = function (e) {
-      var addIndex = _getIndex(layers[layersId].add, e.name),
-          group = null,
-          removeIndex = _getIndex(layers[layersId].remove, e.name);
+      _setLayers(e, 'remove');
 
-      if (e.group) {
-        group = e.group.name;
-      }
-
-      if (removeIndex === -1) { // add layer if not already in 'remove' list
-        layers[layersId].remove.push({
-          group: group,
-          name: e.name
-        });
-      }
-      if (addIndex !== -1) { // remove layer if it's in 'add' list
-        layers[layersId].add.splice(addIndex, 1);
-      }
-
-      storage.mapLayers = JSON.stringify(layers);
+      storage[options.layerStorage].mapLayers = JSON.stringify(layers);
     };
-
-    // Save settings: setup listeners which store settings in localStorage
-    if (!this.__initRestore) {
-      // map extent, size
-      this.on('fullscreenchange', _fullscreenchange, this);
-      this.on('moveend', _moveend, this);
-      // map layers
-      this.on('baselayerchange', _baselayerchange, this);
-      this.on('overlayadd', _overlayadd, this);
-      this.on('overlayremove', _overlayremove, this);
-
-      this.__initRestore = true;
-    }
 
     // Restore settings: map extent, full screen mode and chosen layers
-    try {
-      if (!_isEmpty(view[viewId])) {
-        this.setView(
-          L.latLng(view[viewId].lat, view[viewId].lng),
-          view[viewId].zoom,
-          true
-        );
-        if (view[viewId].fs) {
-          this.toggleFullscreen();
+    _restoreSettings = function () {
+      try {
+        // Restore view
+        if (!_isEmpty(view[viewId])) {
+          map.setView(
+            L.latLng(view[viewId].lat, view[viewId].lng),
+            view[viewId].zoom,
+            true
+          );
+          if (view[viewId].fs) {
+            map.toggleFullscreen();
+          }
         }
-      }
 
-      if (!_isEmpty(layers[layersId])) {
-        var selBaseLayer = layers[layersId].base;
-        if (selBaseLayer) {
-          var keys = Object.keys(options.baseLayers);
-          keys.forEach(function(layerName) {
-            var baseLayer = options.baseLayers[layerName];
-            if (layerName === selBaseLayer) {
-              this.addLayer(baseLayer);
-            } else {
-              this.removeLayer(baseLayer);
+        // Restore layers
+        if (!_isEmpty(layers[layersId])) {
+          var selBaseLayerName = layers[layersId].base;
+
+          if (selBaseLayerName) {
+            Object.keys(options.baseLayers).forEach(function(layerName) {
+              var baseLayer = options.baseLayers[layerName];
+
+              if (layerName === selBaseLayerName) {
+                map.addLayer(baseLayer);
+              } else {
+                map.removeLayer(baseLayer);
+              }
+            }, map);
+          }
+
+          layers[layersId].add.forEach(function(layer) {
+            var overlay = _getOverlay(layer);
+
+            if (overlay && !map.hasLayer(overlay)) {
+              map.addLayer(overlay);
             }
-          }, this);
+          }, map);
+
+          layers[layersId].remove.forEach(function(layer) {
+            var overlay = _getOverlay(layer);
+
+            if (overlay && map.hasLayer(overlay)) {
+              map.removeLayer(overlay);
+            }
+          }, map);
         }
-
-        layers[layersId].add.forEach(function(layer) {
-          var overlay;
-          if (layer.group) {
-            overlay = options.overlays[layer.group][layer.name];
-          } else {
-            overlay = options.overlays[layer.name];
-          }
-          if (overlay && !this.hasLayer(overlay)) {
-            this.addLayer(overlay);
-          }
-        }, this);
-
-        layers[layersId].remove.forEach(function(layer) {
-          var overlay;
-          if (layer.group) {
-            overlay = options.overlays[layer.group][layer.name];
-          } else {
-            overlay = options.overlays[layer.name];
-          }
-          if (overlay && this.hasLayer(overlay)) {
-            this.removeLayer(overlay);
-          }
-        }, this);
       }
-    }
-    catch (err) {
-      console.log(err);
-    }
+      catch (err) {
+        console.log(err);
+      }
+    };
+
+    // Set list of layers to add/remove on map
+    _setLayers = function (e, type) {
+      var group,
+          index;
+
+      group = null;
+      if (e.group) {
+        group = e.group.name;
+      }
+      index = {
+        add: _getIndex(layers[layersId].add, e.name),
+        remove: _getIndex(layers[layersId].remove, e.name)
+      };
+
+      // Loop thru add/remove layer lists
+      Object.keys(index).forEach(function(listType) {
+        if (listType === type) { // add layer to list if not present
+          if (index[listType] === -1) { // layer is not in list
+            layers[layersId][listType].push({
+              group: group,
+              name: e.name
+            });
+          }
+        } else { // remove layer from list if present
+          if (index[listType] !== -1) { // layer is in list
+            layers[layersId][listType].splice(index[listType], 1);
+          }
+        }
+      });
+    };
+
+    _initialize();
   }
 };
 
