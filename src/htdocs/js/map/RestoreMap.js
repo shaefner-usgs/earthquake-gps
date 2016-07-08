@@ -3,14 +3,17 @@
 
 
 /**
- * Leaflet.RestoreView plugin https://github.com/makinacorpus/Leaflet.RestoreView
- * with added functionality:
- * - remembering selected layers, including grouped layers
- *     (compatible with https://github.com/ismyrnow/Leaflet.groupedlayercontrol)
- * - remembering fullscreen mode
- *     (compatible with https://github.com/Leaflet/Leaflet.fullscreen)
+ * Leaflet.RestoreMap plugin
+ *   (based on https://github.com/makinacorpus/Leaflet.RestoreView)
  *
- * Usage: map.restoreView(options)
+ * Added functionality:
+ * - remembers selected layers, including grouped layers
+ *     (compatible with https://github.com/ismyrnow/Leaflet.groupedlayercontrol)
+ * - remembers fullscreen mode
+ *     (compatible with https://github.com/Leaflet/Leaflet.fullscreen)
+ * - options to share layer settings across site
+ *
+ * Usage: map.RestoreMap(options)
  *
  * @param options {Object}
  *        optional settings
@@ -31,8 +34,8 @@
  *
  * <Layer Config> : http://leafletjs.com/reference.html#control-layers-config
  */
-var RestoreViewMixin = {
-  restoreView: function (options) {
+var RestoreMapMixin = {
+  restoreMap: function (options) {
     var defaultId,
         layers,
         layersId,
@@ -285,4 +288,4 @@ var RestoreViewMixin = {
   }
 };
 
-L.Map.include(RestoreViewMixin);
+L.Map.include(RestoreMapMixin);

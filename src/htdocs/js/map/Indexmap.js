@@ -6,7 +6,7 @@ var Xhr = require('util/Xhr');
 
 // Leaflet plugins
 require('leaflet-fullscreen');
-require('map/Restoreview');
+require('map/RestoreMap');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
 require('map/DarkLayer');
@@ -125,7 +125,7 @@ var IndexMap = function (options) {
     L.control.scale().addTo(map);
 
     // Remember user's map settings (selected layers, map extent)
-    map.restoreView({
+    map.restoreMap({
       baseLayers: layers.baseLayers,
       id: 'networks',
       overlays: layers.overlays,
