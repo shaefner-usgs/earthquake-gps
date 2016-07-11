@@ -162,8 +162,13 @@ var NetworkMap = function (options) {
    * Load earthquakes layer from geojson data via ajax
    */
   _loadEarthquakesLayer = function () {
+    var url;
+
+    url = 'http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2.5&orderby=time-asc';
+    //url = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson';
+
     Xhr.ajax({
-      url: 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson',
+      url: url,
       success: function (data) {
         _earthquakes = L.earthquakesLayer({
           data: data
