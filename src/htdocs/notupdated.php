@@ -10,7 +10,7 @@ $network = safeParam('network', 'Pacific');
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../css/notupdated.css" />';
+  $HEAD = '<link rel="stylesheet" href="../css/base.css" />';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
