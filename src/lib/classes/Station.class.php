@@ -40,11 +40,11 @@ class Station {
   }
 
   private function _getLinkList () {
-    $kinematic = $this->stationPath . '/kinematic/';
-    $logs = $this->stationPath . '/logs/';
+    $kinematic = $this->stationPath . '/kinematic';
+    $logs = $this->stationPath . '/logs';
     $ngs = $this->_getNgsLink();
-    $photos = $this->stationPath . '/photos/';
-    $qc = $this->stationPath . '/qc/';
+    $photos = $this->stationPath . '/photos';
+    $qc = $this->stationPath . '/qc';
     $weather = $this->_getWeatherLink();
 
     $links = array(
