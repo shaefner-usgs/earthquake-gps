@@ -9,13 +9,13 @@ $url = $_SERVER['REQUEST_URI'];
 $matches = false;
 if (
   // index
-  preg_match("@^$section/?(index.php)?$@", $url) ||
+  preg_match("@^$section(/index.php)?$@", $url) ||
   // network
-  preg_match("@^$section/(?!stations)[\w-]+/?$@", $url) ||
+  preg_match("@^$section/(?!stations)[\w-]+$@", $url) ||
   // station
-  preg_match("@^$section/[\w-]+/\w{4}/?$@", $url) ||
+  preg_match("@^$section/[\w-]+/\w{4}$@", $url) ||
   // kinematic, logs, photos, qc
-  preg_match("@^$section/[\w-]+/\w{4}/(kinematic|logs|photos|qc)/?$@", $url) ||
+  preg_match("@^$section/[\w-]+/\w{4}/(kinematic|logs|photos|qc(/table)?)$@", $url) ||
   // plots.php
   $url === "$section/plots.php"
 ) {
