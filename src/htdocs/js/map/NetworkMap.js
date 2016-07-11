@@ -228,6 +228,7 @@ var NetworkMap = function (options) {
       baseLayers: layers.baseLayers,
       id: NETWORK,
       overlays: layers.overlays,
+      scope: 'GPS',
       shareLayers: true
     });
 

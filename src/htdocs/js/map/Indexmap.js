@@ -129,6 +129,7 @@ var IndexMap = function (options) {
       baseLayers: layers.baseLayers,
       id: 'networks',
       overlays: layers.overlays,
+      scope: 'GPS',
       shareLayers: true
     });
   };
