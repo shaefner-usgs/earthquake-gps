@@ -146,10 +146,14 @@ class Db {
    * @param $station {String}
    * @return {Function}
    */
-  public function queryQcData ($station) {
+  public function queryQcData ($station, $limit=NULL) {
     $sql = 'SELECT * FROM nca_gps_qualitycontrol
       WHERE `station` = :station
       ORDER BY `date` DESC';
+
+    if ($limit) {
+      $sql .= " LIMIT $limit";
+    }
 
     return $this->_execQuery($sql, array(
       'station' => $station
