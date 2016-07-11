@@ -1,16 +1,5 @@
 <?php
 
-/* TODO
-
-1. media queries:
-  - station page: content R of plots
-  - map heights
-2. nothing happens if layer off and you click popup icon
-3. legend / layer list organization (Stations label)
-4. fault mouseovers clipped at edge of page
-
-*/
-
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 

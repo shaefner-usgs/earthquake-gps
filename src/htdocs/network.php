@@ -1,5 +1,11 @@
 <?php
 
+/* TODO
+
+  1. nothing happens if layer is off and you click popup icon on button list
+
+*/
+
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 
