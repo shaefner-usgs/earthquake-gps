@@ -30,10 +30,6 @@ $backLink = sprintf('%s/%s/%s',
   $network,
   $station
 );
-$downloadLink = sprintf('%s/_getKinematic.csv.php?station=%s',
-  $MOUNT_PATH,
-  $station
-);
 $name = strtoupper($station);
 
 ?>
@@ -51,10 +47,9 @@ $name = strtoupper($station);
   <div class="east plot"><p class="loading">Loading&hellip;</p></div>
   <div class="up plot"><p class="loading">Loading&hellip;</p></div>
   <p>
-    <a href="<?php print $downloadLink; ?>">Download data</a>
+    <a href="kinematic/data">Download data</a>
   </p>
 </section>
-
 
 <p class="back">&laquo;
   <a href="<?php print $backLink; ?>">Back to station <?php print $name; ?></a>
