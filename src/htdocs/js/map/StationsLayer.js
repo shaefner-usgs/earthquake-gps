@@ -286,7 +286,7 @@ var StationsLayer = function (options) {
       if (feature.properties.station !== _station) {
         marker.href = feature.properties.station;
         marker.on('click', function () {
-          window.location = '../' + this.href;
+          window.location = this.href;
         });
       }
     }
