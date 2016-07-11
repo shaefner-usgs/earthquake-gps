@@ -22,14 +22,12 @@
  *              req'd for restoring basemap setting
  *          id: {String},
  *              req'd for saving each page's settings separately
- *          layerStorage {String <'local' | 'session'>}
- *              local: persist layer settings
+ *          layerStorage {String <local | session>}
  *          overlays: {Object <Layer Config>},
- *              req'd for restoring overlay settings,
+ *              req'd for restoring overlay settings
  *          shareLayers: {Boolean}
  *              share layer settings amongst all pages
- *          viewStorage {String <'local' | 'session'>}
- *              local: persist map view settings
+ *          viewStorage {String <local | session>}
  *        }
  *
  * <Layer Config> : http://leafletjs.com/reference.html#control-layers-config
@@ -56,7 +54,7 @@ var RestoreMapMixin = {
         _overlayadd,
         _overlayremove,
         _restoreSettings,
-        _setLayers;
+        _updateLayerList;
 
     map = this;
 
@@ -141,6 +139,7 @@ var RestoreMapMixin = {
       return r;
     };
 
+    // Get Leaflet overlay
     _getOverlay = function (layer) {
       var overlay;
 
@@ -156,7 +155,7 @@ var RestoreMapMixin = {
     // Setup listeners to store settings in local/sessionStorage
     _initSaveSettings = function () {
       if (!map.__initRestore) {
-        // map extent, size
+        // map view (extent, size)
         map.on('fullscreenchange', _fullscreenchange, map);
         map.on('moveend', _moveend, map);
 
@@ -188,14 +187,14 @@ var RestoreMapMixin = {
 
     // Handler for when overlays are added
     _overlayadd = function (e) {
-      _setLayers(e, 'add');
+      _updateLayerList(e, 'add');
 
       storage[options.layerStorage].mapLayers = JSON.stringify(layers);
     };
 
     // Handler for when overlays are removed
     _overlayremove = function (e) {
-      _setLayers(e, 'remove');
+      _updateLayerList(e, 'remove');
 
       storage[options.layerStorage].mapLayers = JSON.stringify(layers);
     };
@@ -253,8 +252,8 @@ var RestoreMapMixin = {
       }
     };
 
-    // Set list of layers to add/remove on map
-    _setLayers = function (e, type) {
+    // Update list of tracked layers in storage to add/remove when map is loaded
+    _updateLayerList = function (e, type) {
       var group,
           index;
 
