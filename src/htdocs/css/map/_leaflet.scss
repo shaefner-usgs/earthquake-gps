@@ -3,6 +3,23 @@
 @import 'leaflet.label.css';
 @import '_MousePosition.scss';
 
+/* template's css is getting the way */
+input[type=checkbox], input[type=radio] {
+  display: inline;
+  height: auto;
+  opacity: 1;
+  position: static;
+  width: auto;
+}
+
+/* Quell long attributions */
+.leaflet-control-attribution {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* leaflet fullscreen plugin icons - override image paths */
 .leaflet-control-fullscreen a {
   background-image: url(/img/fullscreen.png);
@@ -15,20 +32,6 @@
   }
 }
 
-/* template's css is getting the way, grr */
-input[type=checkbox], input[type=radio] {
-  display: inline;
-  height: auto;
-  opacity: 1;
-  position: static;
-  width: auto;
-}
-
-/* use template's color for links in popups */
-.leaflet-popup-content a {
-  color: #306ac2;
-}
-
 /* Leaflet label mouseovers */
 .leaflet-label {
   background: rgba(255, 255, 255, .85);
@@ -37,14 +40,15 @@ input[type=checkbox], input[type=radio] {
   color: #000;
   font-weight: 500;
   padding: 2px 6px;
-}
-.leaflet-label:before {
-  left: -8px;
-  top: 6px;
-}
-.leaflet-label:after {
-  right: -8px;
-  top: 6px;
+
+  &:before {
+    left: -8px;
+    top: 6px;
+  }
+  &:after {
+    right: -8px;
+    top: 6px;
+  }
 }
 
 /* UtfGrid mouseovers */
@@ -66,10 +70,12 @@ input[type=checkbox], input[type=radio] {
   white-space: nowrap;
 }
 
-/* Quell long attributions */
-.leaflet-control-attribution {
-  max-width: 300px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+/* ensure popups are on top of labels */
+.leaflet-popup {
+  z-index: 1000;
+}
+
+/* use template's color for links in popups */
+.leaflet-popup-content a {
+  color: #306ac2;
 }
