@@ -36,10 +36,15 @@ $name = strtoupper($station);
 
 ?>
 
-<div id="application">
-  <noscript>
-    <p class="alert info">Javascript must be enabled to view these plots.</p>
-  </noscript>
+<div class="qcdata">
+  <div id="application">
+    <noscript>
+      <p class="alert info">Javascript must be enabled to view these plots.</p>
+    </noscript>
+  </div>
+  <p>
+    <a href="qc/table">Table of past 14 observations</a>
+  </p>
 </div>
 
 <p class="back">&laquo;
