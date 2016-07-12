@@ -17,7 +17,7 @@ $name = strtoupper($station);
 if (!isset($TEMPLATE)) {
   $TITLE = "GPS Station $name Field Logs";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../../css/logsheets.css" />';
+  $HEAD = '<link rel="stylesheet" href="../../css/base.css" />';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
