@@ -3,9 +3,17 @@
 include '../conf/config.inc.php'; // app config
 
 /**
- * Station model
+ * Model for GPS station
  * - populates fields from db query using magic __set method
  * - also sets up other properites (e.g. links, networkList, and velocities)
+ *
+ * Station Object (
+ *   [links] => Array
+ *   [networkList] => Array
+ *   [stationPath] => String
+ *   [velocities] => Array
+ *   ... (+ all properties returned from db query)
+ * )
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
@@ -26,9 +34,9 @@ class Station {
   }
 
   public function __set ($name, $value) {
-    if ($name === 'lat'
+    if ($name === 'elevation'
+      || $name === 'lat'
       || $name === 'lon'
-      || $name === 'elevation'
       || $name === 'showcoords'
       || $name === 'x'
       || $name === 'y'

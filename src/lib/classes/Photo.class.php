@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Model for station photos
+ * Model for GPS station photos
  *
- * PhotoModel Object (
+ * Photo Object (
  *   [code] => String
  *   [date] => Int
  *   [file] => String
