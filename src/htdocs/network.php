@@ -83,8 +83,8 @@ $legend_html .= '</ul>';
 // Create HTML for station list
 $height = ceil($stations['count'] / 6) * 32;
 $starred = false;
-$stations_html = '<ul class="stations no-style" style="height: '. $height . 'px;">';
 
+$stations_html = '<ul class="stations no-style" style="height: '. $height . 'px;">';
 foreach ($stations['features'] as $feature) {
   // star high rms values
   $star = '';
@@ -104,12 +104,7 @@ foreach ($stations['features'] as $feature) {
     $star
   );
 }
-
 $stations_html .= '</ul>';
-
-$kmlLastYear = "$network/{$network}_lastyear.kmz";
-$kmlNumYears = "$network/{$network}_nobs.kmz";
-$dynKml = "$network/kml";
 
 ?>
 
@@ -133,13 +128,10 @@ $dynKml = "$network/kml";
   <h2>Google Earth Files</h2>
   <ul>
     <li>
-      <a href="<?php print $kmlNumYears; ?>">Sorted by number of years occupied</a>
+      <a href="<?php print $network; ?>/kml/total">Sorted by total years occupied</a>
     </li>
     <li>
-      <a href="<?php print $kmlLastYear; ?>">Sorted by last year occupied</a>
-    </li>
-    <li>
-      <a href="<?php print $dynKml; ?>">Dynamic KML</a>
+      <a href="<?php print $network; ?>/kml/last">Sorted by last year occupied</a>
     </li>
   </ul>
 </section>
