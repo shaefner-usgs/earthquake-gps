@@ -4,8 +4,6 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-date_default_timezone_set('UTC');
-
 $direction = safeParam('direction');
 $station = safeParam('station', '157p');
 $now = date(DATE_RFC2822);
