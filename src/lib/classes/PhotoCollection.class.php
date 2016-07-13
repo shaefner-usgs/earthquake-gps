@@ -55,12 +55,12 @@ class PhotoCollection {
     $aPosition = array_search($a->type, $this->_order);
     $bPosition = array_search($b->type, $this->_order);
 
-    // Both photos are types in $order array
+    // Both photos are types in $_order array
     if ($aPosition !== false && $bPosition !== false) {
       return ($aPosition < $bPosition) ? -1 : 1;
     }
 
-    // Only one photo is type in $order array (put one in $order first)
+    // Only one photo is type in $_order array (put one in $_order first)
     if ($aPosition !== false) {
       return -1;
     }
@@ -68,7 +68,7 @@ class PhotoCollection {
       return 1;
     }
 
-    // Neither photo is type in $order array; alphabetize
+    // Neither photo is type in $_order array; alphabetize
     return ($a < $b) ? -1 : 1;
   }
 
