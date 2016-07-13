@@ -61,7 +61,7 @@ $networks_html .= '</ul>';
 
 ?>
 
-<p>As part of the earthquake process, Earth's surface is being deformed as
+<p>As part of the earthquake process, Earth&rsquo;s surface is being deformed as
   earthquake faults accumulate strain and slip or slowly creep over time. We
   use GPS to monitor this movement by measuring the precise position (within
   5mm or less) of stations near active faults relative to each other. Months
