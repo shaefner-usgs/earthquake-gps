@@ -7,7 +7,7 @@ include_once '../lib/classes/Db.class.php'; // db connector, queries
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station List';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../css/stationlist.css" />';
+  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/stationlist.css" />';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
@@ -23,10 +23,10 @@ $rsStationChars = $db->queryStationChars();
 // Create html for jumplist
 $nav_html = '<nav class="jumplist">';
 while ($row = $rsStationChars->fetch(PDO::FETCH_ASSOC)) {
-  $link_html = '<a href="%s">%s</a>';
+  $link_html = '<a href="' . $MOUNT_PATH . '/stations/%s">%s</a>';
   // highlight current selection
   if ($row['alphanum'] === $filter) {
-    $link_html = '<a href="%s"><strong>%s</strong></a>';
+    $link_html = '<a href="' . $MOUNT_PATH . '/stations/%s"><strong>%s</strong></a>';
   }
   $nav_html .= sprintf($link_html,
     $row['alphanum'],
@@ -47,10 +47,10 @@ while ($row = $rsStationList->fetch(PDO::FETCH_ASSOC)) {
 
 // Create html for subheader
 $sel = strtoupper($filter);
-if (!$sel) {
+if ($sel === '') {
   $sel = 'All';
 }
-$subheader = sprintf ('<h2>&lsquo;%s&rsquo; Stations (%d)</h2>',
+$subheader_html = sprintf ('<h2>&lsquo;%s&rsquo; Stations (%d)</h2>',
   $sel,
   count($stations)
 );
@@ -60,7 +60,8 @@ $list_html = '<ul class="stations no-style">';
 foreach ($stations as $station => $networks) {
   $networks_html = '<ul class="no-style">';
   foreach ($networks as $network) {
-    $networks_html .= sprintf ('<li><a href="../%s/%s">%s</a></li>',
+    $networks_html .= sprintf ('<li><a href="%s/%s/%s">%s</a></li>',
+      $MOUNT_PATH,
       $network,
       $station,
       $network
@@ -76,5 +77,5 @@ $list_html .= '</ul>';
 
 // Render html
 print $nav_html;
-print $subheader;
+print $subheader_html;
 print $list_html;
