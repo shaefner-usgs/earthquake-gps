@@ -261,16 +261,25 @@ class Db {
   }
 
   /**
-   * Query db to get velocities data for a given station and network
+   * Query db to get velocities data for a given network and optional station
    */
-  public function queryVelocities($station, $network) {
-    $sql = 'SELECT * FROM nca_gps_velocities
-      WHERE station = :station AND network = :network
-      ORDER BY last_observation ASC';
+  public function queryVelocities($network, $station=NULL) {
+    $order = 'station ASC';
+    $params = [
+      'network' => $network
+    ];
+    $whereClause = 'WHERE network = :network';
 
-    return $this->_execQuery($sql, array(
-      'network' => $network,
-      'station' => $station
-    ));
+    if ($station) { // add station info to query
+      $order = 'last_observation DESC';
+      $params['station'] = $station;
+      $whereClause .= ' AND station = :station';
+    }
+
+    $sql = "SELECT * FROM nca_gps_velocities
+      $whereClause
+      ORDER BY $order";
+
+    return $this->_execQuery($sql, $params);
   }
 }
