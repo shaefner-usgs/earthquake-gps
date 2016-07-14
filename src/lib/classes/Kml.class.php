@@ -15,27 +15,27 @@ class Kml {
   private $_domain;
   private $_meta;
   private $_network;
-  private $_stations;
   private $_sortField;
+  private $_stations;
 
   public function __construct($network) {
-    $this->_domain = 'localhost:9090';
+    $this->_domain = $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
     $this->_meta = [
-      'station' => [
-        'description' => $network . ' Network (sorted by station name)'
-      ],
       'last_obs' => [
-        'description' => $network . ' Network (sorted by last year occupied)',
-        'folder' => 'Last surveyed in %s'
+        'name' => $network . ' Network (sorted by last year occupied)',
+        'folder' => 'Last surveyed in %s',
+      ],
+      'station' => [
+        'name' => $network . ' Network (sorted by station name)',
       ],
       'total_years' => [
-        'description' => $network . ' Network (sorted by total years occupied)',
-        'folder' => '%s year(s) between first/last surveys'
+        'name' => $network . ' Network (sorted by total years occupied)',
+        'folder' => '%s year(s) between first/last surveys',
       ]
     ];
     $this->_network = $network;
-    $this->_stations = $this->_getStations();
     $this->_sortField = 'station'; // sorted by station name by default
+    $this->_stations = $this->_getStations();
   }
 
   /**
@@ -63,8 +63,8 @@ class Kml {
           if (!$value) {
             $sub = '[unknown]';
           }
-          $name = sprintf($this->_meta[$sortField]['folder'], $sub);
-          $body .= "\n    <Folder><name>$name</name><open>0</open>";
+          $folder = sprintf($this->_meta[$sortField]['folder'], $sub);
+          $body .= "\n    <Folder><name>$folder</name><open>0</open>";
 
           $prevValue = $value;
         }
@@ -97,17 +97,20 @@ class Kml {
    * @return $header {Xml}
    */
   private function _getHeader () {
+    $name = $this->_meta[$this->_sortField]['name'];
     $timestamp = date('D M j, Y H:i:s e');
+
     $header = '<?xml version="1.0" encoding="UTF-8"?>
     <kml xmlns="http://earth.google.com/kml/2.1">
       <Document>
-        <name>' . $this->_meta[$this->_sortField]['description'] . '</name>
-        <description>File last updated ' . $timestamp . '</description>
+        <name>' . $name . '</name>
+        <description>' . $timestamp . '</description>
         <Style id="marker">
           <BalloonStyle><text><![CDATA[
             <style>
-              .coords { }
-              li { }
+              ul { margin: 0; padding-left: 0em; line-height: 1.4; }
+              .coords { margin-top: -1em; }
+              .data { border-top: 1px solid #eee; padding-top: 1em; }
             </style>
             $[description]
           ]]></text></BalloonStyle>
@@ -175,12 +178,12 @@ class Kml {
     }
     $logsheets_html .= '</ul>';
     if ($data_collected) {
-      $logsheets_html = '<p>GPS data was collected on the following dates:</p>' .
-        $logsheets_html;
+      $logsheets_html = '<p class="data">GPS data was collected on the
+        following dates:</p>' . $logsheets_html;
     }
 
     $description_html = sprintf('<h1>%s</h1>
-      <p>%s, %s</p>
+      <p class="coords">%s, %s</p>
       <p><a href="http://%s%s/%s/%s">Station Details</a></p>
       %s',
       $display_station,
@@ -193,7 +196,7 @@ class Kml {
       $logsheets_html
     );
 
-    $placeMark = '      <Placemark>
+    $placeMark = '    <Placemark>
       <name>' . $display_station . '</name>
       <Point>
         <coordinates>' . $station->lon . ',' . $station->lat . ',0</coordinates>
