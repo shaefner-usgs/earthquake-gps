@@ -20,7 +20,7 @@ class Waypoints {
   }
 
   /**
-   * Get waypoints XML
+   * Get XML body (waypoints)
    *
    * @return $body {Xml}
    */
@@ -52,7 +52,7 @@ class Waypoints {
   }
 
   /**
-   * Get footer XML
+   * Get XML footer
    *
    * @return {Xml}
    */
@@ -61,7 +61,7 @@ class Waypoints {
   }
 
   /**
-   * Get header XML
+   * Get XML header
    *
    * @return $header {Xml}
    */
