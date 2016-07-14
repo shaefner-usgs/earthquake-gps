@@ -48,8 +48,8 @@ if (!in_array($network, $networkList)) {
   array_push($networkList, $network);
 }
 
-// Db query result: velocities for selected station and network
-$rsVelocities = $db->queryVelocities($station, $network);
+// Db query result: velocities for selected network and station
+$rsVelocities = $db->queryVelocities($network, $station);
 
 // Create an array of velocities by type
 while ($row = $rsVelocities->fetch(PDO::FETCH_ASSOC)) {
