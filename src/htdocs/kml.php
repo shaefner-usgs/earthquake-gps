@@ -4,7 +4,7 @@ include '../lib/_functions.inc.php'; // app functions
 include '../lib/classes/Kml.class.php'; // Waypoints class
 
 $network = safeParam('network', 'Pacific');
-$sortKey = safeParam('sortKey');
+$sortKey = safeParam('sortKey'); // 'last' or 'total'
 
 $sort = [
   'last' => 'last_obs',
