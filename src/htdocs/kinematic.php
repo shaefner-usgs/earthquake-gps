@@ -6,8 +6,10 @@ include_once '../lib/_functions.inc.php'; // app functions
 $network = safeParam('network', 'SFBayArea');
 $station = safeParam('station', 'p271');
 
+$name = strtoupper($station);
+
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($station) . ' Kinematic Data';
+  $TITLE = "GPS Station $name - Kinematic Data";
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="../../css/kinematic.css" />
@@ -30,7 +32,6 @@ $backLink = sprintf('%s/%s/%s',
   $network,
   $station
 );
-$name = strtoupper($station);
 
 ?>
 

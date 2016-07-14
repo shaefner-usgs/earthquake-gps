@@ -15,7 +15,7 @@ $station = safeParam('station', '7adl');
 $name = strtoupper($station);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "GPS Station $name Photos";
+  $TITLE = "GPS Station $name - Photos";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../css/photos.css" />';
   $FOOT = '
