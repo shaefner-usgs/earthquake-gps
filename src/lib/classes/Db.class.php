@@ -21,9 +21,9 @@ class Db {
    * Perform db query
    *
    * @param $sql {String}
-   *        SQL query
+   *     SQL query
    * @param $params {Array} default is NULL
-   *        key-value substitution params for SQL query
+   *     key-value substitution params for SQL query
    * @return $stmt {Object} - PDOStatement object
    */
   private function _execQuery ($sql, $params=NULL) {
@@ -37,8 +37,8 @@ class Db {
           $stmt->bindValue($key, $value, $type);
         }
       }
-
       $stmt->execute();
+
       return $stmt;
     } catch(Exception $e) {
       print '<p class="alert error">ERROR 2: ' . $e->getMessage() . '</p>';
@@ -49,7 +49,7 @@ class Db {
  * Get data type for a sql parameter (PDO::PARAM_* constant)
  *
  * @param $var {?}
- *        variable to identify type of
+ *     variable to identify type of
  * @return $type {Integer}
  */
   private function _getType ($var) {
@@ -206,7 +206,7 @@ class Db {
    * Query db to get a list of stations and their associated networks
    *
    * @param $firstchar {String/Int} default is NULL
-   *        optional char to filter stations (e.g. only stations starting w 'a')
+   *     optional char to filter stations (e.g. only stations starting w 'a')
    * @return {Function}
    */
   public function queryStationList ($firstchar=NULL) {
@@ -263,7 +263,7 @@ class Db {
   /**
    * Query db to get velocities data for a given network and optional station
    */
-  public function queryVelocities($network, $station=NULL) {
+  public function queryVelocities ($network, $station=NULL) {
     $order = 'station ASC';
     $params = [
       'network' => $network
@@ -281,5 +281,69 @@ class Db {
       ORDER BY $order";
 
     return $this->_execQuery($sql, $params);
+  }
+
+  /**
+   * Create an array of velocities grouped by station, type, and component
+   *
+   * the velocites table contains data in different reference frames ('type')
+   * and only certain fields are applicable to each ref. frame
+   *
+   * @param $rsVelocities {Object} - PDOStatement object
+   * @return $velocites {Array}
+   */
+  public function createVelocitiesArray ($rsVelocities) {
+    while ($row = $rsVelocities->fetch(PDO::FETCH_ASSOC)) {
+      // stations are stored in lowercase in db except in this table
+      $station = strtolower($row['station']);
+      $type = trim($row['type']);
+
+      // Shared props
+      $north = [
+        'velocity' => $row['north_velocity'],
+        'sigma' => $row['north_sigma']
+      ];
+      $east = [
+        'velocity' => $row['east_velocity'],
+        'sigma' => $row['east_sigma']
+      ];
+      $up = [
+        'velocity' => $row['up_velocity'],
+        'sigma' => $row['up_sigma']
+      ];
+
+      // Props based on type (cleaned, itrf2008, nafixed)
+      if ($type === 'cleaned') {
+        $north['whitenoise'] = $row['whitenoisenorth'];
+        $north['randomwalk'] = $row['randomwalknorth'];
+        $north['flickernoise'] = $row['flickernoisenorth'];
+        $east['whitenoise'] = $row['whitenoiseeast'];
+        $east['randomwalk'] = $row['randomwalkeast'];
+        $east['flickernoise'] = $row['flickernoiseeast'];
+        $up['whitenoise'] = $row['whitenoiseup'];
+        $up['randomwalk'] = $row['randomwalkup'];
+        $up['flickernoise'] = $row['flickernoiseup'];
+      } else {
+        $north['rms'] = $row['north_rms'];
+        $east['rms'] = $row['east_rms'];
+        $up['rms'] = $row['up_rms'];
+      }
+
+      $velocities['data'][$station][$type]['north'] = $north;
+      $velocities['data'][$station][$type]['east'] = $east;
+      $velocities['data'][$station][$type]['up'] = $up;
+
+      // Lookup table for column names
+      $velocities['lookup'] = [
+        'flickernoise' => 'Flicker Noise',
+        'randomwalk' => 'Random Walk',
+        'rms' => 'RMS (mm)',
+        'sigma' => 'Uncertainty (mm/yr)	',
+        'velocity' => 'Velocity (mm/yr)	',
+        'whitenoise' => 'White Noise'
+      ];
+    }
+
+    return $velocities;
   }
 }

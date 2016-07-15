@@ -194,32 +194,24 @@ class StationView {
   }
 
   private function _getTable ($type) {
-    $lookup = [
-      'flickernoise' => 'Flicker Noise',
-      'randomwalk' => 'Random Walk',
-      'rms' => 'RMS (mm)',
-      'sigma' => 'Uncertainty (mm/yr)	',
-      'velocity' => 'Velocity (mm/yr)	',
-      'whitenoise' => 'White Noise'
-    ];
-
     $rows = '';
+    $station = $this->_model->station;
     $tableHtml = '';
-    if ($this->_model->velocities[$type]) {
-      $components = $this->_model->velocities[$type];
+    $velocities = $this->_model->velocities;
 
+    $components = $velocities['data'][$station][$type];
+    if ($components) {
       $tableHtml = '<table>';
       foreach($components as $direction => $data) {
         $header = '<tr><td class="empty"></td>';
         $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
         foreach($data as $key => $value) {
-          $header .= '<th>' . $lookup[$key] . '</th>';
+          $header .= '<th>' . $velocities['lookup'][$key] . '</th>';
           $rows .= "<td>$value</td>";
         }
         $header .= '</tr>';
         $rows .= '</tr>';
       }
-
       $tableHtml .= $header;
       $tableHtml .= $rows;
       $tableHtml .= '</table>';
@@ -229,7 +221,7 @@ class StationView {
   }
 
   public function render () {
-    print '<section class="row">';
+    print '<div class="row">';
 
     print '<div class="column two-of-three">';
     print $this->_getMap();
@@ -240,14 +232,10 @@ class StationView {
     print $this->_getCampaignList();
     print '</div>';
 
-    print '</section>';
+    print '</div>';
 
     print $this->_getData();
     print $this->_getDisclaimer();
     print $this->_getBackLink();
-
-    // print '<pre>';
-    // print var_dump($this->_model);
-    // print '</pre>';
   }
 }

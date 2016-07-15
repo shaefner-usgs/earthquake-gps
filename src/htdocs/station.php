@@ -51,45 +51,8 @@ if (!in_array($network, $networkList)) {
 // Db query result: velocities for selected network and station
 $rsVelocities = $db->queryVelocities($network, $station);
 
-// Create an array of velocities by type
-while ($row = $rsVelocities->fetch(PDO::FETCH_ASSOC)) {
-  $type = trim($row['type']);
-
-  // Shared props
-  $north = [
-    'velocity' => $row['north_velocity'],
-    'sigma' => $row['north_sigma']
-  ];
-  $east = [
-    'velocity' => $row['east_velocity'],
-    'sigma' => $row['east_sigma']
-  ];
-  $up = [
-    'velocity' => $row['up_velocity'],
-    'sigma' => $row['up_sigma']
-  ];
-
-  // Props based on type (cleaned, itrf2008, nafixed)
-  if ($type === 'cleaned') {
-    $north['whitenoise'] = $row['whitenoisenorth'];
-    $north['randomwalk'] = $row['randomwalknorth'];
-    $north['flickernoise'] = $row['flickernoisenorth'];
-    $east['whitenoise'] = $row['whitenoiseeast'];
-    $east['randomwalk'] = $row['randomwalkeast'];
-    $east['flickernoise'] = $row['flickernoiseeast'];
-    $up['whitenoise'] = $row['whitenoiseup'];
-    $up['randomwalk'] = $row['randomwalkup'];
-    $up['flickernoise'] = $row['flickernoiseup'];
-  } else {
-    $north['rms'] = $row['north_rms'];
-    $east['rms'] = $row['east_rms'];
-    $up['rms'] = $row['up_rms'];
-  }
-
-  $velocities[$type]['north'] = $north;
-  $velocities[$type]['east'] = $east;
-  $velocities[$type]['up'] = $up;
-}
+// Create velocities array from db result that is more friendly for parsing
+$velocities = $db->createVelocitiesArray($rsVelocities);
 
 // Db query result: station details for selected station and network
 $rsStation = $db->queryStation($station, $network);
