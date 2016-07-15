@@ -264,7 +264,7 @@ class Db {
    * Query db to get velocities data for a given network and optional station
    */
   public function queryVelocities ($network, $station=NULL) {
-    $order = 'station ASC';
+    $order = 'station ASC, type ASC';
     $params = [
       'network' => $network
     ];
