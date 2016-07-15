@@ -63,6 +63,10 @@ var connect = {
       to: '/notupdated.php?network=$1'
     },
     {
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/velocities$',
+      to: '/velocities.php?network=$1'
+    },
+    {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/waypoints$',
       to: '/waypoints.php?network=$1'
     },
