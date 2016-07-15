@@ -20,7 +20,7 @@ include '../conf/config.inc.php'; // app config
 class Station {
   private $data = array();
 
-  public function __construct ($networkList = null, $velocities = null) {
+  public function __construct ($networkList=NULL, $velocities=NULL) {
 
     $this->data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
       . '/' . $this->station;
