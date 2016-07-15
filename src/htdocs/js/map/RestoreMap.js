@@ -49,6 +49,7 @@ var RestoreMapMixin = {
 
         // methods
         _baselayerchange,
+        _createSettingsObjects,
         _fullscreenchange,
         _getIndex,
         _getOverlay,
@@ -103,7 +104,21 @@ var RestoreMapMixin = {
       }
       viewId = options.id;
 
-      // Create obj templates for storing layers and views
+      _createSettingsObjects();
+      _initSaveSettings();
+      _restoreSettings();
+    };
+
+
+    // Handler for when base layer changes
+    _baselayerchange = function (e) {
+      layers[scope][layersId].base = e.name;
+
+      layerStorage.mapLayers = JSON.stringify(layers);
+    };
+
+    // Create obj templates for storing layers and views
+    _createSettingsObjects = function () {
       if (!layers[scope]) {
         layers[scope] = {};
       }
@@ -119,17 +134,6 @@ var RestoreMapMixin = {
       if (!view[scope][viewId]) {
         view[scope][viewId] = {};
       }
-
-      _initSaveSettings();
-      _restoreSettings();
-    };
-
-
-    // Handler for when base layer changes
-    _baselayerchange = function (e) {
-      layers[scope][layersId].base = e.name;
-
-      layerStorage.mapLayers = JSON.stringify(layers);
     };
 
     // Handler for when fullscreen mode changes
