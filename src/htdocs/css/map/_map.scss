@@ -1,0 +1,21 @@
+.map {
+  height: 700px;
+}
+
+@media all and (max-height: 667px) {
+  .map {
+    height: 550px;
+  }
+}
+
+@media all and (max-height: 500px) {
+  .map {
+    height: 400px;
+  }
+}
+
+@media all and (max-height: 400px) {
+  .map {
+    height: 300px;
+  }
+}
