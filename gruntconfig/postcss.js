@@ -23,7 +23,8 @@ var postcss = {
             'node_modules/leaflet.label/dist',
             'node_modules/leaflet-fullscreen/dist',
             'node_modules/leaflet-groupedlayercontrol/src',
-            'node_modules/hazdev-tablist/src'
+            'node_modules/hazdev-tablist/src',
+            config.templateSrc + '/htdocs/css'
           ]
         }),
         precss(), // do 'most' sass things

@@ -2,6 +2,7 @@
 @import 'leaflet.groupedlayercontrol';
 @import 'leaflet.label.css';
 @import '_MousePosition.scss';
+@import '_variables.scss';
 
 /* template's css is getting the way */
 input[type=checkbox], input[type=radio] {
@@ -77,5 +78,5 @@ input[type=checkbox], input[type=radio] {
 
 /* use template's color for links in popups */
 .leaflet-popup-content a {
-  color: #306ac2;
+  color: $link-color;
 }
