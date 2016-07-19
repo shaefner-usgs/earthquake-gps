@@ -94,7 +94,7 @@ class Kml {
   /**
    * Get KML header
    *
-   * @return $header {Xml}
+   * @return $header {String}
    */
   private function _getHeader () {
     $name = $this->_meta[$this->_sortField]['name'];
@@ -120,6 +120,68 @@ class Kml {
     //<IconStyle><Icon><href></href></Icon></IconStyle>
 
     return $header;
+  }
+
+  /**
+   * Get appropriate icon based on station properties for current sort type
+   *
+   * @param $station {Object}
+   *
+   * @return $icon {String}
+   *     Absolute URL of icon
+   */
+  private function _getIcon ($station) {
+    $shapes = [
+      'campaign' => 'triangle',
+      'continuous' => 'square'
+    ];
+    $years = ceil(date('Y') - $station->last_obs);
+
+    if ($this->_sortField === 'station') {
+      $color = 'grey';
+    }
+    if ($this->_sortField === 'last_obs') {
+      if (!$station->last_obs) { // $years is '0' if $station->last_obs is empty
+        $color = 'grey';
+      } else if ($years > 15) {
+        $color = 'red';
+      } else if ($years > 12) {
+        $color = 'orange';
+      } else if ($years > 9) {
+        $color = 'yellow';
+      } else if ($years > 6) {
+        $color = 'blue';
+      } else if ($years > 3) {
+        $color = 'green';
+      } else if ($years > 0) {
+        $color = 'purple';
+      }
+    }
+    else if ($this->_sortField === 'total_years') {
+      if ($station->total_years > 15) {
+        $color = 'red';
+      } else if ($station->total_years > 12) {
+        $color = 'orange';
+      } else if ($station->total_years > 9) {
+        $color = 'yellow';
+      } else if ($station->total_years > 6) {
+        $color = 'blue';
+      } else if ($station->total_years > 3) {
+        $color = 'green';
+      } else if ($station->total_years > 0) {
+        $color = 'purple';
+      } else {
+        $color = 'grey';
+      }
+    }
+
+    $icon = sprintf ('http://%s/img/pin-s-%s+%s.png',
+      $this->_domain,
+      $shapes[$station->stationtype],
+      $color
+    );
+
+    return $icon;
   }
 
   /**
@@ -160,11 +222,12 @@ class Kml {
    * @return $placeMark {String}
    */
   private function _getPlaceMark ($station) {
-    $logsheetsCollection = $this->_getLogSheets($station->station);
     $data_collected = false;
     $display_lat = number_format($station->lat, 5, '.', '');
     $display_lon = number_format($station->lon, 5, '.', '');
     $display_station = strtoupper($station->station);
+    $icon = $this->_getIcon($station);
+    $logsheetsCollection = $this->_getLogSheets($station->station);
 
     $logsheets_html = '<ul>';
     foreach($logsheetsCollection->logsheets as $date => $logsheets) {
@@ -208,6 +271,9 @@ class Kml {
         <range>10000</range>
       </LookAt>
       <Snippet>' . $display_lat . ', ' . $display_lon . '</Snippet>
+      <Style><IconStyle><Icon>
+        <href>'. $icon . '</href>
+      </Icon></IconStyle></Style>
       <styleUrl>#marker</styleUrl>
       <visibility>1</visibility>
     </Placemark>';
