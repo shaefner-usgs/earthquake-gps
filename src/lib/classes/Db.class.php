@@ -99,8 +99,7 @@ class Db {
    * @return {Function}
    */
   public function queryLastUpdated ($network, $days=7) {
-    $sql = 'SELECT `station`, `last_observation`
-      FROM nca_gps_velocities
+    $sql = 'SELECT `station`, `last_observation` FROM nca_gps_velocities
       WHERE `type` = "nafixed" AND `network` = :network
         AND `last_observation` < (NOW() - INTERVAL :days DAY)
       ORDER BY `last_observation` DESC, `station` ASC';
@@ -119,8 +118,7 @@ class Db {
    * @return {Function}
    */
   public function queryNetworkList ($station) {
-    $sql = 'SELECT r.network
-      FROM nca_gps_relations r
+    $sql = 'SELECT r.network FROM nca_gps_relations r
       LEFT JOIN nca_gps_networks n ON r.network = n.name
       WHERE r.station = :station AND n.show = 1
       ORDER BY `network` ASC';
@@ -131,13 +129,28 @@ class Db {
   }
 
   /**
+   * Query db to get details for a given network
+   *
+   * @param $network {String}
+   *
+   * @return {Function}
+   */
+  public function queryNetwork ($network) {
+    $sql = 'SELECT * FROM nca_gps_networks
+      WHERE `network` = :network';
+
+    return $this->_execQuery($sql, array(
+      'network' => $network
+    ));
+  }
+
+  /**
    * Query db to get all "non-hidden" networks
    *
    * @return {Function}
    */
   public function queryNetworks () {
-    $sql = 'SELECT *
-      FROM nca_gps_networks
+    $sql = 'SELECT * FROM nca_gps_networks
       WHERE `show` = 1
       ORDER BY `name` ASC';
 
@@ -170,7 +183,7 @@ class Db {
    * Query db to get station details for a given station and (optional) network
    *
    * @param $station {String}
-   * @param $network {String} default is '%'
+   * @param $network {String} default is NULL
    *
    * @return {Function}
    */
