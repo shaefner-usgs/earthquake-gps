@@ -1,10 +1,10 @@
 <?php
 
-include '../conf/config.inc.php'; // app config
-include '../lib/classes/Db.class.php'; // db connector, queries
+include_once '../conf/config.inc.php'; // app config
+include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 /**
- * GPS Waypoints (.gpx file) for stations in a network
+ * Generate GPS Waypoints (.gpx file) for stations in a network
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */

@@ -1,13 +1,13 @@
 <?php
 
-include '../conf/config.inc.php'; // app config
-include '../lib/classes/Db.class.php'; // db connector, queries
+include_once '../conf/config.inc.php'; // app config
+include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-include '../lib/classes/Logsheet.class.php'; // logsheet model
-include '../lib/classes/LogsheetCollection.class.php'; // logsheet collection
+include_once '../lib/classes/Logsheet.class.php'; // logsheet model
+include_once '../lib/classes/LogsheetCollection.class.php'; // logsheet collection
 
 /**
- * KML files for stations in a network
+ * Generate KML files for stations in a network
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
@@ -242,7 +242,7 @@ class Kml {
     $logsheets_html .= '</ul>';
     if ($data_collected) {
       $logsheets_html = '<p class="data">GPS data was collected on the
-        following dates:</p>' . $logsheets_html;
+        following date(s):</p>' . $logsheets_html;
     }
 
     $description_html = sprintf('<h1>%s</h1>
