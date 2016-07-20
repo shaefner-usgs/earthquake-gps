@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Photo view
+ * - creates the HTML for photos.php
+ *
+ * @author Scott Haefner <shaefner@usgs.gov>
+ */
 class PhotoView {
   private $_collection;
 

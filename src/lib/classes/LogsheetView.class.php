@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Logsheet view
+ * - creates the HTML for logsheets.php
+ *
+ * @author Scott Haefner <shaefner@usgs.gov>
+ */
 class LogsheetView {
   private $_collection;
 
