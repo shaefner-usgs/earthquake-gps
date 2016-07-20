@@ -12,7 +12,7 @@ if (!isset($TEMPLATE)) {
   $HEAD = '<link rel="stylesheet" href="../css/velocities.css" />';
   $CONTACT = 'jsvarc';
 
-  include_once 'template.inc.php';
+  include 'template.inc.php';
 }
 
 $db = new Db;

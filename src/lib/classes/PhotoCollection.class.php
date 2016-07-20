@@ -1,6 +1,6 @@
 <?php
 
-include '../conf/config.inc.php'; // app config
+include_once '../conf/config.inc.php'; // app config
 
 /**
  * Collection of station photos grouped by date

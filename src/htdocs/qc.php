@@ -26,7 +26,7 @@ if (!isset($TEMPLATE)) {
   ';
   $CONTACT = 'jsvarc';
 
-  include_once 'template.inc.php';
+  include 'template.inc.php';
 }
 
 $backLink = sprintf('%s/%s/%s',
