@@ -1,5 +1,13 @@
 <?php
 
+/*
+Table optimization:
+1. velocities: add component field, then have only 1 field for velocity, sigma, etc
+2. network: name field -> network
+3. velocities / offsets: use same values for type fields; also name both fields the same
+4. timeseries table: rename vertical field: up
+*/
+
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 
