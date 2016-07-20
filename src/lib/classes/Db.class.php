@@ -24,6 +24,7 @@ class Db {
    *     SQL query
    * @param $params {Array} default is NULL
    *     key-value substitution params for SQL query
+   *
    * @return $stmt {Object} - PDOStatement object
    */
   private function _execQuery ($sql, $params=NULL) {
@@ -50,6 +51,7 @@ class Db {
  *
  * @param $var {?}
  *     variable to identify type of
+ *
  * @return $type {Integer}
  */
   private function _getType ($var) {
@@ -74,6 +76,7 @@ class Db {
    *
    * @param $mag {Int} default is 2.5
    * @param $days {Int} default is 7
+   *
    * @return {Function}
    */
   public function queryEarthquakes ($mag=2.5, $days=7) {
@@ -93,6 +96,7 @@ class Db {
    *
    * @param $network {String}
    * @param $days {Int} default is 7
+   *
    * @return {Function}
    */
   public function queryLastUpdated ($network, $days=7) {
@@ -112,6 +116,7 @@ class Db {
    * Query db to get a list of "non-hidden" networks a given station belongs to
    *
    * @param $station {String}
+   *
    * @return {Function}
    */
   public function queryNetworkList ($station) {
@@ -144,6 +149,8 @@ class Db {
    * Query db to get a QC data for a given station
    *
    * @param $station {String}
+   * @param $limit {Int}
+   *
    * @return {Function}
    */
   public function queryQcData ($station, $limit=NULL) {
@@ -165,6 +172,7 @@ class Db {
    *
    * @param $station {String}
    * @param $network {String} default is '%'
+   *
    * @return {Function}
    */
   public function queryStation ($station, $network='%') {
@@ -207,6 +215,7 @@ class Db {
    *
    * @param $firstchar {String/Int} default is NULL
    *     optional char to filter stations (e.g. only stations starting w 'a')
+   *
    * @return {Function}
    */
   public function queryStationList ($firstchar=NULL) {
@@ -226,6 +235,7 @@ class Db {
    * Query db to get all stations in a given network
    *
    * @param $network {String}
+   *
    * @return {Function}
    */
   public function queryStations ($network) {
@@ -248,6 +258,7 @@ class Db {
    * Query db to get time series data for a given station
    *
    * @param $station {String}
+   *
    * @return {Function}
    */
   public function queryTimeSeries ($station) {
@@ -262,6 +273,11 @@ class Db {
 
   /**
    * Query db to get velocities data for a given network and optional station
+   *
+   * @param $network {String}
+   * @param $station {String} default is NULL
+   *
+   * @return {Function}
    */
   public function queryVelocities ($network, $station=NULL) {
     $order = 'station ASC, type ASC';
@@ -290,6 +306,7 @@ class Db {
    * and only certain fields are applicable to each ref. frame
    *
    * @param $rsVelocities {Object} - PDOStatement object
+   *
    * @return $velocites {Array}
    */
   public function createVelocitiesArray ($rsVelocities) {
