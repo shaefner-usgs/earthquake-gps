@@ -1,7 +1,8 @@
 <?php
 
-include '../lib/_functions.inc.php'; // app functions
-include '../lib/classes/Kml.class.php'; // Waypoints class
+include_once '../lib/_functions.inc.php'; // app functions
+
+include_once '../lib/classes/Kml.class.php'; // Kml generator
 
 $network = safeParam('network', 'Pacific');
 $sortKey = safeParam('sortKey'); // 'last' or 'total'
@@ -13,6 +14,11 @@ $sort = [
 
 $kml = new Kml($network);
 
-$kml->sort($sort[$sortKey]);
+// KML file is sorted by station by default
+$sortby = $sort[$sortKey];
+if ($sortby) {
+  $kml->sort($sortby);
+}
+
 $kml->setPhpHeaders();
 $kml->render();
