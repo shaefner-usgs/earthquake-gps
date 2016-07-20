@@ -137,7 +137,7 @@ class Db {
    */
   public function queryNetwork ($network) {
     $sql = 'SELECT * FROM nca_gps_networks
-      WHERE `network` = :network';
+      WHERE `name` = :network';
 
     return $this->_execQuery($sql, array(
       'network' => $network
