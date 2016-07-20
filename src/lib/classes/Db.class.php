@@ -158,6 +158,23 @@ class Db {
   }
 
   /**
+   * Query db to get offsets for a given station
+   *
+   * @param $network {String}
+   *
+   * @return {Function}
+   */
+  public function queryOffsets ($station) {
+    $sql = 'SELECT * FROM nca_gps_offsets
+      WHERE `station` = :station
+      ORDER BY `datatype` ASC, `component` ASC';
+
+    return $this->_execQuery($sql, array(
+      'station' => $station
+    ));
+  }
+
+  /**
    * Query db to get a QC data for a given station
    *
    * @param $station {String}
