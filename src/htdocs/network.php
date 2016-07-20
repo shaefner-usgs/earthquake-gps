@@ -8,6 +8,7 @@
 
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 // set default value so page loads without passing params
 $network = safeParam('network', 'Alaska');
@@ -35,6 +36,12 @@ if (!isset($TEMPLATE)) {
 
   include 'template.inc.php';
 }
+
+$db = new Db();
+
+// Db query result: network details for selected network
+$rsNetwork = $db->queryNetwork($network);
+$row = $rsNetwork->fetch(PDO::FETCH_OBJ);
 
 // Check to see if this is a valid network
 if ($stations['count'] === 0) {
@@ -107,6 +114,24 @@ foreach ($stations['features'] as $feature) {
 }
 $stations_html .= '</ul>';
 
+$geFileBaseUri = $network . '/kml';
+
+if ($row->type === 'campaign') {
+  $geFilesHeader = '<h2>Google Earth Files</h2>';
+  $geFiles_lis = '<li>
+      <a href="' . $geFileBaseUri . '/total">Stations sorted by total years occupied</a>
+    </li>';
+  $geFiles_lis .= '<li>
+      <a href="' . $geFileBaseUri . '/last">Stations sorted by last year occupied</a>
+    </li>';
+} else { // continuous network
+  $geFilesHeader = '<h2>Google Earth File</h2>';
+  $geFiles_lis .= '<li>
+      <a href="' . $geFileBaseUri . '">Stations sorted by station name</a>
+    </li>';
+}
+$geFiles_html = "$geFilesHeader<ul>$geFiles_lis</ul>";
+
 ?>
 
 <section>
@@ -126,15 +151,7 @@ $stations_html .= '</ul>';
 </section>
 
 <section>
-  <h2>Google Earth Files</h2>
-  <ul>
-    <li>
-      <a href="<?php print $network; ?>/kml/total">Sorted by total years occupied</a>
-    </li>
-    <li>
-      <a href="<?php print $network; ?>/kml/last">Sorted by last year occupied</a>
-    </li>
-  </ul>
+  <?php print $geFiles_html; ?>
 </section>
 
 <?php } // End: valid network block ?>
