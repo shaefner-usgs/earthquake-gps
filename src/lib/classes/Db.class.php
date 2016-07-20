@@ -80,7 +80,6 @@ class Db {
    * @return {Function}
    */
   public function queryEarthquakes ($mag=2.5, $days=7) {
-    $datetime = ""; // datetime x days ago
     $sql = 'SELECT * FROM earthquakes.recenteqs_pdl
       WHERE mag >= :mag AND `datetime (GMT)` >= (NOW() - INTERVAL :days DAY)
       ORDER BY `datetime (GMT)` ASC';
@@ -175,22 +174,20 @@ class Db {
    *
    * @return {Function}
    */
-  public function queryStation ($station, $network='%') {
-    // use 'LIKE' when no network is passed
-    $operator = '=';
-    if ($network === '%') {
-      $operator = 'LIKE';
-    }
+  public function queryStation ($station, $network=NULL) {
+    $params['station'] = $station;
     $sql = 'SELECT s.lat, s.lon, s.elevation, s.x, s.y, s.z, s.station,
       s.showcoords, r.stationtype, r.network
       FROM nca_gps_stations s
       LEFT JOIN nca_gps_relations r USING (station)
-      WHERE s.station = :station AND r.network ' . $operator . ' :network';
+      WHERE s.station = :station';
 
-    return $this->_execQuery($sql, array(
-      'network' => $network,
-      'station' => $station
-    ));
+    if ($network) {
+      $params['network'] = $network;
+      $sql .= " AND r.network = :network";
+    }
+
+    return $this->_execQuery($sql, $params);
   }
 
   /**
@@ -281,9 +278,7 @@ class Db {
    */
   public function queryVelocities ($network, $station=NULL) {
     $order = 'station ASC, type ASC';
-    $params = [
-      'network' => $network
-    ];
+    $params['network'] = $network;
     $whereClause = 'WHERE network = :network';
 
     if ($station) { // add station info to query
