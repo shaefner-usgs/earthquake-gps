@@ -7,7 +7,7 @@ include_once '../lib/classes/Logsheet.class.php'; // logsheet model
 include_once '../lib/classes/LogsheetCollection.class.php'; // logsheet collection
 
 /**
- * Generate KML files for stations in a network
+ * Generate KML files for GPS stations
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
@@ -115,6 +115,11 @@ class Kml {
     $timestamp = date('D M j, Y H:i:s e');
     $latCenter = (max($this->_lats) + min($this->_lats)) / 2;
     $lonCenter = (max($this->_lons) + min($this->_lons)) / 2;
+    $legendUrl = sprintf ('http://%s%s/img/kmlLegend-%s.png',
+      $this->_domain,
+      $GLOBALS['MOUNT_PATH'],
+      $this->_sortField
+    );
 
     $header = '<?xml version="1.0" encoding="UTF-8"?>
     <kml xmlns="http://earth.google.com/kml/2.1">
@@ -128,6 +133,17 @@ class Kml {
           <range>1000000</range>
           <tilt>0</tilt>
         </LookAt>
+        <ScreenOverlay>
+          <name>Legend</name>
+          <open>0</open>
+          <overlayXY x="0" y="1" xunits="fraction" yunits="fraction"/>
+          <screenXY x=".005" y=".995" xunits="fraction" yunits="fraction"/>
+          <size x="150" y="0" xunits="pixels" yunits="pixels"/>
+          <visibility>1</visibility>
+          <Icon>
+            <href>' . $legendUrl . '</href>
+          </Icon>
+        </ScreenOverlay>
         <Style id="marker">
           <BalloonStyle><text><![CDATA[
             <style>
@@ -138,9 +154,6 @@ class Kml {
             $[description]
           ]]></text></BalloonStyle>
         </Style>';
-
-    //<LabelStyle><scale>1</scale></LabelStyle>
-    //<IconStyle><Icon><href></href></Icon></IconStyle>
 
     return $header;
   }
@@ -198,8 +211,9 @@ class Kml {
       }
     }
 
-    $icon = sprintf ('http://%s/img/pin-s-%s+%s.png',
+    $icon = sprintf ('http://%s%s/img/pin-s-%s+%s.png',
       $this->_domain,
+      $GLOBALS['MOUNT_PATH'],
       $shapes[$station->stationtype],
       $color
     );
@@ -252,6 +266,7 @@ class Kml {
     $icon = $this->_getIcon($station);
     $logsheetsCollection = $this->_getLogSheets($station->station);
 
+    // Create HTML for logsheets
     $logsheets_html = '<ul>';
     foreach($logsheetsCollection->logsheets as $date => $logsheets) {
       $data_collected = true;
@@ -263,11 +278,13 @@ class Kml {
       );
     }
     $logsheets_html .= '</ul>';
+
     if ($data_collected) {
       $logsheets_html = '<p class="data">GPS data was collected on the
         following date(s):</p>' . $logsheets_html;
     }
 
+    // Create HTML for description
     $description_html = sprintf('<h1>%s</h1>
       <p class="coords">%s, %s</p>
       <p><a href="http://%s%s/%s/%s">Station Details</a></p>
@@ -284,21 +301,21 @@ class Kml {
 
     $placeMark = '    <Placemark>
       <name>' . $display_station . '</name>
-      <Point>
-        <coordinates>' . $station->lon . ',' . $station->lat . ',0</coordinates>
-      </Point>
       <description>' . $description_html . '</description>
+      <styleUrl>#marker</styleUrl>
+      <visibility>1</visibility>
       <LookAt>
         <longitude>' . $station->lon . '</longitude>
         <latitude>' . $station->lat . '</latitude>
         <range>10000</range>
       </LookAt>
+      <Point>
+        <coordinates>' . $station->lon . ',' . $station->lat . ',0</coordinates>
+      </Point>
       <Snippet>' . $display_lat . ', ' . $display_lon . '</Snippet>
-      <Style><IconStyle><Icon>
-        <href>'. $icon . '</href>
-      </Icon></IconStyle></Style>
-      <styleUrl>#marker</styleUrl>
-      <visibility>1</visibility>
+      <Style>
+        <IconStyle><Icon><href>'. $icon . '</href></Icon></IconStyle>
+      </Style>
     </Placemark>';
 
     return $placeMark;
