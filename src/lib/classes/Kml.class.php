@@ -47,15 +47,21 @@ class Kml {
    */
   private function _getBody () {
     $body = '';
+    $containsFolders = true;
     $prevValue = '';
     $sortField = $this->_sortField;
     $this->_lats = [];
     $this->_lons = [];
 
+    // Don't create folders when sorting by station name
+    if ($sortField === 'station') {
+      $containsFolders = false;
+    }
+
     foreach($this->_stations as $station) {
 
-      // Create folders for grouping stations (except when sorting by station)
-      if ($sortField !== 'station') {
+      // Create folders for grouping stations
+      if ($containsFolders) {
         $value = $station->$sortField;
         if ($value !== $prevValue) {
           // Close previous folder
