@@ -13,6 +13,8 @@ include_once '../lib/classes/LogsheetCollection.class.php'; // logsheet collecti
  */
 class Kml {
   private $_domain;
+  private $_lats;
+  private $_lons;
   private $_meta;
   private $_network;
   private $_sortField;
@@ -47,6 +49,8 @@ class Kml {
     $body = '';
     $prevValue = '';
     $sortField = $this->_sortField;
+    $this->_lats = [];
+    $this->_lons = [];
 
     foreach($this->_stations as $station) {
 
@@ -69,6 +73,10 @@ class Kml {
           $prevValue = $value;
         }
       }
+
+      // Store station lat, lon in array for calculating bounds of all stations
+      array_push($this->_lats, $station->lat);
+      array_push($this->_lons, $station->lon);
 
       $placeMark = $this->_getPlaceMark($station);
       $body .= "\n$placeMark";
@@ -99,12 +107,21 @@ class Kml {
   private function _getHeader () {
     $name = $this->_meta[$this->_sortField]['name'];
     $timestamp = date('D M j, Y H:i:s e');
+    $latCenter = (max($this->_lats) + min($this->_lats)) / 2;
+    $lonCenter = (max($this->_lons) + min($this->_lons)) / 2;
 
     $header = '<?xml version="1.0" encoding="UTF-8"?>
     <kml xmlns="http://earth.google.com/kml/2.1">
       <Document>
         <name>' . $name . '</name>
         <description>' . $timestamp . '</description>
+        <LookAt>
+          <heading>0</heading>
+          <latitude>' . $latCenter . '</latitude>
+          <longitude>' . $lonCenter . '</longitude>
+          <range>1000000</range>
+          <tilt>0</tilt>
+        </LookAt>
         <Style id="marker">
           <BalloonStyle><text><![CDATA[
             <style>
@@ -299,8 +316,9 @@ class Kml {
    * Render KML content
    */
   public function render () {
-    print $this->_getHeader();
-    print $this->_getBody();
+    $body = $this->_getBody();
+    print $this->_getHeader(); // header depends on arrays set by _getBody()
+    print $body;
     print $this->_getFooter();
   }
 
