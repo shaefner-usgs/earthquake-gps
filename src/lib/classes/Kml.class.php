@@ -171,40 +171,33 @@ class Kml {
       'campaign' => 'triangle',
       'continuous' => 'square'
     ];
-    $years = ceil(date('Y') - $station->last_obs);
 
     if ($this->_sortField === 'station') {
       $color = 'grey';
     }
-    if ($this->_sortField === 'last_obs') {
-      if (!$station->last_obs) { // $years is '0' if $station->last_obs is empty
-        $color = 'grey';
-      } else if ($years > 15) {
+    else {
+      if ($this->_sortField === 'last_obs') {
+        if ($station->last_obs) {
+          $years = ceil(date('Y') - $station->last_obs);
+        } else { // set $years to '0' if $station->last_obs is empty
+          $years = 0;
+        }
+      } else if ($this->_sortField === 'total_years') {
+        $years = $station->total_years;
+      }
+
+      // Get color
+      if ($years > 15) {
         $color = 'red';
       } else if ($years > 12) {
         $color = 'orange';
       } else if ($years > 9) {
         $color = 'yellow';
       } else if ($years > 6) {
-        $color = 'blue';
+        $color = 'green';
       } else if ($years > 3) {
-        $color = 'green';
-      } else if ($years > 0) {
-        $color = 'purple';
-      }
-    }
-    else if ($this->_sortField === 'total_years') {
-      if ($station->total_years > 15) {
-        $color = 'red';
-      } else if ($station->total_years > 12) {
-        $color = 'orange';
-      } else if ($station->total_years > 9) {
-        $color = 'yellow';
-      } else if ($station->total_years > 6) {
         $color = 'blue';
-      } else if ($station->total_years > 3) {
-        $color = 'green';
-      } else if ($station->total_years > 0) {
+      } else if ($years > 0) {
         $color = 'purple';
       } else {
         $color = 'grey';
