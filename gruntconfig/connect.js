@@ -87,6 +87,10 @@ var connect = {
       to: '/logsheets.php?network=$1&station=$2'
     },
     {
+      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/offsets$',
+      to: '/offsets.php?network=$1&station=$2'
+    },
+    {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/photos$',
       to: '/photos.php?network=$1&station=$2'
     },
