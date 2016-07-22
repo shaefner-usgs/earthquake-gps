@@ -119,15 +119,15 @@ $geFileBaseUri = $network . '/kml';
 if ($row->type === 'campaign') {
   $geFilesHeader = '<h2>Google Earth Files</h2>';
   $geFiles_lis = '<li>
-      <a href="' . $geFileBaseUri . '/total">Stations sorted by total years occupied</a>
+      <a href="' . $geFileBaseUri . '/total">Campaign stations sorted by number of years occupied</a>
     </li>';
   $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '/last">Stations sorted by last year occupied</a>
+      <a href="' . $geFileBaseUri . '/last">Campaign stations sorted by last year occupied</a>
     </li>';
 } else { // continuous network
   $geFilesHeader = '<h2>Google Earth File</h2>';
   $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '">Stations sorted by station name</a>
+      <a href="' . $geFileBaseUri . '">All stations sorted by station name</a>
     </li>';
 }
 $geFiles_html = "$geFilesHeader<ul>$geFiles_lis</ul>";

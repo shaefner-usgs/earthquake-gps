@@ -9,6 +9,9 @@ include_once '../lib/classes/LogsheetCollection.class.php'; // logsheet collecti
 /**
  * Generate KML files for GPS stations
  *
+ * @param $network {String} default is NULL
+ *     KML file includes all stations with the option to limit to a given network
+ *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Kml {
@@ -32,15 +35,18 @@ class Kml {
     $this->_meta = [
       'filename' => $filename,
       'last_obs' => [
+        'description' => 'Campaign stations',
         'folder' => 'Last surveyed in %s',
         'name' => $namePrefix . ' (sorted by last year occupied)'
       ],
       'station' => [
+        'description' => 'Campaign and continuous stations',
         'name' => $namePrefix . ' (sorted by station name)'
       ],
       'total_years' => [
+        'description' => 'Campaign stations',
         'folder' => '%s year(s) between first/last surveys',
-        'name' => $namePrefix . ' (sorted by total years occupied)'
+        'name' => $namePrefix . ' (sorted by number of years occupied)'
       ]
     ];
     $this->_network = $network;
@@ -126,21 +132,23 @@ class Kml {
    * @return $header {String}
    */
   private function _getHeader () {
+    $description = $this->_meta[$this->_sortField]['description'];
     $name = $this->_meta[$this->_sortField]['name'];
-    $timestamp = date('D M j, Y H:i:s e');
     $latCenter = (max($this->_lats) + min($this->_lats)) / 2;
-    $lonCenter = (max($this->_lons) + min($this->_lons)) / 2;
     $legendUrl = sprintf ('http://%s%s/img/kmlLegend-%s.png',
       $this->_domain,
       $GLOBALS['MOUNT_PATH'],
       $this->_sortField
     );
+    $lonCenter = (max($this->_lons) + min($this->_lons)) / 2;
+    $timestamp = date('D M j, Y H:i:s e');
 
     $header = '<?xml version="1.0" encoding="UTF-8"?>
     <kml xmlns="http://earth.google.com/kml/2.1">
       <Document>
         <name>' . $name . '</name>
-        <description>' . $timestamp . '</description>
+        <Snippet maxLines="1">' . $timestamp . '</Snippet>
+        <description>' . $description . '</description>
         <LookAt>
           <heading>0</heading>
           <latitude>' . $latCenter . '</latitude>
@@ -274,7 +282,8 @@ class Kml {
     $icon = $this->_getIcon($station);
     $logsheets_html = '';
 
-    // Get logsheets for each station (but only if filtered by network)
+    // Get logsheets for each station
+    // (but only if filtered by network--takes too long for all stations)
     if ($this->_network) {
       $logsheetsCollection = $this->_getLogSheets($station['station']);
 
