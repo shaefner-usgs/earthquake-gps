@@ -21,18 +21,26 @@ class Kml {
   private $_stations;
 
   public function __construct($network=NULL) {
+    $filename = 'GPS';
+    $namePrefix = 'All Stations';
+    if ($network) {
+      $filename = $network;
+      $namePrefix = "$network Network";
+    }
+
     $this->_domain = $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
     $this->_meta = [
+      'filename' => $filename,
       'last_obs' => [
-        'name' => $network . ' Network (sorted by last year occupied)',
         'folder' => 'Last surveyed in %s',
+        'name' => $namePrefix . ' (sorted by last year occupied)'
       ],
       'station' => [
-        'name' => $network . ' Network (sorted by station name)',
+        'name' => $namePrefix . ' (sorted by station name)'
       ],
       'total_years' => [
-        'name' => $network . ' Network (sorted by total years occupied)',
         'folder' => '%s year(s) between first/last surveys',
+        'name' => $namePrefix . ' (sorted by total years occupied)'
       ]
     ];
     $this->_network = $network;
@@ -350,12 +358,8 @@ class Kml {
    * Set PHP Headers for triggering file download w/ no caching
    */
   public function setPhpHeaders () {
-    $basename = 'GPS';
-    if ($this->_network) {
-      $basename = $this->_network;
-    }
     $expires = date(DATE_RFC2822);
-    $filename = $basename . '-' . $this->_sortField . '.kml';
+    $filename = $this->_meta['filename'] . '-' . $this->_sortField . '.kml';
 
     header('Cache-control: no-cache, must-revalidate');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
