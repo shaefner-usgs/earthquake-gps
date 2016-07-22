@@ -66,37 +66,41 @@ class Kml {
       $containsFolders = false;
     }
 
+    // Only include campaign stations unless creating kml sorted by station
+    if ($sortField !== 'station') {
+      $this->_stations = array_filter($this->_stations, function($value) {
+        return $value['stationtype'] === 'campaign';
+      });
+    }
+
     foreach($this->_stations as $station) {
 
-      // Skip continous stations unless we are creating kml sorted by station
-      if ($station->stationtype === 'campaign' || $sortField === 'station') {
-        // Create folders for grouping stations
-        if ($containsFolders) {
-          $value = $station->$sortField;
-          if ($value !== $prevValue) {
-            // Close previous folder
-            if ($prevValue) {
-              $body .= "\n    </Folder>";
-            }
-            // Open new folder
-            $sub = $value;
-            if (!$value) {
-              $sub = '[unknown]';
-            }
-            $folder = sprintf($this->_meta[$sortField]['folder'], $sub);
-            $body .= "\n    <Folder><name>$folder</name><open>0</open>";
-
-            $prevValue = $value;
+      // Create folders for grouping stations
+      if ($containsFolders) {
+        $value = $station[$sortField];
+        if ($value !== $prevValue) {
+          // Close previous folder
+          if ($prevValue) {
+            $body .= "\n    </Folder>";
           }
+          // Open new folder
+          $sub = $value;
+          if (!$value) {
+            $sub = '[unknown]';
+          }
+          $folder = sprintf($this->_meta[$sortField]['folder'], $sub);
+          $body .= "\n    <Folder><name>$folder</name><open>0</open>";
+
+          $prevValue = $value;
         }
-
-        // Store station lat, lon in array for calculating bounds of all stations
-        array_push($this->_lats, $station->lat);
-        array_push($this->_lons, $station->lon);
-
-        $placeMark = $this->_getPlaceMark($station);
-        $body .= "\n$placeMark";
       }
+
+      // Store station lat, lon in array for calculating bounds of all stations
+      array_push($this->_lats, $station['lat']);
+      array_push($this->_lons, $station['lon']);
+
+      $placeMark = $this->_getPlaceMark($station);
+      $body .= "\n$placeMark";
     }
 
     // Close final folder (not using folders when sorting by station)
@@ -188,13 +192,13 @@ class Kml {
     }
     else {
       if ($this->_sortField === 'last_obs') {
-        if ($station->last_obs) {
-          $years = ceil(date('Y') - $station->last_obs);
-        } else { // set $years to '0' if $station->last_obs is empty
+        if ($station['last_obs']) {
+          $years = ceil(date('Y') - $station['last_obs']);
+        } else { // set $years to '0' if $station['last_obs'] is empty
           $years = 0;
         }
       } else if ($this->_sortField === 'total_years') {
-        $years = $station->total_years;
+        $years = $station['total_years'];
       }
 
       // Get color
@@ -218,7 +222,7 @@ class Kml {
     $icon = sprintf ('http://%s%s/img/pin-s-%s+%s.png',
       $this->_domain,
       $GLOBALS['MOUNT_PATH'],
-      $shapes[$station->stationtype],
+      $shapes[$station['stationtype']],
       $color
     );
 
@@ -264,15 +268,15 @@ class Kml {
    */
   private function _getPlaceMark ($station) {
     $data_collected = false;
-    $display_lat = number_format($station->lat, 5, '.', '');
-    $display_lon = number_format($station->lon, 5, '.', '');
-    $display_station = strtoupper($station->station);
+    $display_lat = number_format($station['lat'], 5, '.', '');
+    $display_lon = number_format($station['lon'], 5, '.', '');
+    $display_station = strtoupper($station['station']);
     $icon = $this->_getIcon($station);
     $logsheets_html = '';
 
     // Get logsheets for each station (but only if filtered by network)
     if ($this->_network) {
-      $logsheetsCollection = $this->_getLogSheets($station->station);
+      $logsheetsCollection = $this->_getLogSheets($station['station']);
 
       // Create HTML for logsheets
       $logsheets_html = '<ul>';
@@ -303,8 +307,8 @@ class Kml {
       $display_lon,
       $this->_domain,
       $GLOBALS['MOUNT_PATH'],
-      $station->network,
-      $station->station,
+      $station['network'],
+      $station['station'],
       $logsheets_html
     );
 
@@ -314,12 +318,12 @@ class Kml {
       <styleUrl>#marker</styleUrl>
       <visibility>1</visibility>
       <LookAt>
-        <longitude>' . $station->lon . '</longitude>
-        <latitude>' . $station->lat . '</latitude>
+        <longitude>' . $station['lon'] . '</longitude>
+        <latitude>' . $station['lat'] . '</latitude>
         <range>10000</range>
       </LookAt>
       <Point>
-        <coordinates>' . $station->lon . ',' . $station->lat . ',0</coordinates>
+        <coordinates>' . $station['lon'] . ',' . $station['lat'] . ',0</coordinates>
       </Point>
       <Snippet>' . $display_lat . ', ' . $display_lon . '</Snippet>
       <Style>
@@ -341,7 +345,7 @@ class Kml {
     // Db query result: all stations in a given network
     $result = $db->queryStations($this->_network);
 
-    return $result->fetchAll(PDO::FETCH_OBJ);
+    return $result->fetchAll(PDO::FETCH_ASSOC);
   }
 
   /**
@@ -376,13 +380,13 @@ class Kml {
   public function sort ($col) {
     if ($col === 'last_obs') {
       usort($this->_stations, function ($a, $b) {
-        return intval($b->last_obs) - intval($a->last_obs);
+        return intval($b['last_obs']) - intval($a['last_obs']);
       });
       $this->_sortField = $col;
     }
     else if ($col === 'total_years') {
       usort($this->_stations, function ($a, $b) {
-        return intval($b->total_years) - intval($a->total_years);
+        return intval($b['total_years']) - intval($a['total_years']);
       });
       $this->_sortField = $col;
     }
