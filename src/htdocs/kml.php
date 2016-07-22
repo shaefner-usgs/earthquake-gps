@@ -4,7 +4,7 @@ include_once '../lib/_functions.inc.php'; // app functions
 
 include_once '../lib/classes/Kml.class.php'; // Kml generator
 
-$network = safeParam('network', 'Pacific');
+$network = safeParam('network');
 $sortKey = safeParam('sortKey'); // 'last' or 'total'
 
 $sort = [
@@ -12,7 +12,11 @@ $sort = [
   'total' => 'total_years'
 ];
 
-$kml = new Kml($network);
+if ($network) {
+  $kml = new Kml($network);
+} else {
+  $kml = new Kml();
+}
 
 // KML file is sorted by station by default
 $sortby = $sort[$sortKey];

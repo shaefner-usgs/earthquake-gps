@@ -20,7 +20,7 @@ class Kml {
   private $_sortField;
   private $_stations;
 
-  public function __construct($network) {
+  public function __construct($network=NULL) {
     $this->_domain = $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
     $this->_meta = [
       'last_obs' => [
@@ -257,24 +257,29 @@ class Kml {
     $display_lon = number_format($station->lon, 5, '.', '');
     $display_station = strtoupper($station->station);
     $icon = $this->_getIcon($station);
-    $logsheetsCollection = $this->_getLogSheets($station->station);
+    $logsheets_html = '';
 
-    // Create HTML for logsheets
-    $logsheets_html = '<ul>';
-    foreach($logsheetsCollection->logsheets as $date => $logsheets) {
-      $data_collected = true;
-      $logsheets_html .= sprintf('<li><a href="http://%s%s/%s">%s</a></li>',
-        $this->_domain,
-        $logsheetsCollection->path,
-        $logsheets[0]->file, // front page or txt-based log
-        date('M d, Y', strtotime($date))
-      );
-    }
-    $logsheets_html .= '</ul>';
+    // Get logsheets for each station (but only if filtered by network)
+    if ($this->_network) {
+      $logsheetsCollection = $this->_getLogSheets($station->station);
 
-    if ($data_collected) {
-      $logsheets_html = '<p class="data">GPS data was collected on the
-        following date(s):</p>' . $logsheets_html;
+      // Create HTML for logsheets
+      $logsheets_html = '<ul>';
+      foreach($logsheetsCollection->logsheets as $date => $logsheets) {
+        $data_collected = true;
+        $logsheets_html .= sprintf('<li><a href="http://%s%s/%s">%s</a></li>',
+          $this->_domain,
+          $logsheetsCollection->path,
+          $logsheets[0]->file, // front page or txt-based log
+          date('M d, Y', strtotime($date))
+        );
+      }
+      $logsheets_html .= '</ul>';
+
+      if ($data_collected) {
+        $logsheets_html = '<p class="data">GPS data was collected on the
+          following date(s):</p>' . $logsheets_html;
+      }
     }
 
     // Create HTML for description
@@ -287,7 +292,7 @@ class Kml {
       $display_lon,
       $this->_domain,
       $GLOBALS['MOUNT_PATH'],
-      $this->_network,
+      $station->network,
       $station->station,
       $logsheets_html
     );
@@ -342,8 +347,12 @@ class Kml {
    * Set PHP Headers for triggering file download w/ no caching
    */
   public function setPhpHeaders () {
+    $basename = 'GPS';
+    if ($this->_network) {
+      $basename = $this->_network;
+    }
     $expires = date(DATE_RFC2822);
-    $filename = $this->_network . '-' . $this->_sortField . '.kml';
+    $filename = $basename . '-' . $this->_sortField . '.kml';
 
     header('Cache-control: no-cache, must-revalidate');
     header('Content-Disposition: attachment; filename="' . $filename . '"');

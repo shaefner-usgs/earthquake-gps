@@ -259,22 +259,32 @@ class Db {
     }
 
   /**
-   * Query db to get all stations in a given network
+   * Query db to get all stations (with the option to limit to a given network)
    *
-   * @param $network {String}
+   * @param $network {String} default is NULL
    *
    * @return {Function}
    */
-  public function queryStations ($network) {
-    $sql = 'SELECT s.id, s.station, s.lat, s.lon, s.destroyed, s.showcoords,
-      s.elevation, s.x, s.y, s.z, s.first_obs, s.last_obs, s.num_obs, s.total_years,
-      r.stationtype, v.last_observation, v.up_rms, v.north_rms, v.east_rms
+  public function queryStations ($network=NULL) {
+    $fields = 's.id, s.station, s.lat, s.lon, s.destroyed, s.showcoords,
+      s.elevation, s.x, s.y, s.z, s.first_obs, s.last_obs, s.num_obs,
+      s.total_years, r.network, r.stationtype';
+    $joinClause = 'LEFT JOIN nca_gps_relations r USING (station)';
+    $whereClause = '';
+
+    if ($network) { // add velocity fields and limit results to given network
+      $fields .= ', v.last_observation, v.up_rms, v.north_rms, v.east_rms';
+      $joinClause .= ' LEFT JOIN nca_gps_velocities v USING (station)';
+      $whereClause = 'WHERE r.network = :network AND v.network = :network
+        AND v.type = "nafixed"';
+    }
+
+    $sql = "SELECT $fields
       FROM nca_gps_stations s
-      LEFT JOIN nca_gps_relations r USING (station)
-      LEFT JOIN nca_gps_velocities v USING (station)
-      WHERE r.network = :network AND v.network = :network AND v.type = "nafixed"
+      $joinClause
+      $whereClause
       GROUP BY `station`
-      ORDER BY s.station ASC';
+      ORDER BY s.station ASC";
 
     return $this->_execQuery($sql, array(
       'network' => $network
@@ -309,16 +319,16 @@ class Db {
   public function queryVelocities ($network, $station=NULL) {
     $order = 'station ASC, type ASC';
     $params['network'] = $network;
-    $whereClause = 'WHERE network = :network';
+    $where = 'network = :network';
 
     if ($station) { // add station info to query
       $order = 'last_observation DESC';
       $params['station'] = $station;
-      $whereClause .= ' AND station = :station';
+      $where .= ' AND station = :station';
     }
 
     $sql = "SELECT * FROM nca_gps_velocities
-      $whereClause
+      WHERE $where
       ORDER BY $order";
 
     return $this->_execQuery($sql, $params);
