@@ -55,8 +55,8 @@ var connect = {
       to: '/network.php?network=$1'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/kml(/(last|total))?$',
-      to: '/kml.php?network=$1&sortKey=$3'
+      from: '^' + config.ini.MOUNT_PATH + '/(([a-zA-Z0-9_-]+)/)?kml(/(last|total))?$',
+      to: '/kml.php?network=$2&sortKey=$4'
     },
     {
       from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/notupdated$',
