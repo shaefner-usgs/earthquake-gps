@@ -60,32 +60,35 @@ class Kml {
 
     foreach($this->_stations as $station) {
 
-      // Create folders for grouping stations
-      if ($containsFolders) {
-        $value = $station->$sortField;
-        if ($value !== $prevValue) {
-          // Close previous folder
-          if ($prevValue) {
-            $body .= "\n    </Folder>";
-          }
-          // Open new folder
-          $sub = $value;
-          if (!$value) {
-            $sub = '[unknown]';
-          }
-          $folder = sprintf($this->_meta[$sortField]['folder'], $sub);
-          $body .= "\n    <Folder><name>$folder</name><open>0</open>";
+      // Skip continous stations unless we are creating kml sorted by station
+      if ($station->stationtype === 'campaign' || $sortField === 'station') {
+        // Create folders for grouping stations
+        if ($containsFolders) {
+          $value = $station->$sortField;
+          if ($value !== $prevValue) {
+            // Close previous folder
+            if ($prevValue) {
+              $body .= "\n    </Folder>";
+            }
+            // Open new folder
+            $sub = $value;
+            if (!$value) {
+              $sub = '[unknown]';
+            }
+            $folder = sprintf($this->_meta[$sortField]['folder'], $sub);
+            $body .= "\n    <Folder><name>$folder</name><open>0</open>";
 
-          $prevValue = $value;
+            $prevValue = $value;
+          }
         }
+
+        // Store station lat, lon in array for calculating bounds of all stations
+        array_push($this->_lats, $station->lat);
+        array_push($this->_lons, $station->lon);
+
+        $placeMark = $this->_getPlaceMark($station);
+        $body .= "\n$placeMark";
       }
-
-      // Store station lat, lon in array for calculating bounds of all stations
-      array_push($this->_lats, $station->lat);
-      array_push($this->_lons, $station->lon);
-
-      $placeMark = $this->_getPlaceMark($station);
-      $body .= "\n$placeMark";
     }
 
     // Close final folder (not using folders when sorting by station)
