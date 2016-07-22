@@ -268,22 +268,23 @@ class Db {
   public function queryStations ($network=NULL) {
     $fields = 's.id, s.station, s.lat, s.lon, s.destroyed, s.showcoords,
       s.elevation, s.x, s.y, s.z, s.first_obs, s.last_obs, s.num_obs,
-      s.total_years, r.network, r.stationtype';
-    $joinClause = 'LEFT JOIN nca_gps_relations r USING (station)';
-    $whereClause = '';
+      s.total_years, r.network, r.stationtype, n.show';
+    $joinClause = 'LEFT JOIN nca_gps_relations r USING (station)
+      LEFT JOIN nca_gps_networks n ON n.name = r.network';
+    $where = 'n.show = 1';
 
     if ($network) { // add velocity fields and limit results to given network
       $fields .= ', v.last_observation, v.up_rms, v.north_rms, v.east_rms';
       $joinClause .= ' LEFT JOIN nca_gps_velocities v USING (station)';
-      $whereClause = 'WHERE r.network = :network AND v.network = :network
+      $where = 'r.network = :network AND v.network = :network
         AND v.type = "nafixed"';
     }
 
     $sql = "SELECT $fields
       FROM nca_gps_stations s
       $joinClause
-      $whereClause
-      GROUP BY `station`
+      WHERE $where
+      GROUP BY s.station
       ORDER BY s.station ASC";
 
     return $this->_execQuery($sql, array(
