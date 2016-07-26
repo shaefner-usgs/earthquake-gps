@@ -267,8 +267,8 @@ class Db {
    */
   public function queryStations ($network=NULL) {
     $fields = 's.id, s.station, s.lat, s.lon, s.destroyed, s.showcoords,
-      s.elevation, s.x, s.y, s.z, s.first_obs, s.last_obs, s.num_obs,
-      s.total_years, r.network, r.stationtype, n.show';
+      s.elevation, s.x, s.y, s.z, s.num_obs, s.obs_years,
+      r.network, r.stationtype, n.show';
     $joinClause = 'LEFT JOIN nca_gps_relations r USING (station)
       LEFT JOIN nca_gps_networks n ON n.name = r.network';
     $where = 'n.show = 1';
