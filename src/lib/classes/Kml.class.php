@@ -24,8 +24,8 @@ class Kml {
   private $_stations;
 
   public function __construct($network=NULL) {
-    $filename = 'GPS';
-    $namePrefix = 'All Stations';
+    $filename = 'AllNetworks';
+    $namePrefix = 'All Networks';
     if ($network) {
       $filename = $network;
       $namePrefix = "$network Network";
@@ -80,7 +80,9 @@ class Kml {
     }
 
     foreach($this->_stations as $station) {
-
+      if (!$station['lat'] || !$station['lon']) {
+        break; // skip stations w/o lat / lon values
+      }
       // Create folders for grouping stations
       if ($containsFolders) {
         $value = $station[$sortBy];
@@ -221,7 +223,7 @@ class Kml {
       } else { // $years is flagged '-1' when unknown
         $color = 'grey';
       }
-        
+
     } else if ($this->_sortBy === 'timespan') {
       $years = $station['timespan'];
 
@@ -290,19 +292,42 @@ class Kml {
    * @return $placeMark {String}
    */
   private function _getPlaceMark ($station) {
+    $baseUri = sprintf('http://%s%s/%s/%s',
+      $this->_domain,
+      $GLOBALS['MOUNT_PATH'],
+      $station['network'],
+      $station['station']
+    );
     $data_collected = false;
     $display_lat = number_format($station['lat'], 5, '.', '');
     $display_lon = number_format($station['lon'], 5, '.', '');
     $display_station = strtoupper($station['station']);
     $icon = $this->_getIcon($station);
-    $logsheets_html = '';
 
-    // Get logsheets for each station
-    // (but only if filtered by network--takes too long for all stations)
+    // Create HTML for links
+    $links_html = 'Station ';
+    $links = [
+      'Details' => $baseUri,
+      'Logs' => $baseUri . '/logs',
+      'Photos' => $baseUri . '/photos'
+    ];
+    if ($station['stationtype'] === 'continuous') { // no photos
+      unset($links['Photos']);
+    }
+    foreach ($links as $name => $uri) {
+      $links_html .= sprintf ('<a href="%s">%s</a>, ',
+        $uri,
+        $name
+      );
+    }
+    $links_html = preg_replace('/(,\s+)$/', '', $links_html); // strip final comma
+
+    // Create HTML for logsheets
+    // (only if filtered by network--it takes too long for all stations)
+    $logsheets_html = '';
     if ($this->_network) {
       $logsheetsCollection = $this->_getLogSheets($station['station']);
 
-      // Create HTML for logsheets
       $logsheets_html = '<ul>';
       foreach($logsheetsCollection->logsheets as $date => $logsheets) {
         $data_collected = true;
@@ -324,15 +349,12 @@ class Kml {
     // Create HTML for description
     $description_html = sprintf('<h1>%s</h1>
       <p class="coords">%s, %s</p>
-      <p><a href="http://%s%s/%s/%s">Station Details</a></p>
+      <p>%s</p>
       %s',
       $display_station,
       $display_lat,
       $display_lon,
-      $this->_domain,
-      $GLOBALS['MOUNT_PATH'],
-      $station['network'],
-      $station['station'],
+      $links_html,
       $logsheets_html
     );
 
