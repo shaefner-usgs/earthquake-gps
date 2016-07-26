@@ -195,21 +195,17 @@ class Kml {
       'continuous' => 'square'
     ];
 
+    // Get color
     if ($this->_sortBy === 'station') {
       $color = 'grey';
     }
-    else {
-      if ($this->_sortBy === 'last') {
-        if ($station['last']) {
-          $years = ceil(date('Y') - $station['last']);
-        } else { // set $years to '0' if $station['last'] is empty
-          $years = 0;
-        }
-      } else if ($this->_sortBy === 'timespan') {
-        $years = $station['timespan'];
+    else if ($this->_sortBy === 'last') {
+      if ($station['last']) {
+        $years = ceil(date('Y') - $station['last']);
+      } else { // set $years to '-1' if $station['last'] is empty
+        $years = -1;
       }
 
-      // Get color
       if ($years > 15) {
         $color = 'red';
       } else if ($years > 12) {
@@ -220,9 +216,28 @@ class Kml {
         $color = 'green';
       } else if ($years > 3) {
         $color = 'blue';
-      } else if ($years > 0) {
+      } else if ($years >= 0) {
         $color = 'purple';
-      } else {
+      } else { // $years is flagged '-1' when unknown
+        $color = 'grey';
+      }
+        
+    } else if ($this->_sortBy === 'timespan') {
+      $years = $station['timespan'];
+
+      if ($years > 15) {
+        $color = 'purple';
+      } else if ($years > 12) {
+        $color = 'blue';
+      } else if ($years > 9) {
+        $color = 'green';
+      } else if ($years > 6) {
+        $color = 'yellow';
+      } else if ($years > 3) {
+        $color = 'orange';
+      } else if ($years >= 0) {
+        $color = 'red';
+      } else { // $years is flagged '-1' when unknown
         $color = 'grey';
       }
     }
