@@ -20,7 +20,7 @@ class Kml {
   private $_lons;
   private $_meta;
   private $_network;
-  private $_sortField;
+  private $_sortBy;
   private $_stations;
 
   public function __construct($network=NULL) {
@@ -34,23 +34,23 @@ class Kml {
     $this->_domain = $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
     $this->_meta = [
       'filename' => $filename,
-      'last_obs' => [
+      'last' => [
         'description' => 'Campaign stations',
         'folder' => 'Last surveyed in %s',
         'name' => $namePrefix . ' (sorted by last year occupied)'
       ],
+      'timespan' => [
+        'description' => 'Campaign stations',
+        'folder' => '%s year(s) between first/last surveys',
+        'name' => $namePrefix . ' (sorted by time span between surveys)'
+      ],
       'station' => [
         'description' => 'Campaign and continuous stations',
         'name' => $namePrefix . ' (sorted by station name)'
-      ],
-      'total_years' => [
-        'description' => 'Campaign stations',
-        'folder' => '%s year(s) between first/last surveys',
-        'name' => $namePrefix . ' (sorted by number of years occupied)'
       ]
     ];
     $this->_network = $network;
-    $this->_sortField = 'station'; // sorted by station name by default
+    $this->_sortBy = 'station'; // sorted by station name by default
     $this->_stations = $this->_getStations();
   }
 
@@ -62,18 +62,18 @@ class Kml {
   private function _getBody () {
     $body = '';
     $containsFolders = true;
-    $prevValue = '';
-    $sortField = $this->_sortField;
+    $prevValue = NULL;
+    $sortBy = $this->_sortBy;
     $this->_lats = [];
     $this->_lons = [];
 
     // Don't create folders when sorting by station name
-    if ($sortField === 'station') {
+    if ($sortBy === 'station') {
       $containsFolders = false;
     }
 
     // Only include campaign stations unless creating kml sorted by station
-    if ($sortField !== 'station') {
+    if ($sortBy !== 'station') {
       $this->_stations = array_filter($this->_stations, function($value) {
         return $value['stationtype'] === 'campaign';
       });
@@ -83,18 +83,18 @@ class Kml {
 
       // Create folders for grouping stations
       if ($containsFolders) {
-        $value = $station[$sortField];
+        $value = $station[$sortBy];
         if ($value !== $prevValue) {
           // Close previous folder
-          if ($prevValue) {
+          if (isset($prevValue)) {
             $body .= "\n    </Folder>";
           }
           // Open new folder
           $sub = $value;
-          if (!$value) {
+          if ($value === '' || $value === -1) {
             $sub = '[unknown]';
           }
-          $folder = sprintf($this->_meta[$sortField]['folder'], $sub);
+          $folder = sprintf($this->_meta[$sortBy]['folder'], $sub);
           $body .= "\n    <Folder><name>$folder</name><open>0</open>";
 
           $prevValue = $value;
@@ -110,7 +110,7 @@ class Kml {
     }
 
     // Close final folder (not using folders when sorting by station)
-    if ($sortField !== 'station') {
+    if ($sortBy !== 'station') {
       $body .= "\n    </Folder>";
     }
 
@@ -132,13 +132,13 @@ class Kml {
    * @return $header {String}
    */
   private function _getHeader () {
-    $description = $this->_meta[$this->_sortField]['description'];
-    $name = $this->_meta[$this->_sortField]['name'];
+    $description = $this->_meta[$this->_sortBy]['description'];
+    $name = $this->_meta[$this->_sortBy]['name'];
     $latCenter = (max($this->_lats) + min($this->_lats)) / 2;
     $legendUrl = sprintf ('http://%s%s/img/kmlLegend-%s.png',
       $this->_domain,
       $GLOBALS['MOUNT_PATH'],
-      $this->_sortField
+      $this->_sortBy
     );
     $lonCenter = (max($this->_lons) + min($this->_lons)) / 2;
     $timestamp = date('D M j, Y H:i:s e');
@@ -195,18 +195,18 @@ class Kml {
       'continuous' => 'square'
     ];
 
-    if ($this->_sortField === 'station') {
+    if ($this->_sortBy === 'station') {
       $color = 'grey';
     }
     else {
-      if ($this->_sortField === 'last_obs') {
-        if ($station['last_obs']) {
-          $years = ceil(date('Y') - $station['last_obs']);
-        } else { // set $years to '0' if $station['last_obs'] is empty
+      if ($this->_sortBy === 'last') {
+        if ($station['last']) {
+          $years = ceil(date('Y') - $station['last']);
+        } else { // set $years to '0' if $station['last'] is empty
           $years = 0;
         }
-      } else if ($this->_sortField === 'total_years') {
-        $years = $station['total_years'];
+      } else if ($this->_sortBy === 'timespan') {
+        $years = $station['timespan'];
       }
 
       // Get color
@@ -350,11 +350,30 @@ class Kml {
    */
   private function _getStations() {
     $db = new Db;
+    $stations = [];
 
-    // Db query result: all stations in a given network
-    $result = $db->queryStations($this->_network);
+    // Db query result: all stations, optionally limited to given network
+    $rsStations = $db->queryStations($this->_network);
 
-    return $result->fetchAll(PDO::FETCH_ASSOC);
+    // Add fields needed for sorting stations
+    while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
+      $obs_years = preg_split('/[\s,]+/', $row['obs_years']);
+
+      $row['first'] = min($obs_years);
+      $row['last'] = max($obs_years);
+
+      // set $timespan default to -1 to flag stations with no observations
+      // (useful for sorting)
+      $timespan = -1;
+      if ($row['obs_years']) {
+        $timespan = $row['last'] - $row['first'];
+      }
+      $row['timespan'] = $timespan;
+
+      array_push($stations, $row);
+    }
+
+    return $stations;
   }
 
   /**
@@ -372,7 +391,7 @@ class Kml {
    */
   public function setPhpHeaders () {
     $expires = date(DATE_RFC2822);
-    $filename = $this->_meta['filename'] . '-' . $this->_sortField . '.kml';
+    $filename = $this->_meta['filename'] . '-' . $this->_sortBy . '.kml';
 
     header('Cache-control: no-cache, must-revalidate');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -381,23 +400,23 @@ class Kml {
   }
 
   /**
-   * Sort stations by last observation or total years
+   * Sort stations by last year or timespan of years surveyed
    * (initial Db result is sorted by station name)
    *
-   * @param $col {String <last_obs | total_years>}
+   * @param $sortBy {String <last | timespan>}
    */
-  public function sort ($col) {
-    if ($col === 'last_obs') {
+  public function sort ($sortBy) {
+    if ($sortBy === 'last') {
       usort($this->_stations, function ($a, $b) {
-        return intval($b['last_obs']) - intval($a['last_obs']);
+        return intval($b['last']) - intval($a['last']);
       });
-      $this->_sortField = $col;
+      $this->_sortBy = $sortBy;
     }
-    else if ($col === 'total_years') {
+    else if ($sortBy === 'timespan') {
       usort($this->_stations, function ($a, $b) {
-        return intval($b['total_years']) - intval($a['total_years']);
+        return intval($b['timespan']) - intval($a['timespan']);
       });
-      $this->_sortField = $col;
+      $this->_sortBy = $sortBy;
     }
   }
 }
