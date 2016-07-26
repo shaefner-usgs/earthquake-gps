@@ -93,7 +93,7 @@ $networks_html .= '</ul>';
 <section>
   <h2>Google Earth Files</h2>
   <ul>
-    <li><a href="gps/kml/total">Campaign stations sorted by number of years occupied</a></li>
-    <li><a href="gps/kml/last">Campaign stations sorted by last year occupied</a></li>
+    <li><a href="gps/kml/timespan">Campaign stations sorted by timespan between surveys</a></li>
+    <li><a href="gps/kml/last">Campaign stations sorted by last year surveyed</a></li>
   </ul>
 </section>
