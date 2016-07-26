@@ -5,12 +5,7 @@ include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Kml.class.php'; // Kml generator
 
 $network = safeParam('network');
-$sortKey = safeParam('sortKey'); // 'last' or 'total'
-
-$sort = [
-  'last' => 'last_obs',
-  'total' => 'total_years'
-];
+$sortBy = safeParam('sortBy'); // 'last', 'timespan', or 'year'
 
 if ($network) {
   $kml = new Kml($network);
@@ -19,10 +14,10 @@ if ($network) {
 }
 
 // KML file is sorted by station by default
-$sortby = $sort[$sortKey];
-if ($sortby) {
-  $kml->sort($sortby);
+if ($sortBy) {
+  $kml->sort($sortBy);
 }
 
 $kml->setPhpHeaders();
+//$kml->renderStationsArray();
 $kml->render();
