@@ -165,7 +165,9 @@ var RestoreMapMixin = {
       var overlay;
 
       if (layer.group) {
-        overlay = options.overlays[layer.group][layer.name];
+        if (options.overlays.hasOwnProperty(layer.group)) {
+          overlay = options.overlays[layer.group][layer.name];
+        }
       } else {
         overlay = options.overlays[layer.name];
       }
