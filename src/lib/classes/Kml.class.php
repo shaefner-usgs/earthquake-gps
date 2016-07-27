@@ -64,6 +64,7 @@ class Kml {
     $containsFolders = true;
     $prevValue = NULL;
     $sortBy = $this->_sortBy;
+    $stations = $this->_stations['list'];
     $this->_lats = [];
     $this->_lons = [];
 
@@ -74,12 +75,12 @@ class Kml {
 
     // Only include campaign stations unless creating kml sorted by station
     if ($sortBy !== 'station') {
-      $this->_stations = array_filter($this->_stations, function($value) {
+      $stations = array_filter($stations, function($value) {
         return $value['stationtype'] === 'campaign';
       });
     }
 
-    foreach($this->_stations as $station) {
+    foreach($stations as $station) {
       if (!$station['lat'] || !$station['lon']) {
         break; // skip stations w/o lat / lon values
       }
@@ -186,7 +187,7 @@ class Kml {
   /**
    * Get appropriate icon based on station properties for current sort type
    *
-   * @param $station {Object}
+   * @param $station {Array}
    *
    * @return $icon {String}
    *     Absolute URL of icon
@@ -287,7 +288,7 @@ class Kml {
   /**
    * Get KML placemark for a station
    *
-   * @param $station {Object}
+   * @param $station {Array}
    *
    * @return $placeMark {String}
    */
@@ -381,21 +382,24 @@ class Kml {
   }
 
   /**
-   * Get DB recordset containing all stations in network
+   * Create an array containing stations and observation yrs from DB recordset
    *
    * @return {Object}
    */
   private function _getStations() {
     $db = new Db;
-    $stations = [];
+    $stations = [
+      'list' => [],
+      'years' => []
+    ];
 
     // Db query result: all stations, optionally limited to given network
     $rsStations = $db->queryStations($this->_network);
 
-    // Add fields needed for sorting stations
     while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       $obs_years = preg_split('/[\s,]+/', $row['obs_years']);
 
+      // Add fields needed for sorting stations
       $row['first'] = min($obs_years);
       $row['last'] = max($obs_years);
 
@@ -407,8 +411,18 @@ class Kml {
       }
       $row['timespan'] = $timespan;
 
-      array_push($stations, $row);
+      // Array of stations containing additional fields
+      array_push($stations['list'], $row);
+
+      // Array of all years surveyed
+      foreach($obs_years as $year) {
+        if ($year && !in_array($year, $stations['years'])) {
+          array_push($stations['years'], $year);
+        }
+      }
     }
+
+    sort($stations['years']);
 
     return $stations;
   }
@@ -453,13 +467,13 @@ class Kml {
    */
   public function sort ($sortBy) {
     if ($sortBy === 'last') {
-      usort($this->_stations, function ($a, $b) {
+      usort($this->_stations['list'], function ($a, $b) {
         return intval($b['last']) - intval($a['last']);
       });
       $this->_sortBy = $sortBy;
     }
     else if ($sortBy === 'timespan') {
-      usort($this->_stations, function ($a, $b) {
+      usort($this->_stations['list'], function ($a, $b) {
         return intval($b['timespan']) - intval($a['timespan']);
       });
       $this->_sortBy = $sortBy;
