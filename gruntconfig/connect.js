@@ -55,7 +55,7 @@ var connect = {
       to: '/network.php?network=$1'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/(([a-zA-Z0-9_-]+)/)?kml(/(last|timespan|year))?$',
+      from: '^' + config.ini.MOUNT_PATH + '/(([a-zA-Z0-9_-]+)/)?kml(/(last|timespan|years))?$',
       to: '/kml.php?network=$2&sortBy=$4'
     },
     {

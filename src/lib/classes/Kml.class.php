@@ -424,6 +424,15 @@ class Kml {
   }
 
   /**
+  * Render stations array (useful for debugging)
+  */
+  public function renderStationsArray () {
+    print '<pre>';
+    print_r($this->_stations);
+    print '</pre>';
+  }
+
+  /**
    * Set PHP Headers for triggering file download w/ no caching
    */
   public function setPhpHeaders () {
@@ -437,10 +446,10 @@ class Kml {
   }
 
   /**
-   * Sort stations by last year or timespan of years surveyed
+   * Sort stations by last year, timespan, or years surveyed
    * (initial Db result is sorted by station name)
    *
-   * @param $sortBy {String <last | timespan>}
+   * @param $sortBy {String <last | timespan | years>}
    */
   public function sort ($sortBy) {
     if ($sortBy === 'last') {
