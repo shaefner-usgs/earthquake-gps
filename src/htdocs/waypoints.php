@@ -8,5 +8,5 @@ $network = safeParam('network', 'Pacific');
 
 $gpx = new Waypoints($network);
 
-$gpx->setPhpHeaders();
+$gpx->setHeaders();
 $gpx->render();

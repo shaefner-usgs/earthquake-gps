@@ -463,7 +463,7 @@ class Kml {
   /**
    * Set PHP Headers for triggering file download w/ no caching
    */
-  public function setPhpHeaders () {
+  public function setHeaders () {
     $expires = date(DATE_RFC2822);
     $filename = $this->_meta['filename'] . '-' . $this->_sortBy . '.kml';
 

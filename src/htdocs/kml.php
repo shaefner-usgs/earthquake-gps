@@ -18,6 +18,6 @@ if ($sortBy) {
   $kml->sort($sortBy);
 }
 
-$kml->setPhpHeaders();
+$kml->setHeaders();
 //$kml->renderStationsArray();
 $kml->render();

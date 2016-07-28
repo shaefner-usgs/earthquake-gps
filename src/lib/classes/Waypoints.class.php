@@ -111,7 +111,7 @@ class Waypoints {
   /**
    * Set PHP Headers for triggering file download w/ no caching
    */
-  public function setPhpHeaders () {
+  public function setHeaders () {
     $expires = date(DATE_RFC2822);
 
     header('Cache-control: no-cache, must-revalidate');
