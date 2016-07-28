@@ -39,14 +39,17 @@ class Kml {
         'folder' => 'Last surveyed in %s',
         'name' => $namePrefix . ' (sorted by last year occupied)'
       ],
+      'station' => [ // default
+        'description' => 'Campaign and continuous stations',
+        'name' => $namePrefix . ' (sorted by station name)'
+      ],
       'timespan' => [
         'description' => 'Campaign stations',
         'folder' => '%s year(s) between first/last surveys',
         'name' => $namePrefix . ' (sorted by time span between surveys)'
       ],
-      'station' => [
-        'description' => 'Campaign and continuous stations',
-        'name' => $namePrefix . ' (sorted by station name)'
+      'years' => [
+
       ]
     ];
     $this->_network = $network;
@@ -382,9 +385,14 @@ class Kml {
   }
 
   /**
-   * Create an array containing stations and observation yrs from DB recordset
+   * Create an array containing a list of stations and
+   * stations grouped by years observed from DB recordset
    *
-   * @return {Object}
+   * @return {Array}
+   *   [
+   *     'list' => {Array}
+   *     'years' => {Array}
+   *   ]
    */
   private function _getStations() {
     $db = new Db;
@@ -393,36 +401,42 @@ class Kml {
       'years' => []
     ];
 
-    // Db query result: all stations, optionally limited to given network
+    // Db query result: all stations in non-hidden networks,
+    // (with the option to limit to given network)
     $rsStations = $db->queryStations($this->_network);
 
     while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
-      $obs_years = preg_split('/[\s,]+/', $row['obs_years']);
+      $obs_years = preg_split('/[\s,]+/', $row['obs_years'], NULL,
+        PREG_SPLIT_NO_EMPTY
+      );
 
       // Add fields needed for sorting stations
-      $row['first'] = min($obs_years);
-      $row['last'] = max($obs_years);
-
-      // set $timespan default to -1 to flag stations with no observations
-      // (useful for sorting)
-      $timespan = -1;
-      if ($row['obs_years']) {
-        $timespan = $row['last'] - $row['first'];
+      if (empty($obs_years)) {
+        $first = '';
+        $last = '';
+        $timespan = -1; // set to -1 for sorting purposes
+      } else {
+        $first = min($obs_years);
+        $last = max($obs_years);
+        $timespan = $last - $first;
       }
+      $row['first'] = $first;
+      $row['last'] = $last;
       $row['timespan'] = $timespan;
 
-      // Array of stations containing additional fields
+      // Array of stations, containing added fields
       array_push($stations['list'], $row);
 
-      // Array of all years surveyed
+      // Array of stations, grouped by years surveyed
       foreach($obs_years as $year) {
-        if ($year && !in_array($year, $stations['years'])) {
-          array_push($stations['years'], $year);
+        if (!array_key_exists($year, $stations['years'])) {
+          $stations['years'][$year] = [];
         }
+        array_push($stations['years'][$year], $row);
       }
     }
 
-    sort($stations['years']);
+    ksort($stations['years']);
 
     return $stations;
   }
@@ -476,6 +490,9 @@ class Kml {
       usort($this->_stations['list'], function ($a, $b) {
         return intval($b['timespan']) - intval($a['timespan']);
       });
+      $this->_sortBy = $sortBy;
+    }
+    else if ($sortBy === 'years') {
       $this->_sortBy = $sortBy;
     }
   }
