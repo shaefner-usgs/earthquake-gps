@@ -80,6 +80,19 @@ class Kml {
     }
 
     foreach ($this->_stations as $year => $stations) {
+      // Array contains two lists of stations; skip appropriate list
+      if ($sortBy === 'years') {
+        // viewing stations grouped by year; skip list of all stations
+        if ($year === 'all') {
+          continue;
+        }
+      } else {
+        // skip list(s) of stations grouped by year
+        if ($year !== 'all') {
+          continue;
+        }
+      }
+
       // Fitler to include only campaign stations
       if ($filterStations) {
         $stations = array_filter($stations, function($value) {
@@ -88,23 +101,15 @@ class Kml {
       }
 
       foreach ($stations as $station) {
-        // Skip appropriate list of stations and set folder value
-        if ($sortBy === 'years') {
-          // viewing stations grouped by year; skip list of all stations
-          if ($year === 'all') {
-            continue;
-          }
-          $folderValue = $year;
-        } else {
-          // use list of all stations (skip stations grouped by year)
-          if ($year !== 'all') {
-            continue;
-          }
-          $folderValue = $station[$sortBy];
-        }
-
         // Create folders for grouping stations
         if ($containsFolders) {
+          // Set folder value
+          if ($sortBy === 'years') {
+            $folderValue = $year;
+          } else {
+            $folderValue = $station[$sortBy];
+          }
+          // Add markup for folders
           if ($folderValue !== $prevFolderValue) {
             // Close previous folder
             if (isset($prevFolderValue)) {
@@ -122,10 +127,11 @@ class Kml {
           }
         }
 
-        // Store station lat, lon in array for calculating bounds of all stations
+        // Store station lat, lon for calculating bounds of all stations
         array_push($this->_lats, $station['lat']);
         array_push($this->_lons, $station['lon']);
 
+        // Add markup for each station
         $placeMark = $this->_getPlaceMark($station, $year);
         $body .= "\n$placeMark";
       }
