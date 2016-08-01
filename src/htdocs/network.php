@@ -114,15 +114,19 @@ foreach ($stations['features'] as $feature) {
 }
 $stations_html .= '</ul>';
 
+// Create HTML for Google Earth links
 $geFileBaseUri = $network . '/kml';
 
 if ($row->type === 'campaign') {
   $geFilesHeader = '<h2>Google Earth Files</h2>';
-  $geFiles_lis = '<li>
-      <a href="' . $geFileBaseUri . '/timespan">Campaign stations sorted by timespan between surveys</a>
+  $geFiles_lis .= '<li>
+      <a href="' . $geFileBaseUri . '/years">Campaign stations sorted by year(s) surveyed</a>
     </li>';
   $geFiles_lis .= '<li>
       <a href="' . $geFileBaseUri . '/last">Campaign stations sorted by last year surveyed</a>
+    </li>';
+  $geFiles_lis .= '<li>
+      <a href="' . $geFileBaseUri . '/timespan">Campaign stations sorted by timespan between surveys</a>
     </li>';
 } else { // continuous network
   $geFilesHeader = '<h2>Google Earth File</h2>';
