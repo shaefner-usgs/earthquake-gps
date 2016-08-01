@@ -468,7 +468,7 @@ class Kml {
       }
     }
 
-    ksort($stations);
+    krsort($stations);
 
     return $stations;
   }
