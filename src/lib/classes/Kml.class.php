@@ -60,6 +60,31 @@ class Kml {
   }
 
   /**
+   * Sort db-style results by multiple fields. Converts an array of rows into
+   * an array of columns, then passes the result to php's array_multisort
+   *
+   * @return {Array} sorted array
+   */
+  private function _doSort () {
+    $args = func_get_args();
+    $data = array_shift($args);
+
+    foreach ($args as $n => $field) {
+      if (is_string($field)) {
+        $tmp = [];
+        foreach ($data as $key => $row) {
+          $tmp[$key] = $row[$field];
+        }
+        $args[$n] = $tmp;
+      }
+    }
+    $args[] = &$data;
+    call_user_func_array('array_multisort', $args);
+
+    return array_pop($args);
+  }
+
+  /**
    * Get KML Body
    *
    * @return $body {String}
@@ -513,18 +538,18 @@ class Kml {
    */
   public function sort ($sortBy) {
     if ($sortBy === 'last') {
-      usort($this->_stations['all'], function ($a, $b) {
-        return intval($b['last']) - intval($a['last']);
-      });
+      $this->_stations['all'] = $this->_doSort(
+        $this->_stations['all'], 'last', SORT_DESC, 'station', SORT_ASC
+      );
       $this->_sortBy = $sortBy;
     }
     else if ($sortBy === 'timespan') {
-      usort($this->_stations['all'], function ($a, $b) {
-        return intval($b['timespan']) - intval($a['timespan']);
-      });
+      $this->_stations['all'] = $this->_doSort(
+        $this->_stations['all'], 'timespan', SORT_DESC, 'station', SORT_ASC
+      );
       $this->_sortBy = $sortBy;
     }
-    else if ($sortBy === 'years') {
+    else if ($sortBy === 'years') { // already sorted (grouped) by year
       $this->_sortBy = $sortBy;
     }
   }
