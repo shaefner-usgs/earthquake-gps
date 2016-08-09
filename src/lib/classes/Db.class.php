@@ -46,14 +46,14 @@ class Db {
     }
   }
 
-/**
- * Get data type for a sql parameter (PDO::PARAM_* constant)
- *
- * @param $var {?}
- *     variable to identify type of
- *
- * @return $type {Integer}
- */
+  /**
+   * Get data type for a sql parameter (PDO::PARAM_* constant)
+   *
+   * @param $var {?}
+   *     variable to identify type of
+   *
+   * @return $type {Integer}
+   */
   private function _getType ($var) {
     $varType = gettype($var);
     $pdoTypes = array(
