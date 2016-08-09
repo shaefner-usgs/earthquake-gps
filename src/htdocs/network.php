@@ -25,7 +25,7 @@ if (!isset($TEMPLATE)) {
       var MOUNT_PATH = "' . $MOUNT_PATH . '",
           NETWORK = "' . $network . '";
     </script>
-    <script src="lib/leaflet-0.7.7/leaflet.js"></script>
+    <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
     <script src="js/network.js"></script>
   ';
   $CONTACT = 'jsvarc';
