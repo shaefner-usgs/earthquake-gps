@@ -1,6 +1,6 @@
 {
   "name": "earthquake-gps",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "USGS GPS Stations and Data",
   "main": "Gruntfile.js",
   "scripts": {
