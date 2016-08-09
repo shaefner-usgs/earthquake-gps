@@ -98,3 +98,13 @@ $networks_html .= '</ul>';
     <li><a href="gps/kml/timespan">Campaign stations sorted by timespan between surveys</a></li>
   </ul>
 </section>
+
+<h2>Cooperators</h2>
+
+<p>The USGS Earthquake Hazards Program (EHP) supports GPS data collection
+  throughout the western U.S. through cooperative agreements with Central
+  Washington University, University of California at Berkeley, University of
+  Memphis, and University of Nevada at Reno.  We process GPS data that we
+  collect, plus data from the USGS Volcano Hazards Program (VHP), our cooperator
+  institutions, UNAVCO Inc., and other network operators.  These results are
+  available at this website as time series of daily GPS positions.</p>
