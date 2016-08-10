@@ -7,7 +7,7 @@
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class StationView {
-  private $model;
+  private $_model;
 
   public function __construct (Station $model) {
     $this->_model = $model;
