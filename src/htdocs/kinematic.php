@@ -19,7 +19,7 @@ if (!isset($TEMPLATE)) {
       var MOUNT_PATH = "' . $MOUNT_PATH . '",
           STATION = "' . $station . '";
     </script>
-    <script src="/lib/dygraph/dygraph-combined.js"></script>
+    <script src="../../lib/dygraph/dygraph-combined.js"></script>
     <script src="../../js/kinematic.js"></script>
   ';
   $CONTACT = 'jsvarc';
