@@ -24,6 +24,19 @@ class PhotoView {
     );
   }
 
+  private function _getNavLinks () {
+    $navLinksHtml = sprintf('<ul class="pipelist no-style">
+        <li><strong>Photos</strong></li>
+        <li><a href="%s/%s/%s/logs">Field Logs</a></li>
+      </ul>',
+      $GLOBALS['MOUNT_PATH'],
+      $this->_collection->network,
+      $this->_collection->station
+    );
+
+    return $navLinksHtml;
+  }
+
   private function _getPhotos () {
     if (!$this->_collection->photos) {
       $photosHtml = '<p class="alert info">No Photos Found</p>';
@@ -66,6 +79,7 @@ class PhotoView {
   }
 
   public function render () {
+    print $this->_getNavLinks();
     print $this->_getPhotos();
     print $this->_getBackLink();
   }

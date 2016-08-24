@@ -9,13 +9,11 @@ include_once '../lib/classes/PhotoCollection.class.php'; // collection
 include_once '../lib/classes/PhotoView.class.php'; // view
 
 // set default values so page loads without passing params
-$network = safeParam('network', 'WindKetchFlat_SGPS');
-$station = safeParam('station', '7adl');
-
-$name = strtoupper($station);
+$networkParam = safeParam('network', 'WindKetchFlat_SGPS');
+$stationParam = safeParam('station', '7adl');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "GPS Station $name - Photos";
+  $TITLE = 'GPS Station ' . strtoupper($stationParam) . ' - Photos';
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../css/photos.css" />';
   $FOOT = '
@@ -30,20 +28,20 @@ if (!isset($TEMPLATE)) {
 $db = new Db();
 
 // Db query result: station details for selected station
-$rsStation = $db->queryStation($station);
-$station_exists = $rsStation->fetch();
+$rsStation = $db->queryStation($stationParam);
+$station = $rsStation->fetch();
 
-if ($station_exists) {
+if ($station) {
   // Get a list of photos for selected station
   $dir = sprintf('%s/stations/%s.dir/%s/photos/screen',
     $DATA_DIR,
-    substr($station, 0, 1),
-    $station
+    substr($stationParam, 0, 1),
+    $stationParam
   );
   $files = getDirContents($dir);
 
   // Add photos to collection
-  $photoCollection = new PhotoCollection($station, $network);
+  $photoCollection = new PhotoCollection($networkParam, $stationParam);
   foreach ($files as $file) {
     $photoModel = new Photo($file);
     $photoCollection->add($photoModel);

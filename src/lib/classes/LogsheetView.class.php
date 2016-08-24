@@ -47,7 +47,24 @@ class LogsheetView {
     return $logSheetsHtml;
   }
 
+  private function _getNavLinks () {
+    $navLinksHtml = '';
+    if ($this->_collection->stationType === 'campaign') {
+      $navLinksHtml .= sprintf('<ul class="pipelist no-style">
+          <li><a href="%s/%s/%s/photos">Photos</a></li>
+          <li><strong>Field Logs</strong></li>
+        </ul>',
+        $GLOBALS['MOUNT_PATH'],
+        $this->_collection->network,
+        $this->_collection->station
+      );
+    }
+
+    return $navLinksHtml;
+  }
+
   public function render () {
+    print $this->_getNavLinks();
     print $this->_getLogSheets();
     print $this->_getBackLink();
   }

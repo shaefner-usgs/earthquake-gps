@@ -34,7 +34,7 @@ class PhotoCollection {
   public $photos;
   public $station;
 
-  public function __construct ($station, $network) {
+  public function __construct ($network, $station) {
     $this->count = 0;
     $this->network = $network;
     $this->path = sprintf('%s/data/stations/%s.dir/%s/photos',

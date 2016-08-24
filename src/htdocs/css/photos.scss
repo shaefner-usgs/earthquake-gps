@@ -5,7 +5,7 @@ h2 {
   border-top: 1px solid #dfdfdf;
   padding-top: 1.3em;
 
-  &:first-child {
+  &:first-of-type {
     border: 0;
     padding: 0;
   }
