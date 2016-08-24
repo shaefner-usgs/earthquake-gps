@@ -54,6 +54,8 @@ var StationMap = function (options) {
       zoom: 7
     });
 
+    L.control.scale().addTo(map);
+
     _stations.openPopup(STATION.toUpperCase());
   };
 
