@@ -10,8 +10,6 @@ if (!isset($TEMPLATE)) {
 
 ?>
 
-<h1></h1>
-
 <p>These plots depict north, east and up components of the station as a function of time. The station velocities are in a North America fixed reference frame derived from <a href="http://itrf.ensg.ign.fr/general.php">ITRF2005</a> using an Euler pole defined by Altamimi et al.</p>
 
 <ul id="notes">

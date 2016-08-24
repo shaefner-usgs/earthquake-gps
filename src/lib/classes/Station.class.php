@@ -18,19 +18,19 @@ include_once '../conf/config.inc.php'; // app config
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Station {
-  private $data = array();
+  private $_data = array();
 
   public function __construct ($networkList=NULL, $velocities=NULL) {
 
-    $this->data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
+    $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
       . '/' . $this->station;
-    $this->data['networkList'] = $networkList;
-    $this->data['velocities'] = $velocities;
-    $this->data['links'] = $this->_getLinkList();
+    $this->_data['networkList'] = $networkList;
+    $this->_data['velocities'] = $velocities;
+    $this->_data['links'] = $this->_getLinkList();
   }
 
   public function __get ($name) {
-    return $this->data[$name];
+    return $this->_data[$name];
   }
 
   public function __set ($name, $value) {
@@ -44,7 +44,7 @@ class Station {
     ) {
       $value = floatval($value);
     }
-    $this->data[$name] = $value;
+    $this->_data[$name] = $value;
   }
 
   private function _getLinkList () {
