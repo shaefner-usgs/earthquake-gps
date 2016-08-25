@@ -1,7 +1,7 @@
 <?php
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Cooperators';
+  $TITLE = 'GNSS Data Sources';
   $NAVIGATION = true;
   $CONTACT = 'jsvarc';
 
@@ -12,7 +12,7 @@ if (!isset($TEMPLATE)) {
 
 <h2>Agencies Operating Continuous (Permanent) GNSS Sites</h2>
 
-<p>Many agencies operate permanent GNSS sites for which we display the results
+<p>Many agencies operate continuous GNSS sites for which we display the results
   of positioning and time series analysis on our website or that we use for
   reference frame adjustments.  The agency information is compiled from site
   logs, RINEX headers, and metadata that are provided on individual
