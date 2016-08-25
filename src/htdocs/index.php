@@ -107,5 +107,5 @@ $networks_html .= '</ul>';
   Memphis, and University of Nevada at Reno. We process GPS data that we
   collect, as well as data from the USGS Volcano Hazards Program (VHP), our
   cooperator institutions, UNAVCO Inc., and other sources (see a
-  <a href="cooperators.php">full listing of our cooperators</a>). These results
-  are available on this website as time series of daily GPS positions.</p>
+  <a href="gps/sources.php">full listing of observing agencies</a>). These
+  results are available on this website as time series of daily GPS positions.</p>
