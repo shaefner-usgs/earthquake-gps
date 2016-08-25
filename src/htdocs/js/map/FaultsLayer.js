@@ -29,14 +29,9 @@ var FaultsLayer = function () {
     tiptext: '{NAME}'
   });
 
-  _plates = L.mouseOverLayer({
-    dataUrl: _urlPrefix + 'plates/{z}/{x}/{y}.grid.json?callback={cb}',
-    tileOpts: {
-      minZoom: 0,
-      maxZoom: 5
-    },
-    tileUrl: _urlPrefix + 'plates/{z}/{x}/{y}.png',
-    tiptext: '{Name}'
+  _plates = L.tileLayer(_urlPrefix + 'plates/{z}/{x}/{y}.png', {
+    minZoom: 0,
+    maxZoom: 5
   });
 
   return L.layerGroup([_plates, _faults]);
