@@ -81,7 +81,7 @@ var EarthquakesLayer = function (options) {
     var age,
         eqtime;
 
-    eqtime = Moment.utc(timestamp);
+    eqtime = Moment.utc(timestamp, 'x');
     if (eqtime.isSameOrAfter(_pastHour)) {
       age = 'pasthour';
     } else if (eqtime.isSameOrAfter(_pastDay)) {
@@ -113,7 +113,7 @@ var EarthquakesLayer = function (options) {
     props = feature.properties;
     data = {
       mag: Math.round(props.mag * 10) / 10,
-      time: Moment.utc(props.time).format('ddd, MMM D HH:mm:ss') + ' UTC',
+      time: Moment.utc(props.time, 'x').format('ddd, MMM D HH:mm:ss') + ' UTC',
       place: props.place,
       url: props.url
     };
