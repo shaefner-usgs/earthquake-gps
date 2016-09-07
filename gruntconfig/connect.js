@@ -47,7 +47,7 @@ var connect = {
       redirect: 'permanent'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/stations/?([a-z0-9])?$',
+      from: '^' + config.ini.MOUNT_PATH + '/stations/?([a-z0-9]+)?$',
       to: '/stationlist.php?filter=$1'
     },
     {

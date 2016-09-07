@@ -21,19 +21,19 @@ $db = new Db();
 $rsStationChars = $db->queryStationChars();
 
 // Create html for jumplist
-$nav_html = '<nav class="jumplist">';
+$navHtml = '<nav class="jumplist">';
 while ($row = $rsStationChars->fetch(PDO::FETCH_ASSOC)) {
-  $link_html = '<a href="' . $MOUNT_PATH . '/stations/%s">%s</a>';
+  $linkHtml = '<a href="' . $MOUNT_PATH . '/stations/%s">%s</a>';
   // highlight current selection
   if ($row['alphanum'] === $filter) {
-    $link_html = '<a href="' . $MOUNT_PATH . '/stations/%s"><strong>%s</strong></a>';
+    $linkHtml = '<a href="' . $MOUNT_PATH . '/stations/%s"><strong>%s</strong></a>';
   }
-  $nav_html .= sprintf($link_html,
+  $navHtml .= sprintf($linkHtml,
     $row['alphanum'],
     strtoupper($row['alphanum'])
   );
 }
-$nav_html .= '</nav>';
+$navHtml .= '</nav>';
 
 // Db query result: station list
 $rsStationList = $db->queryStationList($filter);
@@ -50,32 +50,32 @@ $sel = strtoupper($filter);
 if ($sel === '') {
   $sel = 'All';
 }
-$subheader_html = sprintf ('<h2>&lsquo;%s&rsquo; Stations (%d)</h2>',
+$subheaderHtml = sprintf ('<h2>&lsquo;%s&rsquo; Stations (%d)</h2>',
   $sel,
   count($stations)
 );
 
 // Create html for station list
-$list_html = '<ul class="stations no-style">';
+$listHtml = '<ul class="stations no-style">';
 foreach ($stations as $station => $networks) {
-  $networks_html = '<ul class="no-style">';
+  $networksHtml = '<ul class="no-style">';
   foreach ($networks as $network) {
-    $networks_html .= sprintf ('<li><a href="%s/%s/%s">%s</a></li>',
+    $networksHtml .= sprintf ('<li><a href="%s/%s/%s">%s</a></li>',
       $MOUNT_PATH,
       $network,
       $station,
       $network
     );
   }
-  $networks_html .= '</ul>';
-  $list_html .= sprintf('<li><h3>%s</h3>%s</li>',
+  $networksHtml .= '</ul>';
+  $listHtml .= sprintf('<li><h3>%s</h3>%s</li>',
     strtoupper($station),
-    $networks_html
+    $networksHtml
   );
 }
-$list_html .= '</ul>';
+$listHtml .= '</ul>';
 
 // Render html
-print $nav_html;
-print $subheader_html;
-print $list_html;
+print $navHtml;
+print $subheaderHtml;
+print $listHtml;

@@ -247,14 +247,22 @@ class Db {
    */
   public function queryStationList ($firstchar=NULL) {
     $filter = "$firstchar%";
+    $show = 1; // show only stations in 'non-hidden' networks by default
+
+    if ($firstchar === 'hidden') { // show stations in 'hidden' networks as well
+      $filter = '%';
+      $show = 0;
+    }
+
     $sql = 'SELECT r.station, r.network
       FROM nca_gps_relations r
       LEFT JOIN nca_gps_networks n ON (r.network = n.name)
-      WHERE r.station LIKE :filter AND n.show = 1
+      WHERE r.station LIKE :filter AND n.show = :show
       ORDER BY `station` ASC, `network` ASC';
 
       return $this->_execQuery($sql, array(
-        'filter' => $filter
+        'filter' => $filter,
+        'show' => $show
       ));
     }
 
