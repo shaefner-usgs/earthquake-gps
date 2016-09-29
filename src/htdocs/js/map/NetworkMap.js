@@ -86,7 +86,7 @@ var NetworkMap = function (options) {
       station = a.textContent.match(/\w+/);
 
       // add label events to station buttons
-      a.station = station;
+      a.station = station; // add station prop so it's accessible from event
       a.addEventListener('click', hideLabel);
       a.addEventListener('mouseout', hideLabel);
       a.addEventListener('mouseover', showLabel);
