@@ -109,3 +109,14 @@ $networks_html .= '</ul>';
   cooperator institutions, UNAVCO Inc., and other sources (see a
   <a href="gps/sources.php">full listing of observing agencies</a>). These
   results are available on this website as time series of daily GPS positions.</p>
+
+<h2>Publications</h2>
+
+<p>Campaign GPS data collected by the EHP for earthquake and tectonic studies
+  have provided input for many <a href="gps/pdf/USGS-SGPS-refs.pdf">publications</a>.
+  We request that those using these data in their published results inform us
+  of the the citation for inclusion in this list by contacting
+  <a href="mailto:jrmurray@usgs.gov">Jessica Murray</a>. Raw and RINEX data
+  files for the campaign measurements collected by our group may be obtained
+  through the <a href="http://www.ncedc.org/survey-gps/">NCEDC</a>. Please
+  cite these data using doi:10.5066/F7NG4NRK</p>
