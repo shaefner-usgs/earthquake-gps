@@ -51,9 +51,6 @@ if (!in_array($network, $networkList)) {
 // Db query result: velocities for selected network and station
 $rsVelocities = $db->queryVelocities($network, $station);
 
-// Create velocities array from db result that is more friendly for parsing
-$velocities = $db->createVelocitiesArray($rsVelocities);
-
 // Db query result: station details for selected station and network
 $rsStation = $db->queryStation($station, $network);
 
@@ -61,7 +58,7 @@ $rsStation = $db->queryStation($station, $network);
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
   'Station',
-  [$networkList, $velocities]
+  [$networkList, $rsVelocities]
 );
 $stationModel = $rsStation->fetch();
 

@@ -20,12 +20,12 @@ include_once '../conf/config.inc.php'; // app config
 class Station {
   private $_data = array();
 
-  public function __construct ($networkList=NULL, $velocities=NULL) {
+  public function __construct ($networkList=NULL, $rsVelocities=NULL) {
 
     $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
       . '/' . $this->station;
     $this->_data['networkList'] = $networkList;
-    $this->_data['velocities'] = $velocities;
+    $this->_data['velocities'] = $this->_createVelocitiesArray($rsVelocities);
     $this->_data['links'] = $this->_getLinkList();
   }
 
@@ -45,6 +45,71 @@ class Station {
       $value = floatval($value);
     }
     $this->_data[$name] = $value;
+  }
+
+  /**
+   * Create an array of velocities grouped by station, type, and component
+   *
+   * the velocites table contains data in different reference frames ('type')
+   * and only certain fields are applicable to each ref. frame
+   *
+   * @param $rsVelocities {Object} - PDOStatement object
+   *
+   * @return $velocites {Array}
+   */
+  private function _createVelocitiesArray ($rsVelocities) {
+    while ($row = $rsVelocities->fetch(PDO::FETCH_ASSOC)) {
+      // stations are stored in lowercase in db except in this table
+      $station = strtolower($row['station']);
+      $type = trim($row['type']);
+
+      // Shared props
+      $north = [
+        'velocity' => $row['north_velocity'],
+        'sigma' => $row['north_sigma']
+      ];
+      $east = [
+        'velocity' => $row['east_velocity'],
+        'sigma' => $row['east_sigma']
+      ];
+      $up = [
+        'velocity' => $row['up_velocity'],
+        'sigma' => $row['up_sigma']
+      ];
+
+      // Props based on type (cleaned, itrf2008, nafixed)
+      if ($type === 'cleaned') {
+        $north['whitenoise'] = $row['whitenoisenorth'];
+        $north['randomwalk'] = $row['randomwalknorth'];
+        $north['flickernoise'] = $row['flickernoisenorth'];
+        $east['whitenoise'] = $row['whitenoiseeast'];
+        $east['randomwalk'] = $row['randomwalkeast'];
+        $east['flickernoise'] = $row['flickernoiseeast'];
+        $up['whitenoise'] = $row['whitenoiseup'];
+        $up['randomwalk'] = $row['randomwalkup'];
+        $up['flickernoise'] = $row['flickernoiseup'];
+      } else {
+        $north['rms'] = $row['north_rms'];
+        $east['rms'] = $row['east_rms'];
+        $up['rms'] = $row['up_rms'];
+      }
+
+      $velocities['data'][$station][$type]['north'] = $north;
+      $velocities['data'][$station][$type]['east'] = $east;
+      $velocities['data'][$station][$type]['up'] = $up;
+
+      // Lookup table for column names
+      $velocities['lookup'] = [
+        'flickernoise' => 'Flicker Noise',
+        'randomwalk' => 'Random Walk',
+        'rms' => 'RMS (mm)',
+        'sigma' => 'Uncertainty (mm/yr)	',
+        'velocity' => 'Velocity (mm/yr)	',
+        'whitenoise' => 'White Noise'
+      ];
+    }
+
+    return $velocities;
   }
 
   private function _getLinkList () {
