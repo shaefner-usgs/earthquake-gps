@@ -60,7 +60,7 @@ class StationView {
       if (is_file("$baseDir/$dataPath/$baseImg")) {
         $navDownloads = $this->_getNavDownloads($type);
         $navPlots = $this->_getNavPlots($type);
-        $table = $this->_getTable($type);
+        $velocitiesTable = $this->_getVelocitiesTable($type);
 
         $dataHtml .= sprintf('
           <section class="panel" data-title="%s">
@@ -74,7 +74,7 @@ class StationView {
             %s
             <h3>Downloads</h3>
             %s
-            <h3>Velocities and Uncertainties</h3>
+            <h3>Velocities</h3>
             %s
           </section>',
           $name,
@@ -84,7 +84,7 @@ class StationView {
           $name,
           $explanation,
           $navDownloads,
-          $table
+          $velocitiesTable
         );
       }
     }
@@ -193,7 +193,7 @@ class StationView {
       '/' . $type;
   }
 
-  private function _getTable ($type) {
+  private function _getVelocitiesTable ($type) {
     $rows = '';
     $station = $this->_model->station;
     $tableHtml = '';
