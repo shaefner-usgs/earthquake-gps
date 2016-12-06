@@ -158,27 +158,80 @@ class Db {
   }
 
   /**
-   * Query db to get offsets for a given station
+   * Query db to get noise for a given network and optional station
    *
    * @param $network {String}
+   * @param $station {String} default is NULL
    *
    * @return {Function}
    */
-  public function queryOffsets ($station) {
-    $sql = 'SELECT * FROM nca_gps_offsets
-      WHERE `station` = :station
-      ORDER BY `datatype` ASC, `component` ASC';
+  public function queryNoise ($network, $station=NULL) {
+    $params['network'] = $network;
+    $where = "`network` = :network";
 
-    return $this->_execQuery($sql, array(
-      'station' => $station
-    ));
+    if ($station) { // add station info to query
+      $params['station'] = $station;
+      $where .= ' AND  `station` = :station';
+    }
+
+    $sql = "SELECT * FROM nca_gps_noise
+      WHERE $where";
+
+    return $this->_execQuery($sql, $params);
+  }
+
+  /**
+   * Query db to get offsets for a given network and optional station
+   *
+   * @param $network {String}
+   * @param $station {String} default is NULL
+   *
+   * @return {Function}
+   */
+  public function queryOffsets ($network, $station=NULL) {
+    $params['network'] = $network;
+    $where = "`network` = :network";
+
+    if ($station) {
+      $params['station'] = $station;
+      $where .= ' AND  `station` = :station';
+    }
+
+    $sql = "SELECT * FROM nca_gps_offsets
+      WHERE $where
+      ORDER BY `datatype` ASC, `component` ASC";
+
+    return $this->_execQuery($sql, $params);
+  }
+
+  /**
+   * Query db to get post seismic data for a given network and optional station
+   *
+   * @param $network {String}
+   * @param $station {String} default is NULL
+   *
+   * @return {Function}
+   */
+  public function queryPostSeismic ($network, $station=NULL) {
+    $params['network'] = $network;
+    $where = "`network` = :network";
+
+    if ($station) { // add station info to query
+      $params['station'] = $station;
+      $where .= ' AND  `station` = :station';
+    }
+
+    $sql = "SELECT * FROM nca_gps_postseismic
+      WHERE $where";
+
+    return $this->_execQuery($sql, $params);
   }
 
   /**
    * Query db to get a QC data for a given station
    *
    * @param $station {String}
-   * @param $limit {Int}
+   * @param $limit {Int} default is NULL
    *
    * @return {Function}
    */
@@ -194,6 +247,29 @@ class Db {
     return $this->_execQuery($sql, array(
       'station' => $station
     ));
+  }
+
+  /**
+   * Query db to get seasonal data for a given network and optional station
+   *
+   * @param $network {String}
+   * @param $station {String} default is NULL
+   *
+   * @return {Function}
+   */
+  public function querySeasonal ($network, $station=NULL) {
+    $params['network'] = $network;
+    $where = "`network` = :network";
+
+    if ($station) { // add station info to query
+      $params['station'] = $station;
+      $where .= ' AND  `station` = :station';
+    }
+
+    $sql = "SELECT * FROM nca_gps_seasonal
+      WHERE $where";
+
+    return $this->_execQuery($sql, $params);
   }
 
   /**
