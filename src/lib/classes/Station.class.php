@@ -10,6 +10,10 @@ include_once '../conf/config.inc.php'; // app config
  * Station Object (
  *   [links] => Array
  *   [networkList] => Array
+ *   [noise] => Array
+ *   [offsets] => Array
+ *   [postSeismic] => Array
+ *   [seasonal] => Array
  *   [stationPath] => String
  *   [velocities] => Array
  *   ... (+ all properties returned from db query)
@@ -20,13 +24,24 @@ include_once '../conf/config.inc.php'; // app config
 class Station {
   private $_data = array();
 
-  public function __construct ($networkList=NULL, $rsVelocities=NULL) {
+  public function __construct (
+    $networkList=NULL,
+    $rsNoise=NULL,
+    $rsOffsets=NULL,
+    $rsPostSeismic=NULL,
+    $rsSeasonal=NULL,
+    $rsVelocities=NULL
+  ) {
 
+    $this->_data['links'] = $this->_getLinkList();
+    $this->_data['networkList'] = $networkList;
+    $this->_data['noise'] = $rsNoise->fetchAll(PDO::FETCH_ASSOC);
+    $this->_data['offsets'] = $rsOffsets->fetchAll(PDO::FETCH_ASSOC);
+    $this->_data['postSeismic'] = $rsPostSeismic->fetchAll(PDO::FETCH_ASSOC);
+    $this->_data['seasonal'] = $rsSeasonal->fetchAll(PDO::FETCH_ASSOC);
     $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
       . '/' . $this->station;
-    $this->_data['networkList'] = $networkList;
     $this->_data['velocities'] = $this->_createVelocitiesArray($rsVelocities);
-    $this->_data['links'] = $this->_getLinkList();
   }
 
   public function __get ($name) {
