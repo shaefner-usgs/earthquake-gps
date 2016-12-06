@@ -76,7 +76,7 @@ class Station {
     while ($row = $rsVelocities->fetch(PDO::FETCH_ASSOC)) {
       // stations are stored in lowercase in db except in this table
       $station = strtolower($row['station']);
-      $type = trim($row['type']);
+      $type = trim($row['datatype']);
 
       // Shared props
       $north = [
@@ -93,17 +93,7 @@ class Station {
       ];
 
       // Props based on type (cleaned, itrf2008, nafixed)
-      if ($type === 'cleaned') {
-        $north['whitenoise'] = $row['whitenoisenorth'];
-        $north['randomwalk'] = $row['randomwalknorth'];
-        $north['flickernoise'] = $row['flickernoisenorth'];
-        $east['whitenoise'] = $row['whitenoiseeast'];
-        $east['randomwalk'] = $row['randomwalkeast'];
-        $east['flickernoise'] = $row['flickernoiseeast'];
-        $up['whitenoise'] = $row['whitenoiseup'];
-        $up['randomwalk'] = $row['randomwalkup'];
-        $up['flickernoise'] = $row['flickernoiseup'];
-      } else {
+      if ($type !== 'cleaned') {
         $north['rms'] = $row['north_rms'];
         $east['rms'] = $row['east_rms'];
         $up['rms'] = $row['up_rms'];
@@ -115,12 +105,9 @@ class Station {
 
       // Lookup table for column names
       $velocities['lookup'] = [
-        'flickernoise' => 'Flicker Noise',
-        'randomwalk' => 'Random Walk',
         'rms' => 'RMS (mm)',
         'sigma' => 'Uncertainty (mm/yr)	',
         'velocity' => 'Velocity (mm/yr)	',
-        'whitenoise' => 'White Noise'
       ];
     }
 
