@@ -100,7 +100,7 @@ class Db {
    */
   public function queryLastUpdated ($network, $days=7) {
     $sql = 'SELECT `station`, `last_observation` FROM nca_gps_velocities
-      WHERE `type` = "nafixed" AND `network` = :network
+      WHERE `datatype` = "nafixed" AND `network` = :network
         AND `last_observation` < (NOW() - INTERVAL :days DAY)
       ORDER BY `last_observation` DESC, `station` ASC';
 
@@ -361,7 +361,7 @@ class Db {
       $fields .= ', v.last_observation, v.up_rms, v.north_rms, v.east_rms';
       $joinClause .= ' LEFT JOIN nca_gps_velocities v USING (station)';
       $where = 'r.network = :network AND v.network = :network
-        AND v.type = "nafixed"';
+        AND v.datatype = "nafixed"';
     }
 
     $sql = "SELECT $fields
@@ -402,7 +402,7 @@ class Db {
    * @return {Function}
    */
   public function queryVelocities ($network, $station=NULL) {
-    $order = 'station ASC, type ASC';
+    $order = 'station ASC, datatype ASC';
     $params['network'] = $network;
     $where = 'network = :network';
 
