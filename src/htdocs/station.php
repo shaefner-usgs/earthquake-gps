@@ -48,17 +48,28 @@ if (!in_array($network, $networkList)) {
   array_push($networkList, $network);
 }
 
-// Db query result: velocities for selected network and station
+// Db query results for selected network and station
+$rsNoise = $db->queryNoise($network, $station);
+$rsOffsets = $db->queryOffsets($network, $station);
+$rsPostSeismic = $db->queryPostSeismic($network, $station);
+$rsSeasonal = $db->querySeasonal($network, $station);
 $rsVelocities = $db->queryVelocities($network, $station);
 
 // Db query result: station details for selected station and network
 $rsStation = $db->queryStation($station, $network);
 
-// Create the station model using the station details + $networkList, $velocities
+// Create the station model using the station details + $networkList, etc.
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
   'Station',
-  [$networkList, $rsVelocities]
+  [
+    $networkList,
+    $rsNoise,
+    $rsOffsets,
+    $rsPostSeismic,
+    $rsSeasonal,
+    $rsVelocities
+  ]
 );
 $stationModel = $rsStation->fetch();
 
