@@ -99,7 +99,7 @@ class Db {
    * @return {Function}
    */
   public function queryLastUpdated ($network, $days=7) {
-    $sql = 'SELECT `station`, `last_observation` FROM nca_gps_velocities
+    $sql = 'SELECT `station`, `last_observation` FROM gps_velocities
       WHERE `datatype` = "nafixed" AND `network` = :network
         AND `last_observation` < (NOW() - INTERVAL :days DAY)
       ORDER BY `last_observation` DESC, `station` ASC';
@@ -118,8 +118,8 @@ class Db {
    * @return {Function}
    */
   public function queryNetworkList ($station) {
-    $sql = 'SELECT r.network FROM nca_gps_relations r
-      LEFT JOIN nca_gps_networks n ON r.network = n.name
+    $sql = 'SELECT r.network FROM gps_relations r
+      LEFT JOIN gps_networks n ON r.network = n.name
       WHERE r.station = :station AND n.show = 1
       ORDER BY `network` ASC';
 
@@ -136,7 +136,7 @@ class Db {
    * @return {Function}
    */
   public function queryNetwork ($network) {
-    $sql = 'SELECT * FROM nca_gps_networks
+    $sql = 'SELECT * FROM gps_networks
       WHERE `name` = :network';
 
     return $this->_execQuery($sql, array(
@@ -150,7 +150,7 @@ class Db {
    * @return {Function}
    */
   public function queryNetworks () {
-    $sql = 'SELECT * FROM nca_gps_networks
+    $sql = 'SELECT * FROM gps_networks
       WHERE `show` = 1
       ORDER BY `name` ASC';
 
@@ -174,7 +174,7 @@ class Db {
       $where .= ' AND  `station` = :station';
     }
 
-    $sql = "SELECT * FROM nca_gps_noise
+    $sql = "SELECT * FROM gps_noise
       WHERE $where";
 
     return $this->_execQuery($sql, $params);
@@ -197,7 +197,7 @@ class Db {
       $where .= ' AND  `station` = :station';
     }
 
-    $sql = "SELECT * FROM nca_gps_offsets
+    $sql = "SELECT * FROM gps_offsets
       WHERE $where
       ORDER BY `datatype` ASC, `component` ASC";
 
@@ -221,7 +221,7 @@ class Db {
       $where .= ' AND  `station` = :station';
     }
 
-    $sql = "SELECT * FROM nca_gps_postseismic
+    $sql = "SELECT * FROM gps_postseismic
       WHERE $where";
 
     return $this->_execQuery($sql, $params);
@@ -236,7 +236,7 @@ class Db {
    * @return {Function}
    */
   public function queryQcData ($station, $limit=NULL) {
-    $sql = 'SELECT * FROM nca_gps_qualitycontrol
+    $sql = 'SELECT * FROM gps_qualitycontrol
       WHERE `station` = :station
       ORDER BY `date` DESC';
 
@@ -266,7 +266,7 @@ class Db {
       $where .= ' AND  `station` = :station';
     }
 
-    $sql = "SELECT * FROM nca_gps_seasonal
+    $sql = "SELECT * FROM gps_seasonal
       WHERE $where";
 
     return $this->_execQuery($sql, $params);
@@ -284,8 +284,8 @@ class Db {
     $params['station'] = $station;
     $sql = 'SELECT s.lat, s.lon, s.elevation, s.x, s.y, s.z, s.station,
       s.showcoords, r.stationtype, r.network
-      FROM nca_gps_stations s
-      LEFT JOIN nca_gps_relations r USING (station)
+      FROM gps_stations s
+      LEFT JOIN gps_relations r USING (station)
       WHERE s.station = :station';
 
     if ($network) {
@@ -303,8 +303,8 @@ class Db {
    */
   public function queryStationChars () {
     $sql = 'SELECT DISTINCT LEFT(r.station, 1) AS `alphanum`
-      FROM nca_gps_relations r
-      LEFT JOIN nca_gps_networks n ON (r.network = n.name)
+      FROM gps_relations r
+      LEFT JOIN gps_networks n ON (r.network = n.name)
       WHERE n.show = 1
       ORDER BY
         CASE WHEN LEFT(alphanum, 1) REGEXP ("^[0-9]") THEN 1 ELSE 0 END,
@@ -331,8 +331,8 @@ class Db {
     }
 
     $sql = 'SELECT r.station, r.network
-      FROM nca_gps_relations r
-      LEFT JOIN nca_gps_networks n ON (r.network = n.name)
+      FROM gps_relations r
+      LEFT JOIN gps_networks n ON (r.network = n.name)
       WHERE r.station LIKE :filter AND n.show = :show
       ORDER BY `station` ASC, `network` ASC';
 
@@ -353,19 +353,19 @@ class Db {
     $fields = 's.id, s.station, s.lat, s.lon, s.destroyed, s.showcoords,
       s.elevation, s.x, s.y, s.z, s.num_obs, s.obs_years,
       r.network, r.stationtype, n.show';
-    $joinClause = 'LEFT JOIN nca_gps_relations r USING (station)
-      LEFT JOIN nca_gps_networks n ON n.name = r.network';
+    $joinClause = 'LEFT JOIN gps_relations r USING (station)
+      LEFT JOIN gps_networks n ON n.name = r.network';
     $where = 'n.show = 1';
 
     if ($network) { // add velocity fields and limit results to given network
       $fields .= ', v.last_observation, v.up_rms, v.north_rms, v.east_rms';
-      $joinClause .= ' LEFT JOIN nca_gps_velocities v USING (station)';
+      $joinClause .= ' LEFT JOIN gps_velocities v USING (station)';
       $where = 'r.network = :network AND v.network = :network
         AND v.datatype = "nafixed"';
     }
 
     $sql = "SELECT $fields
-      FROM nca_gps_stations s
+      FROM gps_stations s
       $joinClause
       WHERE $where
       GROUP BY s.station
@@ -384,7 +384,7 @@ class Db {
    * @return {Function}
    */
   public function queryTimeSeries ($station) {
-    $sql = 'SELECT * FROM nca_gps_timeseries
+    $sql = 'SELECT * FROM gps_timeseries
       WHERE station = :station
       ORDER BY `epoch` ASC';
 
@@ -412,7 +412,7 @@ class Db {
       $where .= ' AND station = :station';
     }
 
-    $sql = "SELECT * FROM nca_gps_velocities
+    $sql = "SELECT * FROM gps_velocities
       WHERE $where
       ORDER BY $order";
 
