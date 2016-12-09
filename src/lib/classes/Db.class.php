@@ -368,7 +368,7 @@ class Db {
       FROM gps_stations s
       $joinClause
       WHERE $where
-      GROUP BY s.station
+      #GROUP BY s.station
       ORDER BY s.station ASC";
 
     return $this->_execQuery($sql, array(
