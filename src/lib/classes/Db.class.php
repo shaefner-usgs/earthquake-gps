@@ -361,7 +361,7 @@ class Db {
       $fields .= ', v.last_observation, v.up_rms, v.north_rms, v.east_rms';
       $joinClause .= ' LEFT JOIN gps_velocities v USING (station)';
       $where = 'r.network = :network AND v.network = :network
-        AND v.datatype = "na"';
+        AND v.datatype = "nafixed"';
     }
 
     $sql = "SELECT $fields
