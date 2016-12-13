@@ -61,6 +61,7 @@ class StationView {
         $navDownloads = $this->_getNavDownloads($type);
         $navPlots = $this->_getNavPlots($type);
         $velocitiesTable = $this->_getVelocitiesTable($type);
+        $seasonalTable = $this->_getSeasonalTable($type);
 
         $html .= sprintf('
           <section class="panel" data-title="%s">
@@ -76,6 +77,8 @@ class StationView {
             %s
             <h3>Velocities</h3>
             %s
+            <h3>Seasonal</h3>
+            %s
           </section>',
           $name,
           $name,
@@ -84,7 +87,8 @@ class StationView {
           $name,
           $explanation,
           $navDownloads,
-          $velocitiesTable
+          $velocitiesTable,
+          $seasonalTable
         );
       }
     }
@@ -193,10 +197,28 @@ class StationView {
       '/' . $type;
   }
 
+  private function _getSeasonalTable ($type) {
+    $html = '';
+    $rows = '';
+    $seasonal_rows = $this->_model->seasonal;
+
+    $html = '<table>';
+    foreach($seasonal_rows as $row) {
+      if ($row['datatype'] === $type) {
+        $rows .= '<tr><td>' . $row['id'] . '</td></tr>';
+      }
+    }
+    $html .= $header;
+    $html .= $rows;
+    $html .= '</table>';
+
+    return $html;
+  }
+
   private function _getVelocitiesTable ($type) {
+    $html = '';
     $rows = '';
     $station = $this->_model->station;
-    $html = '';
     $velocities = $this->_model->velocities;
 
     $components = $velocities['data'][$station][$type];
