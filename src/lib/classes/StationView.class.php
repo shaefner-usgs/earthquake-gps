@@ -40,7 +40,7 @@ class StationView {
   }
 
   private function _getData () {
-    $dataHtml = '<div class="tablist">';
+    $html = '<div class="tablist">';
     $types = [
       'nafixed' => 'NA-fixed',
       'itrf2008' => 'ITRF2008',
@@ -62,7 +62,7 @@ class StationView {
         $navPlots = $this->_getNavPlots($type);
         $velocitiesTable = $this->_getVelocitiesTable($type);
 
-        $dataHtml .= sprintf('
+        $html .= sprintf('
           <section class="panel" data-title="%s">
             <header>
               <h2>%s</h2>
@@ -88,9 +88,9 @@ class StationView {
         );
       }
     }
-    $dataHtml .= '</div>';
+    $html .= '</div>';
 
-    return $dataHtml;
+    return $html;
   }
 
   private function _getDisclaimer () {
@@ -128,16 +128,16 @@ class StationView {
   }
 
   private function _getLinkList () {
-    $linkListHtml = '<h2>Station Details</h2>';
+    $html = '<h2>Station Details</h2>';
     $links = $this->_model->links;
 
-    $linkListHtml .= '<ul>';
+    $html .= '<ul>';
     foreach($links as $key => $value) {
-      $linkListHtml .= '<li><a href="' . $value . '">' . $key . '</a></li>';
+      $html .= '<li><a href="' . $value . '">' . $key . '</a></li>';
     }
-    $linkListHtml .= '</ul>';
+    $html .= '</ul>';
 
-    return $linkListHtml;
+    return $html;
   }
 
   private function _getMap () {
@@ -145,7 +145,7 @@ class StationView {
   }
 
   private function _getNavDownloads ($type) {
-    $navDownloadsHtml = '
+    $html = '
       <nav class="downloads">
         <span>Raw Data:</span>
         <ul class="no-style">
@@ -165,11 +165,11 @@ class StationView {
         </ul>
       </nav>';
 
-    return $navDownloadsHtml;
+    return $html;
   }
 
   private function _getNavPlots ($type) {
-    $navPlotsHtml = '
+    $html = '
       <nav class="plots ' . $type . '">
         <span>Detrended:</span>
         <ul class="no-style pipelist">
@@ -185,7 +185,7 @@ class StationView {
         </ul>
       </nav>';
 
-    return $navPlotsHtml;
+    return $html;
   }
 
   private function _getPath ($type) {
@@ -196,12 +196,12 @@ class StationView {
   private function _getVelocitiesTable ($type) {
     $rows = '';
     $station = $this->_model->station;
-    $tableHtml = '';
+    $html = '';
     $velocities = $this->_model->velocities;
 
     $components = $velocities['data'][$station][$type];
     if ($components) {
-      $tableHtml = '<table>';
+      $html = '<table>';
       foreach($components as $direction => $data) {
         $header = '<tr><td class="empty"></td>';
         $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
@@ -212,12 +212,12 @@ class StationView {
         $header .= '</tr>';
         $rows .= '</tr>';
       }
-      $tableHtml .= $header;
-      $tableHtml .= $rows;
-      $tableHtml .= '</table>';
+      $html .= $header;
+      $html .= $rows;
+      $html .= '</table>';
     }
 
-    return $tableHtml;
+    return $html;
   }
 
   public function render () {
