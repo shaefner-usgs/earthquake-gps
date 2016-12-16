@@ -26,7 +26,7 @@ class StationView {
     $networks = $this->_model->networkList;
 
     $campaignListHtml .= '<ul>';
-    foreach($networks as $network) {
+    foreach ($networks as $network) {
       $campaignListHtml .= sprintf('<li><a href="%s/%s/%s">%s</a></li>',
         $GLOBALS['MOUNT_PATH'],
         $network,
@@ -41,7 +41,7 @@ class StationView {
 
   private function _getData () {
     $html = '<div class="tablist">';
-    $types = [
+    $datatypes = [
       'nafixed' => 'NA-fixed',
       'itrf2008' => 'ITRF2008',
       'filtered' => 'Filtered'
@@ -49,49 +49,62 @@ class StationView {
 
     $explanation = $this->_getExplanation();
 
-    foreach($types as $type => $name) {
+    foreach ($datatypes as $datatype => $name) {
       $baseDir = $GLOBALS['DATA_DIR'];
       $baseImg = $this->_model->station . '.png';
       $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
-      $dataPath = $this->_getPath($type);
 
-      $baseImgSrc = "$baseUri/$dataPath/$baseImg";
+      $dataPath = $this->_getPath($datatype);
+      $downloadsHtml = $this->_getDownloads($datatype);
 
+      $tables = [
+        'Noise' => $this->_getTable('noise', $datatype),
+        'Offsets' => $this->_getTable('offsets', $datatype),
+        'Post-seismic' => $this->_getTable('postSeismic', $datatype),
+        'Seasonal' => $this->_getTable('seasonal', $datatype),
+        'Velocities' => $this->_getVelocitiesTable($datatype)
+      ];
+
+      $plotsHtml = '';
       if (is_file("$baseDir/$dataPath/$baseImg")) {
-        $navDownloads = $this->_getNavDownloads($type);
-        $navPlots = $this->_getNavPlots($type);
-        $velocitiesTable = $this->_getVelocitiesTable($type);
-        $seasonalTable = $this->_getSeasonalTable($type);
-
-        $html .= sprintf('
-          <section class="panel" data-title="%s">
-            <header>
-              <h2>%s</h2>
-            </header>
-            %s
-            <div class="image">
-              <img src="%s" class="toggle" alt="Plot showing %s data (All data)" />
-            </div>
-            %s
-            <h3>Downloads</h3>
-            %s
-            <h3>Velocities</h3>
-            %s
-            <h3>Seasonal</h3>
-            %s
-          </section>',
-          $name,
-          $name,
-          $navPlots,
-          $baseImgSrc,
-          $name,
-          $explanation,
-          $navDownloads,
-          $velocitiesTable,
-          $seasonalTable
+        $navPlots = $this->_getNavPlots($datatype);
+        $image = sprintf('<div class="image">
+            <img src="%s/%s/%s" class="toggle" alt="Plot showing %s data (All data)" />
+          </div>',
+          $baseUri,
+          $dataPath,
+          $baseImg,
+          $name
         );
+
+        $plotsHtml = $navPlots . $image . $explanation;
       }
+
+      $tablesHtml = '';
+      foreach ($tables as $tableName => $tableData) {
+        if ($tables[$tableName]) { // value is empty if no data in database
+          $tablesHtml .= "<h3>$tableName</h3>$tableData";
+        }
+      }
+
+      $html .= sprintf('
+        <section class="panel" data-title="%s">
+          <header>
+            <h2>%s</h2>
+          </header>
+          %s
+          <h3>Downloads</h3>
+          %s
+          %s
+        </section>',
+        $name,
+        $name,
+        $plotsHtml,
+        $downloadsHtml,
+        $tablesHtml
+      );
     }
+
     $html .= '</div>';
 
     return $html;
@@ -103,6 +116,30 @@ class StationView {
       may be errors in the antenna heights. The velocities are very dependent
       on the length of the span of observations. The presence of outliers
       (errant observations) sometimes contaminates the velocities.</small></p>';
+  }
+
+  private function _getDownloads ($datatype) {
+    $html = '
+      <nav class="downloads">
+        <span>Raw Data:</span>
+        <ul class="no-style">
+          <li><a href="' . $this->_getHref($datatype, '.rneu') .'">All</a></li>
+        </ul>
+        <span>Detrended Data:</span>
+        <ul class="no-style pipelist">
+          <li><a href="' . $this->_getHref($datatype, '_N.data.gz') .'">North</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_E.data.gz') .'">East</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_U.data.gz') .'">Up</a></li>
+        </ul>
+        <span>Trended Data:</span>
+        <ul class="no-style pipelist">
+          <li><a href="' . $this->_getHref($datatype, '_N_wtrend.data.gz') .'">North</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_E_wtrend.data.gz') .'">East</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_U_wtrend.data.gz') .'">Up</a></li>
+        </ul>
+      </nav>';
+
+    return $html;
   }
 
   private function _getExplanation () {
@@ -117,10 +154,10 @@ class StationView {
       </ul>';
   }
 
-  private function _getHref ($type, $suffix) {
+  private function _getHref ($datatype, $suffix) {
     $baseDir = $GLOBALS['DATA_DIR'];
     $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
-    $dataPath = $this->_getPath($type);
+    $dataPath = $this->_getPath($datatype);
     $file = $this->_model->station . $suffix;
     $href = "$baseUri/$dataPath/$file";
 
@@ -136,7 +173,7 @@ class StationView {
     $links = $this->_model->links;
 
     $html .= '<ul>';
-    foreach($links as $key => $value) {
+    foreach ($links as $key => $value) {
       $html .= '<li><a href="' . $value . '">' . $key . '</a></li>';
     }
     $html .= '</ul>';
@@ -148,86 +185,84 @@ class StationView {
     return '<div class="map"></div>';
   }
 
-  private function _getNavDownloads ($type) {
+  private function _getNavPlots ($datatype) {
     $html = '
-      <nav class="downloads">
-        <span>Raw Data:</span>
-        <ul class="no-style">
-          <li><a href="' . $this->_getHref($type, '.rneu') .'">All</a></li>
-        </ul>
-        <span>Detrended Data:</span>
-        <ul class="no-style pipelist">
-          <li><a href="' . $this->_getHref($type, '_N.data.gz') .'">North</a></li>
-          <li><a href="' . $this->_getHref($type, '_E.data.gz') .'">East</a></li>
-          <li><a href="' . $this->_getHref($type, '_U.data.gz') .'">Up</a></li>
-        </ul>
-        <span>Trended Data:</span>
-        <ul class="no-style pipelist">
-          <li><a href="' . $this->_getHref($type, '_N_wtrend.data.gz') .'">North</a></li>
-          <li><a href="' . $this->_getHref($type, '_E_wtrend.data.gz') .'">East</a></li>
-          <li><a href="' . $this->_getHref($type, '_U_wtrend.data.gz') .'">Up</a></li>
-        </ul>
-      </nav>';
-
-    return $html;
-  }
-
-  private function _getNavPlots ($type) {
-    $html = '
-      <nav class="plots ' . $type . '">
+      <nav class="plots ' . $datatype . '">
         <span>Detrended:</span>
         <ul class="no-style pipelist">
-          <li><a href="' . $this->_getHref($type, '_30.png') . '">Past 30 days</a></li>
-          <li><a href="' . $this->_getHref($type, '_90.png') . '">Past 90 days</a></li>
-          <li><a href="' . $this->_getHref($type, '_365.png') . '">Past year</a></li>
-          <li><a href="' . $this->_getHref($type, '_730.png') . '">Past 2 years</a></li>
-          <li><a href="' . $this->_getHref($type, '.png') . '" class="selected">All data</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_30.png') . '">Past 30 days</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_90.png') . '">Past 90 days</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_365.png') . '">Past year</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_730.png') . '">Past 2 years</a></li>
+          <li><a href="' . $this->_getHref($datatype, '.png') . '" class="selected">All data</a></li>
         </ul>
         <span>Trended:</span>
         <ul class="no-style pipelist">
-          <li><a href="' . $this->_getHref($type, '_wtrend.png') . '">All data</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_wtrend.png') . '">All data</a></li>
         </ul>
       </nav>';
 
     return $html;
   }
 
-  private function _getPath ($type) {
+  private function _getPath ($datatype) {
     return 'networks/' . $this->_model->network . '/' . $this->_model->station .
-      '/' . $type;
+      '/' . $datatype;
   }
 
-  private function _getSeasonalTable ($type) {
+  private function _getTable ($table, $datatype, $lookupTable=NULL) {
+    $components = [
+      'E' => 'East',
+      'N' => 'North',
+      'U' => 'Up'
+    ];
     $html = '';
-    $rows = '';
-    $seasonal_rows = $this->_model->seasonal;
+    $rows = $this->_model->$table;
 
-    $html = '<table>';
-    foreach($seasonal_rows as $row) {
-      if ($row['datatype'] === $type) {
-        $rows .= '<tr><td>' . $row['id'] . '</td></tr>';
+    if ($rows) {
+      $html = '<table>';
+      $trs = '';
+      foreach ($rows as $fields) {
+        if ($fields['datatype'] === $datatype) {
+          $th = '<tr><td class="empty"></td>';
+          $tr = '<tr>';
+          $tr .= '<th>' . $components[$fields['component']] . '</th>';
+
+          unset( // hide these values from the table view
+            $fields['component'],
+            $fields['datatype'],
+            $fields['id'],
+            $fields['network'],
+            $fields['station']
+          );
+          foreach ($fields as $key=>$value) {
+            $th .= "<th>$key</th>";
+            $tr .= "<td>$value</td>";
+          }
+          $th .= '</tr>';
+          $tr .= '</tr>';
+          $trs .= $tr;
+        }
       }
+      $html .= $th . $trs . '</table>';
     }
-    $html .= $header;
-    $html .= $rows;
-    $html .= '</table>';
 
     return $html;
   }
 
-  private function _getVelocitiesTable ($type) {
+  private function _getVelocitiesTable ($datatype) {
     $html = '';
     $rows = '';
     $station = $this->_model->station;
     $velocities = $this->_model->velocities;
 
-    $components = $velocities['data'][$station][$type];
+    $components = $velocities['data'][$station][$datatype];
     if ($components) {
       $html = '<table>';
-      foreach($components as $direction => $data) {
+      foreach ($components as $direction => $data) {
         $header = '<tr><td class="empty"></td>';
         $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
           $header .= '<th>' . $velocities['lookup'][$key] . '</th>';
           $rows .= "<td>$value</td>";
         }
