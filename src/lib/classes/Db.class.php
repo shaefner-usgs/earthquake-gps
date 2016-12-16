@@ -199,7 +199,7 @@ class Db {
 
     $sql = "SELECT * FROM gps_offsets
       WHERE $where
-      ORDER BY `datatype` ASC, `component` ASC";
+      ORDER BY `year` ASC";
 
     return $this->_execQuery($sql, $params);
   }
@@ -222,7 +222,8 @@ class Db {
     }
 
     $sql = "SELECT * FROM gps_postseismic
-      WHERE $where";
+      WHERE $where
+      ORDER BY `year` ASC";
 
     return $this->_execQuery($sql, $params);
   }
