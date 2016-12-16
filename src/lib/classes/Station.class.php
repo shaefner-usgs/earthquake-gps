@@ -32,7 +32,6 @@ class Station {
     $rsSeasonal=NULL,
     $rsVelocities=NULL
   ) {
-
     $this->_data['links'] = $this->_getLinkList();
     $this->_data['networkList'] = $networkList;
     $this->_data['noise'] = $rsNoise->fetchAll(PDO::FETCH_ASSOC);
@@ -76,7 +75,7 @@ class Station {
     while ($row = $rsVelocities->fetch(PDO::FETCH_ASSOC)) {
       // stations are stored in lowercase in db except in this table
       $station = strtolower($row['station']);
-      $type = trim($row['datatype']);
+      $datatype = trim($row['datatype']);
 
       // Shared props
       $north = [
@@ -93,15 +92,15 @@ class Station {
       ];
 
       // Props based on type (cleaned, itrf2008, nafixed)
-      if ($type !== 'cleaned') {
+      if ($datatype !== 'cleaned') {
         $north['rms'] = $row['north_rms'];
         $east['rms'] = $row['east_rms'];
         $up['rms'] = $row['up_rms'];
       }
 
-      $velocities['data'][$station][$type]['north'] = $north;
-      $velocities['data'][$station][$type]['east'] = $east;
-      $velocities['data'][$station][$type]['up'] = $up;
+      $velocities['data'][$station][$datatype]['north'] = $north;
+      $velocities['data'][$station][$datatype]['east'] = $east;
+      $velocities['data'][$station][$datatype]['up'] = $up;
 
       // Lookup table for column names
       $velocities['lookup'] = [
