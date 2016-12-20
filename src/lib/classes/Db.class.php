@@ -119,7 +119,7 @@ class Db {
    */
   public function queryNetworkList ($station) {
     $sql = 'SELECT r.network FROM gps_relations r
-      LEFT JOIN gps_networks n ON r.network = n.name
+      LEFT JOIN gps_networks n ON r.network = n.network
       WHERE r.station = :station AND n.show = 1
       ORDER BY `network` ASC';
 
@@ -137,7 +137,7 @@ class Db {
    */
   public function queryNetwork ($network) {
     $sql = 'SELECT * FROM gps_networks
-      WHERE `name` = :network';
+      WHERE `network` = :network';
 
     return $this->_execQuery($sql, array(
       'network' => $network
@@ -152,7 +152,7 @@ class Db {
   public function queryNetworks () {
     $sql = 'SELECT * FROM gps_networks
       WHERE `show` = 1
-      ORDER BY `name` ASC';
+      ORDER BY `network` ASC';
 
     return $this->_execQuery($sql);
   }
@@ -305,7 +305,7 @@ class Db {
   public function queryStationChars () {
     $sql = 'SELECT DISTINCT LEFT(r.station, 1) AS `alphanum`
       FROM gps_relations r
-      LEFT JOIN gps_networks n ON (r.network = n.name)
+      LEFT JOIN gps_networks n ON (r.network = n.network)
       WHERE n.show = 1
       ORDER BY
         CASE WHEN LEFT(alphanum, 1) REGEXP ("^[0-9]") THEN 1 ELSE 0 END,
@@ -333,7 +333,7 @@ class Db {
 
     $sql = 'SELECT r.station, r.network
       FROM gps_relations r
-      LEFT JOIN gps_networks n ON (r.network = n.name)
+      LEFT JOIN gps_networks n ON (r.network = n.network)
       WHERE r.station LIKE :filter AND n.show = :show
       ORDER BY `station` ASC, `network` ASC';
 
@@ -355,14 +355,15 @@ class Db {
       s.elevation, s.x, s.y, s.z, s.num_obs, s.obs_years,
       r.network, r.stationtype, n.show';
     $joinClause = 'LEFT JOIN gps_relations r USING (station)
-      LEFT JOIN gps_networks n ON n.name = r.network';
+      LEFT JOIN gps_networks n ON n.network = r.network';
     $where = 'n.show = 1';
 
     if ($network) { // add velocity fields and limit results to given network
-      $fields .= ', v.last_observation, v.up_rms, v.north_rms, v.east_rms';
-      $joinClause .= ' LEFT JOIN gps_velocities v USING (station)';
-      $where = 'r.network = :network AND v.network = :network
-        AND v.datatype = "nafixed"';
+      //$fields .= ', v.last_observation, v.up_rms, v.north_rms, v.east_rms';
+      //$joinClause .= ' LEFT JOIN gps_velocities v USING (station)';
+      //$where = 'r.network = :network AND v.network = :network
+      //  AND v.datatype = "nafixed"';
+      $where = 'r.network = :network';
     }
 
     $sql = "SELECT $fields
