@@ -33,7 +33,7 @@ while ($row = $rsNetworks->fetch(PDO::FETCH_ASSOC)) {
     ],
     'id' => 'point' . intval($row['id']),
     'properties' => [
-      'name' => $row['name'],
+      'name' => $row['network'],
       'type' => $row['type']
     ],
     'type' => 'Feature'
