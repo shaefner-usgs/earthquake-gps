@@ -10,6 +10,9 @@ class StationView {
   private $_model;
 
   public function __construct (Station $model) {
+    $this->_baseDir = $GLOBALS['DATA_DIR'];
+    $this->_baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
+
     $this->_model = $model;
   }
 
@@ -50,9 +53,7 @@ class StationView {
     $explanation = $this->_getExplanation();
 
     foreach ($datatypes as $datatype => $name) {
-      $baseDir = $GLOBALS['DATA_DIR'];
       $baseImg = $this->_model->station . '.png';
-      $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
 
       $dataPath = $this->_getPath($datatype);
       $downloadsHtml = $this->_getDownloads($datatype);
@@ -66,12 +67,12 @@ class StationView {
       ];
 
       $plotsHtml = '';
-      if (is_file("$baseDir/$dataPath/$baseImg")) {
+      if (is_file("$this->_baseDir/$dataPath/$baseImg")) {
         $navPlots = $this->_getNavPlots($datatype);
         $image = sprintf('<div class="image">
             <img src="%s/%s/%s" class="toggle" alt="Plot showing %s data (All data)" />
           </div>',
-          $baseUri,
+          $this->_baseUri,
           $dataPath,
           $baseImg,
           $name
@@ -155,13 +156,12 @@ class StationView {
   }
 
   private function _getHref ($datatype, $suffix) {
-    $baseDir = $GLOBALS['DATA_DIR'];
-    $baseUri = $GLOBALS['MOUNT_PATH'] . '/data';
     $dataPath = $this->_getPath($datatype);
     $file = $this->_model->station . $suffix;
-    $href = "$baseUri/$dataPath/$file";
+    $href = "$this->_baseUri/$dataPath/$file";
 
-    if (preg_match('/png$/', $file) && !is_file("$baseDir/$dataPath/$file")) {
+    // Check if img exists; if not link to no-data img
+    if (preg_match('/png$/', $file) && !is_file("$this->_baseDir/$dataPath/$file")) {
       $href = "#no-data";
     }
 
