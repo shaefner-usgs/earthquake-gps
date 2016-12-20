@@ -32,14 +32,15 @@ class Station {
     $rsSeasonal=NULL,
     $rsVelocities=NULL
   ) {
+    $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
+      . '/' . $this->station;
+
     $this->_data['links'] = $this->_getLinkList();
     $this->_data['networkList'] = $networkList;
     $this->_data['noise'] = $rsNoise->fetchAll(PDO::FETCH_ASSOC);
     $this->_data['offsets'] = $rsOffsets->fetchAll(PDO::FETCH_ASSOC);
     $this->_data['postSeismic'] = $rsPostSeismic->fetchAll(PDO::FETCH_ASSOC);
     $this->_data['seasonal'] = $rsSeasonal->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
-      . '/' . $this->station;
     $this->_data['velocities'] = $this->_createVelocitiesArray($rsVelocities);
   }
 
