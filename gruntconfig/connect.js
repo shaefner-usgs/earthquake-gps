@@ -43,7 +43,7 @@ var connect = {
   rules: [
     {
       from: '^(' + config.ini.MOUNT_PATH + ')(.*)/+$',
-      to: 'http://localhost:' + config.buildPort + '$1$2',
+      to: 'http://localhost:' + config.buildPort + '$1$2', // strip final '/'
       redirect: 'permanent'
     },
     {
