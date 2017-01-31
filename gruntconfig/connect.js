@@ -117,8 +117,7 @@ var connect = {
       ],
       livereload: config.liveReloadPort,
       middleware: addMiddleware,
-      open: 'http://localhost:' + config.buildPort + config.ini.MOUNT_PATH +
-        '/index.php',
+      open: 'http://localhost:' + config.buildPort + config.ini.MOUNT_PATH,
       port: config.buildPort
     }
   },
@@ -130,8 +129,7 @@ var connect = {
         config.dist + '/htdocs'
       ],
       middleware: addMiddleware,
-      open: 'http://localhost:' + config.distPort + config.ini.MOUNT_PATH +
-        '/index.php',
+      open: 'http://localhost:' + config.distPort + config.ini.MOUNT_PATH,
       port: config.distPort
     }
   },
