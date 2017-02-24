@@ -1,0 +1,45 @@
+@import '_common.scss';
+
+$height: 200px;
+
+nav button {
+  position: relative;
+  padding-left: 3.5rem;
+
+  .material-icons {
+    position: absolute;
+    left: 1rem;
+    bottom: 5px;
+  }
+
+  &.right {
+    padding-left: 2rem;
+    padding-right: 3.5rem;
+
+    .material-icons {
+      left: auto;
+      right: 1rem;
+    }
+  }
+}
+
+.dygraph-title {
+  font-family: Merriweather,Times,serif;
+  margin: 0;
+}
+
+.plot, .loading {
+  height: $height;
+}
+.loading {
+  padding-top: calc($height/2 - 20px);
+}
+
+.plots {
+  border: 1px solid #ddd;
+  padding: 0 1em 0;
+
+  > div {
+    margin: 1.8em 0;
+  }
+}

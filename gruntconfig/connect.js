@@ -2,11 +2,15 @@
 
 var config = require('./config');
 
+
+var MOUNT_PATH = config.ini.MOUNT_PATH;
+
+
 // handle proxies for template, rewrites, php parsing
 var addMiddleware = function (connect, options, middlewares) {
   middlewares.unshift(
-    require('grunt-connect-proxy/lib/utils').proxyRequest,
     require('grunt-connect-rewrite/lib/utils').rewriteRequest,
+    require('grunt-connect-proxy/lib/utils').proxyRequest,
     require('gateway')(options.base[0], {
       '.php': 'php-cgi',
       'env': {
@@ -26,9 +30,16 @@ var connect = {
 
   proxies: [
     {
-      context: config.ini.MOUNT_PATH + '/data', // data on dev server
+      context: '/data', // data on dev server
       host: config.ini.DATA_HOST,
-      port: 80
+      port: 80,
+      headers: {
+        'accept-encoding': 'identity',
+        host: config.ini.DATA_HOST
+      },
+      rewrite: {
+        '^/data': MOUNT_PATH + '/data'
+      }
     },
     {
       context: '/theme/', // 'local' template
@@ -42,35 +53,68 @@ var connect = {
 
   rules: [
     {
-      from: '^' + config.ini.MOUNT_PATH + '/stations/?([a-z0-9])?/?$',
+      from: '^(' + MOUNT_PATH + ')(.*)/+$',
+      to: 'http://localhost:' + config.buildPort + '$1$2', // strip final '/'
+      redirect: 'permanent'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/stations/?([a-z0-9]+)?$',
       to: '/stationlist.php?filter=$1'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/?$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)$',
       to: '/network.php?network=$1'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/?$',
+      from: '^' + MOUNT_PATH + '/(([a-zA-Z0-9_-]+)/)?kml(/(last|timespan|years))?$',
+      to: '/kml.php?network=$2&sortBy=$4'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/notupdated$',
+      to: '/notupdated.php?network=$1'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/velocities$',
+      to: '/velocities.php?network=$1'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/waypoints$',
+      to: '/waypoints.php?network=$1'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})$',
       to: '/station.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/kinematic/?$',
-      to: '/kinematic.php?station=$1'
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic$',
+      to: '/kinematic.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/logs/?$',
-      to: '/logsheets.php?station=$1'
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic/data$',
+      to: '/_getKinematic.csv.php?station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/photos/?$',
-      to: '/photos.php?station=$1'
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/logs$',
+      to: '/logsheets.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/[a-zA-Z0-9_-]+/([a-zA-Z0-9]{4})/qc/?$',
-      to: '/qc.php?station=$1'
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/offsets$',
+      to: '/offsets.php?network=$1&station=$2'
     },
     {
-      from: '^' + config.ini.MOUNT_PATH + '/?(.*)$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/photos$',
+      to: '/photos.php?network=$1&station=$2'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc$',
+      to: '/qc.php?network=$1&station=$2'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table$',
+      to: '/qctable.php?network=$1&station=$2'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/?(.*)$',
       to: '/$1'
     }
   ],
@@ -84,8 +128,7 @@ var connect = {
       ],
       livereload: config.liveReloadPort,
       middleware: addMiddleware,
-      open: 'http://localhost:' + config.buildPort + config.ini.MOUNT_PATH +
-        '/index.php',
+      open: 'http://localhost:' + config.buildPort + MOUNT_PATH,
       port: config.buildPort
     }
   },
@@ -97,8 +140,7 @@ var connect = {
         config.dist + '/htdocs'
       ],
       middleware: addMiddleware,
-      open: 'http://localhost:' + config.distPort + config.ini.MOUNT_PATH +
-        '/index.php',
+      open: 'http://localhost:' + config.distPort + MOUNT_PATH,
       port: config.distPort
     }
   },

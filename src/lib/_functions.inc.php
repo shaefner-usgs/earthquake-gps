@@ -4,6 +4,8 @@
  * Get color classification based on the number of days since the last update
  *
  * @param $days {Int}
+ *
+ * @return $color {String}
  */
 function getColor ($days) {
   if ($days > 14) {
@@ -15,6 +17,7 @@ function getColor ($days) {
   } else if ($days >= 0) {
     $color = 'blue';
   }
+
   return $color;
 }
 
@@ -22,7 +25,7 @@ function getColor ($days) {
  * Get directory contents (checks first if it exists and doesn't return .., .)
  *
  * @param $dir {String}
- *        directory to scan
+ *     directory to scan
  * @param $order {Integer} default is SCANDIR_SORT_DESCENDING
  *
  * @return $r {Array}
@@ -42,9 +45,9 @@ function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
  * Import dynamically generated json file and store it in an array
  *
  * @param $file {String}
- *        full path to json file to import (__DIR__ magic constant is useful)
+ *     full path to json file to import (__DIR__ magic constant is useful)
  * @param $network {String} default is NULL
- *        GPS Network for php script that creates json file
+ *     GPS Network for php script that creates json file
  *
  * @return {Array} json file contents
  */
@@ -70,11 +73,12 @@ function importJsonToArray ($file, $network=NULL) {
  * Get a request parameter from $_GET or $_POST
  *
  * @param $name {String}
- *        The parameter name
+ *     The parameter name
  * @param $default {?} default is NULL
- *        Optional default value if the parameter was not provided.
+ *     Optional default value if the parameter was not provided.
  * @param $filter {PHP Sanitize filter} default is FILTER_SANITIZE_STRING
- *        Optional sanitizing filter to apply
+ *     Optional sanitizing filter to apply
+ *
  * @return $value {String}
  */
 function safeParam ($name, $default=NULL, $filter=FILTER_SANITIZE_STRING) {
@@ -95,9 +99,9 @@ function safeParam ($name, $default=NULL, $filter=FILTER_SANITIZE_STRING) {
  * Convert an array to a json feed and print it
  *
  * @param $array {Array}
- *        Data from db
+ *     Data from db
  * @param $callback {String} default is NULL
- *        optional callback for jsonp requests
+ *     optional callback for jsonp requests
  */
 function showJson ($array, $callback=NULL) {
   header('Content-Type: application/json');

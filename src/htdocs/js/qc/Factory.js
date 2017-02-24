@@ -65,20 +65,22 @@ var Factory = function (options) {
       return data;
     }
 
-    if (end) {
-      end = end.getTime();
-    }
-    if (start) {
-      start = start.getTime();
-    }
-
     // find start/end index
     dates = _data.date;
     startIndex = dates.length;
     endIndex = null;
+
+    if (end) {
+      end = end.getTime();
+    }
+    if (start) {
+      startIndex = -1; // for case where there's no data in range
+      start = start.getTime();
+    }
+
     // dates are in decreasing order
     dates.some(function (d, index) {
-      d = d.getTime();
+      d = new Date(d).getTime();
       if (end) {
         if (endIndex === null && d <= end) {
           // first matching end time
@@ -117,9 +119,6 @@ var Factory = function (options) {
       data = JSON.parse(data);
     }
     _data = data;
-    _data.date = _data.date.map(function (d) {
-      return new Date(d);
-    });
 
     _this.trigger('ready');
   };

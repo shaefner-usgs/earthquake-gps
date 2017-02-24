@@ -4,8 +4,6 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-date_default_timezone_set('UTC');
-
 $callback = safeParam('callback');
 
 // when this script is called via importJsonToArray() which is declared in
@@ -45,6 +43,7 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
     ],
     'properties' => [
       'days' => $days,
+      'elevation' => $row['elevation'],
       'last_observation' => $row['last_observation'],
       'rms' => [
         'east' => floatval($row['east_rms']),
@@ -53,7 +52,10 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       ],
       'showcoords' => intval($row['showcoords']),
       'station' => $row['station'],
-      'type' => $row['stationtype']
+      'type' => $row['stationtype'],
+      'x' => $row['x'],
+      'y' => $row['y'],
+      'z' => $row['z']
     ],
     'type' => 'Feature'
   ];

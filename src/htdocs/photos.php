@@ -8,14 +8,19 @@ include_once '../lib/classes/Photo.class.php'; // model
 include_once '../lib/classes/PhotoCollection.class.php'; // collection
 include_once '../lib/classes/PhotoView.class.php'; // view
 
-// set default value so page loads without passing params
-$station = safeParam('station', '7adl');
+// set default values so page loads without passing params
+$networkParam = safeParam('network', 'WindKetchFlat_SGPS');
+$stationParam = safeParam('station', '7adl');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($station) . ' Photos';
+  $TITLE = 'GPS Station ' . strtoupper($stationParam) . ' - Photos';
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/photos.css" />';
-  $FOOT = '';
+  $HEAD = '<link rel="stylesheet" href="../../css/photos.css" />';
+  $FOOT = '
+    <script src="../../lib/simplbox/simplbox.js"></script>
+    <script src="../../js/photos.js"></script>
+  ';
+  $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
 }
@@ -23,24 +28,25 @@ if (!isset($TEMPLATE)) {
 $db = new Db();
 
 // Db query result: station details for selected station
-$rsStation = $db->queryStation($station);
-$station_exists = $rsStation->fetch();
+$rsStation = $db->queryStation($stationParam);
+$station = $rsStation->fetch();
 
-if ($station_exists) {
+if ($station) {
   // Get a list of photos for selected station
   $dir = sprintf('%s/stations/%s.dir/%s/photos/screen',
     $DATA_DIR,
-    substr($station, 0, 1),
-    $station
+    substr($stationParam, 0, 1),
+    $stationParam
   );
   $files = getDirContents($dir);
 
   // Add photos to collection
-  $photoCollection = new PhotoCollection($station);
+  $photoCollection = new PhotoCollection($networkParam, $stationParam);
   foreach ($files as $file) {
     $photoModel = new Photo($file);
     $photoCollection->add($photoModel);
   }
+  $photoCollection->sort();
 
   // Render HTML
   $view = new PhotoView($photoCollection);

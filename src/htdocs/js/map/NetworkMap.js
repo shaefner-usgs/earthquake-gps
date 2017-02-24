@@ -6,8 +6,9 @@ var Xhr = require('util/Xhr');
 
 // Leaflet plugins
 require('leaflet-fullscreen');
+require('leaflet-groupedlayercontrol');
 require('map/MousePosition');
-require('map/Restoreview');
+require('map/RestoreMap');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
 require('map/DarkLayer');
@@ -32,7 +33,7 @@ var NetworkMap = function (options) {
       _el,
       _stations,
 
-      _attachPopupLinks,
+      _addEvents,
       _getMapLayers,
       _initMap,
       _loadEarthquakesLayer,
@@ -50,31 +51,58 @@ var NetworkMap = function (options) {
     _loadEarthquakesLayer();
     _loadStationsLayer();
 
-    _attachPopupLinks();
+    _addEvents();
   };
 
 
   /**
-   * Attach handlers for map popups to list of stations below the map
+   * Attach handlers for map popups & labels to list of stations below the map
    */
-  _attachPopupLinks = function () {
-    var a, i, li, lis,
-        openPopup;
+  _addEvents = function () {
+    var a, i, li, lis, newA, station,
 
-    openPopup = function(e) {
+        hideLabel,
+        openPopup,
+        showLabel;
+
+    hideLabel = function (e) {
+      _stations.hideLabel(e.target.station);
+    };
+
+    openPopup = function (e) {
       e.preventDefault();
       _stations.openPopup(e.target.station);
+    };
+
+    showLabel = function (e) {
+      _stations.showLabel(e.target.station);
     };
 
     lis = document.querySelectorAll('.stations li');
     for (i = 0; i < lis.length; i ++) {
       li = lis[i];
-      a = document.createElement('a');
-      a.station = li.querySelector('a').textContent;
-      a.setAttribute('class', 'bubble');
-      a.setAttribute('href', '#');
-      li.appendChild(a);
-      a.addEventListener('click', openPopup);
+      // get station name (ignore '*' that indicates high rms value)
+      a = li.querySelector('a');
+      station = a.textContent.match(/\w+/);
+
+      // add label events to station buttons
+      a.station = station; // add station prop so it's accessible from event
+      a.addEventListener('click', hideLabel);
+      a.addEventListener('mouseout', hideLabel);
+      a.addEventListener('mouseover', showLabel);
+
+      // add popup icons to station buttons
+      newA = document.createElement('a');
+      newA.setAttribute('class', 'bubble');
+      newA.setAttribute('href', '#');
+      newA.setAttribute('title', 'View station popup');
+      li.appendChild(newA);
+
+      // add popup, label events to popup icons
+      newA.station = station;
+      newA.addEventListener('click', openPopup);
+      newA.addEventListener('mouseout', hideLabel);
+      newA.addEventListener('mouseover', showLabel);
     }
   };
 
@@ -111,8 +139,11 @@ var NetworkMap = function (options) {
       'Dark': dark
     };
     layers.overlays = {
-      'Faults': faults,
-      'Earthquakes': _earthquakes
+      'Stations': {},
+      'Geology': {
+        'Faults': faults,
+        'M2.5+ Earthquakes': _earthquakes
+      }
     };
     layers.defaults = [terrain, _earthquakes];
 
@@ -120,7 +151,7 @@ var NetworkMap = function (options) {
     Object.keys(_stations.layers).forEach(function(key) {
       name = _stations.names[key] +
         '<span class="' + key + '"></span>'; // hook to add station count
-      layers.overlays[name] = _stations.layers[key];
+      layers.overlays.Stations[name] = _stations.layers[key];
       layers.defaults.push(_stations.layers[key]);
     });
 
@@ -131,8 +162,13 @@ var NetworkMap = function (options) {
    * Load earthquakes layer from geojson data via ajax
    */
   _loadEarthquakesLayer = function () {
+    var url;
+
+    url = 'http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2.5&orderby=time-asc';
+    //url = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson';
+
     Xhr.ajax({
-      url: MOUNT_PATH + '/_getEarthquakes.json.php',
+      url: url,
       success: function (data) {
         _earthquakes = L.earthquakesLayer({
           data: data
@@ -188,15 +224,16 @@ var NetworkMap = function (options) {
 
     // Add controllers
     L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
-    L.control.layers(layers.baseLayers, layers.overlays).addTo(map);
+    L.control.groupedLayers(layers.baseLayers, layers.overlays).addTo(map);
     L.control.mousePosition().addTo(map);
     L.control.scale().addTo(map);
 
     // Remember user's map settings (selected layers, map extent)
-    map.restoreView({
+    map.restoreMap({
       baseLayers: layers.baseLayers,
       id: NETWORK,
       overlays: layers.overlays,
+      scope: 'GPS',
       shareLayers: true
     });
 
@@ -207,7 +244,7 @@ var NetworkMap = function (options) {
   /**
    * Add count dynamically so it doesn't affect the layer name
    *
-   * restoreView plugin uses the name, and layer state can be shared by
+   * restoreMap plugin uses the name, and layer state is shared by
    * multiple pages
    */
   _showCounts = function () {

@@ -46,6 +46,15 @@ var copy = {
     ]
   },
 
+  dygraph: {
+    cwd: 'node_modules/dygraphs',
+    dest: config.build + '/' + config.src + '/htdocs/lib/dygraph',
+    expand: true,
+    src: [
+      'dygraph-combined.js*'
+    ]
+  },
+
   leaflet: {
     expand: true,
     cwd: 'node_modules/leaflet/dist',
@@ -72,6 +81,15 @@ var copy = {
     expand: true,
     src: [
       '*.png'
+    ]
+  },
+
+  simplbox: {
+    cwd: 'node_modules/SimplBox',
+    dest: config.build + '/' + config.src + '/htdocs/lib/simplbox',
+    expand: true,
+    src: [
+      'simplbox.js'
     ]
   }
 };

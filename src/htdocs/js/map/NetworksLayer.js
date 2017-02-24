@@ -1,4 +1,4 @@
-/* global L */
+/* global L, MOUNT_PATH */
 'use strict';
 
 
@@ -28,8 +28,6 @@ _SHAPES = {
 /**
  * Factory for Networks overlay
  *
- * @param data {String}
- *     Geojson data
  * @param options {Object}
  *     {
  *       data: {String} Geojson data
@@ -164,7 +162,7 @@ var NetworksLayer = function (options) {
     // Clicking marker sends user to selected network page
     marker.href = feature.properties.name;
     marker.on('click', function () {
-      window.location = './' + this.href + '/';
+      window.location = MOUNT_PATH + '/' + this.href;
     });
 
     return marker;

@@ -7,15 +7,15 @@ var Util = require('util/Util'),
 
 
 var _C3_DEFAULTS = {
-  padding: {
-    right: 50
-  },
   axis: {
     x: {
       type: 'timeseries',
       tick: {
-        format: '%m/%d/%y',
-        fit: false
+        culling: {
+          max: 6
+        },
+        format: '%Y-%m-%d',
+        fit: true
       }
     },
     y: {
@@ -38,9 +38,18 @@ var _C3_DEFAULTS = {
       show: true
     }
   },
+  padding: {
+    right: 50
+  },
   point: {
     show: true,
-    r: 2
+    r: 0.5,
+    focus: {
+      expand: {
+        enabled: true,
+        r: 3
+      }
+    }
   }
 };
 
@@ -117,7 +126,7 @@ var PlotView = function (options) {
 
     if (data === null) {
       _this.el.classList.add('nodata');
-      _c3El.innerHTML = '';
+      _c3El.innerHTML = '<p class="loading">Loading&hellip;</p>';
       return;
     }
 

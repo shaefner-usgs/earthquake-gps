@@ -16,8 +16,11 @@ var Util = require('util/Util');
  */
 var SatelliteLayer = function (provider, options) {
   var _base,
+      _places,
+      _placesUrl,
       _providers,
-      _ref,
+      _transportation,
+      _transportationUrl,
       _url;
 
   _providers = {
@@ -25,7 +28,8 @@ var SatelliteLayer = function (provider, options) {
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, ' +
         'USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the ' +
         'GIS User Community',
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+      subdomains: ['server', 'services'],
+      url: 'https://{s}.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
     },
     mapquest: {
       attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> ' +
@@ -44,10 +48,12 @@ var SatelliteLayer = function (provider, options) {
 
   // Esri satellite layer doesn't inlcude labels; add them
   if (provider === 'esri') {
-    _ref = L.tileLayer(
-      'http://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}'
-    );
-		return L.layerGroup([_base, _ref]);
+    _placesUrl = 'https://{s}.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}';
+    _places = L.tileLayer(_placesUrl, options);
+    _transportationUrl = 'https://{s}.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}';
+    _transportation = L.tileLayer(_transportationUrl, options);
+
+    return L.layerGroup([_base, _places]);
   } else {
     return _base;
   }

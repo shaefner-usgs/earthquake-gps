@@ -4,8 +4,6 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-date_default_timezone_set('UTC');
-
 $callback = safeParam('callback');
 $now = date(DATE_RFC2822);
 
@@ -35,7 +33,7 @@ while ($row = $rsNetworks->fetch(PDO::FETCH_ASSOC)) {
     ],
     'id' => 'point' . intval($row['id']),
     'properties' => [
-      'name' => $row['name'],
+      'name' => $row['network'],
       'type' => $row['type']
     ],
     'type' => 'Feature'

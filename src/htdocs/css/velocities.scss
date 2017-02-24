@@ -1,0 +1,17 @@
+@import '_common.scss';
+
+h2 {
+  margin-bottom: -1em;
+}
+
+.novalue {
+  text-align: center;
+}
+.station {
+  text-align: center;
+  font-size: 1.2em;
+
+  td {
+    border: 0;
+  }
+}

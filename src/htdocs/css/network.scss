@@ -1,11 +1,17 @@
 @import '_common.scss';
 @import '_maplist.scss';
-@import 'map/_leaflet.scss';
+@import 'map/_map.scss';
 
-.map {
-  height: 800px;
+.popup {
+  img {
+    height: 206px;
+  }
+
+  .pipelist {
+    margin: 1em 0;
+  }
 }
 
-.popup img {
-  width: 250px;
+section > .pipelist {
+  margin-bottom: 1em;
 }

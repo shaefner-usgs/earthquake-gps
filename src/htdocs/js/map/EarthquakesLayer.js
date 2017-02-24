@@ -2,7 +2,8 @@
 'use strict';
 
 
-var Util = require('util/Util');
+var Moment = require('moment'),
+    Util = require('util/Util');
 
 require('leaflet.label');
 
@@ -15,13 +16,13 @@ _COLORS = {
   pasthour: '#f00',
   pastday: '#f90',
   pastweek: '#ff0',
-  pastmonth: '#ffb'
+  pastmonth: '#ffc'
 };
 _MARKER_DEFAULTS = {
   weight: 1,
-  opacity: 0.9,
+  opacity: 0.5,
   fillOpacity: 0.9,
-  color: '#000'
+  color: '#333'
 };
 _DEFAULTS = {
   data: {},
@@ -45,7 +46,11 @@ var EarthquakesLayer = function (options) {
       _initialize,
 
       _markerOptions,
+      _pastDay,
+      _pastHour,
+      _pastWeek,
 
+      _getAge,
       _onEachFeature,
       _pointToLayer;
 
@@ -54,12 +59,41 @@ var EarthquakesLayer = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
     _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
 
+    _pastDay = Moment.utc().subtract(1, 'days');
+    _pastHour = Moment.utc().subtract(1, 'hours');
+    _pastWeek = Moment.utc().subtract(1, 'weeks');
+
     _this = L.geoJson(options.data, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });
   };
 
+
+  /**
+   * Get 'age' of earthquake (pasthour, pastday, etc)
+   *
+   * @param tiemstamp {Int} milliseconds since 1970
+   *
+   * @return age {String}
+   */
+  _getAge = function (timestamp) {
+    var age,
+        eqtime;
+
+    eqtime = Moment.utc(timestamp, 'x');
+    if (eqtime.isSameOrAfter(_pastHour)) {
+      age = 'pasthour';
+    } else if (eqtime.isSameOrAfter(_pastDay)) {
+      age = 'pastday';
+    } else if (eqtime.isSameOrAfter(_pastWeek)) {
+      age = 'pastweek';
+    } else {
+      age = 'pastmonth';
+    }
+
+    return age;
+  };
 
   /**
    * Leaflet GeoJSON option: called on each created feature layer. Useful for
@@ -72,29 +106,32 @@ var EarthquakesLayer = function (options) {
     var data,
         label,
         labelTemplate,
-        link,
         popup,
-        popupTemplate;
+        popupTemplate,
+        props;
 
-    link = 'http://earthquake.usgs.gov/earthquakes/eventpage/' + feature.id;
+    props = feature.properties;
     data = {
-      mag: feature.properties.mag,
-      datetime: feature.properties.datetime,
-      place: feature.properties.place,
-      link: link
+      mag: Math.round(props.mag * 10) / 10,
+      time: Moment.utc(props.time, 'x').format('ddd, MMM D HH:mm:ss') + ' UTC',
+      place: props.place,
+      url: props.url
     };
 
-    labelTemplate = 'M{mag} - {datetime}';
+    labelTemplate = 'M{mag} - {time}';
     label = L.Util.template(labelTemplate, data);
 
     popupTemplate = '<div class="popup eq">' +
-        '<h1>M{mag}, {place}</h1>' +
-        '<time>{datetime}</time>' +
-        '<p><a href="{link}" target="_blank">Details</a> &raquo;</p>' +
+        '<h2>M{mag}, {place}</h2>' +
+        '<time>{time}</time>' +
+        '<p><a href="{url}" target="_blank">Details</a> &raquo;</p>' +
       '</div>';
     popup = L.Util.template(popupTemplate, data);
 
-    layer.bindPopup(popup, {maxWidth: '265'}).bindLabel(label);
+    layer.bindPopup(popup, {
+      autoPanPadding: L.point(50, 50),
+      maxWidth: '265'
+    }).bindLabel(label);
   };
 
   /**
@@ -106,13 +143,13 @@ var EarthquakesLayer = function (options) {
    * @return marker {L.CircleMarker}
    */
   _pointToLayer = function (feature, latlng) {
-    var fillColor,
-        props,
+    var age,
+        fillColor,
         radius;
 
-    props = feature.properties;
-    fillColor = _COLORS[props.age];
-    radius = 3 * parseInt(Math.pow(10, (0.11 * props.mag)), 10);
+    age = _getAge(feature.properties.time);
+    fillColor = _COLORS[age];
+    radius = 3 * parseInt(Math.pow(10, (0.11 * feature.properties.mag)), 10);
 
     _markerOptions.fillColor = fillColor;
     _markerOptions.radius = radius;

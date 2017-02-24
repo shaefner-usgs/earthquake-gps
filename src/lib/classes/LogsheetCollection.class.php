@@ -1,12 +1,11 @@
 <?php
 
-include '../conf/config.inc.php'; // app config
+include_once '../conf/config.inc.php'; // app config
 
 /**
  * Collection of station logsheets grouped by date
  *
  * LogsheetCollection Object (
- *   [path] => String
  *   [logsheets] => Array (
  *     [(date)] => Array (
  *       LogsheetModel Object (
@@ -17,23 +16,31 @@ include '../conf/config.inc.php'; // app config
  *     )
  *     ...
  *   )
+ *   [network] => String
+ *   [path] => String
  *   [station] => String
+ *   [stationType] => String
  * )
  *
  * @author Scott Haefner <shaefner@usgs.gov>
  */
- class LogsheetCollection {
-   public $path;
-   public $logsheets;
+class LogsheetCollection {
+  public $logsheets;
+  public $network;
+  public $path;
+  public $station;
+  public $stationType;
 
-   public function __construct ($station) {
+  public function __construct ($network, $station, $stationType) {
+    $this->logsheets = [];
+    $this->network = $network;
     $this->path = sprintf('%s/data/stations/%s.dir/%s/logsheets',
       $GLOBALS['MOUNT_PATH'],
       substr($station, 0, 1),
       $station
     );
     $this->station = $station;
-    $this->logsheets = [];
+    $this->stationType = $stationType;
   }
 
   /**
@@ -63,6 +70,6 @@ include '../conf/config.inc.php'; // app config
     elseif ($order === 'ASC') {
       return ksort($this->logsheets);
     }
-    throw new Exception('ERROR: Invalid sort order paramerter');
+    throw new Exception('ERROR: Invalid sort order parameter');
   }
 }

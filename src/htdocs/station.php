@@ -1,5 +1,6 @@
 <?php
 
+include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
@@ -7,14 +8,26 @@ include_once '../lib/classes/Station.class.php'; // model
 include_once '../lib/classes/StationView.class.php'; // view
 
 // set default values so page loads without passing params
-$station = safeParam('station', 'aoa1');
 $network = safeParam('network', 'Pacific');
+$station = safeParam('station', 'aoa1');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($station) . " ($network Network)";
+  $TITLE = 'GPS Station ' . strtoupper($station) . " <em>($network Network)</em>";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="' . $MOUNT_PATH . '/css/station.css" />';
-  $FOOT = '<script src="' . $MOUNT_PATH . '/js/station.js"></script>';
+  $HEAD = '
+    <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
+    <link rel="stylesheet" href="../css/station.css" />
+  ';
+  $FOOT = '
+    <script>
+      var MOUNT_PATH = "' . $MOUNT_PATH . '",
+          NETWORK = "' . $network . '",
+          STATION = "' . $station . '";
+    </script>
+    <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
+    <script src="../js/station.js"></script>
+  ';
+  $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
 }
@@ -35,14 +48,28 @@ if (!in_array($network, $networkList)) {
   array_push($networkList, $network);
 }
 
+// Db query results for selected network and station
+$rsNoise = $db->queryNoise($network, $station);
+$rsOffsets = $db->queryOffsets($network, $station);
+$rsPostSeismic = $db->queryPostSeismic($network, $station);
+$rsSeasonal = $db->querySeasonal($network, $station);
+$rsVelocities = $db->queryVelocities($network, $station);
+
 // Db query result: station details for selected station and network
 $rsStation = $db->queryStation($station, $network);
 
-// Create the station model using the station details and $networkList array
+// Create the station model using the station details + $networkList, etc.
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
   'Station',
-  array($networkList)
+  [
+    $networkList,
+    $rsNoise,
+    $rsOffsets,
+    $rsPostSeismic,
+    $rsSeasonal,
+    $rsVelocities
+  ]
 );
 $stationModel = $rsStation->fetch();
 

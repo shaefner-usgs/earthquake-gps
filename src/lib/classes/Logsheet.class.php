@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Model for station logsheets
+ * Model for GPS station logsheets
  *
- * LogsheetModel Object (
+ * Logsheet Object (
  *   [date] => Int
  *   [file] => String
  *   [type] => String

@@ -1,0 +1,30 @@
+.page-content {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+
+  figure {
+    margin-top: 32px;
+    width: 42%;
+  }
+  section {
+    width: 56%;
+  }
+}
+
+.shear-img {
+  padding: 10px;
+}
+
+@media all and (max-width: 1023px) {
+  .page-content {
+    flex-direction: column;
+
+    figure {
+      margin-top: 1em;
+    }
+    figure, section {
+      width: 100%;
+    }
+  }
+}
