@@ -63,7 +63,7 @@ class StationView {
         'Offsets' => $this->_getTable('offsets', $datatype),
         'Post-seismic' => $this->_getTable('postSeismic', $datatype),
         'Seasonal' => $this->_getTable('seasonal', $datatype),
-        'Velocities' => $this->_getVelocitiesTable($datatype)
+        'Velocities' => $this->_getTable('velocities', $datatype)
       ];
 
       $plotsHtml = '';
@@ -247,31 +247,9 @@ class StationView {
       $html .= $th . $trs . '</table>';
     }
 
-    return $html;
-  }
-
-  private function _getVelocitiesTable ($datatype) {
-    $html = '';
-    $rows = '';
-    $station = $this->_model->station;
-    $velocities = $this->_model->velocities;
-
-    $components = $velocities['data'][$station][$datatype];
-    if ($components) {
-      $html = '<table>';
-      foreach ($components as $direction => $data) {
-        $header = '<tr><td class="empty"></td>';
-        $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
-        foreach ($data as $key => $value) {
-          $header .= '<th>' . $velocities['lookup'][$key] . '</th>';
-          $rows .= "<td>$value</td>";
-        }
-        $header .= '</tr>';
-        $rows .= '</tr>';
-      }
-      $html .= $header;
-      $html .= $rows;
-      $html .= '</table>';
+    // Don't send back an empty table (happens if no data for datatype)
+    if ($html === '<table></table>') {
+      $html = '';
     }
 
     return $html;
