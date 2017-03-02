@@ -164,8 +164,7 @@ var NetworkMap = function (options) {
   _loadEarthquakesLayer = function () {
     var url;
 
-    url = 'http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2.5&orderby=time-asc';
-    //url = 'http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson';
+    url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2.5&orderby=time-asc';
 
     Xhr.ajax({
       url: url,
