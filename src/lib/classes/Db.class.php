@@ -72,25 +72,6 @@ class Db {
   }
 
   /**
-   * Query db to get a list of real-time earthquakes
-   *
-   * @param $mag {Int} default is 2.5
-   * @param $days {Int} default is 7
-   *
-   * @return {Function}
-   */
-  public function queryEarthquakes ($mag=2.5, $days=7) {
-    $sql = 'SELECT * FROM earthquakes.recenteqs_pdl
-      WHERE mag >= :mag AND `datetime (GMT)` >= (NOW() - INTERVAL :days DAY)
-      ORDER BY `datetime (GMT)` ASC';
-
-    return $this->_execQuery($sql, array(
-      'mag' => $mag,
-      'days' => $days
-    ));
-  }
-
-  /**
    * Query db to get a list of stations for a given network that aren't up to date
    *
    * @param $network {String}
