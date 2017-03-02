@@ -100,7 +100,7 @@ class Db {
    */
   public function queryLastUpdated ($network, $days=7) {
     $sql = 'SELECT `station`, `last_observation` FROM gps_velocities
-      WHERE `datatype` = "na" AND `network` = :network
+      WHERE `datatype` = "nafixed" AND `network` = :network AND `component` = "U"
         AND `last_observation` < (NOW() - INTERVAL :days DAY)
       ORDER BY `last_observation` DESC, `station` ASC';
 
