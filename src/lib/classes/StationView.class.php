@@ -211,9 +211,9 @@ class StationView {
   }
 
   private function _getTable ($table, $datatype, $lookupTable=NULL) {
-    $components = [
-      'E' => 'East',
+    $components = [ // listed in display order on web page
       'N' => 'North',
+      'E' => 'East',
       'U' => 'Up'
     ];
     $html = '';
@@ -221,12 +221,14 @@ class StationView {
 
     if ($rows) {
       $html = '<table>';
-      $trs = '';
+      $trs = [];
       foreach ($rows as $fields) {
         if ($fields['datatype'] === $datatype) {
+          $component = $fields['component'];
+          $direction = $components[$component];
           $th = '<tr><td class="empty"></td>';
-          $tr = '<tr>';
-          $tr .= '<th>' . $components[$fields['component']] . '</th>';
+          $tr = '<tr class="' . strtolower($direction) . '">';
+          $tr .= "<th>$direction</th>";
 
           unset( // hide these values from the table view
             $fields['component'],
@@ -241,10 +243,14 @@ class StationView {
           }
           $th .= '</tr>';
           $tr .= '</tr>';
-          $trs .= $tr;
+          $trs[$component] = $tr;
         }
       }
-      $html .= $th . $trs . '</table>';
+      $html .= $th;
+      foreach ($components as $key=>$value) {
+        $html .= $trs[$key];
+      }
+      $html .= '</table>';
     }
 
     // Don't send back an empty table (happens if no data for datatype)
