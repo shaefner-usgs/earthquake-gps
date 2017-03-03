@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shaefner-usgs/earthquake-gps.git"
+    "url": "https://github.com/usgs/earthquake-gps.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shaefner-usgs/earthquake-gps/issues"
+    "url": "https://github.com/usgs/earthquake-gps/issues"
   },
-  "homepage": "https://github.com/shaefner-usgs/earthquake-gps",
+  "homepage": "https://github.com/usgs/earthquake-gps",
   "devDependencies": {
     "SimplBox": "shaefner-usgs/SimplBox",
     "autoprefixer": "^6.1.2",
