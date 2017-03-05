@@ -340,10 +340,11 @@ class Db {
     $where = 'n.show = 1';
 
     if ($network) { // add velocity fields and limit results to given network
-      $fields .= ', v.last_observation, v.datatype, v.component';
-      $joinClause .= ' LEFT JOIN gps_velocities v USING (station)';
-      $where = 'r.network = :network AND v.network = :network
-        AND v.datatype = "nafixed" AND v.component = "U"';
+      //$fields .= ', v.last_observation, v.datatype, v.component';
+      //$joinClause .= ' LEFT JOIN gps_velocities v USING (station)';
+      //$where = 'r.network = :network AND v.network = :network
+      //  AND v.datatype = "nafixed" AND v.component = "U"';
+      $where = 'r.network = :network';
     }
 
     $sql = "SELECT $fields
