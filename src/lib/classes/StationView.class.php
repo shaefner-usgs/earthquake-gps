@@ -225,7 +225,7 @@ class StationView {
           $time = strtotime("+" . $days . " days");
           $date = date('Ymd', $time);
 
-          $offsets[$date]['decDate'] = $fields['date'];
+          $offsets[$date]['decDate'] = $fields['decdate'];
           $offsets[$date]['type'] = $fields['offsettype'];
           $offsets[$date][$component . '-size'] = $fields['size'];
           $offsets[$date][$component . '-uncertainty'] = $fields['uncertainty'];
