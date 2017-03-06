@@ -59,11 +59,11 @@ class StationView {
       $downloadsHtml = $this->_getDownloads($datatype);
 
       $tables = [
-        'Noise' => $this->_getTable('noise', $datatype),
+        'Velocities' => $this->_getTable('velocities', $datatype),
         'Offsets' => $this->_getOffsetsTable($datatype),
+        'Noise' => $this->_getTable('noise', $datatype),
         'Post-seismic' => $this->_getTable('postSeismic', $datatype),
-        'Seasonal' => $this->_getTable('seasonal', $datatype),
-        'Velocities' => $this->_getTable('velocities', $datatype)
+        'Seasonal' => $this->_getTable('seasonal', $datatype)
       ];
 
       $plotsHtml = '';
