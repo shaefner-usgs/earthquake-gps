@@ -60,7 +60,7 @@ class StationView {
 
       $tables = [
         'Noise' => $this->_getTable('noise', $datatype),
-        'Offsets' => $this->_getTable('offsets', $datatype),
+        'Offsets' => $this->_getOffsetsTable($datatype),
         'Post-seismic' => $this->_getTable('postSeismic', $datatype),
         'Seasonal' => $this->_getTable('seasonal', $datatype),
         'Velocities' => $this->_getTable('velocities', $datatype)
@@ -201,6 +201,55 @@ class StationView {
           <li><a href="' . $this->_getHref($datatype, '_wtrend.png') . '">All data</a></li>
         </ul>
       </nav>';
+
+    return $html;
+  }
+
+  private function _getOffsetsTable ($datatype) {
+    $html = '<table>
+      <tr>
+        <td class="empty"></td><th>Type</th><th>N offset</th>
+        <th>N uncertainty</th><th>E offset</th><th>E uncertainty</th>
+        <th>U offset</th><th>U uncertainty</th>
+      </tr>';
+    $rows = $this->_model->offsets;
+
+    foreach ($rows as $fields) {
+      if ($fields['datatype'] === $datatype) {
+        $component = $fields['component'];
+        $days = $fields['doy'] - date('z');
+        $time = strtotime("+" . $days . " days");
+        $date = date('Y-m-d', $time);
+
+        $offsets[$date]['type'] = $fields['offsettype'];
+        $offsets[$date][$component . '-size'] = $fields['size'];
+        $offsets[$date][$component . '-uncertainty'] = $fields['uncertainty'];
+      }
+    }
+
+    foreach ($offsets as $tds) {
+      $html .= sprintf('<tr>
+          <th>%s</th>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+        </tr>',
+        $date,
+        $tds['type'],
+        $tds['N-size'],
+        $tds['N-uncertainty'],
+        $tds['E-size'],
+        $tds['E-uncertainty'],
+        $tds['U-size'],
+        $tds['U-uncertainty']
+      );
+    }
+
+    $html .= '</table>';
 
     return $html;
   }
