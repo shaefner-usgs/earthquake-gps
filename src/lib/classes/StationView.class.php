@@ -206,50 +206,55 @@ class StationView {
   }
 
   private function _getOffsetsTable ($datatype) {
-    $html = '<table>
-      <tr>
-        <td class="empty"></td><th>Type</th><th>N offset</th>
-        <th>N uncertainty</th><th>E offset</th><th>E uncertainty</th>
-        <th>U offset</th><th>U uncertainty</th>
-      </tr>';
+    $html = '';
     $rows = $this->_model->offsets;
 
-    foreach ($rows as $fields) {
-      if ($fields['datatype'] === $datatype) {
-        $component = $fields['component'];
-        $days = $fields['doy'] - date('z');
-        $time = strtotime("+" . $days . " days");
-        $date = date('Y-m-d', $time);
+    if ($rows) {
+      $html = '<table>
+        <tr>
+          <td class="empty"></td><th>Type</th><th>N offset</th>
+          <th>N uncertainty</th><th>E offset</th><th>E uncertainty</th>
+          <th>U offset</th><th>U uncertainty</th>
+        </tr>';
+      $rows = $this->_model->offsets;
 
-        $offsets[$date]['type'] = $fields['offsettype'];
-        $offsets[$date][$component . '-size'] = $fields['size'];
-        $offsets[$date][$component . '-uncertainty'] = $fields['uncertainty'];
+      foreach ($rows as $fields) {
+        if ($fields['datatype'] === $datatype) {
+          $component = $fields['component'];
+          $days = $fields['doy'] - date('z');
+          $time = strtotime("+" . $days . " days");
+          $date = date('M j, Y', $time);
+
+          $offsets[$date]['type'] = $fields['offsettype'];
+          $offsets[$date][$component . '-size'] = $fields['size'];
+          $offsets[$date][$component . '-uncertainty'] = $fields['uncertainty'];
+        }
       }
-    }
 
-    foreach ($offsets as $tds) {
-      $html .= sprintf('<tr>
-          <th>%s</th>
-          <td>%s</td>
-          <td>%s</td>
-          <td>%s</td>
-          <td>%s</td>
-          <td>%s</td>
-          <td>%s</td>
-          <td>%s</td>
-        </tr>',
-        $date,
-        $tds['type'],
-        $tds['N-size'],
-        $tds['N-uncertainty'],
-        $tds['E-size'],
-        $tds['E-uncertainty'],
-        $tds['U-size'],
-        $tds['U-uncertainty']
-      );
-    }
+      foreach ($offsets as $tds) {
+        $html .= sprintf('<tr>
+            <th>%s</th>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+          </tr>',
+          $date,
+          $tds['type'],
+          $tds['N-size'],
+          $tds['N-uncertainty'],
+          $tds['E-size'],
+          $tds['E-uncertainty'],
+          $tds['U-size'],
+          $tds['U-uncertainty']
+        );
+      }
 
-    $html .= '</table>';
+      $html .= '</table>';
+    }
 
     return $html;
   }
