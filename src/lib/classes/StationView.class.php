@@ -62,7 +62,7 @@ class StationView {
         'Velocities' => $this->_getTable('velocities', $datatype),
         'Offsets' => $this->_getOffsetsTable($datatype),
         'Noise' => $this->_getTable('noise', $datatype),
-        'Post-seismic' => $this->_getTable('postSeismic', $datatype),
+        'Post-seismic' => $this->_getPostSeismicTable($datatype),
         'Seasonal' => $this->_getTable('seasonal', $datatype)
       ];
 
@@ -216,7 +216,6 @@ class StationView {
           <th>N uncertainty</th><th>E offset</th><th>E uncertainty</th>
           <th>U offset</th><th>U uncertainty</th><th>Type</th>
         </tr>';
-      $rows = $this->_model->offsets;
 
       foreach ($rows as $fields) {
         if ($fields['datatype'] === $datatype) {
@@ -253,6 +252,67 @@ class StationView {
           $tds['U-size'],
           $tds['U-uncertainty'],
           $tds['type']
+        );
+      }
+
+      $html .= '</table>';
+    }
+
+    return $html;
+  }
+
+  private function _getPostSeismicTable ($datatype) {
+    $html = '';
+    $rows = $this->_model->postSeismic;
+
+    if ($rows) {
+      $html = '<table>
+        <tr>
+          <td class="empty"></td><th>Decimal date</th><th>N log size</th>
+          <th>N log uncertainty</th><th>N time constant</th><th>E log size</th>
+          <th>E log uncertainty</th><th>E time constant</th><th>U log size</th>
+          <th>U log uncertainty</th><th>U time constant</th>
+        </tr>';
+
+      foreach ($rows as $fields) {
+        if ($fields['datatype'] === $datatype) {
+          $component = $fields['component'];
+          $days = $fields['doy'] - date('z');
+          $time = strtotime("+" . $days . " days");
+          $date = date('Ymd', $time);
+
+          $postSeismic[$date]['decDate'] = $fields['decdate'];
+          $postSeismic[$date][$component . '-logsig'] = $fields['logsig'];
+          $postSeismic[$date][$component . '-logsize'] = $fields['logsize'];
+          $postSeismic[$date][$component . '-time'] = $fields['time_constant'];
+        }
+      }
+
+      foreach ($postSeismic as $tds) {
+        $html .= sprintf('<tr>
+            <th>%s</th>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+            <td>%s</td>
+          </tr>',
+          $date,
+          $tds['decDate'],
+          $tds['N-logsize'],
+          $tds['N-logsig'],
+          $tds['N-time'],
+          $tds['E-logsize'],
+          $tds['E-logsig'],
+          $tds['E-time'],
+          $tds['U-logsize'],
+          $tds['U-logsig'],
+          $tds['U-time']
         );
       }
 
