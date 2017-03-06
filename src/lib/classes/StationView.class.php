@@ -212,9 +212,9 @@ class StationView {
     if ($rows) {
       $html = '<table>
         <tr>
-          <td class="empty"></td><th>Type</th><th>N offset</th>
+          <td class="empty"></td><th>Decimal date</th><th>N offset</th>
           <th>N uncertainty</th><th>E offset</th><th>E uncertainty</th>
-          <th>U offset</th><th>U uncertainty</th>
+          <th>U offset</th><th>U uncertainty</th><th>Type</th>
         </tr>';
       $rows = $this->_model->offsets;
 
@@ -225,6 +225,7 @@ class StationView {
           $time = strtotime("+" . $days . " days");
           $date = date('Ymd', $time);
 
+          $offsets[$date]['decDate'] = $fields['date'];
           $offsets[$date]['type'] = $fields['offsettype'];
           $offsets[$date][$component . '-size'] = $fields['size'];
           $offsets[$date][$component . '-uncertainty'] = $fields['uncertainty'];
@@ -241,15 +242,17 @@ class StationView {
             <td>%s</td>
             <td>%s</td>
             <td>%s</td>
+            <td>%s</td>
           </tr>',
           $date,
-          $tds['type'],
+          $tds['decDate'],
           $tds['N-size'],
           $tds['N-uncertainty'],
           $tds['E-size'],
           $tds['E-uncertainty'],
           $tds['U-size'],
-          $tds['U-uncertainty']
+          $tds['U-uncertainty'],
+          $tds['type']
         );
       }
 
