@@ -222,7 +222,8 @@ class StationView {
           $component = $fields['component'];
           $days = $fields['doy'] - date('z');
           $time = strtotime("+" . $days . " days");
-          $date = date('Ymd', $time);
+          // use 'year' from db, and calculate 'month' and 'day' from 'doy'
+          $date = $fields['year'] . date('md', $time);
 
           $offsets[$date]['decDate'] = $fields['decdate'];
           $offsets[$date]['type'] = $fields['offsettype'];
@@ -279,7 +280,8 @@ class StationView {
           $component = $fields['component'];
           $days = $fields['doy'] - date('z');
           $time = strtotime("+" . $days . " days");
-          $date = date('Ymd', $time);
+          // use 'year' from db, and calculate 'month' and 'day' from 'doy'
+          $date = $fields['year'] . date('md', $time);
 
           $postSeismic[$date]['decDate'] = $fields['decdate'];
           $postSeismic[$date][$component . '-logsig'] = $fields['logsig'];
