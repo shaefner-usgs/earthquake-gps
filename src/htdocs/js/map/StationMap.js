@@ -4,6 +4,9 @@
 
 var Xhr = require('util/Xhr');
 
+// Leaflet plugins
+require('leaflet-fullscreen');
+
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
 require('map/StationsLayer');
 require('map/TerrainLayer');
@@ -53,7 +56,9 @@ var StationMap = function (options) {
       center: bounds.getCenter(),
       zoom: 7
     });
-
+    
+    // Add controllers
+    L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
     L.control.scale().addTo(map);
 
     _stations.openPopup(STATION.toUpperCase());
