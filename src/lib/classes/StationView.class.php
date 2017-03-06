@@ -223,7 +223,7 @@ class StationView {
           $component = $fields['component'];
           $days = $fields['doy'] - date('z');
           $time = strtotime("+" . $days . " days");
-          $date = date('M j, Y', $time);
+          $date = date('Ymd', $time);
 
           $offsets[$date]['type'] = $fields['offsettype'];
           $offsets[$date][$component . '-size'] = $fields['size'];
@@ -292,6 +292,10 @@ class StationView {
             $fields['station']
           );
           foreach ($fields as $key=>$value) {
+            // strip '-' out of date fields
+            if (preg_match('/\d{4}-\d{2}-\d{2}/', $value)) {
+              $value = str_replace('-', '', $value);
+            }
             $th .= "<th>$key</th>";
             $tr .= "<td>$value</td>";
           }
