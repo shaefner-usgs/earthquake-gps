@@ -120,3 +120,10 @@ $networks_html .= '</ul>';
   files for the campaign measurements collected by our group may be obtained
   through the <a href="http://www.ncedc.org/survey-gps/">NCEDC</a>. Please
   cite these data using doi:10.5066/F7NG4NRK</p>
+
+<p>If using the processed positions or results of time series analysis available
+  on this website, please cite Murray, J.R. and Svarc, J. (2017), Global
+  Positioning System data collection, processing, and analysis conducted by the
+  U.S. Geological Survey Earthquake Hazards Program, Seismol. Res. Lett.,
+  doi:10.1785/0220160204, which provides a detailed description of our
+  methodology.</p>
