@@ -31,7 +31,7 @@ class Kml {
       $namePrefix = "$network Network";
     }
 
-    $this->_domain = $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
+    $this->_domain = $_SERVER['SERVER_NAME'];
     $this->_meta = [
       'filename' => $filename,
       'last' => [ // last year surveyed
