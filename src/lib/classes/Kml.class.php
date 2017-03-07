@@ -34,21 +34,21 @@ class Kml {
     $this->_domain = $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
     $this->_meta = [
       'filename' => $filename,
-      'last' => [
+      'last' => [ // last year surveyed
         'description' => 'Campaign stations',
         'folder' => 'Last surveyed in %s',
         'name' => $namePrefix . ' (sorted by last year surveyed)'
       ],
-      'station' => [ // default
+      'station' => [ // station name (default)
         'description' => 'Campaign and continuous stations',
         'name' => $namePrefix . ' (sorted by station name)'
       ],
-      'timespan' => [
+      'timespan' => [ // time btwn surveys
         'description' => 'Campaign stations',
         'folder' => '%s year(s) between first/last surveys',
         'name' => $namePrefix . ' (sorted by time span between surveys)'
       ],
-      'years' => [
+      'years' => [ // years surveyed
         'description' => 'Campaign stations',
         'folder' => 'Stations surveyed in %s',
         'name' => $namePrefix . ' (sorted by years surveyed)'
@@ -60,7 +60,7 @@ class Kml {
   }
 
   /**
-   * Sort db-style results by multiple fields. Converts an array of rows into
+   * Sort db results by multiple fields. Converts an array of rows into
    * an array of columns, then passes the result to php's array_multisort
    *
    * @return {Array} sorted array
@@ -188,7 +188,7 @@ class Kml {
     $description = $this->_meta[$this->_sortBy]['description'];
     $name = $this->_meta[$this->_sortBy]['name'];
     $latCenter = (max($this->_lats) + min($this->_lats)) / 2;
-    $legendUrl = sprintf ('http://%s%s/img/kmlLegend-%s.png',
+    $legendUrl = sprintf ('https://%s%s/img/kmlLegend-%s.png',
       $this->_domain,
       $GLOBALS['MOUNT_PATH'],
       $this->_sortBy
@@ -299,7 +299,7 @@ class Kml {
       }
     }
 
-    $icon = sprintf ('http://%s%s/img/pin-s-%s+%s.png',
+    $icon = sprintf ('https://%s%s/img/pin-s-%s+%s.png',
       $this->_domain,
       $GLOBALS['MOUNT_PATH'],
       $shapes[$station['stationtype']],
@@ -327,7 +327,7 @@ class Kml {
     $files = getDirContents($dir, $order=SCANDIR_SORT_ASCENDING);
 
     // Add logsheets to collection
-    $logsheetCollection = new LogsheetCollection($station, $this->_network);
+    $logsheetCollection = new LogsheetCollection($this->_network, $station);
     foreach ($files as $file) {
       $logsheetModel = new Logsheet($file);
       $logsheetCollection->add($logsheetModel);
@@ -347,7 +347,7 @@ class Kml {
    * @return $placeMark {String}
    */
   private function _getPlaceMark ($station, $year=NULL) {
-    $baseUri = sprintf('http://%s%s/%s/%s',
+    $baseUri = sprintf('https://%s%s/%s/%s',
       $this->_domain,
       $GLOBALS['MOUNT_PATH'],
       $station['network'],
@@ -386,7 +386,7 @@ class Kml {
       $logsheets_html = '<ul>';
       foreach ($logsheetsCollection->logsheets as $date => $logsheets) {
         $data_collected = true;
-        $logsheets_html .= sprintf('<li><a href="http://%s%s/%s">%s</a></li>',
+        $logsheets_html .= sprintf('<li><a href="https://%s%s/%s">%s</a></li>',
           $this->_domain,
           $logsheetsCollection->path,
           $logsheets[0]->file, // front page or txt-based log
