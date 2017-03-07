@@ -64,7 +64,6 @@ class Station {
   }
 
   private function _getLinkList () {
-    print 'path: ' . $this->stationPath;
     $kinematic = $this->stationPath . '/kinematic';
     $logs = $this->stationPath . '/logs';
     $ngs = $this->_getNgsLink();
