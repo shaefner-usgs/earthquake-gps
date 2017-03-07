@@ -386,10 +386,21 @@ class Kml {
       $logsheets_html = '<ul>';
       foreach ($logsheetsCollection->logsheets as $date => $logsheets) {
         $data_collected = true;
-        $logsheets_html .= sprintf('<li><a href="https://%s%s/%s">%s</a></li>',
-          $this->_domain,
-          $logsheetsCollection->path,
-          $logsheets[0]->file, // front page or txt-based log
+        if (preg_match('/txt?/', $logsheets[0]->file)) {
+          $href = sprintf('https://%s%s/%s',
+            $this->_domain,
+            $logsheetsCollection->path,
+            $logsheets[0]->file // txt-based log
+          );
+        } else {
+          $href = sprintf('https://%s%s/show-logsheet.php?img=%s',
+            $this->_domain,
+            $GLOBALS['MOUNT_PATH'],
+            $logsheets[0]->file // front page of scanned log
+          );
+        }
+        $logsheets_html .= sprintf('<li><a href="%s">%s</a></li>',
+          $href,
           date('M d, Y', strtotime($date))
         );
       }
