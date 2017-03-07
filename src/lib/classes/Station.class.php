@@ -33,14 +33,15 @@ class Station {
     $rsVelocities=NULL
   ) {
 
+    $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
+      . '/' . $this->station;
+
     $this->_data['links'] = $this->_getLinkList();
     $this->_data['networkList'] = $networkList;
     $this->_data['noise'] = $rsNoise->fetchAll(PDO::FETCH_ASSOC);
     $this->_data['offsets'] = $rsOffsets->fetchAll(PDO::FETCH_ASSOC);
     $this->_data['postSeismic'] = $rsPostSeismic->fetchAll(PDO::FETCH_ASSOC);
     $this->_data['seasonal'] = $rsSeasonal->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
-      . '/' . $this->station;
     $this->_data['velocities'] = $rsVelocities->fetchAll(PDO::FETCH_ASSOC);
   }
 
@@ -63,6 +64,7 @@ class Station {
   }
 
   private function _getLinkList () {
+    print 'path: ' . $this->stationPath;
     $kinematic = $this->stationPath . '/kinematic';
     $logs = $this->stationPath . '/logs';
     $ngs = $this->_getNgsLink();
