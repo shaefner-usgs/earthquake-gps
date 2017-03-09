@@ -100,7 +100,7 @@ class Db {
    */
   public function queryNetworkList ($station) {
     $sql = 'SELECT r.network FROM gps_relations r
-      LEFT JOIN gps_networks n ON r.network = n.network
+      LEFT JOIN gps_networks n USING (network)
       WHERE r.station = :station AND n.show = 1
       ORDER BY `network` ASC';
 
@@ -286,7 +286,7 @@ class Db {
   public function queryStationChars () {
     $sql = 'SELECT DISTINCT LEFT(r.station, 1) AS `alphanum`
       FROM gps_relations r
-      LEFT JOIN gps_networks n ON (r.network = n.network)
+      LEFT JOIN gps_networks n USING (network)
       WHERE n.show = 1
       ORDER BY
         CASE WHEN LEFT(alphanum, 1) REGEXP ("^[0-9]") THEN 1 ELSE 0 END,
@@ -314,7 +314,7 @@ class Db {
 
     $sql = 'SELECT r.station, r.network
       FROM gps_relations r
-      LEFT JOIN gps_networks n ON (r.network = n.network)
+      LEFT JOIN gps_networks n USING (network)
       WHERE r.station LIKE :filter AND n.show = :show
       ORDER BY `station` ASC, `network` ASC';
 
@@ -336,7 +336,7 @@ class Db {
       s.elevation, s.x, s.y, s.z, s.num_obs, s.obs_years,
       r.network, r.stationtype, n.show';
     $joinClause = 'LEFT JOIN gps_relations r USING (station)
-      LEFT JOIN gps_networks n ON n.network = r.network';
+      LEFT JOIN gps_networks n USING (network)';
     $where = 'n.show = 1';
 
     if ($network) { // add velocity fields and limit results to given network
