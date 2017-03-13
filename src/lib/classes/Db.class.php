@@ -334,16 +334,12 @@ class Db {
   public function queryStations ($network=NULL) {
     $fields = 's.id, s.station, s.lat, s.lon, s.destroyed, s.showcoords,
       s.elevation, s.x, s.y, s.z, s.num_obs, s.obs_years,
-      r.network, r.stationtype, n.show';
+      r.last_observation, r.network, r.stationtype, n.show';
     $joinClause = 'LEFT JOIN gps_relations r USING (station)
       LEFT JOIN gps_networks n USING (network)';
     $where = 'n.show = 1';
 
-    if ($network) { // add velocity fields and limit results to given network
-      //$fields .= ', v.last_observation, v.datatype, v.component';
-      //$joinClause .= ' LEFT JOIN gps_velocities v USING (station)';
-      //$where = 'r.network = :network AND v.network = :network
-      //  AND v.datatype = "nafixed" AND v.component = "U"';
+    if ($network) { // limit results to given network
       $where = 'r.network = :network';
     }
 
@@ -351,7 +347,6 @@ class Db {
       FROM gps_stations s
       $joinClause
       WHERE $where
-      #GROUP BY s.station
       ORDER BY s.station ASC";
 
     return $this->_execQuery($sql, array(
