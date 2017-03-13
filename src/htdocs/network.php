@@ -96,12 +96,13 @@ $stations_html = '<ul class="stations no-style" style="height: '. $height . 'px;
 foreach ($stations['features'] as $feature) {
   // star high rms values
   $star = '';
+  /* 2017-03-13: Comment out for now b/c rms values no longer in db
   if ($feature['properties']['rms']['up'] > 15 ||
     $feature['properties']['rms']['north'] > 10 ||
     $feature['properties']['rms']['east'] > 10) {
       $star = '<span>*</span>';
       $starred = true;
-  }
+  }*/
   $stations_html .= sprintf('<li class="%s">
       <a href="%s/%s" title="Go to station details">%s%s</a>
     </li>',
