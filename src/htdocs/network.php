@@ -31,8 +31,7 @@ if (!isset($TEMPLATE)) {
   $CONTACT = 'jsvarc';
 
   // importJsonToArray() sets headers -> needs to run before including template
-  $stations = importJsonToArray(__DIR__ .
-    "/_getStations.json.php", $network);
+  $stations = importJsonToArray(__DIR__ . '/_getStations.json.php', $network);
 
   include 'template.inc.php';
 }
