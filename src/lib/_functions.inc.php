@@ -47,7 +47,7 @@ function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
  * @param $file {String}
  *     full path to json file to import (__DIR__ magic constant is useful)
  * @param $network {String} default is NULL
- *     GPS Network for filtering results of json file
+ *     GPS Network - filter for json results
  *
  * @return {Array} json file contents
  */
