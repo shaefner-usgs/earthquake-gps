@@ -6,11 +6,12 @@ include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 $callback = safeParam('callback');
 
-// when this script is called via importJsonToArray() which is declared in
-// functions.inc.php, $network is passed in as a function param
+// when this script is called via importJsonToArray(), which is declared in
+// _functions.inc.php, $network is passed in as a function param
 if (!isset($network)) {
   $network = safeParam('network', 'Pacific');
 }
+
 $now = date(DATE_RFC2822);
 
 $db = new Db;
