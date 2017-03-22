@@ -6,8 +6,12 @@ include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 $callback = safeParam('callback');
 
-// when this script is called via importJsonToArray(), which is declared in
-// _functions.inc.php, $network is passed in as a function param
+/* This script is called via js (as an ajax request) or php (using
+ * importJsonToArray(), which is declared in _functions.inc.php).
+ *
+ * - js mode: $network is set via querystring
+ * - php mode: $network is set before including this script
+ */
 if (!isset($network)) {
   $network = safeParam('network', 'Pacific');
 }
