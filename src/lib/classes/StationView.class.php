@@ -217,18 +217,18 @@ class StationView {
           <th>U offset</th><th>U uncertainty</th><th>Type</th>
         </tr>';
 
-      foreach ($rows as $fields) {
-        if ($fields['datatype'] === $datatype) {
-          $component = $fields['component'];
-          $days = $fields['doy'] - date('z');
+      foreach ($rows as $row) {
+        if ($row['datatype'] === $datatype) {
+          $component = $row['component'];
+          $days = $row['doy'] - date('z');
           $time = strtotime("+" . $days . " days");
           // use 'year' from db, and calculate 'month' and 'day' from 'doy'
-          $date = $fields['year'] . date('md', $time);
+          $date = $row['year'] . date('md', $time);
 
-          $offsets[$date]['decDate'] = $fields['decdate'];
-          $offsets[$date]['type'] = $fields['offsettype'];
-          $offsets[$date][$component . '-size'] = $fields['size'];
-          $offsets[$date][$component . '-uncertainty'] = $fields['uncertainty'];
+          $offsets[$date]['decDate'] = $row['decdate'];
+          $offsets[$date]['type'] = $row['offsettype'];
+          $offsets[$date][$component . '-size'] = $row['size'];
+          $offsets[$date][$component . '-uncertainty'] = $row['uncertainty'];
         }
       }
 
@@ -275,18 +275,18 @@ class StationView {
           <th>U log uncertainty</th><th>U time constant</th>
         </tr>';
 
-      foreach ($rows as $fields) {
-        if ($fields['datatype'] === $datatype) {
-          $component = $fields['component'];
-          $days = $fields['doy'] - date('z');
+      foreach ($rows as $row) {
+        if ($row['datatype'] === $datatype) {
+          $component = $row['component'];
+          $days = $row['doy'] - date('z');
           $time = strtotime("+" . $days . " days");
           // use 'year' from db, and calculate 'month' and 'day' from 'doy'
-          $date = $fields['year'] . date('md', $time);
+          $date = $row['year'] . date('md', $time);
 
-          $postSeismic[$date]['decDate'] = $fields['decdate'];
-          $postSeismic[$date][$component . '-logsig'] = $fields['logsig'];
-          $postSeismic[$date][$component . '-logsize'] = $fields['logsize'];
-          $postSeismic[$date][$component . '-time'] = $fields['time_constant'];
+          $postSeismic[$date]['decDate'] = $row['decdate'];
+          $postSeismic[$date][$component . '-logsig'] = $row['logsig'];
+          $postSeismic[$date][$component . '-logsize'] = $row['logsize'];
+          $postSeismic[$date][$component . '-time'] = $row['time_constant'];
         }
       }
 
@@ -341,22 +341,22 @@ class StationView {
     if ($rows) {
       $html = '<table>';
       $trs = [];
-      foreach ($rows as $fields) {
-        if ($fields['datatype'] === $datatype) {
-          $component = $fields['component'];
+      foreach ($rows as $row) {
+        if ($row['datatype'] === $datatype) {
+          $component = $row['component'];
           $direction = $components[$component];
           $th = '<tr><td class="empty"></td>';
           $tr = '<tr class="' . strtolower($direction) . '">';
           $tr .= "<th>$direction</th>";
 
           unset( // hide these values from the table view
-            $fields['component'],
-            $fields['datatype'],
-            $fields['id'],
-            $fields['network'],
-            $fields['station']
+            $row['component'],
+            $row['datatype'],
+            $row['id'],
+            $row['network'],
+            $row['station']
           );
-          foreach ($fields as $key=>$value) {
+          foreach ($row as $key=>$value) {
             // strip '-' out of date fields
             if (preg_match('/\d{4}-\d{2}-\d{2}/', $value)) {
               $value = str_replace('-', '', $value);
