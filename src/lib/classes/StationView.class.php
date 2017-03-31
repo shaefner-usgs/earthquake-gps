@@ -232,7 +232,7 @@ class StationView {
         }
       }
 
-      foreach ($offsets as $tds) {
+      foreach ($offsets as $dateStr => $tds) {
         $html .= sprintf('<tr>
             <th>%s</th>
             <td>%s</td>
@@ -244,7 +244,7 @@ class StationView {
             <td>%s</td>
             <td>%s</td>
           </tr>',
-          $date,
+          $dateStr,
           $tds['decDate'],
           $tds['N-size'],
           $tds['N-uncertainty'],
@@ -290,7 +290,7 @@ class StationView {
         }
       }
 
-      foreach ($postSeismic as $tds) {
+      foreach ($postSeismic as $dateStr => $tds) {
         $html .= sprintf('<tr>
             <th>%s</th>
             <td>%s</td>
@@ -304,7 +304,7 @@ class StationView {
             <td>%s</td>
             <td>%s</td>
           </tr>',
-          $date,
+          $dateStr,
           $tds['decDate'],
           $tds['N-logsize'],
           $tds['N-logsig'],
@@ -356,7 +356,7 @@ class StationView {
             $row['network'],
             $row['station']
           );
-          foreach ($row as $key=>$value) {
+          foreach ($row as $key => $value) {
             // strip '-' out of date fields
             if (preg_match('/\d{4}-\d{2}-\d{2}/', $value)) {
               $value = str_replace('-', '', $value);
@@ -370,7 +370,7 @@ class StationView {
         }
       }
       $html .= $th;
-      foreach ($components as $key=>$value) {
+      foreach ($components as $key => $value) {
         $html .= $trs[$key];
       }
       $html .= '</table>';
