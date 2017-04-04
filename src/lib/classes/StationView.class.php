@@ -147,7 +147,7 @@ class StationView {
     return '<p>These plots depict the north, east and up components of
       the station as a function of time. <a href="/monitoring/gps/plots.php">
       More detailed explanation</a> &raquo;</p>
-      <p>Dashed lines show offsets due to:</p>
+      <p>Dashed vertical lines show offsets (when present) due to:</p>
       <ul class="no-style">
         <li><mark class="green">Green</mark> &ndash; antenna changes from site logs</li>
         <li><mark class="red">Red</mark> &ndash; earthquakes</li>
@@ -220,10 +220,7 @@ class StationView {
       foreach ($rows as $row) {
         if ($row['datatype'] === $datatype) {
           $component = $row['component'];
-          $days = $row['doy'] - date('z');
-          $time = strtotime("+" . $days . " days");
-          // use 'year' from db, and calculate 'month' and 'day' from 'doy'
-          $date = $row['year'] . date('md', $time);
+          $date = str_replace('-', '', $row['date']);
 
           $offsets[$date]['decDate'] = $row['decdate'];
           $offsets[$date]['type'] = $row['offsettype'];
