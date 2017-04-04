@@ -275,7 +275,7 @@ class StationView {
       foreach ($rows as $row) {
         if ($row['datatype'] === $datatype) {
           $component = $row['component'];
-          $days = $row['doy'] - date('z');
+          $days = $row['doy'] - date('z') - 1; // php starts at '0'
           $time = strtotime("+" . $days . " days");
           // use 'year' from db, and calculate 'month' and 'day' from 'doy'
           $date = $row['year'] . date('md', $time);
