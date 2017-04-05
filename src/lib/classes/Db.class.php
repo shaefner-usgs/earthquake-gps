@@ -298,28 +298,34 @@ class Db {
   /**
    * Query db to get a list of stations and their associated networks
    *
-   * @param $firstchar {String/Int} default is NULL
-   *     optional char to filter stations (e.g. only stations starting w 'a')
+   * @param $filter {String/Int} default is NULL
+   *     optional char or string to filter stations (e.g. stations starting w 'a')
    *
    * @return {Function}
    */
-  public function queryStationList ($firstchar=NULL) {
-    $filter = "$firstchar%";
+  public function queryStationList ($filter=NULL) {
+    $sqlFilter = "$filter%";
     $show = 1; // show only stations in 'non-hidden' networks by default
 
-    if ($firstchar === 'hidden') { // show stations in 'hidden' networks as well
-      $filter = '%';
+    if ($filter === 'hidden') { // show stations in 'hidden' networks
+      $sqlFilter = '%';
       $show = 0;
     }
 
-    $sql = 'SELECT r.station, r.network
+    $where = 'r.station LIKE :filter AND n.show = :show';
+    if ($filter === 'destroyed') {
+      $where = 'destroyed = 1';
+    }
+
+    $sql = "SELECT r.station, r.network, s.destroyed
       FROM gps_relations r
       LEFT JOIN gps_networks n USING (network)
-      WHERE r.station LIKE :filter AND n.show = :show
-      ORDER BY `station` ASC, `network` ASC';
+      LEFT JOIN gps_stations s USING (station)
+      WHERE $where
+      ORDER BY `station` ASC, `network` ASC";
 
       return $this->_execQuery($sql, array(
-        'filter' => $filter,
+        'filter' => $sqlFilter,
         'show' => $show
       ));
     }
