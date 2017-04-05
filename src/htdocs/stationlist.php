@@ -46,7 +46,7 @@ while ($row = $rsStationList->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Create html for subheader
-$sel = strtoupper($filter);
+$sel = ucfirst($filter);
 if ($sel === '') {
   $sel = 'All';
 }
