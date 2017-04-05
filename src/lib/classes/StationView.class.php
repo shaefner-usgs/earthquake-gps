@@ -83,7 +83,7 @@ class StationView {
 
       $tablesHtml = '';
       foreach ($tables as $tableName => $tableData) {
-        if ($tables[$tableName]) { // value is empty if no data in database
+        if ($tableData) { // value is empty if no data in database
           $tablesHtml .= "<h3>$tableName</h3>$tableData";
         }
       }
@@ -209,14 +209,7 @@ class StationView {
     $html = '';
     $rows = $this->_model->offsets;
 
-    if ($rows) {
-      $html = '<table>
-        <tr>
-          <td class="empty"></td><th>Decimal date</th><th>N offset</th>
-          <th>N uncertainty</th><th>E offset</th><th>E uncertainty</th>
-          <th>U offset</th><th>U uncertainty</th><th>Type</th>
-        </tr>';
-
+    if ($rows) { // offsets exist for station
       foreach ($rows as $row) {
         if ($row['datatype'] === $datatype) {
           $component = $row['component'];
@@ -228,32 +221,40 @@ class StationView {
           $offsets[$date][$component . '-uncertainty'] = $row['uncertainty'];
         }
       }
+      if ($offsets) { // offsets exist for datatype
+        $html = '<table>
+          <tr>
+            <td class="empty"></td><th>Decimal date</th><th>N offset</th>
+            <th>N uncertainty</th><th>E offset</th><th>E uncertainty</th>
+            <th>U offset</th><th>U uncertainty</th><th>Type</th>
+          </tr>';
 
-      foreach ($offsets as $dateStr => $tds) {
-        $html .= sprintf('<tr>
-            <th>%s</th>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-          </tr>',
-          $dateStr,
-          $tds['decDate'],
-          $tds['N-size'],
-          $tds['N-uncertainty'],
-          $tds['E-size'],
-          $tds['E-uncertainty'],
-          $tds['U-size'],
-          $tds['U-uncertainty'],
-          $tds['type']
-        );
+        foreach ($offsets as $dateStr => $tds) {
+          $html .= sprintf('<tr>
+              <th>%s</th>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+            </tr>',
+            $dateStr,
+            $tds['decDate'],
+            $tds['N-size'],
+            $tds['N-uncertainty'],
+            $tds['E-size'],
+            $tds['E-uncertainty'],
+            $tds['U-size'],
+            $tds['U-uncertainty'],
+            $tds['type']
+          );
+        }
+
+        $html .= '</table>';
       }
-
-      $html .= '</table>';
     }
 
     return $html;
@@ -263,15 +264,7 @@ class StationView {
     $html = '';
     $rows = $this->_model->postSeismic;
 
-    if ($rows) {
-      $html = '<table>
-        <tr>
-          <td class="empty"></td><th>Decimal date</th><th>N log size</th>
-          <th>N log uncertainty</th><th>N time constant</th><th>E log size</th>
-          <th>E log uncertainty</th><th>E time constant</th><th>U log size</th>
-          <th>U log uncertainty</th><th>U time constant</th>
-        </tr>';
-
+    if ($rows) { // postseismic data exists for station
       foreach ($rows as $row) {
         if ($row['datatype'] === $datatype) {
           $component = $row['component'];
@@ -286,36 +279,45 @@ class StationView {
           $postSeismic[$date][$component . '-time'] = $row['time_constant'];
         }
       }
+      if ($postSeismic) { // postseismic data exists for datatype
+        $html = '<table>
+          <tr>
+            <td class="empty"></td><th>Decimal date</th><th>N log size</th>
+            <th>N log uncertainty</th><th>N time constant</th><th>E log size</th>
+            <th>E log uncertainty</th><th>E time constant</th><th>U log size</th>
+            <th>U log uncertainty</th><th>U time constant</th>
+          </tr>';
 
-      foreach ($postSeismic as $dateStr => $tds) {
-        $html .= sprintf('<tr>
-            <th>%s</th>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-            <td>%s</td>
-          </tr>',
-          $dateStr,
-          $tds['decDate'],
-          $tds['N-logsize'],
-          $tds['N-logsig'],
-          $tds['N-time'],
-          $tds['E-logsize'],
-          $tds['E-logsig'],
-          $tds['E-time'],
-          $tds['U-logsize'],
-          $tds['U-logsig'],
-          $tds['U-time']
-        );
+        foreach ($postSeismic as $dateStr => $tds) {
+          $html .= sprintf('<tr>
+              <th>%s</th>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+            </tr>',
+            $dateStr,
+            $tds['decDate'],
+            $tds['N-logsize'],
+            $tds['N-logsig'],
+            $tds['N-time'],
+            $tds['E-logsize'],
+            $tds['E-logsig'],
+            $tds['E-time'],
+            $tds['U-logsize'],
+            $tds['U-logsig'],
+            $tds['U-time']
+          );
+        }
+
+        $html .= '</table>';
       }
-
-      $html .= '</table>';
     }
 
     return $html;
@@ -337,6 +339,7 @@ class StationView {
 
     if ($rows) {
       $html = '<table>';
+      $th = '';
       $trs = [];
       foreach ($rows as $row) {
         if ($row['datatype'] === $datatype) {
@@ -346,7 +349,7 @@ class StationView {
           $tr = '<tr class="' . strtolower($direction) . '">';
           $tr .= "<th>$direction</th>";
 
-          unset( // hide these values from the table view
+          unset( // don't include these values in the table
             $row['component'],
             $row['datatype'],
             $row['id'],
