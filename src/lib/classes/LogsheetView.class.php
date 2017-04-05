@@ -26,7 +26,7 @@ class LogsheetView {
 
   private function _getLogSheets () {
     if (!$this->_collection->logsheets) {
-      $logSheetsHtml = '<p class="alert info">No Logsheets Found</p>';
+      $logSheetsHtml = '<p class="alert info">No Field Logs Found</p>';
     } else {
       $logSheetsHtml = '';
       // loop thru each logsheet (grouped by date)
