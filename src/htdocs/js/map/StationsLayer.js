@@ -173,8 +173,8 @@ var StationsLayer = function (options) {
       elevation: Math.round(feature.properties.elevation * 100) / 100,
       imgSrc: MOUNT_PATH + '/data/networks/' + NETWORK + '/' + station +
         '/nafixed/' + station + '.png',
-      lat: Math.round(feature.geometry.coordinates[1] * 1000) / 1000,
-      lon: Math.round(feature.geometry.coordinates[0] * 1000) / 1000,
+      lat: Math.round(feature.geometry.coordinates[1] * 100000) / 100000,
+      lon: Math.round(feature.geometry.coordinates[0] * 100000) / 100000,
       network: NETWORK,
       station: station.toUpperCase(),
       x: feature.properties.x,
@@ -201,7 +201,7 @@ var StationsLayer = function (options) {
             '<dt>Lat, Lon (Elevation)</dt><dd>{lat}, {lon} ({elevation}m)</dd>' +
             '<dt>X, Y, Z Position</dt><dd>{x}, {y}, {z}</dd>' +
           '</dl>' +
-          '<p><a href="https://www.google.com/maps/dir//{lat},{lon}/data=!4m2!4m1!3e0">Google Map</a></p>' +
+          '<p><a href="https://maps.google.com/?q={lat},{lon}">Google Map</a></p>' +
         '</div>';
     }
     popup = L.Util.template(popupTemplate, data);
