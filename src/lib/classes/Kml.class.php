@@ -32,26 +32,31 @@ class Kml {
     }
 
     $this->_domain = $_SERVER['SERVER_NAME'];
+    $this->_lats = [];
+    $this->_lons = [];
+    // script creates one of several types of kml files, dep. on $this->_sortBy value
     $this->_meta = [
       'filename' => $filename,
-      'last' => [ // last year surveyed
-        'description' => 'Campaign stations',
-        'folder' => 'Last surveyed in %s',
-        'name' => $namePrefix . ' (sorted by last year surveyed)'
-      ],
-      'station' => [ // station name (default)
-        'description' => 'Campaign and continuous stations',
-        'name' => $namePrefix . ' (sorted by station name)'
-      ],
-      'timespan' => [ // time btwn surveys
-        'description' => 'Campaign stations',
-        'folder' => '%s year(s) between first/last surveys',
-        'name' => $namePrefix . ' (sorted by time span between surveys)'
-      ],
-      'years' => [ // years surveyed
-        'description' => 'Campaign stations',
-        'folder' => 'Stations surveyed in %s',
-        'name' => $namePrefix . ' (sorted by years surveyed)'
+      'types' => [
+        'last' => [ // sorted by last year surveyed
+          'description' => 'Campaign stations',
+          'folder' => 'Last surveyed in %s',
+          'name' => $namePrefix . ' (sorted by last year surveyed)'
+        ],
+        'station' => [ // sorted by station name (default)
+          'description' => 'Campaign and continuous stations',
+          'name' => $namePrefix . ' (sorted by station name)'
+        ],
+        'timespan' => [ // sorted by time btwn surveys
+          'description' => 'Campaign stations',
+          'folder' => '%s year(s) between first/last surveys',
+          'name' => $namePrefix . ' (sorted by time span between surveys)'
+        ],
+        'years' => [ // sorted by years surveyed
+          'description' => 'Campaign stations',
+          'folder' => 'Stations surveyed in %s',
+          'name' => $namePrefix . ' (sorted by years surveyed)'
+        ]
       ]
     ];
     $this->_network = $network;
@@ -67,7 +72,7 @@ class Kml {
    */
   private function _doSort () {
     $args = func_get_args();
-    $data = array_shift($args);
+    $data = $this->_stations['all'];
 
     foreach ($args as $n => $field) {
       if (is_string($field)) {
@@ -95,8 +100,6 @@ class Kml {
     $filterStations = true;
     $prevFolderValue = NULL;
     $sortBy = $this->_sortBy;
-    $this->_lats = [];
-    $this->_lons = [];
 
     // Don't create folders or filter when sorting by station name
     if ($sortBy === 'station') {
@@ -106,8 +109,8 @@ class Kml {
 
     foreach ($this->_stations as $year => $stations) {
       // Array contains two lists of stations; skip appropriate list
-      if ($sortBy === 'years') {
-        // viewing stations grouped by year; skip list of all stations
+      if ($sortBy === 'years') { // viewing stations grouped by year
+        // skip list of 'all' stations
         if ($year === 'all') {
           continue;
         }
@@ -145,7 +148,7 @@ class Kml {
             if ($folderValue === '' || $folderValue === -1) {
               $sub = '[unknown]';
             }
-            $folder = sprintf($this->_meta[$sortBy]['folder'], $sub);
+            $folder = sprintf($this->_meta['types'][$sortBy]['folder'], $sub);
             $body .= "\n    <Folder><name>$folder</name><open>0</open>";
 
             $prevFolderValue = $folderValue;
@@ -185,8 +188,8 @@ class Kml {
    * @return $header {String}
    */
   private function _getHeader () {
-    $description = $this->_meta[$this->_sortBy]['description'];
-    $name = $this->_meta[$this->_sortBy]['name'];
+    $description = $this->_meta['types'][$this->_sortBy]['description'];
+    $name = $this->_meta['types'][$this->_sortBy]['name'];
     $latCenter = (max($this->_lats) + min($this->_lats)) / 2;
     $legendUrl = sprintf ('https://%s%s/img/kmlLegend-%s.png',
       $this->_domain,
@@ -384,8 +387,12 @@ class Kml {
       $logsheetsCollection = $this->_getLogSheets($station['station']);
 
       $logsheets_html = '<ul>';
+      $years = [];
       foreach ($logsheetsCollection->logsheets as $date => $logsheets) {
         $data_collected = true;
+        $timestamp = strtotime($date);
+        $years[] = date('Y', $timestamp);
+
         if (preg_match('/txt?/', $logsheets[0]->file)) {
           $href = sprintf('https://%s%s/%s',
             $this->_domain,
@@ -401,14 +408,20 @@ class Kml {
         }
         $logsheets_html .= sprintf('<li><a href="%s">%s</a></li>',
           $href,
-          date('M d, Y', strtotime($date))
+          date('M d, Y', $timestamp)
         );
       }
       $logsheets_html .= '</ul>';
 
+      $data_html = '';
       if ($data_collected) {
-        $logsheets_html = '<p class="data">GPS data was collected on the
-          following date(s):</p>' . $logsheets_html;
+        if ($station['stationtype'] === 'campaign') {
+          $data_msg = 'GPS data was collected on the following date(s):';
+        } else {
+          $data_msg = 'GPS data was collected from ' . min($years) .
+            '&ndash;' . max($years);
+        }
+        $data_html = '<p class="data">' . $data_msg . '</p>' . $logsheets_html;
       }
     }
 
@@ -421,12 +434,12 @@ class Kml {
       $display_lat,
       $display_lon,
       $links_html,
-      $logsheets_html
+      $data_html
     );
 
     $placeMark = '    <Placemark>
       <name>' . $display_station . '</name>
-      <description>' . $description_html . '</description>
+      <description><![CDATA[' . $description_html . ']]></description>
       <styleUrl>#marker</styleUrl>
       <visibility>1</visibility>
       <LookAt>
@@ -550,13 +563,13 @@ class Kml {
   public function sort ($sortBy) {
     if ($sortBy === 'last') {
       $this->_stations['all'] = $this->_doSort(
-        $this->_stations['all'], 'last', SORT_DESC, 'station', SORT_ASC
+        'last', SORT_DESC, 'station', SORT_ASC
       );
       $this->_sortBy = $sortBy;
     }
     else if ($sortBy === 'timespan') {
       $this->_stations['all'] = $this->_doSort(
-        $this->_stations['all'], 'timespan', SORT_DESC, 'station', SORT_ASC
+        'timespan', SORT_DESC, 'station', SORT_ASC
       );
       $this->_sortBy = $sortBy;
     }
