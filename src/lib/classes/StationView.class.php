@@ -24,24 +24,6 @@ class StationView {
     );
   }
 
-  private function _getCampaignList () {
-    $campaignListHtml = '<h2>Campaign List</h2>';
-    $networks = $this->_model->networkList;
-
-    $campaignListHtml .= '<ul>';
-    foreach ($networks as $network) {
-      $campaignListHtml .= sprintf('<li><a href="%s/%s/%s">%s</a></li>',
-        $GLOBALS['MOUNT_PATH'],
-        $network,
-        $this->_model->station,
-        $network
-      );
-    }
-    $campaignListHtml .= '</ul>';
-
-    return $campaignListHtml;
-  }
-
   private function _getData () {
     $html = '<div class="tablist">';
     $datatypes = [
@@ -50,13 +32,12 @@ class StationView {
       'filtered' => 'Filtered'
     ];
 
-    $explanation = $this->_getExplanation();
-
     foreach ($datatypes as $datatype => $name) {
       $baseImg = $this->_model->station . '.png';
 
       $dataPath = $this->_getPath($datatype);
       $downloadsHtml = $this->_getDownloads($datatype);
+      $explanation = $this->_getExplanation($datatype);
 
       $tables = [
         'Velocities' => $this->_getTable('velocities', $datatype),
@@ -143,8 +124,12 @@ class StationView {
     return $html;
   }
 
-  private function _getExplanation () {
-    return '<p>These plots depict the north, east and up components of
+  private function _getExplanation ($type) {
+    $components = 'north, east, and up';
+    if ($type === 'itrf2008') {
+      $components = 'X, Y, and Z';
+    }
+    return '<p>These plots depict the ' . $components . ' components of
       the station as a function of time. <a href="/monitoring/gps/plots.php">
       More detailed explanation</a> &raquo;</p>
       <p>Dashed vertical lines show offsets (when present) due to:</p>
@@ -205,6 +190,25 @@ class StationView {
     return $html;
   }
 
+  private function _getNetworks () {
+    $networkListHtml = '<h2>Networks</h2>';
+    $networks = $this->_model->networkList;
+
+    $networkListHtml .= '<p>This station belongs to the following network(s):</p>';
+    $networkListHtml .= '<ul>';
+    foreach ($networks as $network) {
+      $networkListHtml .= sprintf('<li><a href="%s/%s/%s">%s</a></li>',
+        $GLOBALS['MOUNT_PATH'],
+        $network,
+        $this->_model->station,
+        $network
+      );
+    }
+    $networkListHtml .= '</ul>';
+
+    return $networkListHtml;
+  }
+
   private function _getOffsetsTable ($datatype) {
     $html = '';
     $rows = $this->_model->offsets;
@@ -258,6 +262,11 @@ class StationView {
     }
 
     return $html;
+  }
+
+  private function _getPath ($datatype) {
+    return 'networks/' . $this->_model->network . '/' . $this->_model->station .
+      '/' . $datatype;
   }
 
   private function _getPostSeismicTable ($datatype) {
@@ -321,11 +330,6 @@ class StationView {
     }
 
     return $html;
-  }
-
-  private function _getPath ($datatype) {
-    return 'networks/' . $this->_model->network . '/' . $this->_model->station .
-      '/' . $datatype;
   }
 
   private function _getTable ($table, $datatype, $lookupTable=NULL) {
@@ -393,7 +397,7 @@ class StationView {
 
     print '<div class="column one-of-three">';
     print $this->_getLinkList();
-    print $this->_getCampaignList();
+    print $this->_getNetworks();
     print '</div>';
 
     print '</div>';
