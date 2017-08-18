@@ -24,24 +24,6 @@ class StationView {
     );
   }
 
-  private function _getCampaignList () {
-    $campaignListHtml = '<h2>Campaign List</h2>';
-    $networks = $this->_model->networkList;
-
-    $campaignListHtml .= '<ul>';
-    foreach ($networks as $network) {
-      $campaignListHtml .= sprintf('<li><a href="%s/%s/%s">%s</a></li>',
-        $GLOBALS['MOUNT_PATH'],
-        $network,
-        $this->_model->station,
-        $network
-      );
-    }
-    $campaignListHtml .= '</ul>';
-
-    return $campaignListHtml;
-  }
-
   private function _getData () {
     $html = '<div class="tablist">';
     $datatypes = [
@@ -50,20 +32,19 @@ class StationView {
       'filtered' => 'Filtered'
     ];
 
-    $explanation = $this->_getExplanation();
-
     foreach ($datatypes as $datatype => $name) {
       $baseImg = $this->_model->station . '.png';
 
       $dataPath = $this->_getPath($datatype);
       $downloadsHtml = $this->_getDownloads($datatype);
+      $explanation = $this->_getExplanation($datatype);
 
       $tables = [
+        'Velocities' => $this->_getTable('velocities', $datatype),
+        'Offsets' => $this->_getOffsetsTable($datatype),
         'Noise' => $this->_getTable('noise', $datatype),
-        'Offsets' => $this->_getTable('offsets', $datatype),
-        'Post-seismic' => $this->_getTable('postSeismic', $datatype),
-        'Seasonal' => $this->_getTable('seasonal', $datatype),
-        'Velocities' => $this->_getVelocitiesTable($datatype)
+        'Post-seismic' => $this->_getPostSeismicTable($datatype),
+        'Seasonal' => $this->_getTable('seasonal', $datatype)
       ];
 
       $plotsHtml = '';
@@ -83,7 +64,7 @@ class StationView {
 
       $tablesHtml = '';
       foreach ($tables as $tableName => $tableData) {
-        if ($tables[$tableName]) { // value is empty if no data in database
+        if ($tableData) { // value is empty if no data in database
           $tablesHtml .= "<h3>$tableName</h3>$tableData";
         }
       }
@@ -143,11 +124,15 @@ class StationView {
     return $html;
   }
 
-  private function _getExplanation () {
-    return '<p>These plots depict the north, east and up components of
+  private function _getExplanation ($type) {
+    $components = 'north, east, and up';
+    if ($type === 'itrf2008') {
+      $components = 'X, Y, and Z';
+    }
+    return '<p>These plots depict the ' . $components . ' components of
       the station as a function of time. <a href="/monitoring/gps/plots.php">
       More detailed explanation</a> &raquo;</p>
-      <p>Dashed lines show offsets due to:</p>
+      <p>Dashed vertical lines show offsets (when present) due to:</p>
       <ul class="no-style">
         <li><mark class="green">Green</mark> &ndash; antenna changes from site logs</li>
         <li><mark class="red">Red</mark> &ndash; earthquakes</li>
@@ -205,15 +190,152 @@ class StationView {
     return $html;
   }
 
+  private function _getNetworks () {
+    $networkListHtml = '<h2>Networks</h2>';
+    $networks = $this->_model->networkList;
+
+    $networkListHtml .= '<p>This station belongs to the following network(s):</p>';
+    $networkListHtml .= '<ul>';
+    foreach ($networks as $network) {
+      $networkListHtml .= sprintf('<li><a href="%s/%s/%s">%s</a></li>',
+        $GLOBALS['MOUNT_PATH'],
+        $network,
+        $this->_model->station,
+        $network
+      );
+    }
+    $networkListHtml .= '</ul>';
+
+    return $networkListHtml;
+  }
+
+  private function _getOffsetsTable ($datatype) {
+    $html = '';
+    $rows = $this->_model->offsets;
+
+    if ($rows) { // offsets exist for station
+      foreach ($rows as $row) {
+        if ($row['datatype'] === $datatype) {
+          $component = $row['component'];
+          $date = str_replace('-', '', $row['date']);
+
+          $offsets[$date]['decDate'] = $row['decdate'];
+          $offsets[$date]['type'] = $row['offsettype'];
+          $offsets[$date][$component . '-size'] = $row['size'];
+          $offsets[$date][$component . '-uncertainty'] = $row['uncertainty'];
+        }
+      }
+      if ($offsets) { // offsets exist for datatype
+        $html = '<table>
+          <tr>
+            <td class="empty"></td><th>Decimal date</th><th>N offset</th>
+            <th>N uncertainty</th><th>E offset</th><th>E uncertainty</th>
+            <th>U offset</th><th>U uncertainty</th><th>Type</th>
+          </tr>';
+
+        foreach ($offsets as $dateStr => $tds) {
+          $html .= sprintf('<tr>
+              <th>%s</th>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+            </tr>',
+            $dateStr,
+            $tds['decDate'],
+            $tds['N-size'],
+            $tds['N-uncertainty'],
+            $tds['E-size'],
+            $tds['E-uncertainty'],
+            $tds['U-size'],
+            $tds['U-uncertainty'],
+            $tds['type']
+          );
+        }
+
+        $html .= '</table>';
+      }
+    }
+
+    return $html;
+  }
+
   private function _getPath ($datatype) {
     return 'networks/' . $this->_model->network . '/' . $this->_model->station .
       '/' . $datatype;
   }
 
+  private function _getPostSeismicTable ($datatype) {
+    $html = '';
+    $rows = $this->_model->postSeismic;
+
+    if ($rows) { // postseismic data exists for station
+      foreach ($rows as $row) {
+        if ($row['datatype'] === $datatype) {
+          $component = $row['component'];
+          $days = $row['doy'] - date('z') - 1; // php starts at '0'
+          $time = strtotime("+" . $days . " days");
+          // use 'year' from db, and calculate 'month' and 'day' from 'doy'
+          $date = $row['year'] . date('md', $time);
+
+          $postSeismic[$date]['decDate'] = $row['decdate'];
+          $postSeismic[$date][$component . '-logsig'] = $row['logsig'];
+          $postSeismic[$date][$component . '-logsize'] = $row['logsize'];
+          $postSeismic[$date][$component . '-time'] = $row['time_constant'];
+        }
+      }
+      if ($postSeismic) { // postseismic data exists for datatype
+        $html = '<table>
+          <tr>
+            <td class="empty"></td><th>Decimal date</th><th>N log size</th>
+            <th>N log uncertainty</th><th>N time constant</th><th>E log size</th>
+            <th>E log uncertainty</th><th>E time constant</th><th>U log size</th>
+            <th>U log uncertainty</th><th>U time constant</th>
+          </tr>';
+
+        foreach ($postSeismic as $dateStr => $tds) {
+          $html .= sprintf('<tr>
+              <th>%s</th>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
+            </tr>',
+            $dateStr,
+            $tds['decDate'],
+            $tds['N-logsize'],
+            $tds['N-logsig'],
+            $tds['N-time'],
+            $tds['E-logsize'],
+            $tds['E-logsig'],
+            $tds['E-time'],
+            $tds['U-logsize'],
+            $tds['U-logsig'],
+            $tds['U-time']
+          );
+        }
+
+        $html .= '</table>';
+      }
+    }
+
+    return $html;
+  }
+
   private function _getTable ($table, $datatype, $lookupTable=NULL) {
-    $components = [
-      'E' => 'East',
+    $components = [ // listed in display order on web page
       'N' => 'North',
+      'E' => 'East',
       'U' => 'Up'
     ];
     $html = '';
@@ -221,57 +343,46 @@ class StationView {
 
     if ($rows) {
       $html = '<table>';
-      $trs = '';
-      foreach ($rows as $fields) {
-        if ($fields['datatype'] === $datatype) {
+      $th = '';
+      $trs = [];
+      foreach ($rows as $row) {
+        if ($row['datatype'] === $datatype) {
+          $component = $row['component'];
+          $direction = $components[$component];
           $th = '<tr><td class="empty"></td>';
-          $tr = '<tr>';
-          $tr .= '<th>' . $components[$fields['component']] . '</th>';
+          $tr = '<tr class="' . strtolower($direction) . '">';
+          $tr .= "<th>$direction</th>";
 
-          unset( // hide these values from the table view
-            $fields['component'],
-            $fields['datatype'],
-            $fields['id'],
-            $fields['network'],
-            $fields['station']
+          unset( // don't include these values in the table
+            $row['component'],
+            $row['datatype'],
+            $row['id'],
+            $row['network'],
+            $row['station']
           );
-          foreach ($fields as $key=>$value) {
+          foreach ($row as $key => $value) {
+            // strip '-' out of date fields
+            if (preg_match('/\d{4}-\d{2}-\d{2}/', $value)) {
+              $value = str_replace('-', '', $value);
+            }
             $th .= "<th>$key</th>";
             $tr .= "<td>$value</td>";
           }
           $th .= '</tr>';
           $tr .= '</tr>';
-          $trs .= $tr;
+          $trs[$component] = $tr;
         }
       }
-      $html .= $th . $trs . '</table>';
+      $html .= $th;
+      foreach ($components as $key => $value) {
+        $html .= $trs[$key];
+      }
+      $html .= '</table>';
     }
 
-    return $html;
-  }
-
-  private function _getVelocitiesTable ($datatype) {
-    $html = '';
-    $rows = '';
-    $station = $this->_model->station;
-    $velocities = $this->_model->velocities;
-
-    $components = $velocities['data'][$station][$datatype];
-    if ($components) {
-      $html = '<table>';
-      foreach ($components as $direction => $data) {
-        $header = '<tr><td class="empty"></td>';
-        $rows .= '<tr><th>' . ucfirst($direction) . '</th>';
-        foreach ($data as $key => $value) {
-          $header .= '<th>' . $velocities['lookup'][$key] . '</th>';
-          $rows .= "<td>$value</td>";
-        }
-        $header .= '</tr>';
-        $rows .= '</tr>';
-      }
-      $html .= $header;
-      $html .= $rows;
-      $html .= '</table>';
+    // Don't send back an empty table (happens if no data for datatype)
+    if ($html === '<table></table>') {
+      $html = '';
     }
 
     return $html;
@@ -286,7 +397,7 @@ class StationView {
 
     print '<div class="column one-of-three">';
     print $this->_getLinkList();
-    print $this->_getCampaignList();
+    print $this->_getNetworks();
     print '</div>';
 
     print '</div>';

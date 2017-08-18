@@ -6,11 +6,16 @@ include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 $callback = safeParam('callback');
 
-// when this script is called via importJsonToArray() which is declared in
-// functions.inc.php, $network is passed in as a function param
+/* This script is called via js (as an ajax request) or php (using
+ * importJsonToArray(), which is declared in _functions.inc.php).
+ *
+ * - js mode: $network is set via querystring
+ * - php mode: $network is set before including this script
+ */
 if (!isset($network)) {
   $network = safeParam('network', 'Pacific');
 }
+
 $now = date(DATE_RFC2822);
 
 $db = new Db;
@@ -45,11 +50,6 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
       'days' => $days,
       'elevation' => $row['elevation'],
       'last_observation' => $row['last_observation'],
-      'rms' => [
-        'east' => floatval($row['east_rms']),
-        'north' => floatval($row['north_rms']),
-        'up' => floatval($row['up_rms'])
-      ],
       'showcoords' => intval($row['showcoords']),
       'station' => $row['station'],
       'type' => $row['stationtype'],

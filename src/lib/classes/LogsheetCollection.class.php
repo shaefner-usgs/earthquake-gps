@@ -31,7 +31,7 @@ class LogsheetCollection {
   public $station;
   public $stationType;
 
-  public function __construct ($network, $station, $stationType) {
+  public function __construct ($network, $station, $stationType=NULL) {
     $this->logsheets = [];
     $this->network = $network;
     $this->path = sprintf('%s/data/stations/%s.dir/%s/logsheets',

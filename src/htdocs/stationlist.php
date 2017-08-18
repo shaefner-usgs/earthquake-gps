@@ -46,7 +46,7 @@ while ($row = $rsStationList->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Create html for subheader
-$sel = strtoupper($filter);
+$sel = ucfirst($filter);
 if ($sel === '') {
   $sel = 'All';
 }
@@ -57,22 +57,26 @@ $subheaderHtml = sprintf ('<h2>&lsquo;%s&rsquo; Stations (%d)</h2>',
 
 // Create html for station list
 $listHtml = '<ul class="stations no-style">';
-foreach ($stations as $station => $networks) {
-  $networksHtml = '<ul class="no-style">';
-  foreach ($networks as $network) {
-    $networksHtml .= sprintf ('<li><a href="%s/%s/%s">%s</a></li>',
-      $MOUNT_PATH,
-      $network,
-      $station,
-      $network
+
+if ($stations) {
+  foreach ($stations as $station => $networks) {
+    $networksHtml = '<ul class="no-style">';
+    foreach ($networks as $network) {
+      $networksHtml .= sprintf ('<li><a href="%s/%s/%s">%s</a></li>',
+        $MOUNT_PATH,
+        $network,
+        $station,
+        $network
+      );
+    }
+    $networksHtml .= '</ul>';
+    $listHtml .= sprintf('<li><h3>%s</h3>%s</li>',
+      strtoupper($station),
+      $networksHtml
     );
   }
-  $networksHtml .= '</ul>';
-  $listHtml .= sprintf('<li><h3>%s</h3>%s</li>',
-    strtoupper($station),
-    $networksHtml
-  );
 }
+
 $listHtml .= '</ul>';
 
 // Render html

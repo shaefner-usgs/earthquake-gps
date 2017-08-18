@@ -37,8 +37,8 @@ class Waypoints {
       $wpt = '  <wpt lat="' . $lat . '" lon="' . $lon . '">
         <ele>' . $ele . '</ele>
         <name>' . $station . '</name>
-        <cmt>Position created from information contained in USGS GPS database</cmt>
-        <desc>Campaign station ' . $station . ' waypoint</desc>
+        <cmt>Station details from USGS GPS database</cmt>
+        <desc>Campaign station ' . $station . '</desc>
         <sym>Triangle, Red</sym>
       </wpt>';
       $body .= "\n$wpt";
@@ -76,7 +76,7 @@ class Waypoints {
     $header = '<?xml version="1.0" encoding="UTF-8"?>
     <gpx
       version="1.0"
-      creator="USGS, Menlo Park - http://earthquake.usgs.gov/monitoring/gps/"
+      creator="USGS, Menlo Park - https://earthquake.usgs.gov/monitoring/gps"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns="http://www.topografix.com/GPX/1/0"
       xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">';

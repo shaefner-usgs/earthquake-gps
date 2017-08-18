@@ -31,8 +31,7 @@ if (!isset($TEMPLATE)) {
   $CONTACT = 'jsvarc';
 
   // importJsonToArray() sets headers -> needs to run before including template
-  $stations = importJsonToArray(__DIR__ .
-    "/_getStations.json.php", $network);
+  $stations = importJsonToArray(__DIR__ . '/_getStations.json.php', $network);
 
   include 'template.inc.php';
 }
@@ -51,7 +50,7 @@ if ($stations['count'] === 0) {
 // Create HTML for link list
 $links = [
   'GPS waypoints' => "$network/waypoints",
-  'Velocities' => "$network/velocities",
+  //'Velocities' => "$network/velocities",
   'Most recent XYZ positions' => "data/networks/$network/${network}_xyz_file",
   'ITRF2008 XYZ time series' => "data/networks/$network/${network}_xyz_files.tar.gz",
   'Stations not updated in the past 7 days' => "$network/notupdated"
@@ -96,12 +95,13 @@ $stations_html = '<ul class="stations no-style" style="height: '. $height . 'px;
 foreach ($stations['features'] as $feature) {
   // star high rms values
   $star = '';
+  /* 2017-03-13: Comment out for now b/c rms values no longer in db
   if ($feature['properties']['rms']['up'] > 15 ||
     $feature['properties']['rms']['north'] > 10 ||
     $feature['properties']['rms']['east'] > 10) {
       $star = '<span>*</span>';
       $starred = true;
-  }
+  }*/
   $stations_html .= sprintf('<li class="%s">
       <a href="%s/%s" title="Go to station details">%s%s</a>
     </li>',

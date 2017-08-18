@@ -12,6 +12,8 @@ if (
   preg_match("@^$section(/index.php)?$@", $url) ||
   // network
   preg_match("@^$section/(?!stations)[\w-]+$@", $url) ||
+  // stations not updated
+  preg_match("@^$section/[\w]+/notupdated$@", $url) ||
   // station
   preg_match("@^$section/[\w-]+/\w{4}$@", $url) ||
   // kinematic, logs, photos, qc
