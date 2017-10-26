@@ -28,26 +28,11 @@ $datatypes = [
 ];
 
 // Create html for tables
-$tableHeader = '<table>
-  <tr>
-    <th>Station</th>
-    <th>Lat</th>
-    <th>Lon</th>
-    <th>Velocity (N)</th>
-    <th>Velocity (E)</th>
-    <th>Velocity (U)</th>
-    <th>Sigma (N)</th>
-    <th>Sigma (E)</th>
-    <th>Sigma (U)</th>
-  </tr>';
-$tableFooter = '</table>';
-
 $tableBody = [];
 while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
-  $commonFields = sprintf('<td>%s</td><td>%s</td><td>%s</td>',
-    $row->station,
-    round($row->lat, 5),
-    round($row->lon, 5)
+  $lonLatFields = sprintf('<td>%s</td><td>%s</td>',
+    round($row->lon, 5),
+    round($row->lat, 5)
   );
   // sigmas/velocities stored as comma-sep values ordered by type ASC, component ASC
   $sigmas = explode(',', $row->sigmas);
@@ -59,15 +44,18 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
+      <td>0.0000</td>
+      <td>%s</td>
       <td>%s</td>
       <td>%s</td>
     </tr>',
-    $commonFields,
-    $velocities[1],
+    $lonLatFields,
     $velocities[0],
-    $velocities[2],
-    $sigmas[1],
+    $velocities[1],
     $sigmas[0],
+    $sigmas[1],
+    $row->station,
+    $velocities[2],
     $sigmas[2]
   );
 
@@ -77,15 +65,18 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
+      <td>0.0000</td>
+      <td>%s</td>
       <td>%s</td>
       <td>%s</td>
     </tr>',
-    $commonFields,
-    $velocities[4],
+    $lonLatFields,
     $velocities[3],
-    $velocities[5],
-    $sigmas[4],
+    $velocities[4],
     $sigmas[3],
+    $sigmas[4],
+    $row->station,
+    $velocities[5],
     $sigmas[5]
   );
 
@@ -95,20 +86,37 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
+      <td>0.0000</td>
+      <td>%s</td>
       <td>%s</td>
       <td>%s</td>
     </tr>',
-    $commonFields,
-    $velocities[7],
+    $lonLatFields,
     $velocities[6],
-    $velocities[8],
-    $sigmas[7],
+    $velocities[7],
     $sigmas[6],
+    $sigmas[7],
+    $row->station,
+    $velocities[8],
     $sigmas[8]
   );
 }
 
 $html = '';
+$tableHeader = '<table>
+  <tr>
+    <th>Longitude</th>
+    <th>Latitude</th>
+    <th>Velocity (E)</th>
+    <th>Velocity (N)</th>
+    <th>Sigma (E)</th>
+    <th>Sigma (N)</th>
+    <th>Correlation (N-E)</th>
+    <th>Station</th>
+    <th>Velocity (U)</th>
+    <th>Sigma (U)</th>
+  </tr>';
+$tableFooter = '</table>';
 foreach ($datatypes as $datatype => $name) {
   $html .= sprintf('<section class="panel" data-title="%s">
       <header>
