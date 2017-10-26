@@ -401,7 +401,7 @@ class Db {
         GROUP_CONCAT(v.sigma ORDER BY v.datatype ASC, v.component ASC) AS sigmas
         FROM `gps_velocities` v
         LEFT JOIN `gps_stations` s USING (station)
-        WHERE v.network = 'SFBayArea'
+        WHERE v.network = :network
         GROUP BY v.station
         ORDER BY v.station ASC";
     }
