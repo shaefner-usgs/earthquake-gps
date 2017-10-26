@@ -1,17 +1,8 @@
+@import 'tablist/TabList.scss';
 @import '_common.scss';
 
-h2 {
-  margin-bottom: -1em;
-}
-
-.novalue {
-  text-align: center;
-}
-.station {
-  text-align: center;
-  font-size: 1.2em;
-
-  td {
-    border: 0;
+.tablist-panel {
+  header {
+    display: none; /* hides in js env only (.tablist-panel added by tabs js) */
   }
 }

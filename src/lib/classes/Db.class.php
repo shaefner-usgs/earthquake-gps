@@ -386,19 +386,25 @@ class Db {
    * @return {Function}
    */
   public function queryVelocities ($network, $station=NULL) {
-    $order = 'station ASC, datatype ASC';
     $params['network'] = $network;
-    $where = 'network = :network';
 
     if ($station) { // add station info to query
-      $order = 'last_observation DESC';
       $params['station'] = $station;
-      $where .= ' AND station = :station';
-    }
 
-    $sql = "SELECT * FROM gps_velocities
-      WHERE $where
-      ORDER BY $order";
+      $sql = "SELECT * FROM gps_velocities
+        WHERE network = :network AND station = :station
+        ORDER BY last_observation DESC";
+    } else {
+      // using MAX() for lat/lon to limit aggregated values from JOIN to 1 value
+      $sql = "SELECT v.station, MAX(s.lat) AS lat, MAX(s.lon) AS lon,
+        GROUP_CONCAT(v.velocity ORDER BY v.datatype ASC, v.component ASC) AS velocities,
+        GROUP_CONCAT(v.sigma ORDER BY v.datatype ASC, v.component ASC) AS sigmas
+        FROM `gps_velocities` v
+        LEFT JOIN `gps_stations` s USING (station)
+        WHERE v.network = 'SFBayArea'
+        GROUP BY v.station
+        ORDER BY v.station ASC";
+    }
 
     return $this->_execQuery($sql, $params);
   }
