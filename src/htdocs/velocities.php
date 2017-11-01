@@ -104,9 +104,9 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
 }
 
 $html = '';
-$tableHeader = '<table>
-  <tr>
-    <th>Station</th>
+$tableHeader = '<table class="sortable">
+  <tr class="no-sort">
+    <th class="sort-default">Station</th>
     <th>Longitude</th>
     <th>Latitude</th>
     <th>Elevation</th>
