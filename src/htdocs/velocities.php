@@ -30,17 +30,18 @@ $datatypes = [
 // Create html for tables
 $tableBody = [];
 while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
-  $lonLatFields = sprintf('<td>%s</td><td>%s</td>',
+  $positionFields = sprintf('<td>%s</td><td>%s</td><td>%s</td>',
     round($row->lon, 5),
-    round($row->lat, 5)
+    round($row->lat, 5),
+    round($row->elevation, 5)
   );
   // sigmas/velocities stored as comma-sep values ordered by type ASC, component ASC
   $sigmas = explode(',', $row->sigmas);
   $velocities = explode(',', $row->velocities);
 
   $tableBody['filtered'] .= sprintf('<tr>
-      %s
       <td>%s</td>
+      %s
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
@@ -49,19 +50,19 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
       <td>%s</td>
       <td>%s</td>
     </tr>',
-    $lonLatFields,
+    $row->station,
+    $positionFields,
     $velocities[0],
     $velocities[1],
     $sigmas[0],
     $sigmas[1],
-    $row->station,
     $velocities[2],
     $sigmas[2]
   );
 
   $tableBody['itrf2008'] .= sprintf('<tr>
-      %s
       <td>%s</td>
+      %s
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
@@ -70,19 +71,19 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
       <td>%s</td>
       <td>%s</td>
     </tr>',
-    $lonLatFields,
+    $row->station,
+    $positionFields,
     $velocities[3],
     $velocities[4],
     $sigmas[3],
     $sigmas[4],
-    $row->station,
     $velocities[5],
     $sigmas[5]
   );
 
   $tableBody['nafixed'] .= sprintf('<tr>
-      %s
       <td>%s</td>
+      %s
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
@@ -91,12 +92,12 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
       <td>%s</td>
       <td>%s</td>
     </tr>',
-    $lonLatFields,
+    $row->station,
+    $positionFields,
     $velocities[6],
     $velocities[7],
     $sigmas[6],
     $sigmas[7],
-    $row->station,
     $velocities[8],
     $sigmas[8]
   );
@@ -105,14 +106,15 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
 $html = '';
 $tableHeader = '<table>
   <tr>
+    <th>Station</th>
     <th>Longitude</th>
     <th>Latitude</th>
+    <th>Elevation</th>
     <th>Velocity (E)</th>
     <th>Velocity (N)</th>
     <th>Sigma (E)</th>
     <th>Sigma (N)</th>
     <th>Correlation (N-E)</th>
-    <th>Station</th>
     <th>Velocity (U)</th>
     <th>Sigma (U)</th>
   </tr>';

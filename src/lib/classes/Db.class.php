@@ -396,7 +396,10 @@ class Db {
         ORDER BY last_observation DESC";
     } else {
       // using MAX() for lat/lon to limit aggregated values from JOIN to 1 value
-      $sql = "SELECT v.station, MAX(s.lat) AS lat, MAX(s.lon) AS lon,
+      $sql = "SELECT v.station,
+        MAX(s.lat) AS lat,
+        MAX(s.lon) AS lon,
+        MAX(s.elevation) AS elevation,
         GROUP_CONCAT(v.velocity ORDER BY v.datatype ASC, v.component ASC) AS velocities,
         GROUP_CONCAT(v.sigma ORDER BY v.datatype ASC, v.component ASC) AS sigmas
         FROM `gps_velocities` v
