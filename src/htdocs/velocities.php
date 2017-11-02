@@ -87,8 +87,8 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
-      <td>0.0000</td>
       <td>%s</td>
+      <td>0.0000</td>
       <td>%s</td>
       <td>%s</td>
     </tr>',
