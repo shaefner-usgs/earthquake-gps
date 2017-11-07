@@ -10,6 +10,7 @@ if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../css/velocities.css" />';
+  $FOOT = '<script src="../js/velocities.js"></script>';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
@@ -20,60 +21,120 @@ $db = new Db;
 // Db query result: velocities for selected network
 $rsVelocities = $db->queryVelocities($network);
 
-// Create velocities array from db result that is more friendly for parsing
-$velocities = $db->createVelocitiesArray($rsVelocities);
-
-$fields = [
-  'velocity',
-  'sigma',
-  'rms',
-  'whitenoise',
-  'randomwalk',
-  'flickernoise'
+$datatypes = [
+  'nafixed' => 'NA-fixed',
+  'itrf2008' => 'ITRF2008',
+  'filtered' => 'Filtered'
 ];
 
-// Create html for table
-$table_html = '<table>';
+// Create html for tables
+$tableBody = [];
+while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
+  $positionFields = sprintf('<td>%s</td><td>%s</td><td>%s</td>',
+    round($row->lon, 5),
+    round($row->lat, 5),
+    round($row->elevation, 5)
+  );
+  // sigmas/velocities stored as comma-sep values ordered by type ASC, component ASC
+  $sigmas = explode(',', $row->sigmas);
+  $velocities = explode(',', $row->velocities);
 
-// Table header
-$th = '<tr><td class="empty"></td><th>Type</th>';
-foreach ($fields as $field) {
-  $name = $velocities['lookup'][$field];
-  $th .= "<th>$name</th>";
+  $tableBody['filtered'] .= sprintf('<tr>
+      <td>%s</td>
+      %s
+      <td>%s</td>
+      <td>%s</td>
+      <td>%s</td>
+      <td>%s</td>
+      <td>0.0000</td>
+      <td>%s</td>
+      <td>%s</td>
+    </tr>',
+    $row->station,
+    $positionFields,
+    $velocities[0],
+    $velocities[1],
+    $sigmas[0],
+    $sigmas[1],
+    $velocities[2],
+    $sigmas[2]
+  );
+
+  $tableBody['itrf2008'] .= sprintf('<tr>
+      <td>%s</td>
+      %s
+      <td>%s</td>
+      <td>%s</td>
+      <td>%s</td>
+      <td>%s</td>
+      <td>0.0000</td>
+      <td>%s</td>
+      <td>%s</td>
+    </tr>',
+    $row->station,
+    $positionFields,
+    $velocities[3],
+    $velocities[4],
+    $sigmas[3],
+    $sigmas[4],
+    $velocities[5],
+    $sigmas[5]
+  );
+
+  $tableBody['nafixed'] .= sprintf('<tr>
+      <td>%s</td>
+      %s
+      <td>%s</td>
+      <td>%s</td>
+      <td>%s</td>
+      <td>%s</td>
+      <td>0.0000</td>
+      <td>%s</td>
+      <td>%s</td>
+    </tr>',
+    $row->station,
+    $positionFields,
+    $velocities[6],
+    $velocities[7],
+    $sigmas[6],
+    $sigmas[7],
+    $velocities[8],
+    $sigmas[8]
+  );
 }
-$th .= '</tr>';
 
-// Table body
-foreach ($velocities['data'] as $station => $types) {
-  // add station name and table header
-  $table_html .= '<tr class="station"><td colspan="8"><h3>Station ' .
-    strtoupper($station) . '</h3></td></tr>';
-  $table_html .= $th;
-
-  foreach ($types as $type => $components) {
-    if ($type !== 'filtered') { // don't show filtered data
-      foreach ($components as $direction => $data) {
-        // add component and type
-        $tr = "<tr><th>$direction</th>";
-        if ($direction === 'north') {
-          $tr .= '<td rowspan="3">' . $type . '</td>';
-        }
-        // add data fields (or '-' for no data)
-        foreach ($fields as $field) {
-          if (array_key_exists($field, $data)) {
-            $tr .= '<td>' . $data[$field] . '</td>';
-          } else {
-            $tr .=  '<td class="novalue">&ndash;</td>';
-          }
-        }
-        $tr .= "</tr>";
-        $table_html .= $tr;
-      }
-    }
-  }
+$html = '';
+$tableHeader = '<table class="sortable">
+  <tr class="no-sort">
+    <th class="sort-default">Station</th>
+    <th>Longitude</th>
+    <th>Latitude</th>
+    <th>Elevation</th>
+    <th>Velocity (E)</th>
+    <th>Velocity (N)</th>
+    <th>Sigma (E)</th>
+    <th>Sigma (N)</th>
+    <th>Correlation (N-E)</th>
+    <th>Velocity (U)</th>
+    <th>Sigma (U)</th>
+  </tr>';
+$tableFooter = '</table>';
+foreach ($datatypes as $datatype => $name) {
+  $html .= sprintf('<section class="panel" data-title="%s">
+      <header>
+        <h3>%s</h3>
+      </header>
+      %s
+      %s
+      %s
+    </section>',
+    $name,
+    $name,
+    $tableHeader,
+    $tableBody[$datatype],
+    $tableFooter
+  );
 }
-
-$table_html .= '</table>';
 
 $backLink = sprintf('%s/%s',
   $MOUNT_PATH,
@@ -84,7 +145,9 @@ $backLink = sprintf('%s/%s',
 
 <h2>Velocities and Uncertainties</h2>
 
-<?php print $table_html; ?>
+<div class="tablist">
+  <?php print $html; ?>
+</div>
 
 <p class="back">&laquo;
   <a href="<?php print $backLink; ?>">Back to <?php print $network; ?>network</a>
