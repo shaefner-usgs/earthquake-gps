@@ -31,9 +31,8 @@ app = Application({
       'title': 'Possible',
       'units': 'observations'
     },
-    'slips': {
-      'title': 'Slips',
-      'units': 'log10(slips)',
+    'slips_per_obs': {
+      'title': 'Slips per observation',
     },
     'sn1': {
       'title': 'SN1',
@@ -55,7 +54,7 @@ app = Application({
       'channels': [
         'pos_obs',
         'comp_obs',
-        'slips'
+        'slips_per_obs'
       ]
     },
     {
