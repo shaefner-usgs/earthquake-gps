@@ -26,7 +26,7 @@ $fields = [
   'mp1',
   'mp2',
   'pos_obs',
-  'slips',
+  'slips_per_obs',
   'sn1',
   'sn2'
 ];
@@ -40,13 +40,6 @@ while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
     $value = $row[$field];
     if ($field === 'date') {
       $value = date('Y-m-d', strtotime($value));
-    } else if ($field === 'slips') {
-      // convert slips to log base 10
-      if ($value <= 0) {
-        $value = 0;
-      } else {
-        $value = round(log10($value), 2);
-      }
     } else {
       if ($value !== null) {
         $value = floatval($value);
