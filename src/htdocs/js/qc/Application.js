@@ -42,7 +42,8 @@ var Application = function (options) {
   _this = View(options);
 
   _initialize = function (options) {
-    var el,
+    var download,
+        el,
         plots;
 
     options = Util.extend({}, _DEFAULTS, options);
@@ -71,6 +72,11 @@ var Application = function (options) {
       plots.appendChild(view.el);
       _plotViews.push(view);
     });
+
+    // add download link
+    download = document.createElement('p');
+    download.innerHTML = '<a href="qc/data">Download data</a>';
+    plots.appendChild(download);
 
     _this.model.set({
       channels: options.channels
