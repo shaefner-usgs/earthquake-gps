@@ -20,12 +20,10 @@ var NavigationView = function (options) {
   var _this,
       _initialize,
       // variables
-      _allData,
       _past30Days,
       _pastYear,
       // methods
       _clearDisabled,
-      _onAllDataClick,
       _onPast30DaysClick,
       _onPastYearClick;
 
@@ -39,18 +37,16 @@ var NavigationView = function (options) {
 
     el = _this.el;
     el.innerHTML =
-        '<button class="past30Days">Past 30 Days</button>' +
         '<button class="pastYear">Past Year</button>' +
-        '<button class="allData">All Data</button>';
-    _allData = el.querySelector('.allData');
+        '<button class="past30Days">Past 30 Days</button>';
+
     _past30Days = el.querySelector('.past30Days');
     _pastYear = el.querySelector('.pastYear');
 
-    _allData.addEventListener('click', _onAllDataClick);
     _past30Days.addEventListener('click', _onPast30DaysClick);
     _pastYear.addEventListener('click', _onPastYearClick);
 
-    _onPast30DaysClick();
+    _onPastYearClick(); // default
   };
 
   /**
@@ -65,18 +61,6 @@ var NavigationView = function (options) {
     }
   };
 
-
-  /**
-   * Clear start/end times.
-   */
-  _onAllDataClick = function () {
-    _clearDisabled();
-    _this.model.set({
-      end: null,
-      start: null
-    });
-    _allData.setAttribute('disabled', 'disabled');
-  };
 
   /**
    * Set start time to one year ago.
@@ -107,13 +91,10 @@ var NavigationView = function (options) {
    * Free references.
    */
   _this.destroy = Util.compose(function () {
-    _allData.removeEventListener('click', _onAllDataClick);
     _past30Days.removeEventListener('click', _onPast30DaysClick);
     _pastYear.removeEventListener('click', _onPastYearClick);
 
-    _allData = null;
     _initialize = null;
-    _onAllDataClick = null;
     _onPast30DaysClick = null;
     _onPastYearClick = null;
     _pastYear = null;
