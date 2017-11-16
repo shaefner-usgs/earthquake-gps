@@ -11,11 +11,12 @@ var _C3_DEFAULTS = {
     x: {
       type: 'timeseries',
       tick: {
+        count: 13,
         culling: {
-          max: 6
+          max: 8
         },
         format: '%Y-%m-%d',
-        fit: true
+        outer: false
       }
     },
     y: {
@@ -43,11 +44,10 @@ var _C3_DEFAULTS = {
   },
   point: {
     show: true,
-    r: 0.5,
+    r: 2.5,
     focus: {
       expand: {
-        enabled: true,
-        r: 3
+        r: 4
       }
     }
   }
@@ -114,7 +114,7 @@ var PlotView = function (options) {
         channels,
         columns,
         data,
-        lastUnit,
+        prevUnit,
         names;
 
     data = _data.get('data');
@@ -136,7 +136,7 @@ var PlotView = function (options) {
     axes = {};
     axis = 'y';
     columns = [];
-    lastUnit = null;
+    prevUnit = null;
     names = {};
     channels.concat(['date']).forEach(function (channel) {
       var meta;
@@ -150,12 +150,12 @@ var PlotView = function (options) {
       }
 
       // channel axis
-      if (lastUnit !== meta.units) {
-        if (lastUnit !== null) {
+      if (prevUnit !== meta.units) {
+        if (prevUnit !== null) {
           axis = 'y2';
         }
-        lastUnit = meta.units;
-        c3options.axis[axis].label.text = lastUnit;
+        prevUnit = meta.units;
+        c3options.axis[axis].label.text = prevUnit;
         c3options.axis[axis].show = true;
       }
       axes[channel] = axis;
@@ -166,6 +166,7 @@ var PlotView = function (options) {
       axes: axes,
       columns: columns,
       names: names,
+      type: 'scatter',
       x: 'date'
     };
 

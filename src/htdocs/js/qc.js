@@ -24,10 +24,11 @@ app = Application({
       'units': 'meters'
     },
     'percentage': {
-      'title': 'Percentage'
+      'title': 'Completeness of Observation',
+      'units': 'percentage'
     },
     'slips_per_obs': {
-      'title': 'Slips per Observation',
+      'title': 'Cycle Slips per Observation'
     },
     'sn1': {
       'title': 'SN1',
