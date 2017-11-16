@@ -12,10 +12,6 @@ el = document.querySelector('#application');
 app = Application({
   // channel metadata
   'channels': {
-    'comp_obs': {
-      'title': 'Complete',
-      'units': 'observations'
-    },
     'date': {
       'title': 'Date'
     },
@@ -27,12 +23,11 @@ app = Application({
       'title': 'MP2',
       'units': 'meters'
     },
-    'pos_obs': {
-      'title': 'Possible',
-      'units': 'observations'
+    'percentage': {
+      'title': 'Percentage'
     },
     'slips_per_obs': {
-      'title': 'Slips per observation',
+      'title': 'Slips per Observation',
     },
     'sn1': {
       'title': 'SN1',
@@ -50,10 +45,9 @@ app = Application({
   // list of plots
   'plots': [
     {
-      'title': '<h2>Observations</h2>',
+      'title': '<h2>Completeness</h2>',
       'channels': [
-        'pos_obs',
-        'comp_obs',
+        'percentage',
         'slips_per_obs'
       ]
     },

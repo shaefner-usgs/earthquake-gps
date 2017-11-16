@@ -21,11 +21,10 @@ $output = [
 
 // Create a nested array for each type of data to store
 $fields = [
-  'comp_obs',
   'date',
   'mp1',
   'mp2',
-  'pos_obs',
+  'percentage',
   'slips_per_obs',
   'sn1',
   'sn2'
