@@ -16,7 +16,7 @@ var config = {
   liveReloadPort: BASE_PORT + 9,
   src: 'src',
   templatePort: BASE_PORT + 8,
-  templateSrc: '../hazdev-template/src'
+  templateSrc: 'node_modules/hazdev-template/src'
 };
 
 module.exports = config;

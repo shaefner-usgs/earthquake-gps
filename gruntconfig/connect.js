@@ -110,6 +110,10 @@ var connect = {
       to: '/qc.php?network=$1&station=$2'
     },
     {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/data$',
+      to: '/_getQcData.csv.php?station=$2'
+    },
+    {
       from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table$',
       to: '/qctable.php?network=$1&station=$2'
     },

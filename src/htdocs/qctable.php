@@ -34,16 +34,18 @@ while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
+      <td>%s</td>
     </tr>\n",
     substr($row['date'], 0, 4),
     date('z', strtotime($row['date'])) + 1,
     $row['date'],
     $row['filename'],
-    $row['pos_obs'],
-    $row['comp_obs'],
     $row['percentage'],
+    $row['slips_per_obs'],
     $row['mp1'],
-    $row['mp2']
+    $row['mp2'],
+    $row['sn1'],
+    $row['sn2']
   );
 }
 
@@ -64,11 +66,12 @@ $name = strtoupper($station);
     <th><abbr title="Day of the year">DoY</abbr></th>
     <th>Date</th>
     <th>Filename</th>
-    <th>Pos Obs</th>
-    <th>Comp Obs</th>
-    <th>Percentage</th>
+    <th>Completeness</th>
+    <th>Slips</th>
     <th>MP1</th>
     <th>MP2</th>
+    <th>SN1</th>
+    <th>SN2</th>
   </tr>
 
 <?php print $table_body_html; ?>
