@@ -44,10 +44,10 @@ var _C3_DEFAULTS = {
   },
   point: {
     show: true,
-    r: 2.5,
+    r: 3.5,
     focus: {
       expand: {
-        r: 4
+        r: 5
       }
     }
   }
