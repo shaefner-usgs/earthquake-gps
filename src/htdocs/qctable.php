@@ -66,7 +66,7 @@ $name = strtoupper($station);
     <th><abbr title="Day of the year">DoY</abbr></th>
     <th>Date</th>
     <th>Filename</th>
-    <th>Percentage</th>
+    <th>Completeness</th>
     <th>Slips</th>
     <th>MP1</th>
     <th>MP2</th>

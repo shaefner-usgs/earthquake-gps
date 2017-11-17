@@ -12,7 +12,7 @@ $db = new Db;
 // Db query result: all qc data for a given station
 $rsQcData = $db->queryQcData($station);
 
-$output = "Date, Filename, Percentage, Slips, MP1, MP2, SN1, SN2\n";
+$output = "Date, Filename, Completeness, Slips_per_obs, MP1, MP2, SN1, SN2\n";
 
 while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
   $output .= sprintf("%s, %s, %s, %s, %s, %s, %s, %s\n",
