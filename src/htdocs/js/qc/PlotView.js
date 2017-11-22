@@ -22,6 +22,15 @@ var _C3_DEFAULTS = {
     y: {
       label: {
         position: 'outer-middle'
+      },
+      tick: {
+        format: function (x) {
+          var places = _getDecimalPlaces(x);
+          if (places > 2) {
+            return Math.round(x * 100) / 100
+          }
+          return x;
+        }
       }
     },
     y2: {
@@ -69,7 +78,9 @@ var _DEFAULTS = {};
 var PlotView = function (options) {
   var _this,
       _initialize,
-      // variables
+
+      _getDecimalPlaces,
+
       _c3El,
       _data,
       _titleEl;
@@ -98,6 +109,37 @@ var PlotView = function (options) {
     _data.on('change:data', _this.render);
   };
 
+  /* Taken from
+    https://stackoverflow.com/questions/9539513/is-there-a-reliable-way-in-javascript-to-obtain-the-number-of-decimal-places-of */
+  _getDecimalPlaces = function (number, literalStrings = true) {
+
+      let decimalPlaces = 0;
+
+      //Convert to number unless already a number or a string we are treating as is
+      if (typeof number !== 'number' && (typeof number !== 'string' || !literalStrings)) {
+          number = Number(number);
+      }
+      if (isNaN(number)) return decimalPlaces;
+
+      //Process the decimal places provided by scientific notation if it exists
+      const parts = number.toString().split('e');
+      if (parts.length === 2) {
+          if (parts[1][0] !== '-') {
+              return decimalPlaces; //Not a fraction, return 0
+          } else {
+              decimalPlaces = Number(parts[1].slice(1));
+          }
+      }
+
+      //Get the number of places after the decimal and add it to our
+      //current count
+      const decimalParts = parts[0].split('.');
+      if (decimalParts.length === 2) {
+          decimalPlaces += decimalParts[1].length;
+      }
+
+      return decimalPlaces;
+  };
 
   /**
    * Update plot.
