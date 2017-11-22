@@ -6,8 +6,15 @@ var Xhr = require('util/Xhr');
 
 // Leaflet plugins
 require('leaflet-fullscreen');
+require('leaflet-groupedlayercontrol');
+require('map/RestoreMap');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
+require('map/DarkLayer');
+require('map/EarthquakesLayer');
+require('map/FaultsLayer');
+require('map/GreyscaleLayer');
+require('map/SatelliteLayer');
 require('map/StationsLayer');
 require('map/TerrainLayer');
 
@@ -21,10 +28,13 @@ var StationMap = function (options) {
   var _this,
       _initialize,
 
+      _earthquakes,
       _el,
       _stations,
 
       _initMap,
+      _getMapLayers,
+      _loadEarthquakesLayer,
       _loadStationsLayer;
 
 
@@ -34,34 +44,116 @@ var StationMap = function (options) {
     options = options || {};
     _el = options.el || document.createElement('div');
 
-    // Load stations layer which calls initMap() when finished
+    // Load eqs, stations layers which each call initMap() when finished
+    _loadEarthquakesLayer();
     _loadStationsLayer();
   };
 
+  /**
+   * Get all map layers that will be displayed on map
+   *
+   * @return layers {Object}
+   *     {
+   *       baseLayers: {Object}
+   *       overlays: {Object}
+   *       defaults: {Array}
+   *     }
+   */
+  _getMapLayers = function () {
+    var dark,
+        faults,
+        greyscale,
+        layers,
+        satellite,
+        terrain;
+
+    dark = L.darkLayer();
+    greyscale = L.greyscaleLayer();
+    satellite = L.satelliteLayer();
+    terrain = L.terrainLayer();
+    faults = L.faultsLayer();
+
+    layers = {};
+    layers.baseLayers = {
+      'Terrain': terrain,
+      'Satellite': satellite,
+      'Greyscale': greyscale,
+      'Dark': dark
+    };
+    layers.overlays = {
+      'Stations': {
+        'Stations': _stations
+      },
+      'Geology': {
+        'Faults': faults,
+        'M2.5+ Earthquakes': _earthquakes
+      }
+    };
+    layers.defaults = [terrain, _earthquakes, _stations];
+
+    return layers;
+  };
 
   /**
    * Create Leaflet map instance
    */
   _initMap = function () {
+    if (!_stations || !_earthquakes) { // check that both ajax layers are set
+      return;
+    }
     var bounds,
+        layers,
         map;
 
     // bounds contain only selected station
     bounds = _stations.getBounds();
+    layers = _getMapLayers();
 
     // Create map
     map = L.map(_el, {
-      layers: [L.terrainLayer(), _stations],
+      layers: layers.defaults,
       scrollWheelZoom: false,
       center: bounds.getCenter(),
       zoom: 7
     });
-    
+
     // Add controllers
     L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
+    L.control.groupedLayers(layers.baseLayers, layers.overlays).addTo(map);
     L.control.scale().addTo(map);
 
+    // Remember user's map settings (selected layers, map extent)
+    map.restoreMap({
+      baseLayers: layers.baseLayers,
+      id: NETWORK + '-' + STATION,
+      overlays: layers.overlays,
+      scope: 'GPS',
+      shareLayers: true
+    });
+
     _stations.openPopup(STATION.toUpperCase());
+  };
+
+  /**
+   * Load earthquakes layer from geojson data via ajax
+   */
+  _loadEarthquakesLayer = function () {
+    var url;
+
+    url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2.5&orderby=time-asc';
+
+    Xhr.ajax({
+      url: url,
+      success: function (data) {
+        _earthquakes = L.earthquakesLayer({
+          data: data
+        });
+        _initMap();
+      },
+      error: function (status) {
+        console.log(status);
+      }
+    });
   };
 
   /**
