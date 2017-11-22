@@ -69,7 +69,9 @@ var _DEFAULTS = {};
 var PlotView = function (options) {
   var _this,
       _initialize,
-      // variables
+
+      _getDecimalPlaces,
+
       _c3El,
       _data,
       _titleEl;
@@ -98,6 +100,43 @@ var PlotView = function (options) {
     _data.on('change:data', _this.render);
   };
 
+  /* Taken from
+    https://stackoverflow.com/questions/9539513/is-there-a-reliable-way-in-javascript-to-obtain-the-number-of-decimal-places-of */
+  _getDecimalPlaces = function (number) {
+    var decimalParts,
+        decimalPlaces,
+        literalStrings,
+        parts;
+
+    decimalPlaces = 0;
+    literalStrings = true;
+
+    // Convert to number unless already a number or a string we are treating as is
+    if (typeof number !== 'number' && (typeof number !== 'string' || !literalStrings)) {
+      number = Number(number);
+    }
+    if (isNaN(number)) {
+      return decimalPlaces;
+    }
+
+    // Process the decimal places provided by scientific notation if it exists
+    parts = number.toString().split('e');
+    if (parts.length === 2) {
+      if (parts[1][0] !== '-') {
+        return decimalPlaces; //Not a fraction, return 0
+      } else {
+        decimalPlaces = Number(parts[1].slice(1));
+      }
+    }
+
+    // Get the number of places after the decimal and add it to our current count
+    decimalParts = parts[0].split('.');
+    if (decimalParts.length === 2) {
+      decimalPlaces += decimalParts[1].length;
+    }
+
+    return decimalPlaces;
+  };
 
   /**
    * Update plot.
@@ -160,6 +199,17 @@ var PlotView = function (options) {
       }
       axes[channel] = axis;
     });
+
+    // c3 sometimes displays tick labels w/ 15 or more decimal places; limit to 4
+    c3options.axis.y.tick = {
+      format: function (x) {
+        var places = _getDecimalPlaces(x);
+        if (places > 4) {
+          return Math.round(x * 10000) / 10000;
+        }
+        return x;
+      }
+    };
 
     c3options.bindto = _c3El;
     c3options.data = {

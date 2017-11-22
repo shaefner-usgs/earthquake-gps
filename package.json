@@ -19,7 +19,7 @@
   "devDependencies": {
     "SimplBox": "shaefner-usgs/SimplBox",
     "autoprefixer": "^6.1.2",
-    "c3": "^0.4.11-rc4",
+    "c3": "^0.4.18",
     "cssnano": "^3.5.2",
     "d3": "^3.5.12",
     "dygraphs": "^1.1.1",
