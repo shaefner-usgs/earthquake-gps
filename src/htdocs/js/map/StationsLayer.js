@@ -266,7 +266,7 @@ var StationsLayer = function (options) {
       selected = false;
 
       if (feature.properties.station === _station) {
-        color = 'blue';
+        color = _getColor(feature.properties.days);
         selected = true;
 
         _bounds.extend(latlng);
