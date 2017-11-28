@@ -58,7 +58,6 @@ var StationsLayer = function (options) {
       _bounds,
       _icons,
       _markerOptions,
-      _points,
       _station,
 
       _getColor,
@@ -77,7 +76,8 @@ var StationsLayer = function (options) {
 
     _bounds = new L.LatLngBounds();
     _icons = {};
-    _points = {};
+
+    _this.points = {};
 
     if (options.station) {
       // Station user is currently viewing (not passed from Network map)
@@ -241,7 +241,7 @@ var StationsLayer = function (options) {
     }
 
     // Store point so its popup can be accessed by openPopup()
-    _points[label] = layer;
+    _this.points[label] = layer;
   };
 
   /**
@@ -324,7 +324,7 @@ var StationsLayer = function (options) {
    * @param station {String}
    */
   _this.hideLabel = function (station) {
-    _points[station].hideLabel();
+    _this.points[station].hideLabel();
   };
 
   /**
@@ -333,7 +333,7 @@ var StationsLayer = function (options) {
    * @param station {String}
    */
   _this.openPopup = function (station) {
-    _points[station].openPopup();
+    _this.points[station].openPopup();
   };
 
   /**
@@ -342,7 +342,7 @@ var StationsLayer = function (options) {
    * @param station {String}
    */
   _this.showLabel = function (station) {
-    _points[station].showLabel();
+    _this.points[station].showLabel();
   };
 
 
