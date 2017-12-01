@@ -135,7 +135,7 @@ file_put_contents($APACHE_CONFIG_FILE, '
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table$ ' .
     $MOUNT_PATH . '/qctable.php?network=$1&station=$2 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/data$ ' .
-    $MOUNT_PATH . '/_getQcData.csv.php?station=$2 [L,PT]
+    $MOUNT_PATH . '/_getQcData.csv.php?network=$1&station=$2 [L,PT]
 
   # Strip trailing slash
   RewriteRule ^' . $MOUNT_PATH . '(.*)/+$ ' .

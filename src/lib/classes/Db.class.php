@@ -212,14 +212,15 @@ class Db {
   /**
    * Query db to get a QC data for a given station
    *
+   * @param $network {String}
    * @param $station {String}
    * @param $limit {Int} default is NULL
    *
    * @return {Function}
    */
-  public function queryQcData ($station, $limit=NULL) {
+  public function queryQcData ($network, $station, $limit=NULL) {
     $sql = 'SELECT * FROM gps_qualitycontrol
-      WHERE `station` = :station
+      WHERE `network` = :network AND `station` = :station
       ORDER BY `date` DESC';
 
     if ($limit) {
@@ -227,6 +228,7 @@ class Db {
     }
 
     return $this->_execQuery($sql, array(
+      'network' => $network,
       'station' => $station
     ));
   }

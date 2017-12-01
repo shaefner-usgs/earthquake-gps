@@ -19,7 +19,7 @@ if (!isset($TEMPLATE)) {
 $db = new Db;
 
 // Db query result: past 14 records of QC data
-$rsQcData = $db->queryQcData($station, 14);
+$rsQcData = $db->queryQcData($network, $station, 14);
 
 // Create html for table body
 $table_body_html = '';

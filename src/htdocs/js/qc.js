@@ -1,4 +1,4 @@
-/* global MOUNT_PATH, STATION */ // passed via var embedded in html page
+/* global MOUNT_PATH, NETWORK, STATION */ // passed via var embedded in html page
 'use strict';
 
 
@@ -69,5 +69,5 @@ app = Application({
   ],
 
   // qc data url
-  'url': MOUNT_PATH + '/_getQcData.json.php?station=' + STATION
+  'url': MOUNT_PATH + '/_getQcData.json.php?network=' + NETWORK + '&station=' + STATION
 });
