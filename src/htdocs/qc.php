@@ -18,6 +18,7 @@ if (!isset($TEMPLATE)) {
   $FOOT = '
     <script>
       var MOUNT_PATH = "' . $MOUNT_PATH . '",
+          NETWORK = "' . $network . '",
           STATION = "' . $station . '";
     </script>
     <script src="../../lib/d3/d3.js"></script>

@@ -212,14 +212,15 @@ class Db {
   /**
    * Query db to get a QC data for a given station
    *
+   * @param $network {String}
    * @param $station {String}
    * @param $limit {Int} default is NULL
    *
    * @return {Function}
    */
-  public function queryQcData ($station, $limit=NULL) {
+  public function queryQcData ($network, $station, $limit=NULL) {
     $sql = 'SELECT * FROM gps_qualitycontrol
-      WHERE `station` = :station
+      WHERE `network` = :network AND `station` = :station
       ORDER BY `date` DESC';
 
     if ($limit) {
@@ -227,6 +228,7 @@ class Db {
     }
 
     return $this->_execQuery($sql, array(
+      'network' => $network,
       'station' => $station
     ));
   }
@@ -388,20 +390,22 @@ class Db {
   public function queryVelocities ($network, $station=NULL) {
     $params['network'] = $network;
 
-    if ($station) { // add station info to query
+    if ($station) { // limit query to given station
       $params['station'] = $station;
 
       $sql = "SELECT * FROM gps_velocities
         WHERE network = :network AND station = :station
         ORDER BY last_observation DESC";
     } else {
-      // using MAX() for lat/lon to limit aggregated values from JOIN to 1 value
+      // using MAX() to limit aggregated values from JOIN to 1 value
       $sql = "SELECT v.station,
         MAX(s.lat) AS lat,
         MAX(s.lon) AS lon,
         MAX(s.elevation) AS elevation,
-        GROUP_CONCAT(v.velocity ORDER BY v.datatype ASC, v.component ASC) AS velocities,
-        GROUP_CONCAT(v.sigma ORDER BY v.datatype ASC, v.component ASC) AS sigmas
+        GROUP_CONCAT(CONCAT(v.datatype, '/', v.component, ':', v.velocity)
+          ORDER BY v.datatype ASC, v.component ASC) AS velocities,
+        GROUP_CONCAT(CONCAT(v.datatype, '/', v.component, ':', v.sigma)
+          ORDER BY v.datatype ASC, v.component ASC) AS sigmas
         FROM `gps_velocities` v
         LEFT JOIN `gps_stations` s USING (station)
         WHERE v.network = :network

@@ -28,81 +28,6 @@ $datatypes = [
 ];
 
 // Create html for tables
-$tableBody = [];
-while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
-  $positionFields = sprintf('<td>%s</td><td>%s</td><td>%s</td>',
-    round($row->lon, 5),
-    round($row->lat, 5),
-    round($row->elevation, 5)
-  );
-  // sigmas/velocities stored as comma-sep values ordered by type ASC, component ASC
-  $sigmas = explode(',', $row->sigmas);
-  $velocities = explode(',', $row->velocities);
-
-  $tableBody['filtered'] .= sprintf('<tr>
-      <td>%s</td>
-      %s
-      <td>%s</td>
-      <td>%s</td>
-      <td>%s</td>
-      <td>%s</td>
-      <td>0.0000</td>
-      <td>%s</td>
-      <td>%s</td>
-    </tr>',
-    $row->station,
-    $positionFields,
-    $velocities[0],
-    $velocities[1],
-    $sigmas[0],
-    $sigmas[1],
-    $velocities[2],
-    $sigmas[2]
-  );
-
-  $tableBody['itrf2008'] .= sprintf('<tr>
-      <td>%s</td>
-      %s
-      <td>%s</td>
-      <td>%s</td>
-      <td>%s</td>
-      <td>%s</td>
-      <td>0.0000</td>
-      <td>%s</td>
-      <td>%s</td>
-    </tr>',
-    $row->station,
-    $positionFields,
-    $velocities[3],
-    $velocities[4],
-    $sigmas[3],
-    $sigmas[4],
-    $velocities[5],
-    $sigmas[5]
-  );
-
-  $tableBody['nafixed'] .= sprintf('<tr>
-      <td>%s</td>
-      %s
-      <td>%s</td>
-      <td>%s</td>
-      <td>%s</td>
-      <td>%s</td>
-      <td>0.0000</td>
-      <td>%s</td>
-      <td>%s</td>
-    </tr>',
-    $row->station,
-    $positionFields,
-    $velocities[6],
-    $velocities[7],
-    $sigmas[6],
-    $sigmas[7],
-    $velocities[8],
-    $sigmas[8]
-  );
-}
-
 $html = '';
 $tableHeader = '<table class="sortable">
   <tr class="no-sort">
@@ -118,22 +43,82 @@ $tableHeader = '<table class="sortable">
     <th>Velocity (U)</th>
     <th>Sigma (U)</th>
   </tr>';
+$tableBody = [];
 $tableFooter = '</table>';
+
+while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
+  // sigmas/velocities are comma-separated in this format: $datatype/$component:$value
+  $sigma = [];
+  $sigmas = explode(',', $row->sigmas);
+  foreach ($sigmas as $s) {
+    // separate out constituent parts
+    preg_match('@(\w+)/(E|N|U):([-\d.]+)@', $s, $matches);
+    $datatype = $matches[1];
+    $component = $matches[2];
+    $value = $matches[3];
+
+    $sigma[$datatype][$component] = $value;
+  }
+
+  $velocity = [];
+  $velocities = explode(',', $row->velocities);
+  foreach ($velocities as $v) {
+    // separate out constituent parts
+    preg_match('@(\w+)/(E|N|U):([-\d.]+)@', $v, $matches);
+    $datatype = $matches[1];
+    $component = $matches[2];
+    $value = $matches[3];
+
+    $velocity[$datatype][$component] = $value;
+  }
+
+  foreach($datatypes as $datatype=>$name) {
+    if ($sigma[$datatype] && $velocity[$datatype]) { // only create table if there's data
+      $tableBody[$datatype] .= sprintf('<tr>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
+          <td>0.0000</td>
+          <td>%s</td>
+          <td>%s</td>
+        </tr>',
+        $row->station,
+        round($row->lon, 5),
+        round($row->lat, 5),
+        round($row->elevation, 5),
+        $velocity[$datatype]['E'],
+        $velocity[$datatype]['N'],
+        $sigma[$datatype]['E'],
+        $sigma[$datatype]['N'],
+        $velocity[$datatype]['U'],
+        $sigma[$datatype]['U']
+      );
+    }
+  }
+}
+
 foreach ($datatypes as $datatype => $name) {
-  $html .= sprintf('<section class="panel" data-title="%s">
-      <header>
-        <h3>%s</h3>
-      </header>
-      %s
-      %s
-      %s
-    </section>',
-    $name,
-    $name,
-    $tableHeader,
-    $tableBody[$datatype],
-    $tableFooter
-  );
+  if ($tableBody[$datatype]) {
+    $html .= sprintf('<section class="panel" data-title="%s">
+        <header>
+          <h3>%s</h3>
+        </header>
+        %s
+        %s
+        %s
+      </section>',
+      $name,
+      $name,
+      $tableHeader,
+      $tableBody[$datatype],
+      $tableFooter
+    );
+  }
 }
 
 $backLink = sprintf('%s/%s',
