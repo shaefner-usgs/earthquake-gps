@@ -132,10 +132,10 @@ file_put_contents($APACHE_CONFIG_FILE, '
     $MOUNT_PATH . '/photos.php?network=$1&station=$2 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc$ ' .
     $MOUNT_PATH . '/qc.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/data$ ' .
-    $MOUNT_PATH . '/_getQcData.csv.php?station=$2 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table$ ' .
     $MOUNT_PATH . '/qctable.php?network=$1&station=$2 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/data$ ' .
+    $MOUNT_PATH . '/_getQcData.csv.php?station=$2 [L,PT]
 
   # Strip trailing slash
   RewriteRule ^' . $MOUNT_PATH . '(.*)/+$ ' .
@@ -143,36 +143,6 @@ file_put_contents($APACHE_CONFIG_FILE, '
 
   # Prevent apache from adding trailing slash on "real" directories by explicitly requesting index.php
   RewriteRule ^' . $MOUNT_PATH . '$ /monitoring/gps/index.php [L,PT]
-
-  # Pretty URLs
-  RewriteRule ^' . $MOUNT_PATH . '/stations/?([a-z0-9]+)?$ ' .
-    $MOUNT_PATH . '/stationlist.php?filter=$1 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)$ ' .
-    $MOUNT_PATH . '/network.php?network=$1 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/(([a-zA-Z0-9_-]+)/)?kml(/(last|timespan|years))?$ ' .
-    $MOUNT_PATH . '/kml.php?network=$2&sortBy=$4 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/notupdated$ ' .
-    $MOUNT_PATH . '/notupdated.php?network=$1 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/velocities$ ' .
-    $MOUNT_PATH . '/velocities.php?network=$1 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/waypoints$ ' .
-    $MOUNT_PATH . '/waypoints.php?network=$1 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})$ ' .
-    $MOUNT_PATH . '/station.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic$ ' .
-    $MOUNT_PATH . '/kinematic.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic/data$ ' .
-    $MOUNT_PATH . '/_getKinematic.csv.php?station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/logs$ ' .
-    $MOUNT_PATH . '/logsheets.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/offsets$ ' .
-    $MOUNT_PATH . '/offsets.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/photos$ ' .
-    $MOUNT_PATH . '/photos.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc$ ' .
-    $MOUNT_PATH . '/qc.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table$ ' .
-    $MOUNT_PATH . '/qctable.php?network=$1&station=$2 [L,PT]
 
   <Location ' . $MOUNT_PATH . '>
     Order allow,deny
