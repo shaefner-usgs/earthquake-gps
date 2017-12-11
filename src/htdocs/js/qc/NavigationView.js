@@ -6,11 +6,11 @@ var Util = require('util/Util'),
 
 var _DEFAULTS = {};
 
-// one month in milliseconds
-var _60_DAYS_MS = 60 * 24 * 60 * 60 * 1000;
+// 120 days in milliseconds
+var _120_DAYS_MS = 120 * 24 * 60 * 60 * 1000;
 
-// one year in milliseconds
-var _ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+// two years in milliseconds
+var _TWO_YEARS_MS = 730 * 24 * 60 * 60 * 1000;
 
 
 /**
@@ -37,8 +37,8 @@ var NavigationView = function (options) {
 
     el = _this.el;
     el.innerHTML =
-        '<button class="pastYear">Past Year</button>' +
-        '<button class="past60Days">Past 60 Days</button>';
+        '<button class="pastYear">Past 2 Years</button>' +
+        '<button class="past60Days">Past 120 Days</button>';
 
     _past60Days = el.querySelector('.past60Days');
     _pastYear = el.querySelector('.pastYear');
@@ -69,7 +69,7 @@ var NavigationView = function (options) {
     _clearDisabled();
     _this.model.set({
       end: null,
-      start: new Date(new Date().getTime() - _60_DAYS_MS)
+      start: new Date(new Date().getTime() - _120_DAYS_MS)
     });
     _past60Days.setAttribute('disabled', 'disabled');
   };
@@ -81,7 +81,7 @@ var NavigationView = function (options) {
     _clearDisabled();
     _this.model.set({
       end: null,
-      start: new Date(new Date().getTime() - _ONE_YEAR_MS)
+      start: new Date(new Date().getTime() - _TWO_YEARS_MS)
     });
     _pastYear.setAttribute('disabled', 'disabled');
   };

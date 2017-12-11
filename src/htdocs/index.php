@@ -69,6 +69,8 @@ $networks_html .= '</ul>';
   stations have moved we calculate ground deformation.
   <a href="gps/about.php">Read more</a> &raquo;</p>
 
+<p class="alert info"><a href="gps/citation.php">How to cite GPS Data</a></p>
+
 <section>
   <h2>View Stations by Network</h2>
   <div class="map"></div>
@@ -101,20 +103,4 @@ $networks_html .= '</ul>';
     cooperator institutions, UNAVCO Inc., and other sources (see a
     <a href="gps/sources.php">full listing of observing agencies</a>). These
     results are available on this website as time series of daily GPS positions.</p>
-
-  <h2>Publications</h2>
-  <p>Campaign GPS data collected by the EHP for earthquake and tectonic studies
-    have provided input for many <a href="gps/pdf/USGS-SGPS-refs.pdf">publications</a>.
-    We request that those using these data in their published results inform us
-    of the the citation for inclusion in this list by contacting
-    <a href="mailto:jrmurray@usgs.gov">Jessica Murray</a>. Raw and RINEX data
-    files for the campaign measurements collected by our group may be obtained
-    through the <a href="http://www.ncedc.org/survey-gps/">NCEDC</a>. Please
-    cite these data using doi:10.5066/F7NG4NRK</p>
-  <p>If using the processed positions or results of time series analysis available
-    on this website, please cite Murray, J.R. and Svarc, J. (2017), Global
-    Positioning System data collection, processing, and analysis conducted by the
-    U.S. Geological Survey Earthquake Hazards Program, Seismol. Res. Lett.,
-    doi:10.1785/0220160204, which provides a detailed description of our
-    methodology.</p>
 </section>

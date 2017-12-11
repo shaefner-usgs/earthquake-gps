@@ -130,8 +130,9 @@ class StationView {
       $components = 'X, Y, and Z';
     }
     return '<p>These plots depict the ' . $components . ' components of
-      the station as a function of time. <a href="/monitoring/gps/plots.php">
-      More detailed explanation</a> &raquo;</p>
+      the station as a function of time.
+      <a href="https://pubs.geoscienceworld.org/ssa/srl/article/88/3/916/284075/global-positioning-system-data-collection">More
+      detailed explanation</a> &raquo;</p>
       <p>Dashed vertical lines show offsets (when present) due to:</p>
       <ul class="no-style">
         <li><mark class="green">Green</mark> &ndash; antenna changes from site logs</li>
