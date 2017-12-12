@@ -99,6 +99,7 @@ file_put_contents($APACHE_CONFIG_FILE, '
   Alias ' . $MOUNT_PATH . ' ' . $CONFIG['APP_DIR'] . '/htdocs
 
   RewriteEngine On
+
   # Strip trailing slash
   RewriteRule ^' . $MOUNT_PATH . '(.*)/+$ ' . $MOUNT_PATH . '$1 [L,R=301]
 
@@ -136,13 +137,6 @@ file_put_contents($APACHE_CONFIG_FILE, '
     $MOUNT_PATH . '/qctable.php?network=$1&station=$2 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/data$ ' .
     $MOUNT_PATH . '/_getQcData.csv.php?network=$1&station=$2 [L,PT]
-
-  # Strip trailing slash
-  RewriteRule ^' . $MOUNT_PATH . '(.*)/+$ ' .
-    $MOUNT_PATH . '$1 [L,R=301]
-
-  # Prevent apache from adding trailing slash on "real" directories by explicitly requesting index.php
-  RewriteRule ^' . $MOUNT_PATH . '$ /monitoring/gps/index.php [L,PT]
 
   <Location ' . $MOUNT_PATH . '>
     Order allow,deny
