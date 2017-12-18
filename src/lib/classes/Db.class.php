@@ -171,16 +171,22 @@ class Db {
    */
   public function queryOffsets ($network, $station=NULL) {
     $params['network'] = $network;
-    $where = "network = :network";
 
     if ($station) {
       $params['station'] = $station;
-      $where .= ' AND  station = :station';
-    }
 
-    $sql = "SELECT * FROM gps_offsets
-      WHERE $where
-      ORDER BY `year` ASC";
+      $sql = "SELECT * FROM gps_offsets
+        WHERE network = :network AND  station = :station
+        ORDER BY `year` ASC";
+    } else {
+      $sql = "SELECT station, `date`, decdate, offsettype,
+      	GROUP_CONCAT(CONCAT(datatype, '/', component, ':', size, ';', uncertainty)
+      		ORDER BY datatype ASC, component ASC) AS offsets
+      	FROM gps_offsets
+      	WHERE network = :network
+      	GROUP BY station, `date`, decdate, offsettype
+      	ORDER BY station ASC";
+    }
 
     return $this->_execQuery($sql, $params);
   }
