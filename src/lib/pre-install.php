@@ -115,6 +115,8 @@ file_put_contents($APACHE_CONFIG_FILE, '
     $MOUNT_PATH . '/kml.php?network=$2&sortBy=$4 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/notupdated$ ' .
     $MOUNT_PATH . '/notupdated.php?network=$1 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/offsets$ ' .
+    $MOUNT_PATH . '/offsets.php?network=$1 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/velocities$ ' .
     $MOUNT_PATH . '/velocities.php?network=$1 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/waypoints$ ' .
@@ -127,8 +129,6 @@ file_put_contents($APACHE_CONFIG_FILE, '
     $MOUNT_PATH . '/_getKinematic.csv.php?station=$2 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/logs$ ' .
     $MOUNT_PATH . '/logsheets.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/offsets$ ' .
-    $MOUNT_PATH . '/offsets.php?network=$1&station=$2 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/photos$ ' .
     $MOUNT_PATH . '/photos.php?network=$1&station=$2 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc$ ' .

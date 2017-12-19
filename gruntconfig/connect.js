@@ -74,6 +74,10 @@ var connect = {
       to: '/notupdated.php?network=$1'
     },
     {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/offsets$',
+      to: '/offsets.php?network=$1'
+    },
+    {
       from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/velocities$',
       to: '/velocities.php?network=$1'
     },
