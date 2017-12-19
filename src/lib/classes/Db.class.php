@@ -80,10 +80,10 @@ class Db {
    * @return {Function}
    */
   public function queryLastUpdated ($network, $days=7) {
-    $sql = 'SELECT `station`, `last_observation` FROM gps_velocities
-      WHERE `datatype` = "nafixed" AND `network` = :network AND `component` = "U"
-        AND `last_observation` < (NOW() - INTERVAL :days DAY)
-      ORDER BY `last_observation` DESC, `station` ASC';
+    $sql = 'SELECT station, last_observation FROM gps_velocities
+      WHERE datatype = "nafixed" AND network = :network AND component = "U"
+        AND last_observation < (NOW() - INTERVAL :days DAY)
+      ORDER BY last_observation DESC, station ASC';
 
     return $this->_execQuery($sql, array(
       'network' => $network,
@@ -102,7 +102,7 @@ class Db {
     $sql = 'SELECT r.network FROM gps_relations r
       LEFT JOIN gps_networks n USING (network)
       WHERE r.station = :station AND n.show = 1
-      ORDER BY `network` ASC';
+      ORDER BY network ASC';
 
     return $this->_execQuery($sql, array(
       'station' => $station
@@ -118,7 +118,7 @@ class Db {
    */
   public function queryNetwork ($network) {
     $sql = 'SELECT * FROM gps_networks
-      WHERE `network` = :network';
+      WHERE network = :network';
 
     return $this->_execQuery($sql, array(
       'network' => $network
@@ -133,7 +133,7 @@ class Db {
   public function queryNetworks () {
     $sql = 'SELECT * FROM gps_networks
       WHERE `show` = 1
-      ORDER BY `network` ASC';
+      ORDER BY network ASC';
 
     return $this->_execQuery($sql);
   }
@@ -148,11 +148,11 @@ class Db {
    */
   public function queryNoise ($network, $station=NULL) {
     $params['network'] = $network;
-    $where = "`network` = :network";
+    $where = "network = :network";
 
     if ($station) { // add station info to query
       $params['station'] = $station;
-      $where .= ' AND  `station` = :station';
+      $where .= ' AND  station = :station';
     }
 
     $sql = "SELECT * FROM gps_noise
@@ -171,16 +171,24 @@ class Db {
    */
   public function queryOffsets ($network, $station=NULL) {
     $params['network'] = $network;
-    $where = "`network` = :network";
 
     if ($station) {
       $params['station'] = $station;
-      $where .= ' AND  `station` = :station';
-    }
 
-    $sql = "SELECT * FROM gps_offsets
-      WHERE $where
-      ORDER BY `year` ASC";
+      $sql = "SELECT * FROM gps_offsets
+        WHERE network = :network AND  station = :station
+        ORDER BY `year` ASC";
+    } else {
+      $sql = "SELECT station, `date`, decdate, offsettype,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', size)
+          ORDER BY datatype ASC, component ASC) AS size,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', uncertainty)
+          ORDER BY datatype ASC, component ASC) AS uncertainty
+        FROM gps_offsets
+        WHERE network = :network
+        GROUP BY station, `date`, decdate, offsettype
+        ORDER BY station ASC, `date` DESC";
+    }
 
     return $this->_execQuery($sql, $params);
   }
@@ -195,11 +203,11 @@ class Db {
    */
   public function queryPostSeismic ($network, $station=NULL) {
     $params['network'] = $network;
-    $where = "`network` = :network";
+    $where = "network = :network";
 
     if ($station) { // add station info to query
       $params['station'] = $station;
-      $where .= ' AND  `station` = :station';
+      $where .= ' AND  station = :station';
     }
 
     $sql = "SELECT * FROM gps_postseismic
@@ -220,7 +228,7 @@ class Db {
    */
   public function queryQcData ($network, $station, $limit=NULL) {
     $sql = 'SELECT * FROM gps_qualitycontrol
-      WHERE `network` = :network AND `station` = :station
+      WHERE network = :network AND station = :station
       ORDER BY `date` DESC';
 
     if ($limit) {
@@ -243,11 +251,11 @@ class Db {
    */
   public function querySeasonal ($network, $station=NULL) {
     $params['network'] = $network;
-    $where = "`network` = :network";
+    $where = "network = :network";
 
     if ($station) { // add station info to query
       $params['station'] = $station;
-      $where .= ' AND  `station` = :station';
+      $where .= ' AND  station = :station';
     }
 
     $sql = "SELECT * FROM gps_seasonal
@@ -286,7 +294,7 @@ class Db {
    * @return {Function}
    */
   public function queryStationChars () {
-    $sql = 'SELECT DISTINCT LEFT(r.station, 1) AS `alphanum`
+    $sql = 'SELECT DISTINCT LEFT(r.station, 1) AS alphanum
       FROM gps_relations r
       LEFT JOIN gps_networks n USING (network)
       WHERE n.show = 1
@@ -324,13 +332,13 @@ class Db {
       LEFT JOIN gps_networks n USING (network)
       LEFT JOIN gps_stations s USING (station)
       WHERE $where
-      ORDER BY `station` ASC, `network` ASC";
+      ORDER BY station ASC, network ASC";
 
-      return $this->_execQuery($sql, array(
-        'filter' => $sqlFilter,
-        'show' => $show
-      ));
-    }
+    return $this->_execQuery($sql, array(
+      'filter' => $sqlFilter,
+      'show' => $show
+    ));
+  }
 
   /**
    * Query db to get all stations (with the option to limit to a given network)
@@ -372,7 +380,7 @@ class Db {
   public function queryTimeSeries ($station) {
     $sql = 'SELECT * FROM gps_timeseries
       WHERE station = :station
-      ORDER BY `epoch` ASC';
+      ORDER BY epoch ASC';
 
     return $this->_execQuery($sql, array(
       'station' => $station
@@ -406,8 +414,8 @@ class Db {
           ORDER BY v.datatype ASC, v.component ASC) AS velocities,
         GROUP_CONCAT(CONCAT(v.datatype, '/', v.component, ':', v.sigma)
           ORDER BY v.datatype ASC, v.component ASC) AS sigmas
-        FROM `gps_velocities` v
-        LEFT JOIN `gps_stations` s USING (station)
+        FROM gps_velocities v
+        LEFT JOIN gps_stations s USING (station)
         WHERE v.network = :network
         GROUP BY v.station
         ORDER BY v.station ASC";

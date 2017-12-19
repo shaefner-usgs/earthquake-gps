@@ -13,7 +13,7 @@ if (
   // network
   preg_match("@^$section/(?!stations)[\w-]+$@", $url) ||
   // stations not updated, velocities
-  preg_match("@^$section/[\w]+/(notupdated|velocities)$@", $url) ||
+  preg_match("@^$section/[\w]+/(notupdated|offsets|velocities)$@", $url) ||
   // station
   preg_match("@^$section/[\w-]+/\w{4}$@", $url) ||
   // kinematic, logs, photos, qc
