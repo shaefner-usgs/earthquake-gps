@@ -9,8 +9,8 @@ $network = safeParam('network', 'SFBayArea');
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../css/velocities.css" />';
-  $FOOT = '<script src="../js/velocities.js"></script>';
+  $HEAD = '<link rel="stylesheet" href="../css/sortAndTabifyTable.css" />';
+  $FOOT = '<script src="../js/sortAndTabifyTable.js"></script>';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
@@ -48,32 +48,32 @@ $tableFooter = '</table>';
 
 while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
   // sigmas/velocities are comma-separated in this format: $datatype/$component:$value
-  $sigma = [];
+  $sigmaValues = [];
   $sigmas = explode(',', $row->sigmas);
-  foreach ($sigmas as $s) {
+  foreach ($sigmas as $sigma) {
     // separate out constituent parts
-    preg_match('@(\w+)/(E|N|U):([-\d.]+)@', $s, $matches);
+    preg_match('@(\w+)/(E|N|U):([-\d.]+)@', $sigma, $matches);
     $datatype = $matches[1];
     $component = $matches[2];
     $value = $matches[3];
 
-    $sigma[$datatype][$component] = $value;
+    $sigmaValues[$datatype][$component] = $value;
   }
 
-  $velocity = [];
+  $velocityValues = [];
   $velocities = explode(',', $row->velocities);
-  foreach ($velocities as $v) {
+  foreach ($velocities as $velocity) {
     // separate out constituent parts
-    preg_match('@(\w+)/(E|N|U):([-\d.]+)@', $v, $matches);
+    preg_match('@(\w+)/(E|N|U):([-\d.]+)@', $velocity, $matches);
     $datatype = $matches[1];
     $component = $matches[2];
     $value = $matches[3];
 
-    $velocity[$datatype][$component] = $value;
+    $velocityValues[$datatype][$component] = $value;
   }
 
   foreach($datatypes as $datatype=>$name) {
-    if ($sigma[$datatype] && $velocity[$datatype]) { // only create table if there's data
+    if ($sigmaValues[$datatype] && $velocityValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
           <td>%s</td>
           <td>%s</td>
@@ -91,12 +91,12 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
         round($row->lon, 5),
         round($row->lat, 5),
         round($row->elevation, 5),
-        $velocity[$datatype]['E'],
-        $velocity[$datatype]['N'],
-        $sigma[$datatype]['E'],
-        $sigma[$datatype]['N'],
-        $velocity[$datatype]['U'],
-        $sigma[$datatype]['U']
+        $velocityValues[$datatype]['E'],
+        $velocityValues[$datatype]['N'],
+        $sigmaValues[$datatype]['E'],
+        $sigmaValues[$datatype]['N'],
+        $velocityValues[$datatype]['U'],
+        $sigmaValues[$datatype]['U']
       );
     }
   }
@@ -135,5 +135,5 @@ $backLink = sprintf('%s/%s',
 </div>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to <?php print $network; ?>network</a>
+  <a href="<?php print $backLink; ?>">Back to <?php print $network; ?> network</a>
 </p>
