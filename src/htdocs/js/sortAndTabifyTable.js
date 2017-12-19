@@ -4,7 +4,7 @@ var Tablesort = require('tablesort'),
     TabList = require('tablist/TabList');
 
 
-var Velocities = function () {
+var SortAndTabifyTable = function () {
   var _this,
       _initialize,
 
@@ -70,4 +70,4 @@ var Velocities = function () {
 };
 
 
-Velocities();
+SortAndTabifyTable();
