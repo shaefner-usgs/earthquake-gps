@@ -180,12 +180,14 @@ class Db {
         ORDER BY `year` ASC";
     } else {
       $sql = "SELECT station, `date`, decdate, offsettype,
-      	GROUP_CONCAT(CONCAT(datatype, '/', component, ':', size, ';', uncertainty)
-      		ORDER BY datatype ASC, component ASC) AS offsets
-      	FROM gps_offsets
-      	WHERE network = :network
-      	GROUP BY station, `date`, decdate, offsettype
-      	ORDER BY station ASC";
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', size)
+          ORDER BY datatype ASC, component ASC) AS size,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', uncertainty)
+          ORDER BY datatype ASC, component ASC) AS uncertainty
+        FROM gps_offsets
+        WHERE network = :network
+        GROUP BY station, `date`, decdate, offsettype
+        ORDER BY station ASC, `date` DESC";
     }
 
     return $this->_execQuery($sql, $params);
