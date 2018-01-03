@@ -9,7 +9,7 @@ $network = safeParam('network', 'SFBayArea');
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../css/sortAndTabifyTable.css" />';
+  $HEAD = '<link rel="stylesheet" href="../css/velocities.css" />';
   $FOOT = '<script src="../js/sortAndTabifyTable.js"></script>';
   $CONTACT = 'jsvarc';
 
