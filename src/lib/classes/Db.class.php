@@ -406,7 +406,7 @@ class Db {
         ORDER BY last_observation DESC";
     } else {
       // using MAX() to limit aggregated values from JOIN to 1 value
-      $sql = "SELECT v.station,
+      $sql = "SELECT v.station, v.last_observation,
         MAX(s.lat) AS lat,
         MAX(s.lon) AS lon,
         MAX(s.elevation) AS elevation,
@@ -417,7 +417,7 @@ class Db {
         FROM gps_velocities v
         LEFT JOIN gps_stations s USING (station)
         WHERE v.network = :network
-        GROUP BY v.station
+        GROUP BY v.station, v.last_observation
         ORDER BY v.station ASC";
     }
 

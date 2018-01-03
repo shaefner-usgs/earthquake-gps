@@ -1,3 +1,21 @@
 @import 'tablist/TabList.scss';
 @import '_common.scss';
 @import '_datatable.scss';
+@import '_variables.scss';
+
+td.blue {
+  border-bottom-color: $blue;
+  background-color: color($blue tint(97%))
+}
+td.orange {
+  border-bottom-color: $orange;
+  background-color: color($orange tint(97%))
+}
+td.red {
+  border-bottom-color: $red;
+  background-color: color($red tint(97%))
+}
+td.yellow {
+  border-bottom-color: $yellow;
+  background-color: color($yellow tint(97%))
+}

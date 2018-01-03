@@ -16,6 +16,9 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+$now = date(DATE_RFC2822);
+$secs = 86400; // secs in one day
+
 $db = new Db;
 
 // Db query result: velocities for selected network
@@ -47,6 +50,9 @@ $tableBody = [];
 $tableFooter = '</table>';
 
 while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
+  $days = floor((strtotime($now) - strtotime($row->last_observation)) / $secs);
+  $color = getColor($days);
+
   // sigmas/velocities are comma-separated in this format: $datatype/$component:$value
   $sigmaValues = [];
   $sigmas = explode(',', $row->sigmas);
@@ -75,7 +81,7 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
   foreach($datatypes as $datatype=>$name) {
     if ($sigmaValues[$datatype] && $velocityValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td>%s</td>
+          <td class="%s">%s</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -87,6 +93,7 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
           <td>%s</td>
           <td>%s</td>
         </tr>',
+        $color,
         $row->station,
         round($row->lon, 5),
         round($row->lat, 5),
