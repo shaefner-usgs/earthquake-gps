@@ -44,15 +44,15 @@
   }
 
   .blue a {
-    border-color: #002cfb;
+    border-color: $blue;
   }
   .orange a {
-    border-color: #fd961e;
+    border-color: $orange;
   }
   .red a {
-    border-color: #c9000a;
+    border-color: $red;
   }
   .yellow a {
-    border-color: #fffb30;
+    border-color: $yellow;
   }
 }
