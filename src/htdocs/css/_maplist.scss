@@ -18,10 +18,6 @@
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
-
-    &:hover {
-      background: linear-gradient(to bottom, rgba(233,233,233,1) 0%, rgba(250,250,250,1) 100%);
-    }
   }
 
   a.bubble {
@@ -43,16 +39,36 @@
     width: 16%;
   }
 
-  .blue a {
-    border-color: #002cfb;
+  .blue a:first-child {
+    border-color: $blue;
+    background-color: color($blue tint(97%));
+
+    &:hover {
+      background: linear-gradient(to bottom, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
+    }
   }
-  .orange a {
-    border-color: #fd961e;
+  .orange a:first-child {
+    border-color: $orange;
+    background-color: color($orange tint(97%));
+
+    &:hover {
+      background: linear-gradient(to bottom, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
+    }
   }
-  .red a {
-    border-color: #c9000a;
+  .red a:first-child {
+    border-color: $red;
+    background-color: color($red tint(97%));
+
+    &:hover {
+      background: linear-gradient(to bottom, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
+    }
   }
-  .yellow a {
-    border-color: #fffb30;
+  .yellow a:first-child {
+    border-color: $yellow;
+    background-color: color($yellow tint(97%));
+
+    &:hover {
+      background: linear-gradient(to bottom, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
+    }
   }
 }

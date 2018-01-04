@@ -139,7 +139,7 @@ var NetworkMap = function (options) {
       'Dark': dark
     };
     layers.overlays = {
-      'Stations': {},
+      'Stations, last updated:': {},
       'Geology': {
         'Faults': faults,
         'M2.5+ Earthquakes': _earthquakes
@@ -151,7 +151,7 @@ var NetworkMap = function (options) {
     Object.keys(_stations.layers).forEach(function(key) {
       name = _stations.names[key] +
         '<span class="' + key + '"></span>'; // hook to add station count
-      layers.overlays.Stations[name] = _stations.layers[key];
+      layers.overlays['Stations, last updated:'][name] = _stations.layers[key];
       layers.defaults.push(_stations.layers[key]);
     });
 
