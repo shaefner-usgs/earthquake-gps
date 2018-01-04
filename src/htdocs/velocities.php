@@ -140,7 +140,7 @@ $backLink = sprintf('%s/%s',
 
 <p>The color of the &lsquo;Station&rsquo; field corresponds to the last
   observation date. See the <a href="<?php print $backLink; ?>">legend below
-  the netowrk map</a> for a breakdown of the color categories.</p>
+  the network map</a> for a breakdown of the color categories.</p>
 
 <div class="tablist">
   <?php print $html; ?>
