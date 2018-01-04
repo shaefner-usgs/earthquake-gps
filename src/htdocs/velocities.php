@@ -81,7 +81,7 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
   foreach($datatypes as $datatype=>$name) {
     if ($sigmaValues[$datatype] && $velocityValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td class="%s">%s</td>
+          <td class="%s" title="Last observation: %s">%s</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -94,6 +94,7 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
           <td>%s</td>
         </tr>',
         $color,
+        $row->last_observation,
         $row->station,
         round($row->lon, 5),
         round($row->lat, 5),
@@ -136,6 +137,10 @@ $backLink = sprintf('%s/%s',
 ?>
 
 <h2>Velocities and Uncertainties</h2>
+
+<p>The color of the &lsquo;Station&rsquo; field corresponds to the last
+  observation date. See the <a href="<?php print $backLink; ?>">legend below
+  the netowrk map</a> for a breakdown of the color categories.</p>
 
 <div class="tablist">
   <?php print $html; ?>
