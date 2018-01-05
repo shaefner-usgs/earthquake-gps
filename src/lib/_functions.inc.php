@@ -3,19 +3,21 @@
 /**
  * Get color classification based on the number of days since the last update
  *
- * @param $days {Int}
+ * @param $days {Integer}
  *
  * @return $color {String}
  */
 function getColor ($days) {
   if ($days > 14) {
     $color = 'red';
-  } else if ($days >= 8) {
+  } else if ($days > 7) {
     $color = 'orange';
-  } else if ($days >= 4) {
+  } else if ($days > 3) {
     $color = 'yellow';
   } else if ($days >= 0) {
     $color = 'blue';
+  } else {
+    $color = 'grey';
   }
 
   return $color;

@@ -110,7 +110,7 @@ var StationsLayer = function (options) {
   };
 
   /**
-   * Get icon color
+   * Get icon color based on the number of days since the last update
    *
    * @param days {Integer}
    *     days since station last updated
@@ -128,6 +128,8 @@ var StationsLayer = function (options) {
       color = 'yellow';
     } else if (days >= 0) {
       color = 'blue';
+    } else {
+      color = 'grey';
     }
 
     return color;
