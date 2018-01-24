@@ -113,6 +113,8 @@ file_put_contents($APACHE_CONFIG_FILE, '
     $MOUNT_PATH . '/network.php?network=$1 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/(([a-zA-Z0-9_-]+)/)?kml(/(last|timespan|years))?$ ' .
     $MOUNT_PATH . '/kml.php?network=$2&sortBy=$4 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/noise ' .
+    $MOUNT_PATH . '/noise.php?network=$1 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/notupdated$ ' .
     $MOUNT_PATH . '/notupdated.php?network=$1 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/offsets$ ' .
