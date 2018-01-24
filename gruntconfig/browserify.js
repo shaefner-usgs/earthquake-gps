@@ -35,14 +35,14 @@ var browserify = {
     dest: config.build + '/' + config.src + '/htdocs/js/photos.js'
   },
 
-  station: {
-    src: [config.src + '/htdocs/js/station.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/station.js'
-  },
-
   qc: {
     src: [config.src + '/htdocs/js/qc.js'],
     dest: config.build + '/' + config.src + '/htdocs/js/qc.js'
+  },
+
+  station: {
+    src: [config.src + '/htdocs/js/station.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/station.js'
   },
 
   velocities: {

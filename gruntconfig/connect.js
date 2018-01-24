@@ -70,6 +70,10 @@ var connect = {
       to: '/kml.php?network=$2&sortBy=$4'
     },
     {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/noise$',
+      to: '/noise.php?network=$1'
+    },
+    {
       from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/notupdated$',
       to: '/notupdated.php?network=$1'
     },

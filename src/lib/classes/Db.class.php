@@ -148,15 +148,39 @@ class Db {
    */
   public function queryNoise ($network, $station=NULL) {
     $params['network'] = $network;
-    $where = "network = :network";
 
     if ($station) { // add station info to query
       $params['station'] = $station;
-      $where .= ' AND  station = :station';
-    }
 
-    $sql = "SELECT * FROM gps_noise
-      WHERE $where";
+      $sql = "SELECT * FROM gps_noise
+        WHERE network = :network  AND  station = :station";
+    } else {
+      $sql = "SELECT station,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', whitenoise)
+          ORDER BY datatype ASC, component ASC) AS whitenoise,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', plamp1)
+          ORDER BY datatype ASC, component ASC) AS plamp1,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', plexp1)
+          ORDER BY datatype ASC, component ASC) AS plexp1,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', GM)
+          ORDER BY datatype ASC, component ASC) AS GM,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', bpfilterelement1)
+          ORDER BY datatype ASC, component ASC) AS bpfilterelement1,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', bpfilterelement2)
+          ORDER BY datatype ASC, component ASC) AS bpfilterelement2,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', numberofpoles)
+          ORDER BY datatype ASC, component ASC) AS numberofpoles,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', BPamplitude)
+          ORDER BY datatype ASC, component ASC) AS BPamplitude,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', plamp2)
+          ORDER BY datatype ASC, component ASC) AS plamp2,
+        GROUP_CONCAT(CONCAT(datatype, '/', component, ':', plexp2)
+          ORDER BY datatype ASC, component ASC) AS plexp2
+        FROM gps_noise
+        WHERE network = :network
+        GROUP BY station
+        ORDER BY station ASC;";
+    }
 
     return $this->_execQuery($sql, $params);
   }
