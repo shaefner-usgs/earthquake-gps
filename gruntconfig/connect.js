@@ -90,39 +90,39 @@ var connect = {
       to: '/waypoints.php?network=$1'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})$',
       to: '/station.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/kinematic$',
       to: '/kinematic.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic/data$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/kinematic/data$',
       to: '/_getKinematic.csv.php?station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/logs$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/logs$',
       to: '/logsheets.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/offsets$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/offsets$',
       to: '/offsets.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/photos$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/photos$',
       to: '/photos.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc$',
       to: '/qc.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/data$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc/data$',
       to: '/_getQcData.csv.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc/table$',
       to: '/qctable.php?network=$1&station=$2'
     },
     {
