@@ -53,7 +53,7 @@ $links = [
   'Velocities and Uncertainties' => "$network/velocities",
   'Offsets' => "$network/offsets",
   'Most recent XYZ positions' => "data/networks/$network/${network}_xyz_file",
-  'ITRF2008 XYZ time series' => "data/networks/$network/${network}_xyz_files.tar.gz",
+  'ITRF2008 XYZ time series' => "data/networks/$network/${network}_ITRF2008_xyz_files.tar.gz",
   'Stations not updated in the past 7 days' => "$network/notupdated"
 ];
 
