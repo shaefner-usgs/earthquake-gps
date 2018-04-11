@@ -44,7 +44,11 @@ class StationView {
         'Offsets' => $this->_getOffsetsTable($datatype),
         'Noise' => $this->_getTable('noise', $datatype),
         'Post-seismic' => $this->_getPostSeismicTable($datatype),
-        'Seasonal' => $this->_getTable('seasonal', $datatype)
+        'Seasonal' => $this->_getTable('seasonal', $datatype, [
+          'decdate' => 'Reference date',
+          'doy' => 'Reference day of year',
+          'year' => 'Reference year'
+        ])
       ];
 
       $plotsHtml = '';
@@ -366,7 +370,11 @@ class StationView {
             if (preg_match('/\d{4}-\d{2}-\d{2}/', $value)) {
               $value = str_replace('-', '', $value);
             }
-            $th .= "<th>$key</th>";
+            $fieldName = $key;
+            if ($lookupTable[$key]) {
+              $fieldName = $lookupTable[$key];
+            }
+            $th .= "<th>$fieldName</th>";
             $tr .= "<td>$value</td>";
           }
           $th .= '</tr>';
