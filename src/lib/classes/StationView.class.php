@@ -40,13 +40,42 @@ class StationView {
       $explanation = $this->_getExplanation($datatype);
 
       $tables = [
-        'Velocities' => $this->_getTable('velocities', $datatype),
+        'Velocities' => $this->_getTable('velocities', $datatype, [
+          'decdate' => 'Reference date',
+          'doy' => 'Reference day of year',
+          'int' => 'Intercept (mm)',
+          'intsig' => 'Intercept standard deviation (mm)',
+          'last_observation' => 'Last observation',
+          'year' => 'Reference year'
+        ]),
         'Offsets' => $this->_getOffsetsTable($datatype),
-        'Noise' => $this->_getTable('noise', $datatype),
+        'Noise' => $this->_getTable('noise', $datatype, [
+          'bpfilterelement1' => 'Lower frequency limit for band-pass (BP) filtered noise (cycle/year)',
+          'bpfilterelement2' => 'Upper frequency limit for band-pass (BP) filtered noise (cycle/year) ',
+          'BPamplitude' => 'Amplitude of BP filtered noise (mm)',
+          'GM' => 'Amplitude of generalized Gauss-Markov noise',
+          'numberofpoles' => 'Number of poles for BP filtered noise',
+          'plamp1' => 'Amplitude of first power law (mm/yr^(<em>n<sub>1</sub></em>/4))',
+          'plamp2' => 'Amplitude of second power law (mm/yr^(<em>n<sub>2</sub></em>/4))',
+          'plexp1' => '<em>n<sub>1</sub></em> (spectral index of first power law)',
+          'plexp2' => '<em>n<sub>2</sub></em> (spectral index of second power law)'
+        ]),
         'Post-seismic' => $this->_getPostSeismicTable($datatype),
         'Seasonal' => $this->_getTable('seasonal', $datatype, [
           'decdate' => 'Reference date',
           'doy' => 'Reference day of year',
+          'p13cosamp' => 'Amplitude of cosine (13.63-day period), mm',
+          'p13cossig' => 'Standard deviation of cosine amplitude (13.63-day period)',
+          'p13sinamp' => 'Amplitude of sine (13.63-day period), mm',
+          'p13sinsig' => 'Standard deviation of sine amplitude (13.63-day period)',
+          'p182cosamp' => 'Amplitude of cosine (180.625-day period), mm',
+          'p182cossig' => 'Standard deviation of cosine amplitude (180.625-day period)',
+          'p182sinamp' => 'Amplitude of sine (180.625-day period), mm',
+          'p182sinsig' => 'Standard deviation of sine amplitude (180.625-day period)',
+          'p365cosamp' => 'Amplitude of cosine (365.25-day period), mm',
+          'p365cossig' => 'Standard deviation of cosine amplitude (365.25-day period)',
+          'p365sinamp' => 'Amplitude of sine (365.25-day period), mm',
+          'p365sinsig' => 'Standard deviation of sine amplitude (365.25-day period)',
           'year' => 'Reference year'
         ])
       ];
@@ -361,16 +390,30 @@ class StationView {
           unset( // don't include these values in the table
             $row['component'],
             $row['datatype'],
+            $row['GM'], // Jess doesn't want this field displayed
             $row['id'],
             $row['network'],
             $row['station']
           );
+
+          // Use select values from seasonal for velocities
+          if ($table === 'velocities') {
+            $seasonalRows = $this->_model->seasonal;
+            foreach($seasonalRows as $seasonalRow) {
+              if ($seasonalRow['datatype'] === $datatype && $seasonalRow['component'] === $component) {
+                $row['decdate'] = $seasonalRow['decdate'];
+                $row['year'] = $seasonalRow['year'];
+                $row['doy'] = $seasonalRow['doy'];
+              }
+            }
+          }
+
           foreach ($row as $key => $value) {
             // strip '-' out of date fields
             if (preg_match('/\d{4}-\d{2}-\d{2}/', $value)) {
               $value = str_replace('-', '', $value);
             }
-            $fieldName = $key;
+            $fieldName = ucfirst($key);
             if ($lookupTable[$key]) {
               $fieldName = $lookupTable[$key];
             }
