@@ -46,6 +46,8 @@ class StationView {
           'int' => 'Intercept (mm)',
           'intsig' => 'Intercept standard deviation (mm)',
           'last_observation' => 'Last observation',
+          'sigma' => 'Velocity standard deviation (mm/yr)',
+          'velocity' => 'Velocity (mm/yr)',
           'year' => 'Reference year'
         ]),
         'Offsets' => $this->_getOffsetsTable($datatype),
@@ -58,7 +60,8 @@ class StationView {
           'plamp1' => 'Amplitude of first power law (mm/yr^(<em>n<sub>1</sub></em>/4))',
           'plamp2' => 'Amplitude of second power law (mm/yr^(<em>n<sub>2</sub></em>/4))',
           'plexp1' => '<em>n<sub>1</sub></em> (spectral index of first power law)',
-          'plexp2' => '<em>n<sub>2</sub></em> (spectral index of second power law)'
+          'plexp2' => '<em>n<sub>2</sub></em> (spectral index of second power law)',
+          'whitenoise' => 'White noise (mm)'
         ]),
         'Post-seismic' => $this->_getPostSeismicTable($datatype),
         'Seasonal' => $this->_getTable('seasonal', $datatype, [
@@ -325,10 +328,17 @@ class StationView {
       if ($postSeismic) { // postseismic data exists for datatype
         $html = '<table>
           <tr>
-            <td class="empty"></td><th>Decimal date</th><th>N log size</th>
-            <th>N log uncertainty</th><th>N time constant</th><th>E log size</th>
-            <th>E log uncertainty</th><th>E time constant</th><th>U log size</th>
-            <th>U log uncertainty</th><th>U time constant</th>
+            <td class="empty"></td>
+            <th>Decimal date</th>
+            <th>N log amplitude (mm)</th>
+            <th>N log amplitude standard deviation (mm)</th>
+            <th>N time constant (years)</th>
+            <th>E log amplitude (mm)</th>
+            <th>E log amplitude standard deviation (mm)</th>
+            <th>E time constant (years)</th>
+            <th>U log amplitude (mm)</th>
+            <th>U log amplitude standard deviation (mm)</th>
+            <th>U time constant (years)</th>
           </tr>';
 
         foreach ($postSeismic as $dateStr => $tds) {
