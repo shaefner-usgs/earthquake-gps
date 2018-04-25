@@ -265,9 +265,15 @@ class StationView {
       if ($offsets) { // offsets exist for datatype
         $html = '<table>
           <tr>
-            <td class="empty"></td><th>Decimal date</th><th>N offset</th>
-            <th>N uncertainty</th><th>E offset</th><th>E uncertainty</th>
-            <th>U offset</th><th>U uncertainty</th><th>Type</th>
+            <td class="empty"></td>
+            <th>Decimal date</th>
+            <th>N offset (mm)</th>
+            <th>N uncertainty (mm)</th>
+            <th>E offset (mm)</th>
+            <th>E uncertainty (mm)</th>
+            <th>U offset (mm)</th>
+            <th>U uncertainty (mm)</th>
+            <th>Type</th>
           </tr>';
 
         foreach ($offsets as $dateStr => $tds) {
