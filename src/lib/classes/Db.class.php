@@ -72,6 +72,26 @@ class Db {
   }
 
   /**
+   * Query db to get a list of deleted points for a station
+   *
+   * @param $network {String}
+   * @param $station {String}
+   * @param $datatype {String}
+   *
+   * @return {Function}
+   */
+  public function queryDeletedPts ($network, $station, $datatype) {
+    $sql = 'SELECT * FROM gps_deleted_pts WHERE network = :network AND
+      station = :station AND datatype = :datatype ORDER BY `date` ASC';
+
+    return $this->_execQuery($sql, array(
+      'network' => $network,
+      'station' => $station,
+      'datatype' => $datatype
+    ));
+  }
+
+  /**
    * Query db to get a list of stations for a given network that aren't up to date
    *
    * @param $network {String}
