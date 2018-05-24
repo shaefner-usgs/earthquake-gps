@@ -137,6 +137,8 @@ class StationView {
   }
 
   private function _getDownloads ($datatype) {
+    $deletedHref = $this->_model->station . "/$datatype/deleted";
+
     $html = '
       <nav class="downloads">
         <span>Raw Data:</span>
@@ -154,6 +156,10 @@ class StationView {
           <li><a href="' . $this->_getHref($datatype, '_N_wtrend.data.gz') .'">North</a></li>
           <li><a href="' . $this->_getHref($datatype, '_E_wtrend.data.gz') .'">East</a></li>
           <li><a href="' . $this->_getHref($datatype, '_U_wtrend.data.gz') .'">Up</a></li>
+        </ul>
+        <span>Deleted points:</span>
+        <ul class="no-style">
+          <li><a href="' . $deletedHref .'">All</a></li>
         </ul>
       </nav>';
 
