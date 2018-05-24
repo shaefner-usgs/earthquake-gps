@@ -139,6 +139,8 @@ file_put_contents($APACHE_CONFIG_FILE, '
     $MOUNT_PATH . '/qctable.php?network=$1&station=$2 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc/data$ ' .
     $MOUNT_PATH . '/_getQcData.csv.php?network=$1&station=$2 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/(nafixed|itrf2008|filtered)/deleted$ ' .
+    $MOUNT_PATH . '/deleted.php?network=$1&station=$2&type=$3 [L,PT]
 
   <Location ' . $MOUNT_PATH . '>
     Order allow,deny
