@@ -1,21 +1,31 @@
 <?php
 
-if (!isset($TEMPLATE)) {
-  $TITLE = 'Deleted Points';
-  $NAVIGATION = true;
-  $CONTACT = 'jsvarc';
+include_once '../conf/config.inc.php'; // app config
+include_once '../lib/_functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-  include 'template.inc.php';
+$network = safeParam('network', 'SFBayArea');
+$station = safeParam('station', '208p');
+$datatype = safeParam('datatype', 'filtered');
+
+$db = new Db();
+
+$rsDeleted = $db->queryDeletedPts($network, $station, $datatype);
+
+$output = "Date, Component, Network, Datatype, Method\n";
+
+while($row = $rsDeleted->fetch()) {
+  $output .= sprintf("%s, %s, %s, %s, %s\n",
+    $row['date'],
+    $row['component'],
+    $row['network'],
+    $row['datatype'],
+    $row['method']
+  );
 }
 
-$params = [
-  'network' => $_GET['network'],
-  'station' => $_GET['station'],
-  'datatype' => $_GET['datatype']
-];
-
-print '<pre>';
-  print_r($params);
-print '</pre>';
+// Send txt stream to browser
+header('Content-type: text/plain');
+print $output;
 
 ?>
