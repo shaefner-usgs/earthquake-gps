@@ -11,7 +11,7 @@ if (!isset($TEMPLATE)) {
 $params = [
   'network' => $_GET['network'],
   'station' => $_GET['station'],
-  'type' => $_GET['type']
+  'datatype' => $_GET['datatype']
 ];
 
 print '<pre>';

@@ -127,7 +127,7 @@ var connect = {
     },
     {
       from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/(nafixed|itrf2008|filtered)/deleted$',
-      to: '/deleted.php?network=$1&station=$2&type=$3'
+      to: '/deleted.php?network=$1&station=$2&datatype=$3'
     },
     {
       from: '^' + MOUNT_PATH + '/?(.*)$',
