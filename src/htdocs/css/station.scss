@@ -85,9 +85,6 @@ mark {
 }
 
 .tablist-panel {
-  overflow: auto;
-  padding: 0 1em 1em;
-
   header {
     display: none; /* hides in js env only (.tablist-panel added by tabs js) */
   }
