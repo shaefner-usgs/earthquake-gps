@@ -263,9 +263,18 @@ class StationView {
           $date = str_replace('-', '', $row['date']);
 
           $offsets[$date]['decDate'] = $row['decdate'];
+          $offsets[$date]['distance'] = $row['distance_from_eq'];
+          $offsets[$date]['mag'] = $row['eqmagnitude'];
           $offsets[$date]['type'] = $row['offsettype'];
           $offsets[$date][$component . '-size'] = $row['size'];
           $offsets[$date][$component . '-uncertainty'] = $row['uncertainty'];
+          $offsets[$date]['id'] = '';
+          if ($row['eqinfo']) {
+            $offsets[$date]['id'] = sprintf('<a href="https://earthquake.usgs.gov/earthquakes/eventpage/%s#executive">%s</a>',
+              $row['eqinfo'],
+              $row['eqinfo']
+            );
+          }
         }
       }
       if ($offsets) { // offsets exist for datatype
@@ -280,11 +289,17 @@ class StationView {
             <th>U offset (mm)</th>
             <th>U uncertainty (mm)</th>
             <th>Type</th>
+            <th>Earthquake magnitude</th>
+            <th>Earthquake information</th>
+            <th>Distance from epicenter (km)</th>
           </tr>';
 
         foreach ($offsets as $dateStr => $tds) {
           $html .= sprintf('<tr>
               <th>%s</th>
+              <td>%s</td>
+              <td>%s</td>
+              <td>%s</td>
               <td>%s</td>
               <td>%s</td>
               <td>%s</td>
@@ -302,7 +317,10 @@ class StationView {
             $tds['E-uncertainty'],
             $tds['U-size'],
             $tds['U-uncertainty'],
-            $tds['type']
+            $tds['type'],
+            $tds['mag'],
+            $tds['id'],
+            $tds['distance']
           );
         }
 

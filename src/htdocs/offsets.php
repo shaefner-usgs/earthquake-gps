@@ -41,6 +41,9 @@ $tableHeader = '<table class="sortable">
     <th>U Offset</th>
     <th>U Uncertainty</th>
     <th>Type</th>
+    <th>Earthquake magnitude</th>
+    <th>Earthquake information</th>
+    <th>Distance from epicenter (km)</th>
   </tr>';
 $tableBody = [];
 $tableFooter = '</table>';
@@ -71,9 +74,20 @@ while ($row = $rsOffsets->fetch(PDO::FETCH_OBJ)) {
     $uncertaintyValues[$datatype][$component] = $value;
   }
 
+  $eqinfo = '';
+  if ($row->eqinfo) {
+    $eqinfo = sprintf('<a href="https://earthquake.usgs.gov/earthquakes/eventpage/%s#executive">%s</a>',
+      $row->eqinfo,
+      $row->eqinfo
+    );
+  }
+
   foreach($datatypes as $datatype=>$name) {
     if ($sizeValues[$datatype] && $uncertaintyValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
+          <td>%s</td>
+          <td>%s</td>
+          <td>%s</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -94,7 +108,10 @@ while ($row = $rsOffsets->fetch(PDO::FETCH_OBJ)) {
         $uncertaintyValues[$datatype]['E'],
         $sizeValues[$datatype]['U'],
         $uncertaintyValues[$datatype]['U'],
-        $row->offsettype
+        $row->offsettype,
+        $row->eqmagnitude,
+        $eqinfo,
+        $row->distance_from_eq
       );
     }
   }

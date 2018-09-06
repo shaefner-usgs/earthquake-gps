@@ -223,14 +223,16 @@ class Db {
         WHERE network = :network AND  station = :station
         ORDER BY `year` ASC";
     } else {
-      $sql = "SELECT station, `date`, decdate, offsettype,
+      $sql = "SELECT station, `date`, decdate, offsettype, eqinfo, eqmagnitude,
+        distance_from_eq,
         GROUP_CONCAT(CONCAT(datatype, '/', component, ':', size)
           ORDER BY datatype ASC, component ASC) AS size,
         GROUP_CONCAT(CONCAT(datatype, '/', component, ':', uncertainty)
           ORDER BY datatype ASC, component ASC) AS uncertainty
         FROM gps_offsets
         WHERE network = :network
-        GROUP BY station, `date`, decdate, offsettype
+        GROUP BY station, `date`, decdate, offsettype, eqinfo, eqmagnitude,
+          distance_from_eq
         ORDER BY station ASC, `date` DESC";
     }
 
