@@ -221,7 +221,7 @@ class Db {
 
       $sql = "SELECT * FROM gps_offsets
         WHERE network = :network AND  station = :station
-        ORDER BY `year` ASC";
+        ORDER BY `date` ASC";
     } else {
       $sql = "SELECT station, `date`, decdate, offsettype, eqinfo, eqmagnitude,
         distance_from_eq,
@@ -258,7 +258,7 @@ class Db {
 
     $sql = "SELECT * FROM gps_postseismic
       WHERE $where
-      ORDER BY `year` ASC";
+      ORDER BY `decdate` ASC";
 
     return $this->_execQuery($sql, $params);
   }
