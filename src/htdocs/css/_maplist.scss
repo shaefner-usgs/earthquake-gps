@@ -72,3 +72,15 @@
     }
   }
 }
+
+@media (max-width: 1000px) {
+  .networks {
+    &:after {
+      content: 'narrow'; /* flag for MediaQueries.js that media query was triggered */
+    }
+
+    > li {
+      width: 49%;
+    }
+  }
+}
