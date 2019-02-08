@@ -1,3 +1,5 @@
+/* CSS for navigation buttons below maps */
+
 .networks, .stations {
   align-content: space-between;
   display: flex;
@@ -73,10 +75,12 @@
   }
 }
 
+/* reflow nav-buttons on narrow screens - uses JS to calculate new height after page render */
 @media (max-width: 1000px) {
   .networks {
     &:after {
-      content: 'narrow'; /* flag for MediaQueries.js that media query was triggered */
+      content: "narrow"; /* flag for MediaQueries.js that media query was triggered */
+      display: none;
     }
 
     > li {
