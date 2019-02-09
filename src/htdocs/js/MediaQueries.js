@@ -1,7 +1,16 @@
 'use strict';
 // Adapted from: http://zerosixthree.se/detecting-media-queries-with-javascript/
 
-
+/**
+ * Sets up a javascript-based MQ on an element that has a CSS MQ already defined
+ * (Be sure to set the content property on the Element's :after selector within
+ *   the CSS mediaquery for JS to track when it's triggered)
+ *
+ * @param options {Object}
+ *   {
+ *     el: Element
+ *   }
+ */
 var MediaQueries = function (options) {
   var _this,
       _initialize,
@@ -36,11 +45,11 @@ var MediaQueries = function (options) {
         _currentBreakpoint = _afterElement.getPropertyValue('content');
 
         if (_currentBreakpoint !== _lastBreakpoint) {
-          if (window.CustomEvent) {
-            event = new CustomEvent('breakpoint-change', {detail: {type: _currentBreakpoint}});
+          if (window.CustomEvent) { // Compliant browsers
+            event = new CustomEvent('breakpoint-change', {detail: {layout: _currentBreakpoint}});
           } else {
             event = document.createEvent('CustomEvent');
-            event.initCustomEvent('breakpoint-change', true, true, {type: _currentBreakpoint});
+            event.initCustomEvent('breakpoint-change', true, true, {layout: _currentBreakpoint});
           }
           window.dispatchEvent(event);
 
