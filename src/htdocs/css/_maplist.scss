@@ -1,3 +1,5 @@
+/* CSS for navigation buttons below maps */
+
 .networks, .stations {
   align-content: space-between;
   display: flex;
@@ -69,6 +71,20 @@
 
     &:hover {
       background: linear-gradient(to bottom, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
+    }
+  }
+}
+
+/* reflow nav-buttons on narrow screens - uses JS to calculate new height after page render */
+@media (max-width: 1000px) {
+  .networks {
+    &:after {
+      content: "narrow"; /* flag for MediaQueries.js that media query was triggered */
+      display: none;
+    }
+
+    > li {
+      width: 49%;
     }
   }
 }
