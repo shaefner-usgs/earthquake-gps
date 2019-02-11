@@ -4,8 +4,10 @@
 var IndexMap = require('map/IndexMap'),
     MediaQueries = require('MediaQueries');
 
-var initialHeight,
-    navButtons;
+var height,
+    initialHeight,
+    navButtons,
+    numNetworks;
 
 // Initialize map
 IndexMap({
@@ -20,6 +22,7 @@ MediaQueries({
 
 // Change height of container for nav-buttons below map when CSS breakpoint is triggered
 initialHeight = parseInt(navButtons.style.height, 10);
+numNetworks = parseInt(document.querySelector('h3.count').textContent, 10);
 window.addEventListener('breakpoint-change', function(e) {
   var layout = e.detail.layout;
 
@@ -27,8 +30,9 @@ window.addEventListener('breakpoint-change', function(e) {
   layout = layout.replace(/"/g, '');
 
   if (layout === 'narrow') {
-    navButtons.style.height = initialHeight * 2 + 'px';
-  } else {
-    navButtons.style.height = initialHeight + 'px';
+    height = Math.ceil(numNetworks / 2) * 32;
+  } else { // default (wide)
+    height = initialHeight;
   }
+  navButtons.style.height = height + 'px';
 });

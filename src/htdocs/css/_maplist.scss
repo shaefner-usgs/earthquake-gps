@@ -33,12 +33,12 @@
 }
 
 .networks > li {
-  width: 24%;
+  width: 24.5%;
 }
 
 .stations {
   > li {
-    width: 16%;
+    width: 12%;
   }
 
   .blue a:first-child {
@@ -84,7 +84,29 @@
     }
 
     > li {
-      width: 49%;
+      width: 49.5%; /* 2 columns */
+    }
+  }
+  .stations {
+    &:after {
+      content: "normal"; /* flag for MediaQueries.js that media query was triggered */
+      display: none;
+    }
+
+    > li {
+      width: 16%; /* 6 columns */
+    }
+  }
+}
+@media (max-width: 600px) {
+  .stations {
+    &:after {
+      content: "narrow"; /* flag for MediaQueries.js that media query was triggered */
+      display: none;
+    }
+
+    > li {
+      width: 32.5%; /*/ 3 columns */
     }
   }
 }
