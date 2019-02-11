@@ -2,9 +2,13 @@
 // Adapted from: http://zerosixthree.se/detecting-media-queries-with-javascript/
 
 /**
- * Sets up a javascript-based MQ on an element that has a CSS MQ already defined
+ * Triggers javascript behavior based on media queries (MQs) defined in CSS
+ *
+ * To use, pass in the HTML Element with the MQ defined during instantiation,
+ * then watch for the Custom Event 'breakpoint-change' to set up JS behavior.
+ *
  * (Be sure to set the content property on the Element's :after selector within
- *   the CSS mediaquery for JS to track when it's triggered)
+ *   the CSS media query for each MQ state for JS to track changing breakpoints)
  *
  * @param options {Object}
  *   {
