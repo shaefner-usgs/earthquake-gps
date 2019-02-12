@@ -89,7 +89,7 @@ foreach ($legend_icons as $key => $description) {
 $legend_html .= '</ul>';
 
 // Create HTML for station list
-$height = ceil($stations['count'] / 8) * 32;
+$height = ceil($stations['count'] / 8) * 36;
 $starred = false;
 
 $stations_html = '<ul class="stations no-style" style="height: '. $height . 'px;">';

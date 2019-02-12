@@ -42,7 +42,7 @@ foreach ($legend_icons as $key => $description) {
 $legend_html .= '</ul>';
 
 // Create HTML for network list
-$height = ceil($networks['count'] / 4) * 32;
+$height = ceil($networks['count'] / 4) * 36;
 $networks_html = '<ul class="networks no-style" style="height: '. $height . 'px;">';
 
 foreach ($networks['features'] as $feature) {

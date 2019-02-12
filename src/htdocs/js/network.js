@@ -30,9 +30,9 @@ window.addEventListener('breakpoint-change', function(e) {
   layout = layout.replace(/"/g, '');
 
   if (layout === 'narrow') {
-    height = Math.ceil(numStations / 4) * 32;
+    height = Math.ceil(numStations / 4) * 36;
   } else if (layout === 'normal') {
-    height = Math.ceil(numStations / 6) * 32;
+    height = Math.ceil(numStations / 6) * 36;
   } else { // default (wide)
     height = initialHeight;
   }
