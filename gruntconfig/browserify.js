@@ -46,8 +46,8 @@ var browserify = {
   },
 
   velocities: {
-    src: [config.src + '/htdocs/js/sortAndTabifyTable.js'],
-    dest: config.build + '/' + config.src + '/htdocs/js/sortAndTabifyTable.js'
+    src: [config.src + '/htdocs/js/table.js'],
+    dest: config.build + '/' + config.src + '/htdocs/js/table.js'
   }
 
 };

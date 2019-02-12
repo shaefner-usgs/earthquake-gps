@@ -10,7 +10,7 @@ if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../css/velocities.css" />';
-  $FOOT = '<script src="../js/sortAndTabifyTable.js"></script>';
+  $FOOT = '<script src="../js/table.js"></script>';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';

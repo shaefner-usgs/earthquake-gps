@@ -69,5 +69,4 @@ var SortAndTabifyTable = function () {
   return _this;
 };
 
-
-SortAndTabifyTable();
+module.exports = SortAndTabifyTable;
