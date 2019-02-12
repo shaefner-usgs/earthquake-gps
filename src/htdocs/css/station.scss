@@ -35,8 +35,7 @@ mark {
   }
 }
 
-/* Table header */
-.downloads + h3 {
+.downloads {
   clear: left;
 }
 
@@ -64,7 +63,7 @@ mark {
     }
 
     ul {
-      margin-top: 0;
+      margin: 0 0 .25em;
     }
   }
 

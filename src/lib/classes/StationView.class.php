@@ -95,7 +95,7 @@ class StationView {
           $name
         );
 
-        $plotsHtml = $navPlots . $image . $explanation;
+        $plotsHtml = '<h3>Plots</h3>' . $navPlots . $image . $explanation;
       }
 
       $tablesHtml = '';
@@ -111,7 +111,7 @@ class StationView {
             <h2>%s</h2>
           </header>
           %s
-          <h3>Downloads</h3>
+          <h3 class="downloads">Downloads</h3>
           %s
           %s
         </section>',
@@ -140,7 +140,7 @@ class StationView {
     $deletedHref = $this->_model->station . "/$datatype/deleted";
 
     $html = '
-      <nav class="downloads">
+      <nav>
         <span>Raw Data:</span>
         <ul class="no-style">
           <li><a href="' . $this->_getHref($datatype, '.rneu') .'">All</a></li>
