@@ -11,8 +11,8 @@
   }
 
   a:first-child {
-    background: #f3f3f3;
-    border: 1px solid #ddd;
+    background-color: color(grey tint(94%));
+    border: 1px solid $grey;
     color: #000;
     display: block;
     overflow: hidden;
@@ -20,6 +20,10 @@
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &:hover {
+      background: linear-gradient(to bottom, color($grey tint(70%)) 0%, rgb(255,255,255) 100%);
+    }
   }
 
   a.bubble {
