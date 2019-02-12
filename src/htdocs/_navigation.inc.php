@@ -28,7 +28,7 @@ $NAVIGATION =
   navGroup('GPS',
     navItem("$section", 'Data', $matches) .
     navItem("$section/stations", 'Station List') .
-    navItem("$section/citation.php", 'Citing These Data') .
+    navItem("$section/citation.php", 'Data Citation') .
     navItem("$section/about.php", 'About')
   );
 
