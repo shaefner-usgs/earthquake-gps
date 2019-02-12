@@ -1,7 +1,6 @@
 'use strict';
 
 
-
 /**
  * Navigation class: zoom and pan controls
  * (only need to manipulate one graph; they're bound together when created)
