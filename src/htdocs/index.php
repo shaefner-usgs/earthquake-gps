@@ -75,7 +75,7 @@ $networks_html .= '</ul>';
   <h2>View Stations by Network</h2>
   <div class="map"></div>
   <?php print $legend_html; ?>
-  <h3 class="count"><?php print $networks['count']; ?> networks on this map</h3>
+  <h3 class="count"><?php print $networks['count']; ?> Networks on this Map</h3>
   <?php print $networks_html; ?>
 </section>
 
