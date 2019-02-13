@@ -49,12 +49,12 @@ if ($stations['count'] === 0) {
 
 // Create HTML for link list
 $links = [
-  'GPS Waypoints' => "$network/waypoints",
   'Velocities and Uncertainties' => "$network/velocities",
   'Offsets' => "$network/offsets",
+  'Stations Not Updated in the Past 7 Days' => "$network/notupdated",
   'Most Recent XYZ Positions' => "data/networks/$network/${network}_xyz_file",
-  'ITRF2008 XYZ Time Series' => "data/networks/$network/${network}_ITRF2008_xyz_files.tar.gz",
-  'Stations Not Updated in the Past 7 Days' => "$network/notupdated"
+  'GPS Waypoints' => "$network/waypoints",
+  'ITRF2008 XYZ Time Series' => "data/networks/$network/${network}_ITRF2008_xyz_files.tar.gz"
 ];
 
 $links_html = '<ul class="pipelist no-style">';
