@@ -101,7 +101,10 @@ class StationView {
       $tablesHtml = '';
       foreach ($tables as $tableName => $tableData) {
         if ($tableData) { // value is empty if no data in database
-          $tablesHtml .= "<h3>$tableName</h3>$tableData";
+          $tablesHtml .= sprintf('<h3>%s</h3><div class="scroll-wrapper">%s</div>',
+            $tableName,
+            $tableData
+          );
         }
       }
 
@@ -280,7 +283,7 @@ class StationView {
       if ($offsets) { // offsets exist for datatype
         $html = '<table>
           <tr>
-            <td class="empty"></td>
+            <td class="empty freeze"></td>
             <th>Decimal date</th>
             <th>N offset (mm)</th>
             <th>N uncertainty (mm)</th>
@@ -296,7 +299,7 @@ class StationView {
 
         foreach ($offsets as $dateStr => $tds) {
           $html .= sprintf('<tr>
-              <th>%s</th>
+              <th class="freeze">%s</th>
               <td>%s</td>
               <td>%s</td>
               <td>%s</td>
@@ -358,7 +361,7 @@ class StationView {
       if ($postSeismic) { // postseismic data exists for datatype
         $html = '<table>
           <tr>
-            <td class="empty"></td>
+            <td class="empty freeze"></td>
             <th>Decimal date</th>
             <th>N log amplitude (mm)</th>
             <th>N log amplitude standard deviation (mm)</th>
@@ -373,7 +376,7 @@ class StationView {
 
         foreach ($postSeismic as $dateStr => $tds) {
           $html .= sprintf('<tr>
-              <th>%s</th>
+              <th class="freeze">%s</th>
               <td>%s</td>
               <td>%s</td>
               <td>%s</td>
@@ -423,9 +426,9 @@ class StationView {
         if ($row['datatype'] === $datatype) {
           $component = $row['component'];
           $direction = $components[$component];
-          $th = '<tr><td class="empty"></td>';
+          $th = '<tr><td class="empty freeze"></td>';
           $tr = '<tr class="' . strtolower($direction) . '">';
-          $tr .= "<th>$direction</th>";
+          $tr .= '<th class="freeze">' . $direction . '</th>';
 
           unset( // don't include these values in the table
             $row['component'],

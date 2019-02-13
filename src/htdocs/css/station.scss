@@ -35,10 +35,6 @@ mark {
   }
 }
 
-.downloads {
-  clear: left;
-}
-
 .image {
   float: left;
   margin: 1em 1em 2em 0;
@@ -68,7 +64,24 @@ mark {
   }
 
   th {
+    background-color: #f8f8f8;
+    border-width: 0 1px 1px 1px;
     text-align: center;
+  }
+
+  .downloads {
+    clear: left;
+  }
+
+  .empty {
+    background-color: #fff !important;
+    border: 0;
+  }
+
+  .freeze {
+    border-width: 1px 1px 1px 0;
+    left: 0;
+    position: sticky;
   }
 }
 
@@ -81,6 +94,10 @@ mark {
     font-weight: normal;
     margin-top: 1em;
   }
+}
+
+.scroll-wrapper {
+  overflow-x: auto;
 }
 
 .tablist-panel {
