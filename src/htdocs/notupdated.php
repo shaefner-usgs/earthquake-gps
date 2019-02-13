@@ -43,7 +43,7 @@ $backlink = sprintf('<a href="%s/%s">Back to %s network</a>',
 ?>
 
 <h2>
-  Stations not updated in the past <?php print $days; ?> days
+  Stations Not Updated in the Past <?php print $days; ?> Days
 </h2>
 
 <section>
