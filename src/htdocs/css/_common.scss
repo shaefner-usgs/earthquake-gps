@@ -43,6 +43,22 @@ th {
   }
 }
 
+.popup {
+  font-size: 14px;
+
+  a {
+    color: #306ac2;
+
+    &:visited {
+      color: #306ac2;
+    }
+  }
+
+  h2 {
+    font-size: 1.25em;
+  }
+}
+
 .tablist-panel {
   overflow: auto;
 }
