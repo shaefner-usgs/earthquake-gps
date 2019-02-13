@@ -146,6 +146,7 @@ $geFiles_html = "$geFilesHeader<ul>$geFiles_lis</ul>";
 <section>
   <div class="map"></div>
   <?php print $legend_html; ?>
+  <p class="small">Pin color indicates when station was last updated.</p>
   <h3 class="count"><?php print $stations['count']; ?> Stations on this Map</h3>
   <?php
     print $stations_html;
