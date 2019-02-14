@@ -3,10 +3,6 @@ th {
     cursor: pointer;
     white-space: nowrap;
 
-    &:selection {
-      background: transparent;
-    }
-
     &:after {
       border-color: #404040 transparent;
       border-style: solid;
@@ -15,6 +11,14 @@ th {
       display: inline-block;
       margin: 4px 0 4px 2px;
       visibility: hidden;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:selection {
+      background: transparent;
     }
 
     &.sort-up:after,
