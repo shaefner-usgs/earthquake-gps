@@ -47,7 +47,7 @@
 
   .blue a:first-child {
     border-color: $blue;
-    background-color: color($blue tint(97%));
+    background-color: $lightBlue;
 
     &:hover {
       background: linear-gradient(to bottom, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
@@ -55,7 +55,7 @@
   }
   .orange a:first-child {
     border-color: $orange;
-    background-color: color($orange tint(97%));
+    background-color: $lightOrange;
 
     &:hover {
       background: linear-gradient(to bottom, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
@@ -63,7 +63,7 @@
   }
   .red a:first-child {
     border-color: $red;
-    background-color: color($red tint(97%));
+    background-color: $lightRed;
 
     &:hover {
       background: linear-gradient(to bottom, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
@@ -71,7 +71,7 @@
   }
   .yellow a:first-child {
     border-color: $yellow;
-    background-color: color($yellow tint(97%));
+    background-color: $lightYellow;
 
     &:hover {
       background: linear-gradient(to bottom, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
