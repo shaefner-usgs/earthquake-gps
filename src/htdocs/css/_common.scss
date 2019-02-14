@@ -61,4 +61,8 @@ th {
 
 .tablist-panel {
   overflow: auto;
+
+  header {
+    display: none; /* hide redundant headers after "tabifying" by js (js adds 'tablist-panel' parent class) */
+  }
 }

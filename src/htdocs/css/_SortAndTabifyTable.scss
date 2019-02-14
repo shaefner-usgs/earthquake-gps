@@ -28,9 +28,3 @@ th {
     }
   }
 }
-
-.tablist-panel {
-  header {
-    display: none; /* hides in js env only (.tablist-panel added by tabs js) */
-  }
-}
