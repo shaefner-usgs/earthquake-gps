@@ -13,7 +13,7 @@ var _DEFAULTS = {
 };
 
 /**
- * Class for creating a lightbox using SimplBox
+ * Class for creating a lightbox using free SimplBox Library
  *
  * @param options {Object}
  *  {
