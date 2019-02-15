@@ -31,19 +31,19 @@ $datatypes = [
 $html = '';
 $tableHeader = '<table class="sortable">
   <tr class="no-sort">
-    <th class="sort-default">Station</th>
-    <th>Date</th>
-    <th>Decimal Date</th>
-    <th>N Offset</th>
-    <th>N Uncertainty</th>
-    <th>E Offset</th>
-    <th>E Uncertainty</th>
-    <th>U Offset</th>
-    <th>U Uncertainty</th>
-    <th>Type</th>
-    <th>Earthquake magnitude</th>
-    <th>Earthquake information</th>
-    <th>Distance from epicenter (km)</th>
+    <th class="sort-default freeze">Station</th>
+    <th class="freeze">Date</th>
+    <th class="freeze">Decimal Date</th>
+    <th class="freeze">N Offset</th>
+    <th class="freeze">N Uncertainty</th>
+    <th class="freeze">E Offset</th>
+    <th class="freeze">E Uncertainty</th>
+    <th class="freeze">U Offset</th>
+    <th class="freeze">U Uncertainty</th>
+    <th class="freeze">Type</th>
+    <th class="freeze">Earthquake magnitude</th>
+    <th class="freeze">Earthquake information</th>
+    <th class="freeze">Distance from epicenter (km)</th>
   </tr>';
 $tableBody = [];
 $tableFooter = '</table>';
@@ -85,7 +85,7 @@ while ($row = $rsOffsets->fetch(PDO::FETCH_OBJ)) {
   foreach($datatypes as $datatype=>$name) {
     if ($sizeValues[$datatype] && $uncertaintyValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td>%s</td>
+          <td class="freeze">%s</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -123,9 +123,11 @@ foreach ($datatypes as $datatype => $name) {
         <header>
           <h3>%s</h3>
         </header>
+        <div class="scroll-wrapper">
         %s
         %s
         %s
+        </div>
       </section>',
       $name,
       $name,

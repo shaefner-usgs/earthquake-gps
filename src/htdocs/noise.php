@@ -31,37 +31,37 @@ $datatypes = [
 $html = '';
 $tableHeader = '<table class="sortable">
   <tr class="no-sort">
-    <th class="sort-default">Station</th>
-    <th>N whitenoise</th>
-    <th>E whitenoise</th>
-    <th>U whitenoise</th>
-    <th>N plamp1</th>
-    <th>E plamp1</th>
-    <th>U plamp1</th>
-    <th>N plexp1</th>
-    <th>E plexp1</th>
-    <th>U plexp1</th>
-    <th>N GM</th>
-    <th>E GM</th>
-    <th>U GM</th>
-    <th>N bpfilterelement1</th>
-    <th>E bpfilterelement1</th>
-    <th>U bpfilterelement1</th>
-    <th>N bpfilterelement2</th>
-    <th>E bpfilterelement2</th>
-    <th>U bpfilterelement2</th>
-    <th>N numberofpoles</th>
-    <th>E numberofpoles</th>
-    <th>U numberofpoles</th>
-    <th>N BPamplitude</th>
-    <th>E BPamplitude</th>
-    <th>U BPamplitude</th>
-    <th>N plamp2</th>
-    <th>E plamp2</th>
-    <th>U plamp2</th>
-    <th>N plexp2</th>
-    <th>E plexp2</th>
-    <th>U plexp2</th>
+    <th class="sort-default freeze">Station</th>
+    <th class="freeze">N whitenoise</th>
+    <th class="freeze">E whitenoise</th>
+    <th class="freeze">U whitenoise</th>
+    <th class="freeze">N plamp1</th>
+    <th class="freeze">E plamp1</th>
+    <th class="freeze">U plamp1</th>
+    <th class="freeze">N plexp1</th>
+    <th class="freeze">E plexp1</th>
+    <th class="freeze">U plexp1</th>
+    <th class="freeze">N GM</th>
+    <th class="freeze">E GM</th>
+    <th class="freeze">U GM</th>
+    <th class="freeze">N bpfilterelement1</th>
+    <th class="freeze">E bpfilterelement1</th>
+    <th class="freeze">U bpfilterelement1</th>
+    <th class="freeze">N bpfilterelement2</th>
+    <th class="freeze">E bpfilterelement2</th>
+    <th class="freeze">U bpfilterelement2</th>
+    <th class="freeze">N numberofpoles</th>
+    <th class="freeze">E numberofpoles</th>
+    <th class="freeze">U numberofpoles</th>
+    <th class="freeze">N BPamplitude</th>
+    <th class="freeze">E BPamplitude</th>
+    <th class="freeze">U BPamplitude</th>
+    <th class="freeze">N plamp2</th>
+    <th class="freeze">E plamp2</th>
+    <th class="freeze">U plamp2</th>
+    <th class="freeze">N plexp2</th>
+    <th class="freeze">E plexp2</th>
+    <th class="freeze">U plexp2</th>
   </tr>';
 $tableBody = [];
 $tableFooter = '</table>';
@@ -89,7 +89,7 @@ while ($row = $rsNoise->fetch(PDO::FETCH_OBJ)) {
   foreach($datatypes as $datatype=>$name) {
     if ($values['whitenoise'][$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td>%s</td>
+          <td class="freeze">%s</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -163,9 +163,11 @@ foreach ($datatypes as $datatype => $name) {
         <header>
           <h3>%s</h3>
         </header>
+        <div class="scroll-wrapper">
         %s
         %s
         %s
+        </div>
       </section>',
       $name,
       $name,

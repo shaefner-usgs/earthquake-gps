@@ -34,17 +34,17 @@ $datatypes = [
 $html = '';
 $tableHeader = '<table class="sortable">
   <tr class="no-sort">
-    <th class="sort-default">Station</th>
-    <th>Longitude</th>
-    <th>Latitude</th>
-    <th>Elevation</th>
-    <th>Velocity (E)</th>
-    <th>Velocity (N)</th>
-    <th>Sigma (E)</th>
-    <th>Sigma (N)</th>
-    <th>Correlation (N-E)</th>
-    <th>Velocity (U)</th>
-    <th>Sigma (U)</th>
+    <th class="sort-default freeze">Station</th>
+    <th class="freeze">Longitude</th>
+    <th class="freeze">Latitude</th>
+    <th class="freeze">Elevation</th>
+    <th class="freeze">Velocity (E)</th>
+    <th class="freeze">Velocity (N)</th>
+    <th class="freeze">Sigma (E)</th>
+    <th class="freeze">Sigma (N)</th>
+    <th class="freeze">Correlation (N-E)</th>
+    <th class="freeze">Velocity (U)</th>
+    <th class="freeze">Sigma (U)</th>
   </tr>';
 $tableBody = [];
 $tableFooter = '</table>';
@@ -81,7 +81,7 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
   foreach($datatypes as $datatype=>$name) {
     if ($sigmaValues[$datatype] && $velocityValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td class="%s" title="Last observation: %s">%s</td>
+          <td class="%s freeze" title="Last observation: %s">%s</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -116,9 +116,11 @@ foreach ($datatypes as $datatype => $name) {
         <header>
           <h3>%s</h3>
         </header>
+        <div class="scroll-wrapper">
         %s
         %s
         %s
+        </div>
       </section>',
       $name,
       $name,

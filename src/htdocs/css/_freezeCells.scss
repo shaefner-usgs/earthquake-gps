@@ -1,0 +1,24 @@
+/* CSS for freezing header cells on network-level velocities, offsets, and noise tables */
+
+td.freeze {
+  border-width: 1px 1px 1px 0;
+  left: 0;
+}
+
+th.freeze {
+  border-width: 0 1px 1px 1px;
+  top: 0;
+
+  &:first-child {
+    border-left: 0;
+  }
+}
+
+.freeze {
+  position: sticky;
+}
+
+.scroll-wrapper {
+  overflow: auto;
+  max-height: 65vh;
+}
