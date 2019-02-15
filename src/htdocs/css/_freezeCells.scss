@@ -1,16 +1,30 @@
 /* CSS for freezing header cells on network-level velocities, offsets, and noise tables */
 
+table.sortable {
+  border-collapse: separate; /* prevent borders from scrolling */
+  border-spacing: 0;
+  margin: 0;
+  position: relative;
+}
+
+td, th {
+  border: solid #e8e8e8;
+  border-width: 0 1px 1px 0;
+}
+
 td.freeze {
-  border-width: 1px 1px 1px 0;
+  background-color: #fff;
   left: 0;
 }
 
 th.freeze {
-  border-width: 0 1px 1px 1px;
+  background-color: #f8f8f8;
   top: 0;
 
   &:first-child {
-    border-left: 0;
+    left: 0;
+    top: 0;
+    z-index: 10;
   }
 }
 
@@ -20,5 +34,6 @@ th.freeze {
 
 .scroll-wrapper {
   overflow: auto;
-  max-height: 65vh;
+  margin-top: 1.25em;
+  max-height: 80vh;
 }
