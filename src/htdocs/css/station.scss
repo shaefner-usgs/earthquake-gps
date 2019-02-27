@@ -26,12 +26,8 @@ mark {
 }
 
 .one-of-three {
-  h2 {
-    font-size: 1em;
-
-    &:first-child {
-      margin-top: 0;
-    }
+  h2:first-child {
+    margin-top: 0;
   }
 }
 
