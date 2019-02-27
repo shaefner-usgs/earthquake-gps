@@ -23,12 +23,16 @@ nav button {
   }
 }
 
+.downloads {
+  margin-bottom: 1.5em;
+}
+
 .dygraph-title {
   font-family: Merriweather,Times,serif;
   margin: 0;
 }
 
-.plot, .loading {
+.loading, .plot {
   height: $height;
 }
 .loading {

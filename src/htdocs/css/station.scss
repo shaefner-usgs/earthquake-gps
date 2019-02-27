@@ -25,9 +25,16 @@ mark {
   }
 }
 
-.one-of-three {
-  h2:first-child {
-    margin-top: 0;
+.downloads {
+  display: flex;
+  flex-wrap: wrap;
+
+  li {
+    margin-right: 1em;
+
+    &:last-child {
+      margin-right: 0;
+    };
   }
 }
 
@@ -42,16 +49,25 @@ mark {
   margin-bottom: 1em;
 }
 
+.one-of-three {
+  h2:first-child {
+    margin-top: 0;
+  }
+}
+
 .panel {
   margin-top: 1em;
 
   nav {
     overflow: hidden;
 
-    span {
-      display: inline-block;
-      float: left;
-      margin: 0 5px 0 0;
+    h4 {
+      font: normal 1em "Source Sans Pro", Helvetica, Arial, sans-serif;
+      margin: .75em 0 .25em;
+
+      &:first-child {
+        margin-top: .5em;
+      }
     }
 
     ul {

@@ -47,9 +47,10 @@ $backLink = sprintf('%s/%s/%s',
   <div class="north plot"><p class="loading">Loading&hellip;</p></div>
   <div class="east plot"><p class="loading">Loading&hellip;</p></div>
   <div class="up plot"><p class="loading">Loading&hellip;</p></div>
-  <p>
-    <a href="kinematic/data">Download data</a>
-  </p>
+  <h2>Downloads</h2>
+  <ul class="downloads no-style">
+    <li><a href="kinematic/data" class="text">Plot data</a></li>
+  </ul>
 </section>
 
 <p class="back">&laquo;

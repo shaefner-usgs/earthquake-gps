@@ -114,7 +114,7 @@ class StationView {
             <h2>%s</h2>
           </header>
           %s
-          <h3 class="downloads">Downloads</h3>
+          <h3>Downloads</h3>
           %s
           %s
         </section>',
@@ -144,25 +144,25 @@ class StationView {
 
     $html = '
       <nav>
-        <span>Raw Data:</span>
-        <ul class="no-style">
-          <li><a href="' . $this->_getHref($datatype, '.rneu') .'">All</a></li>
+        <h4>Raw Data</h4>
+        <ul class="no-style downloads">
+          <li><a href="' . $this->_getHref($datatype, '.rneu') .'" class="text">All</a></li>
         </ul>
-        <span>Detrended Data:</span>
-        <ul class="no-style pipelist">
-          <li><a href="' . $this->_getHref($datatype, '_N.data.gz') .'">North</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_E.data.gz') .'">East</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_U.data.gz') .'">Up</a></li>
+        <h4>Detrended Data</h4>
+        <ul class="no-style downloads">
+          <li><a href="' . $this->_getHref($datatype, '_N.data.gz') .'" class="zip">North</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_E.data.gz') .'" class="zip">East</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_U.data.gz') .'" class="zip">Up</a></li>
         </ul>
-        <span>Trended Data:</span>
-        <ul class="no-style pipelist">
-          <li><a href="' . $this->_getHref($datatype, '_N_wtrend.data.gz') .'">North</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_E_wtrend.data.gz') .'">East</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_U_wtrend.data.gz') .'">Up</a></li>
+        <h4>Trended Data</h4>
+        <ul class="no-style downloads">
+          <li><a href="' . $this->_getHref($datatype, '_N_wtrend.data.gz') .'" class="zip">North</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_E_wtrend.data.gz') .'" class="zip">East</a></li>
+          <li><a href="' . $this->_getHref($datatype, '_U_wtrend.data.gz') .'" class="zip">Up</a></li>
         </ul>
-        <span>Deleted points:</span>
-        <ul class="no-style">
-          <li><a href="' . $deletedHref .'">All</a></li>
+        <h4>Deleted points</h4>
+        <ul class="no-style downloads">
+          <li><a href="' . $deletedHref .'" class="text">All</a></li>
         </ul>
       </nav>';
 

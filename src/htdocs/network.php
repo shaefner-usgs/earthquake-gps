@@ -52,9 +52,6 @@ $links = [
   'Velocities and Uncertainties' => "$network/velocities",
   'Offsets' => "$network/offsets",
   'Stations Not Updated in the Past 7 Days' => "$network/notupdated",
-  'Most Recent XYZ Positions' => "data/networks/$network/${network}_xyz_file",
-  'GPS Waypoints' => "$network/waypoints",
-  'ITRF2008 XYZ Time Series' => "data/networks/$network/${network}_ITRF2008_xyz_files.tar.gz"
 ];
 
 $links_html = '<ul class="pipelist no-style">';
@@ -115,27 +112,39 @@ foreach ($stations['features'] as $feature) {
 }
 $stations_html .= '</ul>';
 
-// Create HTML for Google Earth links
-$geFileBaseUri = $network . '/kml';
+// Create HTML for Download links
+$downloads = [
+  'GPS Waypoints' => ['gpx', "$network/waypoints"],
+  'Most Recent XYZ Positions' => ['text', "data/networks/$network/${network}_xyz_file"],
+  'ITRF2008 XYZ Time Series' => ['zip', "data/networks/$network/${network}_ITRF2008_xyz_files.tar.gz"]
+];
+$kmlFileBaseUri = $network . '/kml';
 
+$downloads_html = '<ul class="downloads no-style">';
 if ($row->type === 'campaign') {
-  $geFilesHeader = '<h2>Google Earth Files</h2>';
-  $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '/years">Campaign stations sorted by year(s) surveyed</a>
+  $kmlFiles = '<li>
+      <a href="' . $kmlFileBaseUri . '/years" class="kml">Campaign stations sorted by year(s) surveyed</a>
     </li>';
-  $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '/last">Campaign stations sorted by last year surveyed</a>
+  $kmlFiles .= '<li>
+      <a href="' . $kmlFileBaseUri . '/last" class="kml">Campaign stations sorted by last year surveyed</a>
     </li>';
-  $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '/timespan">Campaign stations sorted by timespan between surveys</a>
+  $kmlFiles .= '<li>
+      <a href="' . $kmlFileBaseUri . '/timespan" class="kml">Campaign stations sorted by timespan between surveys</a>
     </li>';
 } else { // continuous network
-  $geFilesHeader = '<h2>Google Earth File</h2>';
-  $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '">All stations sorted by station name</a>
+  $kmlFiles = '<li>
+      <a href="' . $kmlFileBaseUri . '" class="kml">Stations sorted by station name</a>
     </li>';
 }
-$geFiles_html = "$geFilesHeader<ul>$geFiles_lis</ul>";
+$downloads_html .= $kmlFiles;
+foreach ($downloads as $name=>$file) {
+  $downloads_html .= sprintf('<li><a href="%s" class="%s">%s</a></li>',
+    $file[1],
+    $file[0],
+    $name
+  );
+}
+$downloads_html .= '</ul>';
 
 ?>
 
@@ -157,7 +166,8 @@ $geFiles_html = "$geFilesHeader<ul>$geFiles_lis</ul>";
 </section>
 
 <section>
-  <?php print $geFiles_html; ?>
+  <h2>Downloads</h2>
+  <?php print $downloads_html; ?>
 </section>
 
 <?php } // End: valid network block ?>

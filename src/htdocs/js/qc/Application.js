@@ -74,8 +74,9 @@ var Application = function (options) {
     });
 
     // add download link
-    download = document.createElement('p');
-    download.innerHTML = '<a href="qc/data">Download data</a>';
+    download = document.createElement('div');
+    download.innerHTML = '<h2>Downloads</h2><ul class="downloads no-style">' +
+      '<li><a href="qc/data" class="text">Plot data</a></li></ul>';
     plots.appendChild(download);
 
     _this.model.set({

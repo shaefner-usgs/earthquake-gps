@@ -6,6 +6,29 @@ th {
   margin-top: 2em;
 }
 
+.downloads {
+  a {
+    background: no-repeat 0/22px;
+    display: inline-block;
+    height: 22px;
+    margin: 2px 0;
+    padding-left: 26px;
+  }
+
+  .gpx {
+    background-image: url('../img/gpx-icon.png');
+  }
+  .kml {
+    background-image: url('../img/kml-icon.png');
+  }
+  .text {
+    background-image: url('../img/text-icon.png');
+  }
+  .zip {
+    background-image: url('../img/zip-icon.png');
+  }
+}
+
 .legend {
   display: flex;
   flex-flow: row wrap;

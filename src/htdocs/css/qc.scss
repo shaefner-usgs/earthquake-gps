@@ -4,17 +4,21 @@
 
 $height: 320px;
 
-h2 {
-  text-align: center;
-}
-
 .c3-grid line {
   stroke: #DADADA;
 }
 
-.plot, .loading {
+.downloads {
+  margin-bottom: 1.5em;
+}
+
+.loading, .plot {
   height: $height;
 }
 .loading {
   padding-top: calc($height/2 - 30px);
+}
+
+.title h2 {
+  text-align: center;
 }

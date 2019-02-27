@@ -85,11 +85,11 @@ $networks_html .= '</ul>';
 </section>
 
 <section>
-  <h2>Google Earth Files</h2>
-  <ul>
-    <li><a href="gps/kml/years">Campaign stations sorted by year(s) surveyed</a></li>
-    <li><a href="gps/kml/last">Campaign stations sorted by last year surveyed</a></li>
-    <li><a href="gps/kml/timespan">Campaign stations sorted by timespan between surveys</a></li>
+  <h2>Downloads</h2>
+  <ul class="downloads no-style">
+    <li><a href="gps/kml/years" class="kml">Campaign stations sorted by year(s) surveyed</a></li>
+    <li><a href="gps/kml/last" class="kml">Campaign stations sorted by last year surveyed</a></li>
+    <li><a href="gps/kml/timespan" class="kml">Campaign stations sorted by timespan between surveys</a></li>
   </ul>
 </section>
 
