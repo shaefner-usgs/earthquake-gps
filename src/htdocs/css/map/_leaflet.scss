@@ -2,9 +2,9 @@
 @import 'leaflet.groupedlayercontrol.css';
 @import 'leaflet.label.css';
 @import '_MousePosition.scss';
-@import '_variables.scss';
+@import '_vars.scss';
 
-/* template's css is getting the way */
+/* Template's css is getting the way */
 input[type=checkbox], input[type=radio] {
   display: inline;
   height: auto;
@@ -21,7 +21,7 @@ input[type=checkbox], input[type=radio] {
   white-space: nowrap;
 }
 
-/* leaflet fullscreen plugin icons - override image paths */
+/* Leaflet fullscreen plugin icons - override image paths */
 .leaflet-control-fullscreen a {
   background-image: url(/img/fullscreen.png);
 }
@@ -71,12 +71,19 @@ input[type=checkbox], input[type=radio] {
   white-space: nowrap;
 }
 
-/* ensure popups are on top of labels */
+/* Ensure popups are on top of labels */
 .leaflet-popup {
   z-index: 1000;
 }
 
-/* use template's color for links in popups */
-.leaflet-popup-content a {
-  color: $link-color;
+/* Bump up font sizes & use template's color for links in popups */
+.leaflet-popup-content {
+  font-size: 14px;
+
+  a {
+    color: $link-color;
+  }
+  h2 {
+    font-size: 1.25em;
+  }
 }

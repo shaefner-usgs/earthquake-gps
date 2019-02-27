@@ -1,3 +1,22 @@
+table {
+  td.blue {
+    border-bottom-color: $blue;
+    background-color: $lightBlue;
+  }
+  td.orange {
+    border-bottom-color: $orange;
+    background-color: $lightOrange;
+  }
+  td.red {
+    border-bottom-color: $red;
+    background-color: $lightRed;
+  }
+  td.yellow {
+    border-bottom-color: $yellow;
+    background-color: $lightYellow;
+  }
+}
+
 th {
   font-weight: normal;
 }
@@ -63,22 +82,6 @@ th {
     cursor: text;
     font-weight: bold;
     text-decoration: none;
-  }
-}
-
-.popup {
-  font-size: 14px;
-
-  a {
-    color: #306ac2;
-
-    &:visited {
-      color: #306ac2;
-    }
-  }
-
-  h2 {
-    font-size: 1.25em;
   }
 }
 

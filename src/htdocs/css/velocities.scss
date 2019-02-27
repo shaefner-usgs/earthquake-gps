@@ -1,22 +1,5 @@
+@import '_vars.scss';
 @import 'tablist/TabList.scss';
 @import '_common.scss';
 @import '_freezeCells.scss';
 @import '_SortAndTabifyTable.scss';
-@import '_variables.scss';
-
-td.blue {
-  border-bottom-color: $blue;
-  background-color: $lightBlue;
-}
-td.orange {
-  border-bottom-color: $orange;
-  background-color: $lightOrange;
-}
-td.red {
-  border-bottom-color: $red;
-  background-color: $lightRed;
-}
-td.yellow {
-  border-bottom-color: $yellow;
-  background-color: $lightYellow;
-}

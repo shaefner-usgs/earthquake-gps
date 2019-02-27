@@ -62,7 +62,7 @@ mark {
     overflow: hidden;
 
     h4 {
-      font: normal 1em "Source Sans Pro", Helvetica, Arial, sans-serif;
+      font: normal 1em $font-sans;
       margin: .75em 0 .25em;
 
       &:first-child {
