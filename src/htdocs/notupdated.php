@@ -10,7 +10,8 @@ $network = safeParam('network', 'Pacific');
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../css/base.css" />';
+  $HEAD = '<link rel="stylesheet" href="../css/notupdated.css" />';
+  $FOOT = '<script src="../js/table.js"></script>';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
@@ -22,13 +23,15 @@ $db = new Db();
 $rsLastUpdated = $db->queryLastUpdated($network, $days);
 
 // Create html for table
-$table_html = '<table>
-  <tr><th>Station</th><th>Last Observation</th></tr>';
+$table_html = '<table class="sortable">
+  <tr class="no-sort"><th>Station</th><th class="sort-default" data-sort-order="desc">Last Observation</th></tr>';
 
 while($row = $rsLastUpdated->fetch()) {
-  $table_html .= sprintf("<tr><td>%s</td><td>%s</td>\n",
+  $time = strtotime($row['last_observation']);
+  $table_html .= sprintf('<tr><td>%s</td><td data-sort="%s">%s</td>',
     $row['station'],
-    date('M j, Y', strtotime($row['last_observation']))
+    date('Y-m-d', $time),
+    date('M j, Y', $time)
   );
 }
 
