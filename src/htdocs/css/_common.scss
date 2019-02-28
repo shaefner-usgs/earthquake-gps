@@ -17,8 +17,15 @@ table {
   }
 }
 
+td {
+  background-color: #fff;
+}
 th {
+  background-color: #f8f8f8;
   font-weight: normal;
+}
+td, th {
+  border-color: #e8e8e8;
 }
 
 .back {
