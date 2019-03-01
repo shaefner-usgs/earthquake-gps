@@ -16,10 +16,20 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+$now = date(DATE_RFC2822);
+$secs = 86400; // secs in one day
+
 $db = new Db;
 
-// Db query result: offsets for selected network
+// Db query results: offsets, velocities for selected network
 $rsOffsets = $db->queryOffsets($network);
+$rsVelocities = $db->queryVelocities($network);
+
+// Create an array of last update time keyed by station name
+$lastObs = [];
+while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
+  $lastObs[$row->station] = $row->last_observation;
+}
 
 $datatypes = [
   'nafixed' => 'NA-fixed',
@@ -82,10 +92,13 @@ while ($row = $rsOffsets->fetch(PDO::FETCH_OBJ)) {
     );
   }
 
+  $days = floor((strtotime($now) - strtotime($lastObs[$row->station])) / $secs);
+  $color = getColor($days);
+
   foreach($datatypes as $datatype=>$name) {
     if ($sizeValues[$datatype] && $uncertaintyValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td class="freeze">%s</td>
+          <td class="%s freeze" title="Last observation: %s">%s</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -99,6 +112,8 @@ while ($row = $rsOffsets->fetch(PDO::FETCH_OBJ)) {
           <td>%s</td>
           <td>%s</td>
         </tr>',
+        $color,
+        $lastObs[$row->station],
         $row->station,
         $row->date,
         $row->decdate,
