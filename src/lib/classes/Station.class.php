@@ -10,6 +10,8 @@ include_once '../conf/config.inc.php'; // app config
  * Station Object (
  *   [links] => Array
  *   [networkList] => Array
+ *   [numLogs] => Int
+ *   [numPhotos] => Int
  *   [noise] => Array
  *   [offsets] => Array
  *   [postSeismic] => Array
@@ -38,6 +40,8 @@ class Station {
 
     $this->_data['links'] = $this->_getLinkList();
     $this->_data['networkList'] = $networkList;
+    $this->_data['numLogs'] = $this->_getNumLogs();
+    $this->_data['numPhotos'] = $this->_getNumPhotos();
     $this->_data['noise'] = $rsNoise->fetchAll(PDO::FETCH_ASSOC);
     $this->_data['offsets'] = $rsOffsets->fetchAll(PDO::FETCH_ASSOC);
     $this->_data['postSeismic'] = $rsPostSeismic->fetchAll(PDO::FETCH_ASSOC);
@@ -96,6 +100,40 @@ class Station {
       $this->lat,
       $this->lon * -1 // ngs server 'balks' at negative values for W longitude
     );
+  }
+
+  private function _getNumLogs () {
+    global $DATA_DIR;
+
+    $dir = sprintf('%s/stations/%s.dir/%s/logsheets',
+      $DATA_DIR,
+      substr($this->station, 0, 1),
+      $this->station
+    );
+    $files = getDirContents($dir);
+
+    $logSheets = [];
+    foreach ($files as $file) {
+      preg_match('/^\w{4}(\d{8})[^\d]+/', $file, $matches);
+      if (isSet($matches[1])) {
+        $logSheets[] = $matches[1];
+      }
+    }
+
+    return count(array_unique($logSheets));
+  }
+
+  private function _getNumPhotos () {
+    global $DATA_DIR;
+
+    $dir = sprintf('%s/stations/%s.dir/%s/photos/screen',
+      $DATA_DIR,
+      substr($this->station, 0, 1),
+      $this->station
+    );
+    $files = getDirContents($dir);
+
+    return count($files);
   }
 
   private function _getWeatherLink () {

@@ -205,7 +205,14 @@ class StationView {
 
     $html .= '<ul>';
     foreach ($links as $key => $value) {
-      $html .= '<li><a href="' . $value . '">' . $key . '</a></li>';
+      $number = '';
+      if ($key === 'Photos') {
+        $number = ' (' . $this->_model->numPhotos . ')';
+      }
+      if ($key === 'Field Logs') {
+        $number = ' (' . $this->_model->numLogs . ')';
+      }
+      $html .= '<li><a href="' . $value . '">' . $key . '</a>' . $number . '</li>';
     }
     $html .= '</ul>';
 
