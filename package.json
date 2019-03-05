@@ -36,7 +36,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-postcss": "^0.7.1",
     "hazdev-tablist": "^0.1.1",
-    "hazdev-template": "^0.2.1",
+    "hazdev-template": "usgs/hazdev-template",
     "hazdev-webutils": "^0.1.5",
     "http-rewrite-middleware": "^0.1.6",
     "ini": "^1.3.4",
