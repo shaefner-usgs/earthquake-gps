@@ -62,7 +62,7 @@ var Plots = function (options) {
 
     e.preventDefault();
 
-    img = _el.parentNode.querySelector('.toggle');
+    img = document.querySelector('.toggle');
     alt = img.getAttribute('alt').replace(/\(.*\)/, '(' + e.target.textContent + ')');
     img.setAttribute('alt', alt);
     if (e.target.href.indexOf('#no-data') !== -1) {
