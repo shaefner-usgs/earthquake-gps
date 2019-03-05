@@ -13,7 +13,9 @@ $networkParam = safeParam('network', 'WindKetchFlat_SGPS');
 $stationParam = safeParam('station', '7adl');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($stationParam) . ' - Field Logs';
+  $TITLE = "$networkParam Network";
+  $SUBTITLE = 'Station ' . strtoupper($stationParam) . ' Field Logs';
+  $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../css/base.css" />';
   $CONTACT = 'jsvarc';
@@ -26,6 +28,8 @@ $db = new Db();
 // Db query result: station details for selected station
 $rsStation = $db->queryStation($stationParam);
 $station = $rsStation->fetch(PDO::FETCH_ASSOC);
+
+print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 
 if ($station) {
   // Get a list of logsheets for selected station

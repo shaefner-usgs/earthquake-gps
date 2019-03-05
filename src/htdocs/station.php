@@ -12,7 +12,9 @@ $network = safeParam('network', 'Pacific');
 $station = safeParam('station', 'aoa1');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($station) . " <em>($network Network)</em>";
+  $TITLE = "$network Network";
+  $SUBTITLE = 'Station ' . strtoupper($station);
+  $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
@@ -74,6 +76,7 @@ $rsStation->setFetchMode(
 $stationModel = $rsStation->fetch();
 
 // Create the view and render it
+print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 if ($stationModel) {
   $view = new StationView($stationModel);
   $view->render();

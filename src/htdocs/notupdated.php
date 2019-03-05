@@ -8,6 +8,8 @@ $network = safeParam('network', 'Pacific');
 
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
+  $SUBTITLE = 'Stations Not Updated in the Past 7 Days';
+  $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../css/notupdated.css" />';
   $FOOT = '<script src="../js/table.js"></script>';
@@ -53,8 +55,8 @@ $backlink = sprintf('<a href="%s/%s">Back to %s network</a>',
 
 ?>
 
-<h2>
-  Stations Not Updated in the Past 7 Days
+<h2 class="subtitle">
+  <?php print $SUBTITLE; ?>
 </h2>
 
 <section>

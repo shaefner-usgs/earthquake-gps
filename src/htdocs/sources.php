@@ -3,6 +3,7 @@
 if (!isset($TEMPLATE)) {
   $TITLE = 'GNSS Data Sources';
   $NAVIGATION = true;
+  $HEAD = '<link rel="stylesheet" href="css/base.css" />';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
@@ -10,7 +11,7 @@ if (!isset($TEMPLATE)) {
 
 ?>
 
-<h2>Agencies Operating Continuous (Permanent) GNSS Sites</h2>
+<h2 class="subtitle">Agencies Operating Continuous (Permanent) GNSS Sites</h2>
 
 <p>Many agencies operate continuous GNSS sites for which we display the results
   of positioning and time series analysis on our website or that we use for

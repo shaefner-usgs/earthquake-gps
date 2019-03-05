@@ -9,7 +9,9 @@ $station = safeParam('station', 'p271');
 $name = strtoupper($station);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "GPS Station $name - Quality Control Data";
+  $TITLE = "$network Network";
+  $SUBTITLE = "Station $name Quality Control Data";
+  $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="../../lib/c3/c3.css" />
@@ -35,6 +37,8 @@ $backLink = sprintf('%s/%s/%s',
   $network,
   $station
 );
+
+print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 
 ?>
 

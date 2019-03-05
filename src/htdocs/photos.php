@@ -13,7 +13,9 @@ $networkParam = safeParam('network', 'WindKetchFlat_SGPS');
 $stationParam = safeParam('station', '7adl');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($stationParam) . ' - Photos';
+  $TITLE = "$networkParam Network";
+  $SUBTITLE = 'Station ' . strtoupper($stationParam) . ' Photos';
+  $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../css/photos.css" />';
   $FOOT = '
@@ -30,6 +32,8 @@ $db = new Db();
 // Db query result: station details for selected station
 $rsStation = $db->queryStation($stationParam);
 $station = $rsStation->fetch();
+
+print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 
 if ($station) {
   // Get a list of photos for selected station

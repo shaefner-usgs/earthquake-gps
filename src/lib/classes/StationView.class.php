@@ -214,7 +214,7 @@ class StationView {
   }
 
   private function _getLinkList () {
-    $html = '<h2>Station Details</h2>';
+    $html = '<h3>Station Details</h3>';
     $links = $this->_model->links;
 
     $html .= '<ul>';
@@ -258,7 +258,7 @@ class StationView {
   }
 
   private function _getNetworks () {
-    $networkListHtml = '<h2>Networks</h2>';
+    $networkListHtml = '<h3>Networks</h3>';
     $networks = $this->_model->networkList;
 
     $networkListHtml .= '<p>This station belongs to the following network(s):</p>';

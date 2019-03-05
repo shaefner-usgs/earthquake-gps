@@ -8,7 +8,9 @@ $network = safeParam('network', 'SFBayArea');
 $station = safeParam('station', 'p271');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($station) . ' Quality Control Data';
+  $TITLE = "$network Network";
+  $SUBTITLE = 'Station ' . strtoupper($station) . ' Quality Control Data';
+  $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../../css/base.css" />';
   $CONTACT = 'jsvarc';
@@ -56,9 +58,11 @@ $backLink = sprintf('%s/%s/%s',
 );
 $name = strtoupper($station);
 
+print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
+
 ?>
 
-<h2>Past 14 observations</h2>
+<h3>Past 14 Observations</h3>
 
 <table>
   <tr>

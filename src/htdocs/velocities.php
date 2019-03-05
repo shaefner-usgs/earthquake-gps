@@ -8,6 +8,8 @@ $network = safeParam('network', 'SFBayArea');
 
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
+  $SUBTITLE = 'Velocities and Uncertainties';
+  $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../css/velocities.css" />';
   $FOOT = '<script src="../js/table.js"></script>';
@@ -138,7 +140,9 @@ $backLink = sprintf('%s/%s',
 
 ?>
 
-<h2>Velocities and Uncertainties</h2>
+<h2 class="subtitle">
+  <?php print $SUBTITLE; ?>
+</h2>
 
 <p>The color of the &lsquo;Station&rsquo; field corresponds to the last
   observation date. See the <a href="<?php print $backLink; ?>">legend below

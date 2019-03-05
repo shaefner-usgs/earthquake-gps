@@ -8,6 +8,8 @@ $network = safeParam('network', 'SFBayArea');
 
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
+  $SUBTITLE = 'Offsets';
+  $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../css/offsets.css" />';
   $FOOT = '<script src="../js/table.js"></script>';
@@ -160,7 +162,9 @@ $backLink = sprintf('%s/%s',
 
 ?>
 
-<h2>Offsets</h2>
+<h2 class="subtitle">
+  <?php print $SUBTITLE; ?>
+</h2>
 
 <div class="tablist">
   <?php print $html; ?>

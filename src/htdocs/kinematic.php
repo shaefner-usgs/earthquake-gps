@@ -9,7 +9,9 @@ $station = safeParam('station', 'p271');
 $name = strtoupper($station);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "GPS Station $name - Kinematic Data";
+  $TITLE = "$network Network";
+  $SUBTITLE = "GPS Station $name Kinematic Data";
+  $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="../../css/kinematic.css" />
@@ -32,6 +34,8 @@ $backLink = sprintf('%s/%s/%s',
   $network,
   $station
 );
+
+print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 
 ?>
 
