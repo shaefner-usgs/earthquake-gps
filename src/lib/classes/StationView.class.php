@@ -86,16 +86,22 @@ class StationView {
       $plotsHtml = '';
       if (is_file("$this->_baseDir/$dataPath/$baseImg")) {
         $navPlots = $this->_getNavPlots($datatype);
-        $image = sprintf('<div class="image">
-            <img src="%s/%s/%s" class="toggle" alt="Plot showing %s data (All data)" />
-          </div>',
+        $image = sprintf('<img src="%s/%s/%s" class="toggle" alt="Plot showing %s data (All data)" />',
           $this->_baseUri,
           $dataPath,
           $baseImg,
           $name
         );
 
-        $plotsHtml = '<h3>Plots</h3>' . $navPlots . $image . $explanation;
+        $plotsHtml = sprintf ('<h3>Plots</h3>
+          <div class="plots">
+            <div class="image">%s</div>
+            <div class="meta">%s%s</div>
+          </div>',
+          $image,
+          $navPlots,
+          $explanation
+        );
       }
 
       $tablesHtml = '';
@@ -114,7 +120,7 @@ class StationView {
             <h2>%s</h2>
           </header>
           %s
-          <h3>Downloads</h3>
+          <h3 class="clear">Downloads</h3>
           %s
           %s
         </section>',
@@ -143,27 +149,35 @@ class StationView {
     $deletedHref = $this->_model->station . "/$datatype/deleted";
 
     $html = '
-      <nav>
-        <h4>Raw Data</h4>
-        <ul class="no-style downloads">
-          <li><a href="' . $this->_getHref($datatype, '.rneu') .'" class="text">All</a></li>
-        </ul>
-        <h4>Detrended Data</h4>
-        <ul class="no-style downloads">
-          <li><a href="' . $this->_getHref($datatype, '_N.data.gz') .'" class="zip">North</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_E.data.gz') .'" class="zip">East</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_U.data.gz') .'" class="zip">Up</a></li>
-        </ul>
-        <h4>Trended Data</h4>
-        <ul class="no-style downloads">
-          <li><a href="' . $this->_getHref($datatype, '_N_wtrend.data.gz') .'" class="zip">North</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_E_wtrend.data.gz') .'" class="zip">East</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_U_wtrend.data.gz') .'" class="zip">Up</a></li>
-        </ul>
-        <h4>Deleted points</h4>
-        <ul class="no-style downloads">
-          <li><a href="' . $deletedHref .'" class="text">All</a></li>
-        </ul>
+      <nav class="nav-downloads">
+        <div>
+          <h4>Raw Data</h4>
+          <ul class="no-style downloads">
+            <li><a href="' . $this->_getHref($datatype, '.rneu') .'" class="text">All</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Detrended Data</h4>
+          <ul class="no-style downloads">
+            <li><a href="' . $this->_getHref($datatype, '_N.data.gz') .'" class="zip">North</a></li>
+            <li><a href="' . $this->_getHref($datatype, '_E.data.gz') .'" class="zip">East</a></li>
+            <li><a href="' . $this->_getHref($datatype, '_U.data.gz') .'" class="zip">Up</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Trended Data</h4>
+          <ul class="no-style downloads">
+            <li><a href="' . $this->_getHref($datatype, '_N_wtrend.data.gz') .'" class="zip">North</a></li>
+            <li><a href="' . $this->_getHref($datatype, '_E_wtrend.data.gz') .'" class="zip">East</a></li>
+            <li><a href="' . $this->_getHref($datatype, '_U_wtrend.data.gz') .'" class="zip">Up</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Deleted points</h4>
+          <ul class="no-style downloads">
+            <li><a href="' . $deletedHref .'" class="text">All</a></li>
+          </ul>
+        </div>
       </nav>';
 
     return $html;
@@ -225,8 +239,8 @@ class StationView {
 
   private function _getNavPlots ($datatype) {
     $html = '
-      <nav class="plots ' . $datatype . '">
-        <span>Detrended:</span>
+      <nav class="nav-plots ' . $datatype . '">
+        <h4>Detrended</h4>
         <ul class="no-style pipelist">
           <li><a href="' . $this->_getHref($datatype, '_30.png') . '">Past 30 days</a></li>
           <li><a href="' . $this->_getHref($datatype, '_90.png') . '">Past 90 days</a></li>
@@ -234,7 +248,7 @@ class StationView {
           <li><a href="' . $this->_getHref($datatype, '_730.png') . '">Past 2 years</a></li>
           <li><a href="' . $this->_getHref($datatype, '.png') . '" class="selected">All data</a></li>
         </ul>
-        <span>Trended:</span>
+        <h4>Trended</h4>
         <ul class="no-style pipelist">
           <li><a href="' . $this->_getHref($datatype, '_wtrend.png') . '">All data</a></li>
         </ul>
