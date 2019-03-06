@@ -173,7 +173,7 @@ class StationView {
           </ul>
         </div>
         <div>
-          <h4>Deleted points</h4>
+          <h4>Deleted Points</h4>
           <ul class="no-style downloads">
             <li><a href="' . $deletedHref .'" class="text">All</a></li>
           </ul>
