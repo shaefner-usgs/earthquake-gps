@@ -48,12 +48,12 @@ class PhotoView {
       // loop thru each photo (grouped by date taken)
       foreach ($this->_collection->photos as $date => $photos) {
         $dateString = date('F j, Y', strtotime($date));
-        $photosHtml .= '<h2>' . $dateString . '</h2>';
+        $photosHtml .= '<h3>' . $dateString . '</h3>';
         $photosHtml .= '<ul class="no-style photos">';
         foreach ($photos as $photo) {
           $count ++;
           $photosHtml .= sprintf('<li class="%s">
-              <h3>%s</h3>
+              <h4>%s</h4>
               <a href="%s/screen/%s" data-simplbox><img width="144" height="144" src="%s/thumb/%s" alt="%s: %s (%d of %d)"/></a>
               <a class="fullsize" href="%s/full/%s"><i class="material-icons" title="Full resolution photo">&#xE2C4;</i></a>
             </li>',

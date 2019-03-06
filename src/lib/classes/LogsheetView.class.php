@@ -31,7 +31,7 @@ class LogsheetView {
       $logSheetsHtml = '';
       // loop thru each logsheet (grouped by date)
       foreach ($this->_collection->logsheets as $date => $logsheets) {
-        $logSheetsHtml .= '<h2>' . date('F j, Y', strtotime($date)) . '</h2>';
+        $logSheetsHtml .= '<h3>' . date('F j, Y', strtotime($date)) . '</h3>';
         $logSheetsHtml .= '<ul class="no-style pipelist">';
         foreach ($logsheets as $logsheet) {
           $logSheetsHtml .= sprintf ('<li><a href="%s/%s">%s</a></li>',
