@@ -1,3 +1,4 @@
+@import '_vars.scss';
 @import '_common.scss';
 
 $height: 200px;
@@ -28,7 +29,7 @@ nav button {
 }
 
 .dygraph-title {
-  font-family: Merriweather,Times,serif;
+  font-family: $font-serif;
   margin: 0;
 }
 
