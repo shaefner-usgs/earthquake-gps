@@ -79,14 +79,14 @@ class Station {
       'Photos' => $photos,
       'Field Logs' => $logs,
       'Quality Control Data' => $qc,
-      '5-minute Kinematic Results' => $kinematic,
+      'Kinematic Data' => $kinematic,
       'Weather' => $weather,
       '<abbr title="National Geodetic Survey">NGS</abbr> Datasheets' => $ngs
     );
 
     // campaign stations don't have kinematic data; continous don't have photos
     if ($this->stationtype === 'campaign') {
-      unset($links['5-minute Kinematic Results']);
+      unset($links['Kinematic Data']);
     } else if ($this->stationtype === 'continuous') {
       unset($links['Photos']);
     }
