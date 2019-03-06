@@ -101,7 +101,7 @@ while ($row = $rsOffsets->fetch(PDO::FETCH_OBJ)) {
     if ($sizeValues[$datatype] && $uncertaintyValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
           <td class="%s freeze" title="Last observation: %s">%s</td>
-          <td>%s</td>
+          <td class="nowrap">%s</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>

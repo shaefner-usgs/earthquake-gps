@@ -79,6 +79,10 @@ td, th {
   }
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .pipelist {
   display: flex;
   flex-wrap: wrap;
