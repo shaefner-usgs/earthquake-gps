@@ -17,7 +17,7 @@ class StationView {
   }
 
   private function _getBackLink () {
-    return sprintf('<p class="back">&laquo; <a href="%s/%s">Back to %s network</a></p>',
+    return sprintf('<p class="back">&laquo; <a href="%s/%s">Back to %s Network</a></p>',
       $GLOBALS['MOUNT_PATH'],
       $this->_model->network,
       $this->_model->network

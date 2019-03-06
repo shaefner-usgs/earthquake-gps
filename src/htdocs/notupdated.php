@@ -27,7 +27,7 @@ $db = new Db();
 $rsLastUpdated = $db->queryLastUpdated($network, 7);
 
 // Create html for table
-$table_html = '<table class="sortable">
+$html = '<table class="sortable">
   <tr class="no-sort"><th>Station</th><th class="sort-default" data-sort-order="desc">Last Observation</th></tr>';
 
 while($row = $rsLastUpdated->fetch(PDO::FETCH_OBJ)) {
@@ -35,7 +35,7 @@ while($row = $rsLastUpdated->fetch(PDO::FETCH_OBJ)) {
   $days = floor((strtotime($now) - $time) / $secs);
   $color = getColor($days);
 
-  $table_html .= sprintf('<tr>
+  $html .= sprintf('<tr>
       <td class="%s">%s</td><td data-sort="%s">%s</td>
     </tr>',
     $color,
@@ -45,11 +45,10 @@ while($row = $rsLastUpdated->fetch(PDO::FETCH_OBJ)) {
   );
 }
 
-$table_html .= '</table>';
+$html .= '</table>';
 
-$backlink = sprintf('<a href="%s/%s">Back to %s network</a>',
+$backLink = sprintf('%s/%s',
   $MOUNT_PATH,
-  $network,
   $network
 );
 
@@ -60,9 +59,9 @@ $backlink = sprintf('<a href="%s/%s">Back to %s network</a>',
 </h2>
 
 <section>
-  <?php print $table_html; ?>
+  <?php print $html; ?>
 </section>
 
 <p class="back">&laquo;
-  <?php print $backlink; ?>
+  <a href="<?php print $backLink; ?>">Back to <?php print $network; ?> Network</a>
 </p>

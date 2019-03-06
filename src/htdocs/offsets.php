@@ -171,5 +171,5 @@ $backLink = sprintf('%s/%s',
 </div>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to <?php print $network; ?> network</a>
+  <a href="<?php print $backLink; ?>">Back to <?php print $network; ?> Network</a>
 </p>

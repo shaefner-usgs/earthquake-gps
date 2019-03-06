@@ -15,7 +15,7 @@ class LogsheetView {
 
   private function _getBackLink () {
     return sprintf('<p class="back">&laquo;
-        <a href="%s/%s/%s">Back to station %s</a>
+        <a href="%s/%s/%s">Back to Station %s</a>
       </p>',
       $GLOBALS['MOUNT_PATH'],
       $this->_collection->network,

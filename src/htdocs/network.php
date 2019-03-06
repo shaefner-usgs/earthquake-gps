@@ -123,17 +123,17 @@ $kmlFileBaseUri = $network . '/kml';
 $downloads_html = '<ul class="downloads no-style">';
 if ($row->type === 'campaign') {
   $kmlFiles = '<li>
-      <a href="' . $kmlFileBaseUri . '/years" class="kml">Campaign stations sorted by year(s) surveyed</a>
+      <a href="' . $kmlFileBaseUri . '/years" class="kml">Campaign Stations Sorted by Year(s) Surveyed</a>
     </li>';
   $kmlFiles .= '<li>
-      <a href="' . $kmlFileBaseUri . '/last" class="kml">Campaign stations sorted by last year surveyed</a>
+      <a href="' . $kmlFileBaseUri . '/last" class="kml">Campaign Stations Sorted by Last Year Surveyed</a>
     </li>';
   $kmlFiles .= '<li>
-      <a href="' . $kmlFileBaseUri . '/timespan" class="kml">Campaign stations sorted by timespan between surveys</a>
+      <a href="' . $kmlFileBaseUri . '/timespan" class="kml">Campaign Stations Sorted by Timespan Between Surveys</a>
     </li>';
 } else { // continuous network
   $kmlFiles = '<li>
-      <a href="' . $kmlFileBaseUri . '" class="kml">Stations sorted by station name</a>
+      <a href="' . $kmlFileBaseUri . '" class="kml">Stations Sorted by Station Name</a>
     </li>';
 }
 $downloads_html .= $kmlFiles;
@@ -173,5 +173,5 @@ $downloads_html .= '</ul>';
 <?php } // End: valid network block ?>
 
 <p class="back">&laquo;
-  <a href="<?php print $MOUNT_PATH; ?>">Back to all networks</a>
+  <a href="<?php print $MOUNT_PATH; ?>">Back to All Networks</a>
 </p>

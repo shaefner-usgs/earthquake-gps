@@ -69,7 +69,7 @@ $networks_html .= '</ul>';
   stations have moved we calculate ground deformation.
   <a href="gps/about.php">Read more</a> &raquo;</p>
 
-<p class="alert info"><a href="gps/citation.php">How to cite GPS Data</a></p>
+<p class="alert info"><a href="gps/citation.php">How to Cite GPS Data</a></p>
 
 <section>
   <h2>View Stations by Network</h2>
@@ -87,9 +87,9 @@ $networks_html .= '</ul>';
 <section>
   <h2>Downloads</h2>
   <ul class="downloads no-style">
-    <li><a href="gps/kml/years" class="kml">Campaign stations sorted by year(s) surveyed</a></li>
-    <li><a href="gps/kml/last" class="kml">Campaign stations sorted by last year surveyed</a></li>
-    <li><a href="gps/kml/timespan" class="kml">Campaign stations sorted by timespan between surveys</a></li>
+    <li><a href="gps/kml/years" class="kml">Campaign Stations Sorted by Year(s) Surveyed</a></li>
+    <li><a href="gps/kml/last" class="kml">Campaign Stations Sorted by Last Year Surveyed</a></li>
+    <li><a href="gps/kml/timespan" class="kml">Campaign Stations Sorted by Timespan Between Surveys</a></li>
   </ul>
 </section>
 
