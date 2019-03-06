@@ -76,7 +76,7 @@ var Application = function (options) {
     // add download link
     download = document.createElement('div');
     download.innerHTML = '<h2>Downloads</h2><ul class="downloads no-style">' +
-      '<li><a href="qc/data" class="text">Plot data</a></li></ul>';
+      '<li><a href="qc/data" class="text">Plot Data</a></li></ul>';
     plots.appendChild(download);
 
     _this.model.set({

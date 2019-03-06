@@ -42,17 +42,19 @@ print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 
 ?>
 
+<ul class="pipelist no-style">
+  <li><strong>Plots</strong></li>
+  <li><a href="./qc/table">Table</a></li>
+</ul>
+
 <div class="qcdata">
   <div id="application">
     <noscript>
       <p class="alert info">Javascript must be enabled to view these plots.</p>
     </noscript>
   </div>
-  <p>
-    <a href="qc/table">Table of past 14 observations</a>
-  </p>
 </div>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to station <?php print $name; ?></a>
+  <a href="<?php print $backLink; ?>">Back to Station <?php print $name; ?></a>
 </p>

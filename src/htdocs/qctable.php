@@ -62,7 +62,12 @@ print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 
 ?>
 
-<h3>Past 14 Observations</h3>
+<ul class="pipelist no-style">
+  <li><a href="../qc">Plots</a></li>
+  <li><strong>Table</strong></li>
+</ul>
+
+<p>Past 14 observations.</p>
 
 <table>
   <tr>
@@ -83,5 +88,5 @@ print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 </table>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to station <?php print $name; ?></a>
+  <a href="<?php print $backLink; ?>">Back to Station <?php print $name; ?></a>
 </p>
