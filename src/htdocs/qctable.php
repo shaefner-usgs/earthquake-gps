@@ -12,7 +12,8 @@ if (!isset($TEMPLATE)) {
   $SUBTITLE = 'Station ' . strtoupper($station) . ' Quality Control Data';
   $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../../../css/base.css" />';
+  $HEAD = '<link rel="stylesheet" href="../../../css/qctable.css" />';
+  $FOOT = '<script src="../../../js/table.js"></script>';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
@@ -69,11 +70,11 @@ print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 
 <p>Past 14 observations.</p>
 
-<table>
-  <tr>
+<table class="sortable">
+  <tr class="no-sort">
     <th>Year</th>
     <th><abbr title="Day of the year">DoY</abbr></th>
-    <th>Date</th>
+    <th class="sort-default" data-sort-order="desc">Date</th>
     <th>Filename</th>
     <th>Completeness</th>
     <th>Slips</th>
