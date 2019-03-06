@@ -18,10 +18,20 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+$now = date(DATE_RFC2822);
+$secs = 86400; // secs in one day
+
 $db = new Db;
 
-// Db query result: noise for selected network
+// Db query results: noise, velocities for selected network
 $rsNoise = $db->queryNoise($network);
+$rsVelocities = $db->queryVelocities($network);
+
+// Create an array of last update time keyed by station name
+$lastObs = [];
+while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
+  $lastObs[$row->station] = $row->last_observation;
+}
 
 $datatypes = [
   'nafixed' => 'NA-fixed',
@@ -88,10 +98,13 @@ while ($row = $rsNoise->fetch(PDO::FETCH_OBJ)) {
     }
   }
 
+  $days = floor((strtotime($now) - strtotime($lastObs[$row->station])) / $secs);
+  $color = getColor($days);
+
   foreach($datatypes as $datatype=>$name) {
     if ($values['whitenoise'][$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td class="freeze">%s</td>
+          <td class="%s freeze" title="Last observation: %s">%s</td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -123,6 +136,8 @@ while ($row = $rsNoise->fetch(PDO::FETCH_OBJ)) {
           <td>%s</td>
           <td>%s</td>
         </tr>',
+        $color,
+        $lastObs[$row->station],
         $row->station,
         $values['whitenoise'][$datatype]['N'],
         $values['whitenoise'][$datatype]['E'],
