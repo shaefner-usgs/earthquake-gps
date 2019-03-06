@@ -42,9 +42,7 @@ h3 {
   flex-flow: row wrap;
 
   h4 {
-    font-family: $font-sans;
-    font-weight: normal;
-    font-size: 1em;
+    font: normal 1em $font-sans;
     margin: 8px 0;
     overflow: hidden;
     text-overflow: ellipsis;
