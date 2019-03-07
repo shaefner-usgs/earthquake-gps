@@ -27,7 +27,7 @@ html {
     left: 0;
   }
 
-  &:hover:after, &:hover:before {
+  &.right:after, &.left:before {
     opacity: 1;
   }
 }

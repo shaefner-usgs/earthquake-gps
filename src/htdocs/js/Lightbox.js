@@ -26,11 +26,12 @@ var Lightbox = function (options) {
       _initialize,
 
       _addCaption,
-      _addClickHandler,
       _addCloseButton,
       _addCssClass,
+      _addHandlers,
       _addOverlay,
       _addSpinner,
+      _getPosition,
       _removeComponent;
 
 
@@ -44,7 +45,7 @@ var Lightbox = function (options) {
     callbacks = {
       onImageLoadEnd: function () {
         _removeComponent('simplbox-loading');
-        _addClickHandler(simplbox);
+        _addHandlers(simplbox);
         _addCssClass();
       },
       onImageLoadStart: function () {
@@ -74,7 +75,9 @@ var Lightbox = function (options) {
 
 
   /**
-   * Add caption
+   * Add caption bar above photo
+   *
+   * @param base {Object}
    */
   _addCaption = function (base) {
     var div,
@@ -94,31 +97,9 @@ var Lightbox = function (options) {
   };
 
   /**
-   * Add option for clicking on photos to navigate
-   */
-  _addClickHandler = function (base) {
-    var div,
-        id;
-
-    id = SimplBox.options.imageElementId;
-    div = document.getElementById(id);
-
-    base.API_AddEvent(div, 'click touchend', function (e) {
-      var divPos = div.getBoundingClientRect(),
-          divX = e.clientX - divPos.left;
-
-      // navigate left or right depending on where user clicked
-      if ((div.clientWidth / divX) > 2) {
-        base.leftAnimationFunction();
-      } else {
-        base.rightAnimationFunction();
-      }
-      return false;
-    });
-  };
-
-  /**
-   * Add close button
+   * Add close button to caption bar
+   *
+   * @param base {Object}
    */
   _addCloseButton = function (base) {
     var div;
@@ -144,7 +125,48 @@ var Lightbox = function (options) {
   };
 
   /**
-   * Add screen overlay
+   * Add handlers for prev / next photo navigation
+   *
+   * @param base {Object}
+   */
+  _addHandlers = function (base) {
+    var div,
+        id,
+        position;
+
+    id = SimplBox.options.imageElementId;
+    div = document.getElementById(id);
+
+    // Navigate to prev / next photo, depending on where user clicked
+    base.API_AddEvent(div, 'click touchend', function (e) {
+      position = _getPosition(div, e);
+      if (position === 'left') {
+        base.leftAnimationFunction();
+      } else {
+        base.rightAnimationFunction();
+      }
+
+      return false;
+    });
+
+    // Show navigation buttons on photo when user hovers
+    div.addEventListener('mousemove', function (e) {
+      position = _getPosition(div, e);
+      if (position === 'left') {
+        div.classList.add('left');
+        div.classList.remove('right');
+      } else {
+        div.classList.add('right');
+        div.classList.remove('left');
+      }
+    });
+    div.addEventListener('mouseout', function () {
+      div.classList.remove('left', 'right');
+    });
+  };
+
+  /**
+   * Add dark screen overlay
    */
   _addOverlay = function () {
     var div;
@@ -169,10 +191,30 @@ var Lightbox = function (options) {
   };
 
   /**
+   * Get relative mouse position (right or left) over an element
+   *
+   * @param el {Element}
+   * @param evt {Event}
+   */
+  _getPosition = function (el, evt) {
+    var divPos = el.getBoundingClientRect(),
+        divX = evt.clientX - divPos.left,
+        position;
+
+    if ((el.clientWidth / divX) > 2) {
+      position = 'left';
+    } else {
+      position = 'right';
+    }
+
+    return position;
+  };
+
+  /**
   * Remove lightbox component from DOM
   *
   * @param id {String}
-  *  id of component to remove
+  *   id of component to remove
   */
   _removeComponent = function (id) {
     var el;
