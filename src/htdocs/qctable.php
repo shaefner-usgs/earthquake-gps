@@ -10,7 +10,7 @@ $station = safeParam('station', 'p271');
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $SUBTITLE = 'Station ' . strtoupper($station) . ' Quality Control Data';
-  $TITLETAG = "$TITLE | $SUBTITLE";
+  $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../../css/qctable.css" />';
   $FOOT = '<script src="../../../js/table.js"></script>';

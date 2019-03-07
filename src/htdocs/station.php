@@ -14,7 +14,7 @@ $station = safeParam('station', 'aoa1');
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $SUBTITLE = 'Station ' . strtoupper($station);
-  $TITLETAG = "$TITLE | $SUBTITLE";
+  $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />

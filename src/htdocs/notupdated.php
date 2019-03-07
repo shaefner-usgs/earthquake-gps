@@ -9,7 +9,7 @@ $network = safeParam('network', 'Pacific');
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $SUBTITLE = 'Stations Not Updated in the Past 7 Days';
-  $TITLETAG = "$TITLE | $SUBTITLE";
+  $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../css/notupdated.css" />';
   $FOOT = '<script src="../js/table.js"></script>';

@@ -9,7 +9,7 @@ $network = safeParam('network', 'SFBayArea');
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $SUBTITLE = 'Velocities and Uncertainties';
-  $TITLETAG = "$TITLE | $SUBTITLE";
+  $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../css/velocities.css" />';
   $FOOT = '<script src="../js/table.js"></script>';

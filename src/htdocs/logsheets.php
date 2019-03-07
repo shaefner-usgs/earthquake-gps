@@ -15,7 +15,7 @@ $stationParam = safeParam('station', '7adl');
 if (!isset($TEMPLATE)) {
   $TITLE = "$networkParam Network";
   $SUBTITLE = 'Station ' . strtoupper($stationParam) . ' Field Logs';
-  $TITLETAG = "$TITLE | $SUBTITLE";
+  $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../css/logsheets.css" />';
   $CONTACT = 'jsvarc';

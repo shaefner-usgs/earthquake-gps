@@ -11,7 +11,7 @@ $name = strtoupper($station);
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
   $SUBTITLE = "Station $name Quality Control Data";
-  $TITLETAG = "$TITLE | $SUBTITLE";
+  $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="../../lib/c3/c3.css" />
