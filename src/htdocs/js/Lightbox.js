@@ -25,13 +25,13 @@ var Lightbox = function (options) {
   var _this,
       _initialize,
 
+      _addCaption,
       _addClickHandler,
+      _addCloseButton,
       _addCssClass,
-      _captionOn,
-      _closeButtonOn,
-      _componentOff,
-      _overlayOn,
-      _preLoadIconOn;
+      _addOverlay,
+      _addSpinner,
+      _removeComponent;
 
 
   _this = {};
@@ -43,22 +43,22 @@ var Lightbox = function (options) {
 
     callbacks = {
       onImageLoadEnd: function () {
-        _componentOff('simplbox-loading');
+        _removeComponent('simplbox-loading');
         _addClickHandler(simplbox);
         _addCssClass();
       },
       onImageLoadStart: function () {
-        _preLoadIconOn();
-        _captionOn(simplbox);
+        _addSpinner();
+        _addCaption(simplbox);
       },
       onEnd: function () {
-        _componentOff('simplbox-caption');
-        _componentOff('simplbox-close');
-        _componentOff('simplbox-overlay');
+        _removeComponent('simplbox-caption');
+        _removeComponent('simplbox-close');
+        _removeComponent('simplbox-overlay');
       },
       onStart: function () {
-        _overlayOn();
-        _closeButtonOn(simplbox);
+        _addOverlay();
+        _addCloseButton(simplbox);
       }
     };
     options = Util.extend({}, _DEFAULTS, callbacks, options);
@@ -68,6 +68,26 @@ var Lightbox = function (options) {
     simplbox.init();
   };
 
+
+  /**
+   * Add caption
+   */
+  _addCaption = function (base) {
+    var div,
+        fragment,
+        title;
+
+    fragment = document.createDocumentFragment();
+    div = document.createElement('div');
+    title = base.m_Alt.replace(/\(/, '<small>(').replace(/\)/, ')</small>');
+
+    _removeComponent('simplbox-caption');
+
+    div.setAttribute('id', 'simplbox-caption');
+    div.innerHTML = title;
+    fragment.appendChild(div);
+    document.body.appendChild(fragment);
+  };
 
   /**
    * Add option for clicking on photos to navigate
@@ -94,39 +114,9 @@ var Lightbox = function (options) {
   };
 
   /**
-   * Add material-icons class for navigation arrows on photos
-   */
-  _addCssClass = function () {
-    var id;
-
-    id = SimplBox.options.imageElementId;
-    document.getElementById(id).classList.add('material-icons');
-  };
-
-  /**
-   * Add caption
-   */
-  _captionOn = function (base) {
-    var div,
-        fragment,
-        title;
-
-    fragment = document.createDocumentFragment();
-    div = document.createElement('div');
-    title = base.m_Alt.replace(/\(/, '<small>(').replace(/\)/, ')</small>');
-
-    _componentOff('simplbox-caption');
-
-    div.setAttribute('id', 'simplbox-caption');
-    div.innerHTML = title;
-    fragment.appendChild(div);
-    document.body.appendChild(fragment);
-  };
-
-  /**
    * Add close button
    */
-  _closeButtonOn = function (base) {
+  _addCloseButton = function (base) {
     var div;
 
     div = document.createElement('div');
@@ -140,24 +130,19 @@ var Lightbox = function (options) {
   };
 
   /**
-  * Remove lightbox component from DOM
-  *
-  * @param id {String}
-  *  id of component to remove
-  */
-  _componentOff = function (id) {
-    var el;
+   * Add material-icons class for navigation arrows on photos
+   */
+  _addCssClass = function () {
+    var id;
 
-    el = document.getElementById(id);
-    if (el) {
-      el.parentNode.removeChild(el);
-    }
+    id = SimplBox.options.imageElementId;
+    document.getElementById(id).classList.add('material-icons');
   };
 
   /**
    * Add screen overlay
    */
-  _overlayOn = function () {
+  _addOverlay = function () {
     var div;
 
     div = document.createElement('div');
@@ -168,7 +153,7 @@ var Lightbox = function (options) {
   /**
    * Add loading spinner
    */
-  _preLoadIconOn = function () {
+  _addSpinner = function () {
     var div1,
         div2;
 
@@ -177,6 +162,21 @@ var Lightbox = function (options) {
     div1.setAttribute('id', 'simplbox-loading');
     div1.appendChild(div2);
     document.body.appendChild(div1);
+  };
+
+  /**
+  * Remove lightbox component from DOM
+  *
+  * @param id {String}
+  *  id of component to remove
+  */
+  _removeComponent = function (id) {
+    var el;
+
+    el = document.getElementById(id);
+    if (el) {
+      el.parentNode.removeChild(el);
+    }
   };
 
 
