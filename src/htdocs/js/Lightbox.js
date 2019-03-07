@@ -7,7 +7,7 @@ var Util = require('util/Util');
 
 var _DEFAULTS = {
   animationSpeed: 0,
-  imageSize: 0.8,
+  imageSize: 1,
   quitOnDocumentClick: true,
   quitOnImageClick: false
 };
@@ -55,10 +55,14 @@ var Lightbox = function (options) {
         _removeComponent('simplbox-caption');
         _removeComponent('simplbox-close');
         _removeComponent('simplbox-overlay');
+
+        document.body.classList.remove('simplbox');
       },
       onStart: function () {
         _addOverlay();
         _addCloseButton(simplbox);
+
+        document.body.classList.add('simplbox');
       }
     };
     options = Util.extend({}, _DEFAULTS, callbacks, options);
