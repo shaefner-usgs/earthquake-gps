@@ -17,7 +17,7 @@ if (!isset($TEMPLATE)) {
   $SUBTITLE = 'Station ' . strtoupper($stationParam) . ' Field Logs';
   $TITLETAG = "$TITLE | $SUBTITLE";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../../css/base.css" />';
+  $HEAD = '<link rel="stylesheet" href="../../css/logsheets.css" />';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
