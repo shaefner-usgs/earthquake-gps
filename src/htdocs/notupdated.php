@@ -18,9 +18,6 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
-$now = date(DATE_RFC2822);
-$secs = 86400; // secs in one day
-
 $db = new Db();
 
 // Db query result: all stations that haven't been updated in past 7 days
@@ -32,13 +29,11 @@ $html = '<table class="sortable">
 
 while($row = $rsLastUpdated->fetch(PDO::FETCH_OBJ)) {
   $time = strtotime($row->last_observation);
-  $days = floor((strtotime($now) - $time) / $secs);
-  $color = getColor($days);
 
   $html .= sprintf('<tr>
       <td class="%s">%s</td><td data-sort="%s">%s</td>
     </tr>',
-    $color,
+    getColor($row->last_observation),
     $row->station,
     date('Y-m-d', $time),
     date('M j, Y', $time)

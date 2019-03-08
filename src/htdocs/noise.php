@@ -18,9 +18,6 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
-$now = date(DATE_RFC2822);
-$secs = 86400; // secs in one day
-
 $db = new Db;
 
 // Db query results: noise, velocities for selected network
@@ -98,9 +95,6 @@ while ($row = $rsNoise->fetch(PDO::FETCH_OBJ)) {
     }
   }
 
-  $days = floor((strtotime($now) - strtotime($lastObs[$row->station])) / $secs);
-  $color = getColor($days);
-
   foreach($datatypes as $datatype=>$name) {
     if ($values['whitenoise'][$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
@@ -136,7 +130,7 @@ while ($row = $rsNoise->fetch(PDO::FETCH_OBJ)) {
           <td>%s</td>
           <td>%s</td>
         </tr>',
-        $color,
+        getColor($lastObs[$row->station]),
         $lastObs[$row->station],
         $row->station,
         $values['whitenoise'][$datatype]['N'],
