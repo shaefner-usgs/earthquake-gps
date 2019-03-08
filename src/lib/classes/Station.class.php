@@ -28,25 +28,26 @@ class Station {
 
   public function __construct (
     $networkList=NULL,
-    $rsNoise=NULL,
-    $rsOffsets=NULL,
-    $rsPostSeismic=NULL,
-    $rsSeasonal=NULL,
-    $rsVelocities=NULL
+    $noise=NULL,
+    $offsets=NULL,
+    $postSeismic=NULL,
+    $seasonal=NULL,
+    $velocities=NULL
   ) {
 
     $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
       . '/' . $this->station;
 
+    $this->_data['lastUpdate'] = $this->_getLastUpdate($velocities);
     $this->_data['links'] = $this->_getLinkList();
     $this->_data['networkList'] = $networkList;
     $this->_data['numLogs'] = $this->_getNumLogs();
     $this->_data['numPhotos'] = $this->_getNumPhotos();
-    $this->_data['noise'] = $rsNoise->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['offsets'] = $rsOffsets->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['postSeismic'] = $rsPostSeismic->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['seasonal'] = $rsSeasonal->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['velocities'] = $rsVelocities->fetchAll(PDO::FETCH_ASSOC);
+    $this->_data['noise'] = $noise;
+    $this->_data['offsets'] = $offsets;
+    $this->_data['postSeismic'] = $postSeismic;
+    $this->_data['seasonal'] = $seasonal;
+    $this->_data['velocities'] = $velocities;
   }
 
   public function __get ($name) {
@@ -65,6 +66,12 @@ class Station {
       $value = floatval($value);
     }
     $this->_data[$name] = $value;
+  }
+
+  private function _getLastUpdate ($array) {
+    if (is_array($array)) {
+      return $array[0]['last_observation'];
+    }
   }
 
   private function _getLinkList () {

@@ -66,11 +66,11 @@ $rsStation->setFetchMode(
   'Station',
   [
     $networkList,
-    $rsNoise,
-    $rsOffsets,
-    $rsPostSeismic,
-    $rsSeasonal,
-    $rsVelocities
+    $rsNoise->fetchAll(PDO::FETCH_ASSOC),
+    $rsOffsets->fetchAll(PDO::FETCH_ASSOC),
+    $rsPostSeismic->fetchAll(PDO::FETCH_ASSOC),
+    $rsSeasonal->fetchAll(PDO::FETCH_ASSOC),
+    $rsVelocities->fetchAll(PDO::FETCH_ASSOC)
   ]
 );
 $stationModel = $rsStation->fetch();
