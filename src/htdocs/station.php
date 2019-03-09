@@ -13,7 +13,7 @@ $station = safeParam('station', 'aoa1');
 
 if (!isset($TEMPLATE)) {
   $TITLE = "$network Network";
-  $SUBTITLE = 'Station ' . strtoupper($station);
+  $SUBTITLE = '<a>Station ' . strtoupper($station) . '</a>';
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '
@@ -76,7 +76,10 @@ $rsStation->setFetchMode(
 $stationModel = $rsStation->fetch();
 
 // Create the view and render it
-print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
+printf ('<h2 class="subtitle %s">%s</h2>',
+  getColor($stationModel->lastUpdate),
+  $SUBTITLE
+);
 if ($stationModel) {
   $view = new StationView($stationModel);
   $view->render();

@@ -104,6 +104,36 @@ td, th {
 
 .subtitle {
   margin: -.25em 0 1.5em;
+
+  a {
+    border: 1px solid;
+    color: $text-color;
+    display: inline-block;
+    font: normal 2rem $font-sans;
+    padding: 2px 4px;
+    text-decoration: none;
+  }
+  span {
+    display: block;
+    margin-top: 1.25em;
+  }
+
+  &.blue a {
+    background: $lightBlue;
+    border-color: $blue;
+  }
+  &.orange a {
+    background: $lightOrange;
+    border-color: $orange;
+  }
+  &.red a {
+    background: $lightRed;
+    border-color: $red;
+  }
+  &.yellow a {
+    background: $lightYellow;
+    border-color: $yellow;
+  }
 }
 
 .tablist-panel {

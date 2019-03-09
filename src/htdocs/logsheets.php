@@ -14,7 +14,10 @@ $stationParam = safeParam('station', '7adl');
 
 if (!isset($TEMPLATE)) {
   $TITLE = "$networkParam Network";
-  $SUBTITLE = 'Station ' . strtoupper($stationParam) . ' Field Logs';
+  $SUBTITLE = sprintf ('<a href="../%s">Station %s</a> <span>Field Logs</span>',
+    $stationParam,
+    strtoupper($stationParam)
+  );
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../css/logsheets.css" />';
@@ -29,7 +32,10 @@ $db = new Db();
 $rsStation = $db->queryStation($stationParam);
 $station = $rsStation->fetch(PDO::FETCH_ASSOC);
 
-print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
+printf ('<h2 class="subtitle %s">%s</h2>',
+  getColor($station['last_observation']),
+  $SUBTITLE
+);
 
 if ($station) {
   // Get a list of logsheets for selected station
