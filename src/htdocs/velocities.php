@@ -77,7 +77,9 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
   foreach($datatypes as $datatype=>$name) {
     if ($sigmaValues[$datatype] && $velocityValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td class="%s freeze" title="Last observation: %s">%s</td>
+          <td class="%s freeze link" title="Last observation: %s">
+            <a href="./%s">%s</a>
+          </td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -91,7 +93,8 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
         </tr>',
         getColor($row->last_observation),
         $row->last_observation,
-        $row->station,
+        strtolower($row->station),
+        strtoupper($row->station),
         round($row->lon, 5),
         round($row->lat, 5),
         round($row->elevation, 5),

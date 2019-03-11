@@ -94,7 +94,9 @@ while ($row = $rsOffsets->fetch(PDO::FETCH_OBJ)) {
   foreach($datatypes as $datatype=>$name) {
     if ($sizeValues[$datatype] && $uncertaintyValues[$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td class="%s freeze" title="Last observation: %s">%s</td>
+          <td class="%s freeze link" title="Last observation: %s">
+            <a href="./%s">%s</a>
+          </td>
           <td class="nowrap">%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -110,7 +112,8 @@ while ($row = $rsOffsets->fetch(PDO::FETCH_OBJ)) {
         </tr>',
         getColor($lastObs[$row->station]),
         $lastObs[$row->station],
-        $row->station,
+        strtolower($row->station),
+        strtoupper($row->station),
         $row->date,
         $row->decdate,
         $sizeValues[$datatype]['N'],

@@ -98,7 +98,9 @@ while ($row = $rsNoise->fetch(PDO::FETCH_OBJ)) {
   foreach($datatypes as $datatype=>$name) {
     if ($values['whitenoise'][$datatype]) { // only create table if there's data
       $tableBody[$datatype] .= sprintf('<tr>
-          <td class="%s freeze" title="Last observation: %s">%s</td>
+          <td class="%s freeze link" title="Last observation: %s">
+            <a href="./%s">%s</a>
+          </td>
           <td>%s</td>
           <td>%s</td>
           <td>%s</td>
@@ -132,7 +134,8 @@ while ($row = $rsNoise->fetch(PDO::FETCH_OBJ)) {
         </tr>',
         getColor($lastObs[$row->station]),
         $lastObs[$row->station],
-        $row->station,
+        strtolower($row->station),
+        strtoupper($row->station),
         $values['whitenoise'][$datatype]['N'],
         $values['whitenoise'][$datatype]['E'],
         $values['whitenoise'][$datatype]['U'],

@@ -31,10 +31,14 @@ while($row = $rsLastUpdated->fetch(PDO::FETCH_OBJ)) {
   $time = strtotime($row->last_observation);
 
   $html .= sprintf('<tr>
-      <td class="%s">%s</td><td data-sort="%s">%s</td>
+      <td class="%s link">
+        <a href="./%s">%s</a>
+      </td>
+      <td data-sort="%s">%s</td>
     </tr>',
     getColor($row->last_observation),
-    $row->station,
+    strtolower($row->station),
+    strtoupper($row->station),
     date('Y-m-d', $time),
     date('M j, Y', $time)
   );
