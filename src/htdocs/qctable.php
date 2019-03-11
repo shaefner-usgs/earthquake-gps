@@ -78,8 +78,6 @@ $backLink = sprintf('%s/%s/%s',
   <li><strong>Table</strong></li>
 </ul>
 
-<p>Past 14 observations.</p>
-
 <table class="sortable">
   <tr class="no-sort">
     <th>Year</th>
@@ -97,6 +95,8 @@ $backLink = sprintf('%s/%s/%s',
 <?php print $tableBodyHtml; ?>
 
 </table>
+
+<p>Past 14 observations.</p>
 
 <p class="back">&laquo;
   <a href="<?php print $backLink; ?>">Back to Station <?php print $stationName; ?></a>

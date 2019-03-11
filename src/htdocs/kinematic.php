@@ -55,8 +55,6 @@ $backLink = sprintf('%s/%s/%s',
 
 <p>5-minute Kinematic Results.</p>
 
-<p>Click and drag on a plot to zoom in. Hold shift while dragging to pan.</p>
-
 <nav>
   <button class="pan left"><i class="material-icons">&#xE5CB;</i> Left</button>
   <button class="pan right">Right <i class="material-icons">&#xE5CC;</i></button>
@@ -67,11 +65,13 @@ $backLink = sprintf('%s/%s/%s',
   <div class="north plot"><p class="loading">Loading&hellip;</p></div>
   <div class="east plot"><p class="loading">Loading&hellip;</p></div>
   <div class="up plot"><p class="loading">Loading&hellip;</p></div>
-  <h2>Downloads</h2>
-  <ul class="downloads no-style">
-    <li><a href="kinematic/data" class="text">Plot Data</a></li>
-  </ul>
+  <p>Click and drag on a plot to zoom in. Hold shift while dragging to pan.</p>
 </section>
+
+<h3>Download</h3>
+<ul class="downloads no-style">
+  <li><a href="kinematic/data" class="text">Plot Data</a></li>
+</ul>
 
 <p class="back">&laquo;
   <a href="<?php print $backLink; ?>">Back to Station <?php print $stationName; ?></a>

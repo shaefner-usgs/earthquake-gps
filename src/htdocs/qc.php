@@ -69,6 +69,11 @@ $backLink = sprintf('%s/%s/%s',
   </div>
 </div>
 
+<h3>Download</h3>
+<ul class="downloads no-style">
+  <li><a href="qc/data" class="text">Plot Data</a></li>
+</ul>
+
 <p class="back">&laquo;
   <a href="<?php print $backLink; ?>">Back to Station <?php print $stationName; ?></a>
 </p>
