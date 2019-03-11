@@ -86,7 +86,7 @@ class StationView {
       $plotsHtml = '';
       if (is_file("$this->_baseDir/$dataPath/$baseImg")) {
         $navPlots = $this->_getNavPlots($datatype);
-        $image = sprintf('<img src="%s/%s/%s" class="toggle" alt="Plot showing %s data (All data)" />',
+        $image = sprintf('<img src="%s/%s/%s" alt="Plot showing %s data (All data)" />',
           $this->_baseUri,
           $dataPath,
           $baseImg,
