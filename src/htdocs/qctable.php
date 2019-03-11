@@ -4,12 +4,17 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$network = safeParam('network', 'SFBayArea');
-$station = safeParam('station', 'p271');
+$networkParam = safeParam('network', 'SFBayArea');
+$stationParam = safeParam('station', 'p271');
+
+$stationName = strtoupper($stationParam);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "$network Network";
-  $SUBTITLE = 'Station ' . strtoupper($station) . ' Quality Control Data';
+  $TITLE = "$networkParam Network";
+  $SUBTITLE = sprintf ('<a href="../../%s">Station %s</a> <span>Quality Control Data</span>',
+    $stationParam,
+    $stationName
+  );
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../../css/qctable.css" />';
@@ -21,8 +26,12 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db;
 
-// Db query result: past 14 records of QC data
-$rsQcData = $db->queryQcData($network, $station, 14);
+// Db query results: station details for selected station and past 14 records of QC data
+$rsStation = $db->queryStation($stationParam);
+$rsQcData = $db->queryQcData($networkParam, $stationParam, 14);
+
+$station = $rsStation->fetch();
+$color = getColor($station['last_observation']);
 
 // Create html for table body
 $table_body_html = '';
@@ -54,14 +63,15 @@ while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
 
 $backLink = sprintf('%s/%s/%s',
   $MOUNT_PATH,
-  $network,
-  $station
+  $networkParam,
+  $stationParam
 );
-$name = strtoupper($station);
-
-print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 
 ?>
+
+<h2 class="subtitle <?php print $color; ?>">
+  <?php print $SUBTITLE; ?>
+</h2>
 
 <ul class="pipelist no-style">
   <li><a href="../qc">Plots</a></li>
@@ -89,5 +99,5 @@ print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 </table>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to Station <?php print $name; ?></a>
+  <a href="<?php print $backLink; ?>">Back to Station <?php print $stationName; ?></a>
 </p>

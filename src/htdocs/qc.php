@@ -2,15 +2,19 @@
 
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$network = safeParam('network', 'SFBayArea');
-$station = safeParam('station', 'p271');
+$networkParam = safeParam('network', 'SFBayArea');
+$stationParam = safeParam('station', 'p271');
 
-$name = strtoupper($station);
+$stationName = strtoupper($stationParam);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "$network Network";
-  $SUBTITLE = "Station $name Quality Control Data";
+  $TITLE = "$networkParam Network";
+  $SUBTITLE = sprintf ('<a href="../%s">Station %s</a> <span>Quality Control Data</span>',
+    $stationParam,
+    $stationName
+  );
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '
@@ -20,8 +24,8 @@ if (!isset($TEMPLATE)) {
   $FOOT = '
     <script>
       var MOUNT_PATH = "' . $MOUNT_PATH . '",
-          NETWORK = "' . $network . '",
-          STATION = "' . $station . '";
+          NETWORK = "' . $networkParam . '",
+          STATION = "' . $stationParam . '";
     </script>
     <script src="../../lib/d3/d3.js"></script>
     <script src="../../lib/c3/c3.js"></script>
@@ -32,15 +36,25 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+$db = new Db();
+
+// Db query result: station details for selected station
+$rsStation = $db->queryStation($stationParam);
+
+$station = $rsStation->fetch();
+$color = getColor($station['last_observation']);
+
 $backLink = sprintf('%s/%s/%s',
   $MOUNT_PATH,
-  $network,
-  $station
+  $networkParam,
+  $stationParam
 );
 
-print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
-
 ?>
+
+<h2 class="subtitle <?php print $color; ?>">
+  <?php print $SUBTITLE; ?>
+</h2>
 
 <ul class="pipelist no-style">
   <li><strong>Plots</strong></li>
@@ -56,5 +70,5 @@ print '<h2 class="subtitle">' . $SUBTITLE . '</h2>';
 </div>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to Station <?php print $name; ?></a>
+  <a href="<?php print $backLink; ?>">Back to Station <?php print $stationName; ?></a>
 </p>
