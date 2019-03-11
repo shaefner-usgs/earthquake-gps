@@ -9,7 +9,7 @@ include_once '../lib/classes/StationView.class.php'; // view
 
 // set default values so page loads without passing params
 $networkParam = safeParam('network', 'Pacific');
-$stationParam = safeParam('station', 'aoa1');
+$stationParam = strtolower(safeParam('station', 'aoa1'));
 
 $stationName = strtoupper($stationParam);
 

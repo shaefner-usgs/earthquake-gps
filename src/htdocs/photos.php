@@ -10,7 +10,7 @@ include_once '../lib/classes/PhotoView.class.php'; // view
 
 // set default values so page loads without passing params
 $networkParam = safeParam('network', 'WindKetchFlat_SGPS');
-$stationParam = safeParam('station', '7adl');
+$stationParam = strtolower(safeParam('station', '7adl'));
 
 if (!isset($TEMPLATE)) {
   $TITLE = "$networkParam Network";

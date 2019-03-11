@@ -5,7 +5,7 @@ include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 $networkParam = safeParam('network', 'SFBayArea');
-$stationParam = safeParam('station', '208p');
+$stationParam = strtolower(safeParam('station', '208p'));
 $datatypeParam = safeParam('datatype', 'filtered');
 
 $db = new Db();

@@ -5,7 +5,7 @@ include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 $direction = safeParam('direction');
-$stationParam = safeParam('station', '157p');
+$stationParam = strtolower(safeParam('station', '157p'));
 $now = date(DATE_RFC2822);
 
 $db = new Db;

@@ -6,7 +6,7 @@ include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 $callbackParam = safeParam('callback');
 $networkParam = safeParam('network', 'SFBayArea');
-$stationParam = safeParam('station', 'p271');
+$stationParam = strtolower(safeParam('station', 'p271'));
 
 $now = date(DATE_RFC2822);
 

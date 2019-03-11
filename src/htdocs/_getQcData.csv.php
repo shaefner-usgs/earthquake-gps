@@ -5,7 +5,7 @@ include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 $networkParam = safeParam('network', 'SFBayArea');
-$stationParam = safeParam('station', 'p271');
+$stationParam = strtolower(safeParam('station', 'p271'));
 
 $now = date(DATE_RFC2822);
 
