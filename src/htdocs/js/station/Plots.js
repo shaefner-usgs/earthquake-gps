@@ -58,11 +58,13 @@ var Plots = function (options) {
    */
   _togglePlot = function (e) {
     var alt,
+        div,
         img;
 
     e.preventDefault();
 
-    img = document.querySelector('.toggle');
+    div = _el.closest('.plots');
+    img = div.querySelector('img');
     alt = img.getAttribute('alt').replace(/\(.*\)/, '(' + e.target.textContent + ')');
     img.setAttribute('alt', alt);
     if (e.target.href.indexOf('#no-data') !== -1) {
