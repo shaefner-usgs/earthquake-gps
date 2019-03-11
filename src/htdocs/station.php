@@ -8,12 +8,14 @@ include_once '../lib/classes/Station.class.php'; // model
 include_once '../lib/classes/StationView.class.php'; // view
 
 // set default values so page loads without passing params
-$network = safeParam('network', 'Pacific');
-$station = safeParam('station', 'aoa1');
+$networkParam = safeParam('network', 'Pacific');
+$stationParam = safeParam('station', 'aoa1');
+
+$stationName = strtoupper($stationParam);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "$network Network";
-  $SUBTITLE = '<a>Station ' . strtoupper($station) . '</a>';
+  $TITLE = "$networkParam Network";
+  $SUBTITLE = '<a>Station ' . $stationName . '</a>';
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '
@@ -23,8 +25,8 @@ if (!isset($TEMPLATE)) {
   $FOOT = '
     <script>
       var MOUNT_PATH = "' . $MOUNT_PATH . '",
-          NETWORK = "' . $network . '",
-          STATION = "' . $station . '";
+          NETWORK = "' . $networkParam . '",
+          STATION = "' . $stationParam . '";
     </script>
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
     <script src="../js/station.js"></script>
@@ -37,7 +39,7 @@ if (!isset($TEMPLATE)) {
 $db = new Db;
 
 // Db query result: all "non-hidden" networks that selected station belongs to
-$rsNetworkList = $db->queryNetworkList($station);
+$rsNetworkList = $db->queryNetworkList($stationParam);
 
 // Create an array of networks
 $networkList = array();
@@ -46,19 +48,19 @@ while ($row = $rsNetworkList->fetch(PDO::FETCH_ASSOC)) {
 }
 // Add currently selected network if it's not already in the list
 // (this would happen if user is viewing a "hidden" network)
-if (!in_array($network, $networkList)) {
-  array_push($networkList, $network);
+if (!in_array($networkParam, $networkList)) {
+  array_push($networkList, $networkParam);
 }
 
 // Db query results for selected network and station
-$rsNoise = $db->queryNoise($network, $station);
-$rsOffsets = $db->queryOffsets($network, $station);
-$rsPostSeismic = $db->queryPostSeismic($network, $station);
-$rsSeasonal = $db->querySeasonal($network, $station);
-$rsVelocities = $db->queryVelocities($network, $station);
+$rsNoise = $db->queryNoise($networkParam, $stationParam);
+$rsOffsets = $db->queryOffsets($networkParam, $stationParam);
+$rsPostSeismic = $db->queryPostSeismic($networkParam, $stationParam);
+$rsSeasonal = $db->querySeasonal($networkParam, $stationParam);
+$rsVelocities = $db->queryVelocities($networkParam, $stationParam);
 
 // Db query result: station details for selected station and network
-$rsStation = $db->queryStation($station, $network);
+$rsStation = $db->queryStation($stationParam, $networkParam);
 
 // Create the station model using the station details + $networkList, etc.
 $rsStation->setFetchMode(

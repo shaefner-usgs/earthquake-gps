@@ -4,10 +4,10 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$network = safeParam('network', 'SFBayArea');
+$networkParam = safeParam('network', 'SFBayArea');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "$network Network";
+  $TITLE = "$networkParam Network";
   $SUBTITLE = 'Velocities and Uncertainties';
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
@@ -21,7 +21,7 @@ if (!isset($TEMPLATE)) {
 $db = new Db;
 
 // Db query result: velocities for selected network
-$rsVelocities = $db->queryVelocities($network);
+$rsVelocities = $db->queryVelocities($networkParam);
 
 $datatypes = [
   'nafixed' => 'NA-fixed',
@@ -129,7 +129,7 @@ foreach ($datatypes as $datatype => $name) {
 
 $backLink = sprintf('%s/%s',
   $MOUNT_PATH,
-  $network
+  $networkParam
 );
 
 ?>
@@ -143,5 +143,5 @@ $backLink = sprintf('%s/%s',
 </div>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to <?php print $network; ?> Network</a>
+  <a href="<?php print $backLink; ?>">Back to <?php print $networkParam; ?> Network</a>
 </p>

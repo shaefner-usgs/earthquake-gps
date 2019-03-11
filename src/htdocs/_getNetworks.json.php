@@ -4,7 +4,8 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$callback = safeParam('callback');
+$callbackParam = safeParam('callback');
+
 $now = date(DATE_RFC2822);
 
 $db = new Db;
@@ -56,4 +57,4 @@ while ($row = $rsNetworks->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Send json stream to browser
-showJson($output, $callback);
+showJson($output, $callbackParam);

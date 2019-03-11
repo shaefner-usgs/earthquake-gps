@@ -5,13 +5,13 @@ include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 $direction = safeParam('direction');
-$station = safeParam('station', '157p');
+$stationParam = safeParam('station', '157p');
 $now = date(DATE_RFC2822);
 
 $db = new Db;
 
 // Db query result: time series data for given station
-$rsTimeSeries = $db->queryTimeSeries($station);
+$rsTimeSeries = $db->queryTimeSeries($stationParam);
 
 // Set header
 if (preg_match('/^north|east|up$/', $direction)) {

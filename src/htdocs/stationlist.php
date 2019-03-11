@@ -4,6 +4,8 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
+$filterParam = safeParam('filter');
+
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Station List';
   $NAVIGATION = true;
@@ -12,8 +14,6 @@ if (!isset($TEMPLATE)) {
 
   include 'template.inc.php';
 }
-
-$filter = safeParam('filter');
 
 $db = new Db();
 
@@ -25,7 +25,7 @@ $navHtml = '<nav class="jumplist">';
 while ($row = $rsStationChars->fetch(PDO::FETCH_ASSOC)) {
   $linkHtml = '<a href="' . $MOUNT_PATH . '/stations/%s">%s</a>';
   // highlight current selection
-  if ($row['alphanum'] === $filter) {
+  if ($row['alphanum'] === $filterParam) {
     $linkHtml = '<a href="' . $MOUNT_PATH . '/stations/%s"><strong>%s</strong></a>';
   }
   $navHtml .= sprintf($linkHtml,
@@ -36,7 +36,7 @@ while ($row = $rsStationChars->fetch(PDO::FETCH_ASSOC)) {
 $navHtml .= '</nav>';
 
 // Db query result: station list
-$rsStationList = $db->queryStationList($filter);
+$rsStationList = $db->queryStationList($filterParam);
 
 // Create a more "friendly" array to loop over for creating list html
 while ($row = $rsStationList->fetch(PDO::FETCH_ASSOC)) {
@@ -46,7 +46,7 @@ while ($row = $rsStationList->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Create html for subheader
-$sel = ucfirst($filter);
+$sel = ucfirst($filterParam);
 if ($sel === '') {
   $sel = 'All';
 }

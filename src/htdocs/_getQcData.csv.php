@@ -4,15 +4,15 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$network = safeParam('network', 'SFBayArea');
-$station = safeParam('station', 'p271');
+$networkParam = safeParam('network', 'SFBayArea');
+$stationParam = safeParam('station', 'p271');
 
 $now = date(DATE_RFC2822);
 
 $db = new Db;
 
 // Db query result: all qc data for a given station / network
-$rsQcData = $db->queryQcData($network, $station);
+$rsQcData = $db->queryQcData($networkParam, $stationParam);
 
 $output = "Date, Filename, Completeness, Slips_per_obs, MP1, MP2, SN1, SN2\n";
 

@@ -4,10 +4,10 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$network = safeParam('network', 'Pacific');
+$networkParam = safeParam('network', 'Pacific');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "$network Network";
+  $TITLE = "$networkParam Network";
   $SUBTITLE = 'Stations Not Updated in the Past 7 Days';
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
@@ -21,7 +21,7 @@ if (!isset($TEMPLATE)) {
 $db = new Db();
 
 // Db query result: all stations that haven't been updated in past 7 days
-$rsLastUpdated = $db->queryLastUpdated($network, 7);
+$rsLastUpdated = $db->queryLastUpdated($networkParam, 7);
 
 // Create html for table
 $html = '<table class="sortable">
@@ -44,7 +44,7 @@ $html .= '</table>';
 
 $backLink = sprintf('%s/%s',
   $MOUNT_PATH,
-  $network
+  $networkParam
 );
 
 ?>
@@ -58,5 +58,5 @@ $backLink = sprintf('%s/%s',
 </section>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to <?php print $network; ?> Network</a>
+  <a href="<?php print $backLink; ?>">Back to <?php print $networkParam; ?> Network</a>
 </p>

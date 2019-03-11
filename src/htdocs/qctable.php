@@ -34,9 +34,9 @@ $station = $rsStation->fetch();
 $color = getColor($station['last_observation']);
 
 // Create html for table body
-$table_body_html = '';
+$tableBodyHtml = '';
 while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
-  $table_body_html .= sprintf("<tr>
+  $tableBodyHtml .= sprintf("<tr>
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
@@ -94,7 +94,7 @@ $backLink = sprintf('%s/%s/%s',
     <th>SN2</th>
   </tr>
 
-<?php print $table_body_html; ?>
+<?php print $tableBodyHtml; ?>
 
 </table>
 

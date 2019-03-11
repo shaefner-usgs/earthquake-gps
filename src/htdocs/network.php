@@ -11,10 +11,10 @@ include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 // set default value so page loads without passing params
-$network = safeParam('network', 'Alaska');
+$networkParam = safeParam('network', 'Alaska');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = $network . ' Network';
+  $TITLE = $networkParam . ' Network';
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
@@ -23,7 +23,7 @@ if (!isset($TEMPLATE)) {
   $FOOT = '
     <script>
       var MOUNT_PATH = "' . $MOUNT_PATH . '",
-          NETWORK = "' . $network . '";
+          NETWORK = "' . $networkParam . '";
     </script>
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
     <script src="js/network.js"></script>
@@ -31,7 +31,7 @@ if (!isset($TEMPLATE)) {
   $CONTACT = 'jsvarc';
 
   // importJsonToArray() sets headers -> needs to run before including template
-  $stations = importJsonToArray(__DIR__ . '/_getStations.json.php', $network);
+  $stations = importJsonToArray(__DIR__ . '/_getStations.json.php', $networkParam);
 
   include 'template.inc.php';
 }
@@ -39,7 +39,7 @@ if (!isset($TEMPLATE)) {
 $db = new Db();
 
 // Db query result: network details for selected network
-$rsNetwork = $db->queryNetwork($network);
+$rsNetwork = $db->queryNetwork($networkParam);
 $row = $rsNetwork->fetch(PDO::FETCH_OBJ);
 
 // Check to see if this is a valid network
@@ -49,22 +49,22 @@ if ($stations['count'] === 0) {
 
 // Create HTML for link list
 $links = [
-  'Velocities and Uncertainties' => "$network/velocities",
-  'Offsets' => "$network/offsets",
-  'Stations Not Updated in the Past 7 Days' => "$network/notupdated",
+  'Velocities and Uncertainties' => "$networkParam/velocities",
+  'Offsets' => "$networkParam/offsets",
+  'Stations Not Updated in the Past 7 Days' => "$networkParam/notupdated",
 ];
 
-$links_html = '<ul class="pipelist no-style">';
+$linksHtml = '<ul class="pipelist no-style">';
 foreach($links as $name => $link) {
-  $links_html .= sprintf('<li><a href="%s">%s</a></li>',
+  $linksHtml .= sprintf('<li><a href="%s">%s</a></li>',
     $link,
     $name
   );
 }
-$links_html .= '</ul>';
+$linksHtml .= '</ul>';
 
 // Create HTML for legend
-$legend_icons = [
+$legendIcons = [
   'triangle+grey' => 'Campaign',
   'square+grey' => 'Continuous',
   'blue' => 'Past 3 days',
@@ -73,9 +73,9 @@ $legend_icons = [
   'red' => 'Over 14 days ago'
 ];
 
-$legend_html = '<ul class="legend no-style">';
-foreach ($legend_icons as $key => $description) {
-  $legend_html .= sprintf('<li>
+$legendHtml = '<ul class="legend no-style">';
+foreach ($legendIcons as $key => $description) {
+  $legendHtml .= sprintf('<li>
       <img src="img/pin-s-%s-2x.png" alt="%s icon" /><span>%s</span>
     </li>',
     $key,
@@ -83,13 +83,13 @@ foreach ($legend_icons as $key => $description) {
     $description
   );
 }
-$legend_html .= '</ul>';
+$legendHtml .= '</ul>';
 
 // Create HTML for station list
 $height = ceil($stations['count'] / 8) * 36;
 $starred = false;
 
-$stations_html = '<ul class="stations no-style" style="height: '. $height . 'px;">';
+$stationsHtml = '<ul class="stations no-style" style="height: '. $height . 'px;">';
 foreach ($stations['features'] as $feature) {
   // star high rms values
   $star = '';
@@ -100,27 +100,27 @@ foreach ($stations['features'] as $feature) {
       $star = '<span>*</span>';
       $starred = true;
   }*/
-  $stations_html .= sprintf('<li class="%s">
+  $stationsHtml .= sprintf('<li class="%s">
       <a href="%s/%s" title="Go to station details">%s%s</a>
     </li>',
     getColor($feature['properties']['last_observation']),
-    $network,
+    $networkParam,
     $feature['properties']['station'],
     strtoupper($feature['properties']['station']),
     $star
   );
 }
-$stations_html .= '</ul>';
+$stationsHtml .= '</ul>';
 
 // Create HTML for Download links
 $downloads = [
-  'GPS Waypoints' => ['gpx', "$network/waypoints"],
-  'Most Recent XYZ Positions' => ['text', "data/networks/$network/${network}_xyz_file"],
-  'ITRF2008 XYZ Time Series' => ['zip', "data/networks/$network/${network}_ITRF2008_xyz_files.tar.gz"]
+  'GPS Waypoints' => ['gpx', "$networkParam/waypoints"],
+  'Most Recent XYZ Positions' => ['text', "data/networks/$networkParam/${networkParam}_xyz_file"],
+  'ITRF2008 XYZ Time Series' => ['zip', "data/networks/$networkParam/${networkParam}_ITRF2008_xyz_files.tar.gz"]
 ];
-$kmlFileBaseUri = $network . '/kml';
+$kmlFileBaseUri = $networkParam . '/kml';
 
-$downloads_html = '<ul class="downloads no-style">';
+$downloadsHtml = '<ul class="downloads no-style">';
 if ($row->type === 'campaign') {
   $kmlFiles = '<li>
       <a href="' . $kmlFileBaseUri . '/years" class="kml">Campaign Stations Sorted by Year(s) Surveyed</a>
@@ -136,29 +136,29 @@ if ($row->type === 'campaign') {
       <a href="' . $kmlFileBaseUri . '" class="kml">Stations Sorted by Station Name</a>
     </li>';
 }
-$downloads_html .= $kmlFiles;
+$downloadsHtml .= $kmlFiles;
 foreach ($downloads as $name=>$file) {
-  $downloads_html .= sprintf('<li><a href="%s" class="%s">%s</a></li>',
+  $downloadsHtml .= sprintf('<li><a href="%s" class="%s">%s</a></li>',
     $file[1],
     $file[0],
     $name
   );
 }
-$downloads_html .= '</ul>';
+$downloadsHtml .= '</ul>';
 
 ?>
 
 <section>
-  <?php print $links_html; ?>
+  <?php print $linksHtml; ?>
 </section>
 
 <section>
   <div class="map"></div>
-  <?php print $legend_html; ?>
+  <?php print $legendHtml; ?>
   <p class="small">Pin color indicates when station was last updated.</p>
   <h3 class="count"><?php print $stations['count']; ?> Stations on this Map</h3>
   <?php
-    print $stations_html;
+    print $stationsHtml;
     if ($starred) {
       print '<p>* = high RMS values</p>';
     }
@@ -167,7 +167,7 @@ $downloads_html .= '</ul>';
 
 <section>
   <h2>Downloads</h2>
-  <?php print $downloads_html; ?>
+  <?php print $downloadsHtml; ?>
 </section>
 
 <?php } // End: valid network block ?>

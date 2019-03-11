@@ -4,16 +4,16 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$callback = safeParam('callback');
+$callbackParam = safeParam('callback');
 
 /* This script is called via js (as an ajax request) or php (using
  * importJsonToArray(), which is declared in _functions.inc.php).
  *
- * - js mode: $network is set via querystring
- * - php mode: $network is set before including this script
+ * - js mode: $networkParam is set via querystring
+ * - php mode: $networkParam is set before including this script
  */
-if (!isset($network)) {
-  $network = safeParam('network', 'Pacific');
+if (!isset($networkParam)) {
+  $networkParam = safeParam('network', 'Pacific');
 }
 
 $now = date(DATE_RFC2822);
@@ -21,14 +21,14 @@ $now = date(DATE_RFC2822);
 $db = new Db;
 
 // Db query result: all stations in a given network
-$rsStations = $db->queryStations($network);
+$rsStations = $db->queryStations($networkParam);
 
 // Initialize array template for json feed
 $output = [
   'count' => $rsStations->rowCount(),
   'generated' => $now,
   'features' => [],
-  'network' => $network,
+  'network' => $networkParam,
   'type' => 'FeatureCollection'
 ];
 
@@ -64,4 +64,4 @@ while ($row = $rsStations->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Send json stream to browser
-showJson($output, $callback);
+showJson($output, $callbackParam);
