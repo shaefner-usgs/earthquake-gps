@@ -14,7 +14,7 @@ $stationParam = safeParam('station', '7adl');
 
 if (!isset($TEMPLATE)) {
   $TITLE = "$networkParam Network";
-  $SUBTITLE = sprintf ('<a href="../%s">Station %s</a> <span>Field Logs</span>',
+  $SUBTITLE = sprintf ('<a href="../%s">Station %s</a> <span>Photos</span>',
     $stationParam,
     strtoupper($stationParam)
   );
