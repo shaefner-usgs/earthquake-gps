@@ -23,7 +23,7 @@ if (!isset($TEMPLATE)) {
   $FOOT = '
     <script>
       var MOUNT_PATH = "' . $MOUNT_PATH . '",
-          STATION = "' . $station . '";
+          STATION = "' . $stationParam . '";
     </script>
     <script src="../../lib/dygraph/dygraph-combined.js"></script>
     <script src="../../js/kinematic.js"></script>
