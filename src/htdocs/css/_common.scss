@@ -139,12 +139,9 @@ td, th {
     color: $text-color;
     display: inline-block;
     font: normal 2rem $font-sans;
+    margin-right: .25em;
     padding: 2px 4px;
     text-decoration: none;
-  }
-  span {
-    display: block;
-    margin-top: 1em;
   }
 
   &.blue a {
