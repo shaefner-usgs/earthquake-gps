@@ -50,18 +50,20 @@ var TimeSeries = function (options) {
       animatedZooms: true,
       axes: {
         x: {
+          gridLineColor: '#c4c4c4',
           valueFormatter: function(num/*, opts, seriesName, dygraph, row, col*/) {
             return _getDateString(new Date(num));
           }
+        },
+        y: {
+          gridLineColor: '#999999'
         }
       },
       color: _color,
       digitsAfterDecimal: 4,
       gridLinePattern: [3, 3],
       height: 200,
-      labelsDivWidth: 300,
       panEdgeFraction: 0.1,
-      sigFigs: 2,
       title: _direction.capitalize(),
       ylabel: 'm',
 

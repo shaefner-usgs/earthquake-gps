@@ -18,6 +18,7 @@ if (!isset($TEMPLATE)) {
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '
+    <link rel="stylesheet" href="../../lib/dygraph/dygraph.css" />
     <link rel="stylesheet" href="../../css/kinematic.css" />
   ';
   $FOOT = '
@@ -25,7 +26,7 @@ if (!isset($TEMPLATE)) {
       var MOUNT_PATH = "' . $MOUNT_PATH . '",
           STATION = "' . $stationParam . '";
     </script>
-    <script src="../../lib/dygraph/dygraph-combined.js"></script>
+    <script src="../../lib/dygraph/dygraph.js"></script>
     <script src="../../js/kinematic.js"></script>
   ';
   $CONTACT = 'jsvarc';
