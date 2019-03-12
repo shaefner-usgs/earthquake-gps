@@ -284,7 +284,7 @@ class StationView {
       foreach ($rows as $row) {
         if ($row['datatype'] === $datatype) {
           $component = $row['component'];
-          $date = str_replace('-', '', $row['date']);
+          $date = $row['date'];
 
           $offsets[$date]['decDate'] = $row['decdate'];
           $offsets[$date]['distance'] = $row['distance_from_eq'];
@@ -320,7 +320,7 @@ class StationView {
 
         foreach ($offsets as $dateStr => $tds) {
           $html .= sprintf('<tr>
-              <th class="freeze">%s</th>
+              <th class="freeze nowrap">%s</th>
               <td>%s</td>
               <td>%s</td>
               <td>%s</td>
@@ -473,10 +473,6 @@ class StationView {
           }
 
           foreach ($row as $key => $value) {
-            // strip '-' out of date fields
-            if (preg_match('/\d{4}-\d{2}-\d{2}/', $value)) {
-              $value = str_replace('-', '', $value);
-            }
             $fieldName = ucfirst($key);
             if ($lookupTable[$key]) {
               $fieldName = $lookupTable[$key];

@@ -53,6 +53,14 @@ var TimeSeries = function (options) {
           gridLineColor: '#c4c4c4',
           valueFormatter: function(num/*, opts, seriesName, dygraph, row, col*/) {
             return _getDateString(new Date(num));
+          },
+          axisLabelFormatter: function(d, gran, opts) {
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var label = Dygraph.dateAxisLabelFormatter(d, gran, opts);
+            if (/^\d{2}(\s+|&#160;)\w{3}$/.test(label)) {
+              label = months[d.getMonth()] + ' ' + d.getDate();
+            }
+            return label;
           }
         },
         y: {
