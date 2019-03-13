@@ -15,7 +15,7 @@ var _C3_DEFAULTS = {
         culling: {
           max: 8
         },
-        format: '%Y-%m-%d',
+        format: '%b %e, %Y',
         outer: false
       }
     },
