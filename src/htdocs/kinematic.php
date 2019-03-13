@@ -63,9 +63,24 @@ $backLink = sprintf('%s/%s/%s',
 </nav>
 
 <section class="plots">
-  <div class="north plot"><p class="loading">Loading&hellip;</p></div>
-  <div class="east plot"><p class="loading">Loading&hellip;</p></div>
-  <div class="up plot"><p class="loading">Loading&hellip;</p></div>
+  <div class="north">
+    <div class="legend"></div>
+    <div class="plot">
+      <p class="loading">Loading&hellip;</p>
+    </div>
+  </div>
+  <div class="east">
+    <div class="legend"></div>
+    <div class="plot">
+      <p class="loading">Loading&hellip;</p>
+    </div>
+  </div>
+  <div class="up">
+    <div class="legend"></div>
+    <div class="plot">
+      <p class="loading">Loading&hellip;</p>
+    </div>
+  </div>
   <p>Click and drag on a plot to zoom in. Hold shift while dragging to pan.</p>
 </section>
 

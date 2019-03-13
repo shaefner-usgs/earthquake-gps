@@ -46,7 +46,7 @@ var TimeSeries = function (options) {
    * @param data {String}
    */
   _draw = function (data) {
-    _graph = new Dygraph(_el, data, {
+    _graph = new Dygraph(_el.querySelector('.plot'), data, {
       animatedZooms: true,
       axes: {
         x: {
@@ -70,7 +70,8 @@ var TimeSeries = function (options) {
       color: _color,
       digitsAfterDecimal: 4,
       gridLinePattern: [3, 3],
-      height: 200,
+      labelsDiv: _el.querySelector('.legend'),
+      legend: 'onmouseover',
       panEdgeFraction: 0.1,
       title: _direction.capitalize(),
       ylabel: 'm',
