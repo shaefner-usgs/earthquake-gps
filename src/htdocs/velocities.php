@@ -92,7 +92,7 @@ while ($row = $rsVelocities->fetch(PDO::FETCH_OBJ)) {
           <td>%s</td>
         </tr>',
         getColor($row->last_observation),
-        $row->last_observation,
+        date('M j, Y', strtotime($row->last_observation)),
         strtolower($row->station),
         strtoupper($row->station),
         round($row->lon, 5),

@@ -111,7 +111,7 @@ while ($row = $rsOffsets->fetch(PDO::FETCH_OBJ)) {
           <td>%s</td>
         </tr>',
         getColor($lastObs[$row->station]),
-        $lastObs[$row->station],
+        date('M j, Y', strtotime($lastObs[$row->station])),
         strtolower($row->station),
         strtoupper($row->station),
         $row->date,
