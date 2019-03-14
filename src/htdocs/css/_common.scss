@@ -1,5 +1,21 @@
 @import '_vars.scss';
 
+h1 a {
+  color: $text-color;
+  position: relative;
+  text-decoration: none;
+
+  &:active, &:hover, &:visited {
+    color: $text-color;
+  }
+  &:hover:after {
+    content: '\00ab';
+    left: -2.2rem;
+    position: absolute;
+    top: -2px;
+  }
+}
+
 table {
   td.blue {
     border-bottom-color: $blue;

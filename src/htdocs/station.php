@@ -14,7 +14,10 @@ $stationParam = strtolower(safeParam('station', 'aoa1'));
 $stationName = strtoupper($stationParam);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "$networkParam Network";
+  $TITLE = sprintf ('<a href="../%s">%s Network</a>',
+    $networkParam,
+    $networkParam
+  );
   $SUBTITLE = '<a>Station ' . $stationName . '</a>';
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
