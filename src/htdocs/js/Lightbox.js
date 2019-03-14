@@ -27,12 +27,14 @@ var Lightbox = function (options) {
 
       _addCaption,
       _addCloseButton,
-      _addCssClass,
       _addHandlers,
       _addOverlay,
-      _addSpinner,
+      _addLoadingSpinner,
       _getPosition,
-      _removeComponent;
+      _removeComponent,
+      _showNavButtons,
+
+      _simpleboxId;
 
 
   _this = {};
@@ -42,14 +44,18 @@ var Lightbox = function (options) {
         el,
         simplbox;
 
+    _simpleboxId = SimplBox.options.imageElementId;
+
     callbacks = {
       onImageLoadEnd: function () {
+        document.getElementById(_simpleboxId).classList.add('material-icons');
+
         _removeComponent('simplbox-loading');
         _addHandlers(simplbox);
-        _addCssClass();
+        _showNavButtons();
       },
       onImageLoadStart: function () {
-        _addSpinner();
+        _addLoadingSpinner();
         _addCaption(simplbox);
       },
       onEnd: function () {
@@ -66,8 +72,8 @@ var Lightbox = function (options) {
         document.body.classList.add('simplbox');
       }
     };
-    options = Util.extend({}, _DEFAULTS, callbacks, options);
     el = options.el;
+    options = Util.extend({}, _DEFAULTS, callbacks, options);
 
     simplbox = new SimplBox(el, options);
     simplbox.init();
@@ -115,27 +121,15 @@ var Lightbox = function (options) {
   };
 
   /**
-   * Add material-icons class for navigation arrows on photos
-   */
-  _addCssClass = function () {
-    var id;
-
-    id = SimplBox.options.imageElementId;
-    document.getElementById(id).classList.add('material-icons');
-  };
-
-  /**
    * Add handlers for prev / next photo navigation
    *
    * @param base {Object}
    */
   _addHandlers = function (base) {
     var div,
-        id,
         position;
 
-    id = SimplBox.options.imageElementId;
-    div = document.getElementById(id);
+    div = document.getElementById(_simpleboxId);
 
     // Navigate to prev / next photo, depending on where user clicked
     base.API_AddEvent(div, 'click touchend', function (e) {
@@ -179,7 +173,7 @@ var Lightbox = function (options) {
   /**
    * Add loading spinner
    */
-  _addSpinner = function () {
+  _addLoadingSpinner = function () {
     var div1,
         div2;
 
@@ -223,6 +217,22 @@ var Lightbox = function (options) {
     if (el) {
       el.parentNode.removeChild(el);
     }
+  };
+
+  /**
+   * Briefly show navigation buttons on photo to alert user about photo navigation
+   */
+  _showNavButtons = function () {
+    var div;
+
+    div = document.getElementById(_simpleboxId);
+    div.classList.add('left');
+    div.classList.add('right');
+
+    window.setTimeout(function () {
+      div.classList.remove('left');
+      div.classList.remove('right');
+    }, 1500);
   };
 
 
