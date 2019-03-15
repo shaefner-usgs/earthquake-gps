@@ -1,6 +1,4 @@
 @import '_common.scss';
-@import 'qc/_NavigationView.scss';
-@import 'qc/_PlotView.scss';
 
 $height: 320px;
 
@@ -13,6 +11,18 @@ $height: 320px;
 }
 .loading {
   padding-top: calc($height/2 - 30px);
+}
+
+.navigation {
+  overflow: hidden;
+}
+
+.plots {
+  border: 1px solid #ddd;
+
+  p {
+    margin-left: 1em;
+  }
 }
 
 .title h3 {
