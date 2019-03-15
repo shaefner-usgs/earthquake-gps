@@ -203,6 +203,24 @@ $backLink = sprintf('%s/%s',
   <?php print $SUBTITLE; ?>
 </h2>
 
+<nav>
+  <ul class="pipelist no-style">
+    <li>
+      <a href="../<?php print $networkParam; ?>">Station Map</a></li>
+    </li>
+    <li>
+      <a href="../<?php print $networkParam; ?>/velocities">Velocities and Uncertainties</a>
+    </li>
+    <li>
+      <a href="../<?php print $networkParam; ?>/offsets">Offsets</a>
+    </li>
+    <li><strong>Noise</strong></li>
+    <li>
+      <a href="../<?php print $networkParam; ?>/notupdated">Stations Not Updated in the Past 7 Days</a>
+    </li>
+  </ul>
+</nav>
+
 <div class="tablist">
   <?php print $html; ?>
 </div>

@@ -47,22 +47,6 @@ if ($stations['count'] === 0) {
   print '<p class="alert info">Network Not Found</p>';
 } else { // Begin: valid network block
 
-// Create HTML for link list
-$links = [
-  'Velocities and Uncertainties' => "$networkParam/velocities",
-  'Offsets' => "$networkParam/offsets",
-  'Stations Not Updated in the Past 7 Days' => "$networkParam/notupdated",
-];
-
-$linksHtml = '<ul class="pipelist no-style">';
-foreach($links as $name => $link) {
-  $linksHtml .= sprintf('<li><a href="%s">%s</a></li>',
-    $link,
-    $name
-  );
-}
-$linksHtml .= '</ul>';
-
 // Create HTML for legend
 $legendIcons = [
   'triangle+grey' => 'Campaign',
@@ -148,9 +132,22 @@ $downloadsHtml .= '</ul>';
 
 ?>
 
-<section>
-  <?php print $linksHtml; ?>
-</section>
+<h2 class="subtitle">Station Map</h2>
+
+<nav>
+  <ul class="pipelist no-style">
+    <li><strong>Station Map</strong></li>
+    <li>
+      <a href="<?php print $networkParam; ?>/velocities">Velocities and Uncertainties</a>
+    </li>
+    <li>
+      <a href="<?php print $networkParam; ?>/offsets">Offsets</a>
+    </li>
+    <li>
+      <a href="<?php print $networkParam; ?>/notupdated">Stations Not Updated in the Past 7 Days</a>
+    </li>
+  </ul>
+</nav>
 
 <section>
   <div class="map"></div>
