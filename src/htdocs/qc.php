@@ -10,7 +10,10 @@ $stationParam = strtolower(safeParam('station', 'p271'));
 $stationName = strtoupper($stationParam);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "$networkParam Network";
+  $TITLE = sprintf ('<a href="../../%s">%s Network</a>',
+    $networkParam,
+    $networkParam
+  );
   $SUBTITLE = sprintf ('<a href="../%s">Station %s</a> <span>Quality Control Data</span>',
     $stationParam,
     $stationName

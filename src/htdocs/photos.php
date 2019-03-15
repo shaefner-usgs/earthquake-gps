@@ -13,7 +13,10 @@ $networkParam = safeParam('network', 'WindKetchFlat_SGPS');
 $stationParam = strtolower(safeParam('station', '7adl'));
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "$networkParam Network";
+  $TITLE = sprintf ('<a href="../../%s">%s Network</a>',
+    $networkParam,
+    $networkParam
+  );
   $SUBTITLE = sprintf ('<a href="../%s">Station %s</a> <span>Photos</span>',
     $stationParam,
     strtoupper($stationParam)
