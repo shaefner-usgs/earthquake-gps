@@ -26,6 +26,7 @@ nav button {
 .dygraph-title {
   font-family: $font-serif;
   margin: 0;
+  z-index: 100;
 }
 
 .east, .north, .up {
@@ -33,11 +34,13 @@ nav button {
 }
 
 .legend {
+  background: #fff;
   font-size: 1.5rem;
   position: absolute;
   right: 0;
   top: 0;
   white-space: nowrap;
+  z-index: 1000;
 }
 
 .loading, .plot {
@@ -52,9 +55,13 @@ nav button {
 
 .plots {
   border: 1px solid #ddd;
-  padding: 0 1em 0;
+  padding: 0 .75em 0 .25em;
 
   > div {
     margin: 1.8em 0;
+  }
+
+  p {
+    margin-left: .75em;
   }
 }
