@@ -213,20 +213,39 @@ class StationView {
     return $href;
   }
 
-  private function _getLinkList () {
-    $html = '<h3>Station Details</h3>';
-    $links = $this->_model->links;
+  private function _getStationDetails () {
+    $updateTime = strtotime($this->_model->lastUpdate);
+    $numDays = date('z') - date('z', $updateTime);
+    $updated = date('M j, Y', $updateTime);
+    $numDaysStr = '';
+    $plural = 's';
+    if ($numDays > 0 && $numDays < 31) { // show num days since update if 30 or less
+      if ($numDays === 1) {
+        $plural = '';
+      }
+      $numDaysStr = " ($numDays day$plural ago)";
+    }
+    $html = sprintf ('<p>This station was last updated on %s%s.</p>',
+      $updated,
+      $numDaysStr
+    );
 
+    $links = $this->_model->links;
     $html .= '<ul>';
     foreach ($links as $key => $value) {
       $number = '';
       if ($key === 'Photos') {
-        $number = ' (' . $this->_model->numPhotos . ')';
+        $number = " ({$this->_model->numPhotos})";
       }
       if ($key === 'Field Logs') {
-        $number = ' (' . $this->_model->numLogs . ')';
+        $number = " ({$this->_model->numLogs})";
       }
-      $html .= '<li><a href="' . $value . '">' . $key . '</a>' . $number . '</li>';
+      $html .= sprintf ('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
+        $value[1],
+        $value[0],
+        $key,
+        $number
+      );
     }
     $html .= '</ul>';
 
@@ -508,8 +527,8 @@ class StationView {
     print '</div>';
 
     print '<div class="column one-of-three">';
-    print $this->_getLinkList();
-    print $this->_getNetworks();
+    print $this->_getStationDetails();
+    //print $this->_getNetworks();
     print '</div>';
 
     print '</div>';

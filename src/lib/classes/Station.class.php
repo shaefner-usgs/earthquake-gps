@@ -24,7 +24,7 @@ include_once '../conf/config.inc.php'; // app config
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Station {
-  private $_data = array();
+  private $_data = [];
 
   public function __construct (
     $networkList=NULL,
@@ -82,16 +82,17 @@ class Station {
     $qc = $this->stationPath . '/qc';
     $weather = $this->_getWeatherLink();
 
-    $links = array(
-      'Photos' => $photos,
-      'Field Logs' => $logs,
-      'Quality Control Data' => $qc,
-      'Kinematic Data' => $kinematic,
-      'Weather' => $weather,
-      '<abbr title="National Geodetic Survey">NGS</abbr> Datasheets' => $ngs
-    );
+    // Multi-dimensional array containing material icons and uris for link list
+    $links = [
+      'Photos' => ['collections', $photos],
+      'Field Logs' => ['assignment', $logs],
+      'Quality Control Data' => ['scatter_plot', $qc],
+      'Kinematic Data' => ['show_chart', $kinematic],
+      'Weather' => ['wb_sunny', $weather],
+      '<abbr title="National Geodetic Survey">NGS</abbr> Datasheets' => ['description', $ngs]
+    ];
 
-    // campaign stations don't have kinematic data; continous don't have photos
+    // Campaign stations don't have kinematic data; continous don't have photos
     if ($this->stationtype === 'campaign') {
       unset($links['Kinematic Data']);
     } else if ($this->stationtype === 'continuous') {

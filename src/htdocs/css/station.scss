@@ -91,8 +91,28 @@ mark {
 }
 
 .one-of-three {
-  h3:first-child {
+  i {
+    margin-right: 5px;
+  }
+  li > a {
+    color: #333;
+    display: flex;
+    padding: 6px 0;
+    text-decoration: none;
+
+    &:hover {
+      background: rgba(229, 255, 218, 0.43);
+      color: #000;
+    }
+  }
+
+  p:first-child {
     margin-top: 0;
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
   }
 }
 
