@@ -233,18 +233,21 @@ class StationView {
     $links = $this->_model->links;
     $html .= '<ul>';
     foreach ($links as $key => $value) {
-      $number = '';
+      $count = '';
+      $number = NULL;
       if ($key === 'Photos') {
-        $number = " ({$this->_model->numPhotos})";
+        $number = $this->_model->numPhotos;
+      } else if ($key === 'Field Logs') {
+        $number = $this->_model->numLogs;
       }
-      if ($key === 'Field Logs') {
-        $number = " ({$this->_model->numLogs})";
+      if ($number) {
+        $count = "&nbsp;<span>($number)</span>";
       }
       $html .= sprintf ('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
         $value[1],
         $value[0],
         $key,
-        $number
+        $count
       );
     }
     $html .= '</ul>';

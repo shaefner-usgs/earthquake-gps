@@ -89,7 +89,7 @@ class Station {
       'Quality Control Data' => ['scatter_plot', $qc],
       'Kinematic Data' => ['show_chart', $kinematic],
       'Weather' => ['wb_sunny', $weather],
-      '<abbr title="National Geodetic Survey">NGS</abbr> Datasheets' => ['description', $ngs]
+      '<abbr title="National Geodetic Survey">NGS</abbr>&nbsp;Datasheets' => ['description', $ngs]
     ];
 
     // Campaign stations don't have kinematic data; continous don't have photos
