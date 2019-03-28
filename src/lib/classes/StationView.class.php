@@ -408,7 +408,7 @@ class StationView {
           $days = $row['doy'] - date('z') - 1; // php starts at '0'
           $time = strtotime("+" . $days . " days");
           // use 'year' from db, and calculate 'month' and 'day' from 'doy'
-          $date = $row['year'] . date('md', $time);
+          $date = $row['year'] . '-' . date('m-d', $time);
 
           $postSeismic[$date]['decDate'] = $row['decdate'];
           $postSeismic[$date][$component . '-logsig'] = $row['logsig'];
@@ -434,7 +434,7 @@ class StationView {
 
         foreach ($postSeismic as $dateStr => $tds) {
           $html .= sprintf('<tr>
-              <th class="freeze">%s</th>
+              <th class="freeze nowrap">%s</th>
               <td>%s</td>
               <td>%s</td>
               <td>%s</td>
