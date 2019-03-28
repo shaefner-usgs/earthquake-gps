@@ -225,13 +225,13 @@ class StationView {
       }
       $numDaysStr = " ($numDays day$plural ago)";
     }
-    $html = sprintf ('<p>This station was last updated on %s%s.</p>',
+    $html = sprintf ('<p>Last observation: %s%s</p>',
       $updated,
       $numDaysStr
     );
 
     $links = $this->_model->links;
-    $html .= '<ul>';
+    $html .= '<ul class="links">';
     foreach ($links as $key => $value) {
       $count = '';
       $number = NULL;
@@ -280,20 +280,35 @@ class StationView {
   }
 
   private function _getNetworks () {
-    $networkListHtml = '<h3>Networks</h3>';
+    $networkListHtml = '<p>This station is not in any other networks.</p>';
     $networks = $this->_model->networkList;
 
-    $networkListHtml .= '<p>This station belongs to the following network(s):</p>';
-    $networkListHtml .= '<ul>';
-    foreach ($networks as $network) {
-      $networkListHtml .= sprintf('<li><a href="%s/%s/%s">%s</a></li>',
-        $GLOBALS['MOUNT_PATH'],
-        $network,
-        $this->_model->station,
-        $network
+    if (count($networks) > 1) {
+      $countOther = count($networks) - 1;
+      $plurality = '';
+      if ($countOther > 1) {
+        $plurality = 's';
+      }
+      $networkListHtml = sprintf('<nav><h4>This station is in %s other network%s</h4>',
+        $countOther,
+        $plurality
       );
+      $networkListHtml .= '<ul class="pipelist no-style">';
+      foreach ($networks as $network) {
+        $cssClass = '';
+        if ($network === $this->_model->network) {
+          $cssClass = 'selected';
+        }
+        $networkListHtml .= sprintf('<li><a href="%s/%s/%s" class="%s">%s</a></li>',
+          $GLOBALS['MOUNT_PATH'],
+          $network,
+          $this->_model->station,
+          $cssClass,
+          $network
+        );
+      }
+      $networkListHtml .= '</ul></nav>';
     }
-    $networkListHtml .= '</ul>';
 
     return $networkListHtml;
   }
@@ -531,7 +546,7 @@ class StationView {
 
     print '<div class="column one-of-three">';
     print $this->_getStationDetails();
-    //print $this->_getNetworks();
+    print $this->_getNetworks();
     print '</div>';
 
     print '</div>';

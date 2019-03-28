@@ -27,6 +27,17 @@ mark {
   }
 }
 
+nav {
+  h4 {
+    font: normal 1em $font-sans;
+    margin: 1em 0 .25em;
+  }
+
+  ul {
+    margin: 0 0 .25em;
+  }
+}
+
 .downloads {
   display: flex;
   flex-wrap: wrap;
@@ -55,6 +66,36 @@ mark {
 
   img {
     width: 490px;
+  }
+}
+
+.links {
+  list-style: none;
+  margin-bottom: 2em;
+  padding: 0;
+
+  i {
+    margin-right: 4px;
+  }
+
+  li > a {
+    align-items: center;
+    color: #333;
+    display: flex;
+    max-width: 12em;
+    padding: 4px 0;
+    text-decoration: none;
+    transition: all .25s ease-out;
+
+    span {
+      color: #777;
+      font-size: .8em;
+    }
+
+    &:hover {
+      background: rgba(229, 255, 218, 0.43);
+      color: #000;
+    }
   }
 }
 
@@ -91,35 +132,8 @@ mark {
 }
 
 .one-of-three {
-  i {
-    margin-right: 4px;
-  }
-  li > a {
-    align-items: center;
-    color: #333;
-    display: flex;
-    max-width: 15em;
-    padding: 5px 0;
-    text-decoration: none;
-
-    span {
-      color: #777;
-      font-size: .8em;
-    }
-
-    &:hover {
-      background: rgba(229, 255, 218, 0.43);
-      color: #000;
-    }
-  }
-
   p:first-child {
     margin-top: 0;
-  }
-
-  ul {
-    padding: 0;
-    list-style: none;
   }
 }
 
@@ -131,17 +145,6 @@ mark {
 
     &:first-of-type {
       margin-top: .5em;
-    }
-  }
-
-  nav {
-    h4 {
-      font: normal 1em $font-sans;
-      margin: 1em 0 .25em;
-    }
-
-    ul {
-      margin: 0 0 .25em;
     }
   }
 
