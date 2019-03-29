@@ -164,8 +164,8 @@ var PlotView = function (options) {
     _titleEl.innerHTML = _this.model.get('title');
 
     if (data === null) {
-      _this.el.classList.add('nodata');
       _c3El.innerHTML = '<p class="loading">Loading&hellip;</p>';
+
       return;
     }
 
