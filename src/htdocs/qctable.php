@@ -64,6 +64,8 @@ while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
   );
 }
 
+$numRows = $rsQcData->rowCount();
+
 $backLink = sprintf('%s/%s/%s',
   $MOUNT_PATH,
   $networkParam,
@@ -100,7 +102,7 @@ $backLink = sprintf('%s/%s/%s',
   <?php print $tableBodyHtml; ?>
 
   </table>
-  <p>Past 14 observations.</p>
+  <p>Past <?php print $numRows; ?> observations.</p>
 
 <?php } else { ?>
 
