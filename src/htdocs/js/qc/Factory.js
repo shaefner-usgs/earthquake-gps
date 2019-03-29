@@ -120,6 +120,11 @@ var Factory = function (options) {
     }
     _data = data;
 
+    if (data.count === 0) { // no QC data for station in db
+      document.querySelector('.application').innerHTML = '<p class="alert info">No Data</p>';
+      document.querySelector('.qc-download').classList.add('hide');
+    }
+
     _this.trigger('ready');
   };
 

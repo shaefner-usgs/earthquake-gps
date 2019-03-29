@@ -7,7 +7,7 @@ var Application = require('qc/Application');
 var app,
     el;
 
-el = document.querySelector('#application');
+el = document.querySelector('.application');
 
 app = Application({
   // channel metadata

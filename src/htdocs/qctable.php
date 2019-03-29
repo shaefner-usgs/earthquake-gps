@@ -81,25 +81,32 @@ $backLink = sprintf('%s/%s/%s',
   <li><strong>Table</strong></li>
 </ul>
 
-<table class="sortable">
-  <tr class="no-sort">
-    <th>Year</th>
-    <th><abbr title="Day of the year">DoY</abbr></th>
-    <th class="sort-default" data-sort-order="desc">Date</th>
-    <th>Filename</th>
-    <th>Completeness</th>
-    <th>Slips</th>
-    <th>MP1</th>
-    <th>MP2</th>
-    <th>SN1</th>
-    <th>SN2</th>
-  </tr>
+<?php if ($tableBodyHtml) { ?>
 
-<?php print $tableBodyHtml; ?>
+  <table class="sortable">
+    <tr class="no-sort">
+      <th>Year</th>
+      <th><abbr title="Day of the year">DoY</abbr></th>
+      <th class="sort-default" data-sort-order="desc">Date</th>
+      <th>Filename</th>
+      <th>Completeness</th>
+      <th>Slips</th>
+      <th>MP1</th>
+      <th>MP2</th>
+      <th>SN1</th>
+      <th>SN2</th>
+    </tr>
 
-</table>
+  <?php print $tableBodyHtml; ?>
 
-<p>Past 14 observations.</p>
+  </table>
+  <p>Past 14 observations.</p>
+
+<?php } else { ?>
+
+  <p class="alert info">No Data</p>
+
+<?php } ?>
 
 <p class="back">&laquo;
   <a href="<?php print $backLink; ?>">Back to Station <?php print $stationName; ?></a>

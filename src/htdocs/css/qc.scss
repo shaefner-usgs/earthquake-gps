@@ -6,6 +6,10 @@ $height: 320px;
   stroke: #DADADA;
 }
 
+.hide {
+  display: none;
+}
+
 .loading, .plot {
   height: $height;
 }
