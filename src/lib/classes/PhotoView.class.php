@@ -39,7 +39,7 @@ class PhotoView {
 
   private function _getPhotos () {
     if (!$this->_collection->photos) {
-      $photosHtml = '<p class="alert info">No Photos Found</p>';
+      $photosHtml = '<p class="alert info">No Photos</p>';
     } else {
       $photosHtml = '';
       $count = 0;
