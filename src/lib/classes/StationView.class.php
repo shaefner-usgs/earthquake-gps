@@ -240,7 +240,7 @@ class StationView {
       } else if ($key === 'Field Logs') {
         $number = $this->_model->numLogs;
       }
-      if ($number) {
+      if (isSet($number)) {
         $count = "&nbsp;<span>($number)</span>";
       }
       $html .= sprintf ('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
