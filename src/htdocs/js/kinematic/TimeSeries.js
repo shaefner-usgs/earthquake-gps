@@ -15,13 +15,14 @@ var TimeSeries = function (options) {
 
       _blockRedraw,
       _color,
-      _direction,
+      _component,
       _el,
       _graph,
       _graphs,
 
       _draw,
       _getDateString,
+      _hideGraph,
       _loadData;
 
 
@@ -30,7 +31,7 @@ var TimeSeries = function (options) {
   _initialize = function (options) {
     options = options || {};
     _color = options.color;
-    _direction = options.direction;
+    _component = options.component;
     _el = options.el || document.createElement('div');
     _graphs = options.graphs || [];
 
@@ -73,7 +74,7 @@ var TimeSeries = function (options) {
       labelsDiv: _el.querySelector('.legend'),
       legend: 'onmouseover',
       panEdgeFraction: 0.1,
-      title: _direction.capitalize(),
+      title: _component.capitalize(),
       ylabel: 'm',
 
       // sync xrange of graphs (zooming and panning)
@@ -118,6 +119,11 @@ var TimeSeries = function (options) {
     });
 
     _graphs.push(_graph);
+
+    // Hide empty component plot if there's no data
+    if (_graph.rawData_.length === 0) {
+      _hideGraph();
+    }
   };
 
   /**
@@ -140,12 +146,32 @@ var TimeSeries = function (options) {
       pad(d.getSeconds()) + ' UTC';
   };
 
+
+  /**
+   * Hide (remove) component graph and hide application if all components are empty
+   */
+  _hideGraph = function () {
+    var count = 0;
+
+    _el.parentNode.removeChild(_el);
+    _graph.hidden = true;
+
+    _graphs.forEach(function(g) {
+      if (g.hasOwnProperty('hidden') && g.hidden === true) {
+        count ++;
+      }
+    });
+    if (count === 3) {
+      document.querySelector('.application').innerHTML = '<p class="alert info">No Data</p>';
+    }
+  };
+
   /**
    * Load kinematic data via Xhr
    */
   _loadData = function () {
     Xhr.ajax({
-      url: MOUNT_PATH + '/_getKinematic.csv.php?direction=' + _direction + '&station=' + STATION,
+      url: MOUNT_PATH + '/_getKinematic.csv.php?component=' + _component + '&station=' + STATION,
       success: _draw,
       error: function (status) {
         console.log(status);
