@@ -2,12 +2,20 @@
 
 $height: 320px;
 
-.c3-grid line {
-  stroke: #DADADA;
+.app-nav {
+  overflow: hidden;
 }
 
-.hide {
-  display: none;
+.app-plots {
+  border: 1px solid #ddd;
+
+  p {
+    margin-left: 1em;
+  }
+}
+
+.c3-grid line {
+  stroke: #DADADA;
 }
 
 .loading, .plot {
@@ -15,18 +23,6 @@ $height: 320px;
 }
 .loading {
   padding-top: calc($height/2 - 30px);
-}
-
-.navigation {
-  overflow: hidden;
-}
-
-.plots {
-  border: 1px solid #ddd;
-
-  p {
-    margin-left: 1em;
-  }
 }
 
 .title h3 {

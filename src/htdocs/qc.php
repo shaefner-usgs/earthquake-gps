@@ -64,18 +64,17 @@ $backLink = sprintf('%s/%s/%s',
   <li><a href="./qc/table">Table</a></li>
 </ul>
 
-<section class="application">
+<div class="application">
   <noscript>
     <p class="alert info">Javascript must be enabled to view these plots.</p>
   </noscript>
-</section>
-
-<section class="qc-download">
-  <h3>Download</h3>
-  <ul class="downloads no-style">
-    <li><a href="qc/data" class="text">Plot Data</a></li>
-  </ul>
-</section>
+  <section class="app-download">
+    <h3>Download</h3>
+    <ul class="downloads no-style">
+      <li><a href="qc/data" class="text">Plot Data</a></li>
+    </ul>
+  </section>
+</div>
 
 <p class="back">&laquo;
   <a href="<?php print $backLink; ?>">Back to Station <?php print $stationName; ?></a>

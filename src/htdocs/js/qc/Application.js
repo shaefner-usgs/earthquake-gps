@@ -42,15 +42,19 @@ var Application = function (options) {
   _this = View(options);
 
   _initialize = function (options) {
-    var el,
+    var download,
+        el,
         plots;
 
     options = Util.extend({}, _DEFAULTS, options);
 
     el = _this.el;
-    el.innerHTML = '<nav class="navigation"></nav>' +
-        '<section class="plots"></section>';
-    plots = el.querySelector('.plots');
+    download = el.querySelector('.app-download');
+    el.innerHTML = '<nav class="app-nav"></nav>' +
+        '<section class="app-plots"></section>';
+    el.appendChild(download);
+
+    plots = el.querySelector('.app-plots');
     _plotViews = [];
 
     _factory = Factory({
@@ -58,7 +62,7 @@ var Application = function (options) {
     });
 
     _navigationView = NavigationView({
-      el: el.querySelector('.navigation'),
+      el: el.querySelector('.app-nav'),
       model: _this.model
     });
 
