@@ -25,18 +25,34 @@ table {
   td.blue {
     border-bottom-color: $blue;
     background-color: $lightBlue;
+
+    &:hover {
+      background: linear-gradient(to bottom, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
+    }
   }
   td.orange {
     border-bottom-color: $orange;
     background-color: $lightOrange;
+
+    &:hover {
+      background: linear-gradient(to bottom, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
+    }
   }
   td.red {
     border-bottom-color: $red;
     background-color: $lightRed;
+
+    &:hover {
+      background: linear-gradient(to bottom, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
+    }
   }
   td.yellow {
     border-bottom-color: $yellow;
     background-color: $lightYellow;
+
+    &:hover {
+      background: linear-gradient(to bottom, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
+    }
   }
 
   td.link {
@@ -160,7 +176,7 @@ ul.legend {
     color: $text-color;
     display: inline-block;
     font: normal 2rem $font-sans;
-    margin-right: .25em;
+    margin-right: .1em;
     padding: 2px 4px;
     text-decoration: none;
   }
