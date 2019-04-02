@@ -23,28 +23,32 @@ $db = new Db();
 // Db query result: all stations that haven't been updated in past 7 days
 $rsLastUpdated = $db->queryLastUpdated($networkParam, 7);
 
-// Create html for table
-$html = '<table class="sortable">
-  <tr class="no-sort"><th>Station</th><th class="sort-default" data-sort-order="desc">Last Observation</th></tr>';
+if ($rsLastUpdated->rowCount() > 0) {
+  // Create html for table
+  $html = '<table class="sortable">
+    <tr class="no-sort"><th>Station</th><th class="sort-default" data-sort-order="desc">Last Observation</th></tr>';
 
-while($row = $rsLastUpdated->fetch(PDO::FETCH_OBJ)) {
-  $time = strtotime($row->last_observation);
+  while($row = $rsLastUpdated->fetch(PDO::FETCH_OBJ)) {
+    $time = strtotime($row->last_observation);
 
-  $html .= sprintf('<tr>
-      <td class="%s link">
-        <a href="./%s">%s</a>
-      </td>
-      <td data-sort="%s">%s</td>
-    </tr>',
-    getColor($row->last_observation),
-    strtolower($row->station),
-    strtoupper($row->station),
-    date('Y-m-d', $time),
-    date('M j, Y', $time)
-  );
+    $html .= sprintf('<tr>
+        <td class="%s link">
+          <a href="./%s">%s</a>
+        </td>
+        <td data-sort="%s">%s</td>
+      </tr>',
+      getColor($row->last_observation),
+      strtolower($row->station),
+      strtoupper($row->station),
+      date('Y-m-d', $time),
+      date('M j, Y', $time)
+    );
+  }
+
+  $html .= '</table>';
+} else {
+  $html = '<p class="alert info">None</p>';
 }
-
-$html .= '</table>';
 
 $backLink = sprintf('%s/%s',
   $MOUNT_PATH,
@@ -73,9 +77,7 @@ $backLink = sprintf('%s/%s',
   </ul>
 </nav>
 
-<section>
-  <?php print $html; ?>
-</section>
+<?php print $html; ?>
 
 <p class="back">&laquo;
   <a href="<?php print $backLink; ?>">Back to <?php print $networkParam; ?> Network</a>
