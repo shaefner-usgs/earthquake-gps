@@ -1,14 +1,10 @@
 /* CSS for freezing header cells on network-level velocities, offsets, and noise tables */
 
-table.sortable {
+table {
   border-collapse: separate; /* prevent borders from scrolling */
   border-spacing: 0;
   margin: 0;
   position: relative;
-}
-
-td, th {
-  border-width: 0 1px 1px 0;
 }
 
 td.freeze {
