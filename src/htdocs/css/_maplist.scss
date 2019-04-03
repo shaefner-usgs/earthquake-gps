@@ -22,7 +22,7 @@
     white-space: nowrap;
 
     &:hover {
-      background: linear-gradient(to bottom, color($grey tint(70%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($grey tint(70%)) 0%, rgb(255,255,255) 100%);
     }
   }
 
@@ -50,7 +50,7 @@
     background-color: $lightBlue;
 
     &:hover {
-      background: linear-gradient(to bottom, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
     }
   }
   .orange a:first-child {
@@ -58,7 +58,7 @@
     background-color: $lightOrange;
 
     &:hover {
-      background: linear-gradient(to bottom, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
     }
   }
   .red a:first-child {
@@ -66,7 +66,7 @@
     background-color: $lightRed;
 
     &:hover {
-      background: linear-gradient(to bottom, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
     }
   }
   .yellow a:first-child {
@@ -74,7 +74,7 @@
     background-color: $lightYellow;
 
     &:hover {
-      background: linear-gradient(to bottom, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
     }
   }
 }

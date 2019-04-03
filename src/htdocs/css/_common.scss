@@ -27,7 +27,7 @@ table {
     background-color: $lightBlue;
 
     &:hover {
-      background: linear-gradient(to bottom, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
     }
   }
   td.orange {
@@ -35,7 +35,7 @@ table {
     background-color: $lightOrange;
 
     &:hover {
-      background: linear-gradient(to bottom, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
     }
   }
   td.red {
@@ -43,7 +43,7 @@ table {
     background-color: $lightRed;
 
     &:hover {
-      background: linear-gradient(to bottom, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
     }
   }
   td.yellow {
@@ -51,7 +51,7 @@ table {
     background-color: $lightYellow;
 
     &:hover {
-      background: linear-gradient(to bottom, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
     }
   }
 
@@ -187,7 +187,7 @@ ul.legend {
     border-color: $blue;
 
     &[href]:hover {
-      background: linear-gradient(to bottom, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
     }
   }
   &.orange a {
@@ -195,7 +195,7 @@ ul.legend {
     border-color: $orange;
 
     &[href]:hover {
-      background: linear-gradient(to bottom, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
     }
   }
   &.red a {
@@ -203,7 +203,7 @@ ul.legend {
     border-color: $red;
 
     &[href]:hover {
-      background: linear-gradient(to bottom, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
     }
   }
   &.yellow a {
@@ -211,7 +211,7 @@ ul.legend {
     border-color: $yellow;
 
     &[href]:hover {
-      background: linear-gradient(to bottom, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
+      background: linear-gradient(to top, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
     }
   }
 }
