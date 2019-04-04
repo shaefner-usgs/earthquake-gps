@@ -32,13 +32,13 @@ if ($rsLastUpdated->rowCount() > 0) {
     $time = strtotime($row->last_observation);
 
     $html .= sprintf('<tr>
-        <td class="%s link">
-          <a href="./%s">%s</a>
-        </td>
+        <th class="link">
+          <a href="./%s" class="%s button">%s</a>
+        </th>
         <td data-sort="%s">%s</td>
       </tr>',
-      getColor($row->last_observation),
       strtolower($row->station),
+      getColor($row->last_observation),
       strtoupper($row->station),
       date('Y-m-d', $time),
       date('M j, Y', $time)
