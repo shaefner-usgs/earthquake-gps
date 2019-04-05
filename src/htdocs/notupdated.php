@@ -26,17 +26,21 @@ $rsLastUpdated = $db->queryLastUpdated($networkParam, 7);
 if ($rsLastUpdated->rowCount() > 0) {
   // Create html for table
   $html = '<table class="sortable">
-    <tr class="no-sort"><th>Station</th><th class="sort-default" data-sort-order="desc">Last Observation</th></tr>';
+    <tr class="no-sort">
+      <th>Station</th>
+      <th class="sort-default" data-sort-order="desc">Last Observation</th>
+    </tr>';
 
   while($row = $rsLastUpdated->fetch(PDO::FETCH_OBJ)) {
     $time = strtotime($row->last_observation);
 
     $html .= sprintf('<tr>
-        <th class="link">
+        <th class="%s link">
           <a href="./%s" class="%s button">%s</a>
         </th>
         <td data-sort="%s">%s</td>
       </tr>',
+      getColor($row->last_observation),
       strtolower($row->station),
       getColor($row->last_observation),
       strtoupper($row->station),
@@ -64,7 +68,8 @@ $backLink = sprintf('%s/%s',
 <nav>
   <ul class="pipelist no-style">
     <li>
-      <a href="../<?php print $networkParam; ?>">Station Map</a></li>
+      <a href="../<?php print $networkParam; ?>">Station Map</a>
+    </li>
     <li>
       <a href="../<?php print $networkParam; ?>/velocities">Velocities and Uncertainties</a>
     </li>

@@ -78,7 +78,7 @@ if ($rsVelocities->rowCount() > 0) {
     foreach($datatypes as $datatype=>$name) {
       if ($sigmaValues[$datatype] && $velocityValues[$datatype]) { // only create table if there's data
         $tableBody[$datatype] .= sprintf('<tr>
-            <th class="freeze link" title="Last observation: %s">
+            <th class="%s freeze link" title="Last observation: %s">
               <a href="./%s" class="%s button">%s</a>
             </th>
             <td>%s</td>
@@ -92,6 +92,7 @@ if ($rsVelocities->rowCount() > 0) {
             <td>%s</td>
             <td>%s</td>
           </tr>',
+          getColor($row->last_observation),
           date('M j, Y', strtotime($row->last_observation)),
           strtolower($row->station),
           getColor($row->last_observation),
@@ -150,7 +151,8 @@ $backLink = sprintf('%s/%s',
 <nav>
   <ul class="pipelist no-style">
     <li>
-      <a href="../<?php print $networkParam; ?>">Station Map</a></li>
+      <a href="../<?php print $networkParam; ?>">Station Map</a>
+    </li>
     <li>
       <strong>Velocities and Uncertainties</strong>
     </li>

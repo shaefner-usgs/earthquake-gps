@@ -1,6 +1,7 @@
+@import 'map/_leaflet.scss';
 @import 'tablist/TabList.scss';
 @import '_common.scss';
-@import 'map/_leaflet.scss';
+@import '_freezeCells.scss';
 
 h1 em {
   font-size: .8em;
@@ -53,11 +54,6 @@ nav {
 
 .empty {
   border-width: 0 1px 1px 0;
-}
-
-.freeze {
-  left: 0;
-  position: sticky;
 }
 
 .image {
@@ -149,8 +145,6 @@ nav {
   }
 
   th {
-    background-color: #f8f8f8;
-    border-width: 0 1px 1px 0;
     text-align: center;
   }
 }
@@ -163,10 +157,6 @@ nav {
 .row {
   margin-bottom: 1.5em;
   margin-top: 1.75em;
-}
-
-.scroll-wrapper {
-  overflow-x: auto;
 }
 
 @media screen and (max-width:1199px) {
