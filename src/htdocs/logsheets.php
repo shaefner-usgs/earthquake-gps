@@ -17,7 +17,7 @@ if (!isset($TEMPLATE)) {
     $networkParam,
     $networkParam
   );
-  $SUBTITLE = sprintf ('<a href="../%s">Station %s</a> <span>Field Logs</span>',
+  $SUBTITLE = sprintf ('<a href="../%s" class="button">Station %s</a> <span>Field Logs</span>',
     $stationParam,
     strtoupper($stationParam)
   );
@@ -35,9 +35,9 @@ $db = new Db();
 $rsStation = $db->queryStation($stationParam);
 $station = $rsStation->fetch(PDO::FETCH_ASSOC);
 
-printf ('<h2 class="subtitle %s">%s</h2>',
-  getColor($station['last_observation']),
-  $SUBTITLE
+$color = getColor($station['last_observation']);
+printf ('<h2 class="subtitle">%s</h2>',
+  str_replace('button', "$color button", $SUBTITLE)
 );
 
 if ($station) {

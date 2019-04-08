@@ -18,7 +18,7 @@ if (!isset($TEMPLATE)) {
     $networkParam,
     $networkParam
   );
-  $SUBTITLE = '<a>Station ' . $stationName . '</a>';
+  $SUBTITLE = 'Station ' . $stationName;
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '
@@ -81,7 +81,7 @@ $rsStation->setFetchMode(
 $stationModel = $rsStation->fetch();
 
 // Create the view and render it
-printf ('<h2 class="subtitle %s">%s</h2>',
+printf ('<h2 class="subtitle"><a class="%s button">%s</a></h2>',
   getColor($stationModel->lastUpdate),
   $SUBTITLE
 );

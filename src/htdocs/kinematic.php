@@ -14,7 +14,7 @@ if (!isset($TEMPLATE)) {
     $networkParam,
     $networkParam
   );
-  $SUBTITLE = sprintf ('<a href="../%s">Station %s</a> <span>Kinematic Data</span>',
+  $SUBTITLE = sprintf ('<a href="../%s" class="button">Station %s</a> <span>Kinematic Data</span>',
     $stationParam,
     $stationName
   );
@@ -45,6 +45,7 @@ $rsStation = $db->queryStation($stationParam);
 $station = $rsStation->fetch();
 $color = getColor($station['last_observation']);
 
+
 $backLink = sprintf('%s/%s/%s',
   $MOUNT_PATH,
   $networkParam,
@@ -53,8 +54,8 @@ $backLink = sprintf('%s/%s/%s',
 
 ?>
 
-<h2 class="subtitle <?php print $color; ?>">
-  <?php print $SUBTITLE; ?>
+<h2 class="subtitle">
+  <?php print str_replace('button', "$color button", $SUBTITLE); ?>
 </h2>
 
 <p>5-minute Kinematic Results.</p>

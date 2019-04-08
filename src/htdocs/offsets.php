@@ -95,9 +95,9 @@ if ($rsOffsets->rowCount() > 0) {
     foreach($datatypes as $datatype=>$name) {
       if ($sizeValues[$datatype] && $uncertaintyValues[$datatype]) { // only create table if there's data
         $tableBody[$datatype] .= sprintf('<tr>
-            <td class="%s freeze link" title="Last observation: %s">
-              <a href="./%s">%s</a>
-            </td>
+            <th class="%s freeze link" title="Last observation: %s">
+              <a href="./%s" class="%s button">%s</a>
+            </th>
             <td class="nowrap">%s</td>
             <td>%s</td>
             <td>%s</td>
@@ -114,6 +114,7 @@ if ($rsOffsets->rowCount() > 0) {
           getColor($lastObs[$row->station]),
           date('M j, Y', strtotime($lastObs[$row->station])),
           strtolower($row->station),
+          getColor($lastObs[$row->station]),
           strtoupper($row->station),
           $row->date,
           $row->decdate,
@@ -172,7 +173,8 @@ $backLink = sprintf('%s/%s',
 <nav>
   <ul class="pipelist no-style">
     <li>
-      <a href="../<?php print $networkParam; ?>">Station Map</a></li>
+      <a href="../<?php print $networkParam; ?>">Station Map</a>
+    </li>
     <li>
       <a href="../<?php print $networkParam; ?>/velocities">Velocities and Uncertainties</a>
     </li>

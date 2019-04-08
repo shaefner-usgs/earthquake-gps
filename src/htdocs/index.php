@@ -48,7 +48,7 @@ $networksHtml = '<ul class="networks no-style" style="height: '. $height . 'px;"
 foreach ($networks['features'] as $feature) {
   if ($feature['geometry']['type'] === 'Point') { // skip polygons
     $networksHtml .= sprintf('<li>
-        <a href="gps/%s" title="Go to map of stations" class="%s">%s</a>
+        <a href="gps/%s" class="%s button" title="Go to map of stations">%s</a>
       </li>',
       $feature['properties']['name'],
       str_replace('point', 'link', $feature['id']),

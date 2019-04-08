@@ -99,9 +99,9 @@ if ($rsNoise->rowCount() > 0) {
     foreach($datatypes as $datatype=>$name) {
       if ($values['whitenoise'][$datatype]) { // only create table if there's data
         $tableBody[$datatype] .= sprintf('<tr>
-            <td class="%s freeze link" title="Last observation: %s">
-              <a href="./%s">%s</a>
-            </td>
+            <th class="%s freeze link" title="Last observation: %s">
+              <a href="./%s" class="%s button">%s</a>
+            </th>
             <td>%s</td>
             <td>%s</td>
             <td>%s</td>
@@ -136,6 +136,7 @@ if ($rsNoise->rowCount() > 0) {
           getColor($lastObs[$row->station]),
           date('M j, Y', strtotime($lastObs[$row->station])),
           strtolower($row->station),
+          getColor($lastObs[$row->station]),
           strtoupper($row->station),
           $values['whitenoise'][$datatype]['N'],
           $values['whitenoise'][$datatype]['E'],
@@ -212,7 +213,7 @@ $backLink = sprintf('%s/%s',
 <nav>
   <ul class="pipelist no-style">
     <li>
-      <a href="../<?php print $networkParam; ?>">Station Map</a></li>
+      <a href="../<?php print $networkParam; ?>">Station Map</a>
     </li>
     <li>
       <a href="../<?php print $networkParam; ?>/velocities">Velocities and Uncertainties</a>
@@ -220,7 +221,9 @@ $backLink = sprintf('%s/%s',
     <li>
       <a href="../<?php print $networkParam; ?>/offsets">Offsets</a>
     </li>
-    <li><strong>Noise</strong></li>
+    <li>
+      <strong>Noise</strong>
+    </li>
     <li>
       <a href="../<?php print $networkParam; ?>/notupdated">Stations Not Updated in the Past 7 Days</a>
     </li>
