@@ -1,23 +1,26 @@
 @import '_vars.scss';
 
-h1 a {
-  color: $text-color;
+h1 {
   position: relative;
-  text-decoration: none;
 
-  &:active, &:visited {
+  a {
     color: $text-color;
-  }
-  &:hover {
-    color: #000;
-  }
-  &:hover:before {
-    content: '\00ab';
-    font-size: 1.75rem;
-    font-weight: normal;
-    left: -1.5rem;
-    position: absolute;
-    top: .5rem;
+    text-decoration: none;
+
+    &:active, &:visited {
+      color: $text-color;
+    }
+    &:hover {
+      color: #000;
+    }
+    &:hover:before {
+      content: '\00ab';
+      font-size: 1.75rem;
+      font-weight: normal;
+      left: -1.5rem;
+      position: absolute;
+      top: .5rem;
+    }
   }
 }
 
@@ -32,26 +35,6 @@ th {
   font-weight: normal;
 }
 
-ul.legend {
-  display: flex;
-  flex-flow: row wrap;
-  margin-top: 0;
-
-  img {
-    height: 25px;
-    position: absolute;
-  }
-  li {
-    padding: .5em 1.25em 0 0;
-    position: relative;
-    white-space: nowrap;
-  }
-  span {
-    display: inline-block;
-    margin-left: 25px;
-  }
-}
-
 .back {
   margin-top: 2em;
 }
@@ -61,6 +44,8 @@ ul.legend {
   border: 1px solid $grey;
   color: $text-color;
   display: block;
+  font: normal 1.7rem $font-sans;
+  line-height: 1.5;
   overflow: hidden;
   padding: 2px 4px;
   text-decoration: none;
@@ -137,6 +122,26 @@ ul.legend {
   }
 }
 
+.legend {
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 0;
+
+  img {
+    height: 25px;
+    position: absolute;
+  }
+  li {
+    padding: .5em 1.25em 0 0;
+    position: relative;
+    white-space: nowrap;
+  }
+  span {
+    display: inline-block;
+    margin-left: 25px;
+  }
+}
+
 .nowrap {
   white-space: nowrap;
 }
@@ -176,12 +181,11 @@ ul.legend {
 }
 
 .subtitle {
+  display: flex;
   margin: -.5em 0 1em;
 
-  a {
-    display: inline-block;
-    font: normal 2rem $font-sans;
-    margin-right: .1em;
+  span {
+    padding: 3px 0 0 4px;
   }
 }
 
