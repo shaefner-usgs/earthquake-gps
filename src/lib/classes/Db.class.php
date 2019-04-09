@@ -82,7 +82,7 @@ class Db {
    */
   public function queryDeletedPts ($network, $station, $datatype) {
     $sql = 'SELECT * FROM gps_deleted_pts WHERE network = :network AND
-      station = :station AND datatype = :datatype ORDER BY `date` ASC';
+      station = :station AND datatype = :datatype ORDER BY FIELD(`component`, "N", "E", "U"), `date` ASC';
 
     return $this->_execQuery($sql, array(
       'network' => $network,
