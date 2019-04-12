@@ -25,15 +25,18 @@ var Lightbox = function (options) {
   var _this,
       _initialize,
 
+      _addButtons,
       _addCaption,
-      _addCloseButton,
-      _addHandlers,
-      _addOverlay,
       _addLoadingSpinner,
+      _addNavHandlers,
+      _addOverlay,
+      _createButton,
       _getPosition,
       _removeComponent,
+      _rotatePhoto,
       _showNavButtons,
 
+      _angle,
       _simpleboxId;
 
 
@@ -48,10 +51,10 @@ var Lightbox = function (options) {
 
     callbacks = {
       onImageLoadEnd: function () {
-        document.getElementById(_simpleboxId).classList.add('material-icons');
+        _angle = 0;
 
         _removeComponent('simplbox-loading');
-        _addHandlers(simplbox);
+        _addNavHandlers(simplbox);
         _showNavButtons();
       },
       onImageLoadStart: function () {
@@ -59,6 +62,7 @@ var Lightbox = function (options) {
         _addCaption(simplbox);
       },
       onEnd: function () {
+        _removeComponent('simplbox-buttons');
         _removeComponent('simplbox-caption');
         _removeComponent('simplbox-close');
         _removeComponent('simplbox-overlay');
@@ -67,7 +71,7 @@ var Lightbox = function (options) {
       },
       onStart: function () {
         _addOverlay();
-        _addCloseButton(simplbox);
+        _addButtons(simplbox);
 
         document.body.classList.add('simplbox');
       }
@@ -81,9 +85,47 @@ var Lightbox = function (options) {
 
 
   /**
+   * Add action buttons (close, rotate)
+   *
+   * @param base {Object}
+   *   SimplBox instance
+   */
+  _addButtons = function (base) {
+    var buttons,
+        close,
+        left,
+        right;
+
+    close = _createButton('simplbox-close', 'cancel');
+    left = _createButton('left', 'rotate_left');
+    right = _createButton('right', 'rotate_right');
+
+    buttons = document.createElement('div');
+    buttons.setAttribute('id', 'simplbox-buttons');
+    [left, right, close].forEach(function (item) {
+      buttons.appendChild(item);
+    });
+    document.body.appendChild(buttons);
+
+    base.API_AddEvent(close, 'click touchend', function () {
+      base.API_RemoveImageElement();
+    });
+    base.API_AddEvent(left, 'click touchend', function (e) {
+      _rotatePhoto(-90);
+      e.stopPropagation();
+    }, false);
+    base.API_AddEvent(right, 'click touchend', function (e) {
+      _rotatePhoto(90);
+      e.stopPropagation();
+    });
+
+  };
+
+  /**
    * Add caption bar above photo
    *
    * @param base {Object}
+   *   SimplBox instance
    */
   _addCaption = function (base) {
     var div,
@@ -103,33 +145,31 @@ var Lightbox = function (options) {
   };
 
   /**
-   * Add close button to caption bar
-   *
-   * @param base {Object}
+   * Add loading spinner
    */
-  _addCloseButton = function (base) {
-    var div;
+  _addLoadingSpinner = function () {
+    var div1,
+        div2;
 
-    div = document.createElement('div');
-    div.setAttribute('id', 'simplbox-close');
-    div.innerHTML = '<i class="material-icons">&#xE5C9;</i>';
-    document.body.appendChild(div);
-    base.API_AddEvent(div, 'click touchend', function () {
-      base.API_RemoveImageElement();
-      return false;
-    });
+    div1 = document.createElement('div');
+    div2 = document.createElement('div');
+    div1.setAttribute('id', 'simplbox-loading');
+    div1.appendChild(div2);
+    document.body.appendChild(div1);
   };
 
   /**
    * Add handlers for prev / next photo navigation
    *
    * @param base {Object}
+   *   SimplBox instance
    */
-  _addHandlers = function (base) {
+  _addNavHandlers = function (base) {
     var div,
         position;
 
     div = document.getElementById(_simpleboxId);
+    div.classList.add('material-icons');
 
     // Navigate to prev / next photo, depending on where user clicked
     base.API_AddEvent(div, 'click touchend', function (e) {
@@ -171,17 +211,20 @@ var Lightbox = function (options) {
   };
 
   /**
-   * Add loading spinner
+   * Create button elements
+   *
+   * @param id {String}
+   * @param icon {String}
+   *   material icon name
    */
-  _addLoadingSpinner = function () {
-    var div1,
-        div2;
+  _createButton = function (id, icon) {
+    var div = document.createElement('div');
 
-    div1 = document.createElement('div');
-    div2 = document.createElement('div');
-    div1.setAttribute('id', 'simplbox-loading');
-    div1.appendChild(div2);
-    document.body.appendChild(div1);
+    div.setAttribute('id', id);
+    div.classList.add('icon');
+    div.innerHTML = '<i class="material-icons">' + icon + '</i>';
+
+    return div;
   };
 
   /**
@@ -220,6 +263,21 @@ var Lightbox = function (options) {
   };
 
   /**
+   * Rotate photo
+   *
+   * @param a {Number}
+   *   value in degrees to rotate
+   */
+  _rotatePhoto = function (a) {
+    var photo;
+
+    _angle += a;
+    photo = document.querySelector('#' + _simpleboxId + ' img');
+
+    photo.style.transform = 'rotate(' + _angle + 'deg)';
+  };
+
+  /**
    * Briefly show navigation buttons on photo to alert user about photo navigation
    */
   _showNavButtons = function () {
@@ -240,5 +298,6 @@ var Lightbox = function (options) {
   options = null;
   return _this;
 };
+
 
 module.exports = Lightbox;

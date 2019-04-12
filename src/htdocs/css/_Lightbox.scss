@@ -32,9 +32,25 @@ html {
   }
 }
 
+#simplbox-buttons {
+  display: flex;
+  position: fixed;
+  right: 5px;
+  top: 5px;
+  z-index: 10002;
+
+  .icon {
+    color: rgb(205, 203, 229);
+    cursor: pointer;
+  }
+  .material-icons {
+    font-size: 30px;
+  }
+}
+
 #simplbox-caption {
   background-color: rgba(13, 5, 255, 0.47);
-  color: rgb(196, 201, 255);
+  color: rgb(228, 226, 255);
   font-size: 20px;
   left: 0;
   padding: 5px;
@@ -46,21 +62,8 @@ html {
   z-index: 10001;
 
   small {
-    color: rgba(196, 201, 255, 0.73);
+    color: rgb(205, 203, 229);
     padding-left: .5em;
-  }
-}
-
-#simplbox-close {
-  color: rgba(196, 201, 255, 0.73);
-  cursor: pointer;
-  position: fixed;
-  right: 8px;
-  top: 5px;
-  z-index: 10002;
-
-  .material-icons {
-    font-size: 30px;
   }
 }
 
@@ -69,16 +72,17 @@ html {
   position: fixed;
   top: 50%;
   z-index: 10003;
-}
-#simplbox-loading:before {
-  animation: loader 1s linear infinite;
-  background-color: #ccc;
-  border-radius: 50%;
-  content: '';
-  display: block;
-  height: 8px;
-  transform-origin: 8px 8px;
-  width: 8px;
+
+  &:before {
+    animation: loader 1s linear infinite;
+    background-color: #ccc;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 8px;
+    transform-origin: 8px 8px;
+    width: 8px;
+  }
 }
 @keyframes loader {
   0% {
