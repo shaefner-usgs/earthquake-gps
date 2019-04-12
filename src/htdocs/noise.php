@@ -233,5 +233,5 @@ $backLink = sprintf('%s/%s',
 <?php print $html; ?>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to <?php print $networkParam; ?> Network</a>
+  <a href="<?php print $backLink; ?>">Back to Station Map</a>
 </p>
