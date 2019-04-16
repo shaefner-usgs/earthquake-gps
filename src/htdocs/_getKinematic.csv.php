@@ -4,18 +4,18 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$direction = safeParam('direction');
-$station = safeParam('station', '157p');
+$component = safeParam('component');
+$stationParam = strtolower(safeParam('station', '157p'));
 $now = date(DATE_RFC2822);
 
 $db = new Db;
 
 // Db query result: time series data for given station
-$rsTimeSeries = $db->queryTimeSeries($station);
+$rsTimeSeries = $db->queryTimeSeries($stationParam);
 
 // Set header
-if (preg_match('/^north|east|up$/', $direction)) {
-  $header = sprintf("Datetime-UTC, %s\n", ucfirst($direction));
+if (preg_match('/^north|east|up$/', $component)) {
+  $header = sprintf("Datetime-UTC, %s\n", ucfirst($component));
 } else {
   $header = "Datetime-UTC, Datetime-J2000, North, East, Up\n";
 }
@@ -29,9 +29,9 @@ while ($row = $rsTimeSeries->fetch(PDO::FETCH_ASSOC)) {
   $date = date('Y/m/d H:i:s', $timestamp);
 
   // show only chosen component - for timeseries plot
-  if ($direction) {
-    $column = $direction;
-    if ($direction === 'up') {
+  if ($component) {
+    $column = $component;
+    if ($component === 'up') {
       $column = 'vertical'; // db field is 'vertical' for up component
     }
     $values = floatval($row[$column]);

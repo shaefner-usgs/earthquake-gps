@@ -41,6 +41,7 @@ var NetworksLayer = function (options) {
       _initialize,
 
       _icons,
+      _ids,
       _markerOptions,
 
       _attachEvents,
@@ -56,6 +57,7 @@ var NetworksLayer = function (options) {
     _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
 
     _icons = {};
+    _ids = [];
 
     _this = L.geoJson(options.data, {
       onEachFeature: _onEachFeature,
@@ -97,16 +99,26 @@ var NetworksLayer = function (options) {
    * Hide label & polygon
    *
    * @param id {Int}
-   *     id number of features to hide
+   *     optional; id number of feature to hide (hides all if no id is given)
    */
   _hide = function (id) {
-    var label = document.querySelector('.label' + id),
-        poly = document.querySelector('.poly' + id);
+    var ids,
+        label,
+        poly;
 
-    label.classList.add('off');
-    if (poly) {
-      poly.classList.add('off');
+    ids = _ids; // all ids
+    if (id) {
+      ids = [id];
     }
+
+    ids.forEach(function(id) {
+      label = document.querySelector('.label' + id);
+      poly = document.querySelector('.poly' + id);
+      label.classList.add('off');
+      if (poly) {
+        poly.classList.add('off');
+      }
+    });
   };
 
   /**
@@ -138,6 +150,8 @@ var NetworksLayer = function (options) {
         noHide: true,
         pane: 'popupPane'
       });
+
+      _ids.push(id);
     }
   };
 
@@ -172,12 +186,13 @@ var NetworksLayer = function (options) {
    * Show label & polygon
    *
    * @param id {Int}
-   *     id number of features to show
+   *     id number of feature to show
    */
   _show = function (id) {
     var label = document.querySelector('.label' + id),
         poly = document.querySelector('.poly' + id);
 
+    _hide();
     label.classList.remove('off');
     if (poly) {
       poly.classList.remove('off');

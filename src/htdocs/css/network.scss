@@ -1,5 +1,4 @@
 @import '_common.scss';
-@import '_variables.scss';
 @import '_maplist.scss';
 @import 'map/_map.scss';
 
@@ -11,6 +10,11 @@
   .pipelist {
     margin: 1em 0;
   }
+}
+
+.small {
+  margin-top: .5em;
+  font-size: .8em;
 }
 
 section > .pipelist {

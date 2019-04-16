@@ -1,8 +1,19 @@
-@import 'tablist/TabList.scss';
 @import '_common.scss';
-@import '_freezeCells.scss';
 @import '_tableCellLinks.scss';
 @import '_SortAndTabifyTable.scss';
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+td, th {
+  border-width: 0 1px 1px 0;
+}
+
+th.link {
+  position: relative;
+}
 
 .scroll-wrapper {
   margin-top: 1.25em;

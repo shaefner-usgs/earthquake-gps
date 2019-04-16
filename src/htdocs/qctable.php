@@ -4,13 +4,24 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$network = safeParam('network', 'SFBayArea');
-$station = safeParam('station', 'p271');
+$networkParam = safeParam('network', 'SFBayArea');
+$stationParam = strtolower(safeParam('station', 'p271'));
+
+$stationName = strtoupper($stationParam);
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($station) . ' Quality Control Data';
+  $TITLE = sprintf ('<a href="../../../%s">%s Network</a>',
+    $networkParam,
+    $networkParam
+  );
+  $SUBTITLE = sprintf ('<a href="../../%s" class="button">Station %s</a> <span>Quality Control Data</span>',
+    $stationParam,
+    $stationName
+  );
+  $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../../../css/base.css" />';
+  $HEAD = '<link rel="stylesheet" href="../../../css/qctable.css" />';
+  $FOOT = '<script src="../../../js/table.js"></script>';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
@@ -18,13 +29,17 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db;
 
-// Db query result: past 14 records of QC data
-$rsQcData = $db->queryQcData($network, $station, 14);
+// Db query results: station details for selected station and past 14 records of QC data
+$rsStation = $db->queryStation($stationParam);
+$rsQcData = $db->queryQcData($networkParam, $stationParam, 14);
+
+$station = $rsStation->fetch();
+$color = getColor($station['last_observation']);
 
 // Create html for table body
-$table_body_html = '';
+$tableBodyHtml = '';
 while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
-  $table_body_html .= sprintf("<tr>
+  $tableBodyHtml .= sprintf("<tr>
       <td>%s</td>
       <td>%s</td>
       <td>%s</td>
@@ -49,35 +64,52 @@ while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
   );
 }
 
+$numRows = $rsQcData->rowCount();
+
 $backLink = sprintf('%s/%s/%s',
   $MOUNT_PATH,
-  $network,
-  $station
+  $networkParam,
+  $stationParam
 );
-$name = strtoupper($station);
 
 ?>
 
-<h2>Past 14 observations</h2>
+<h2 class="subtitle">
+  <?php print str_replace('button', "$color button", $SUBTITLE); ?>
+</h2>
 
-<table>
-  <tr>
-    <th>Year</th>
-    <th><abbr title="Day of the year">DoY</abbr></th>
-    <th>Date</th>
-    <th>Filename</th>
-    <th>Completeness</th>
-    <th>Slips</th>
-    <th>MP1</th>
-    <th>MP2</th>
-    <th>SN1</th>
-    <th>SN2</th>
-  </tr>
+<ul class="pipelist no-style">
+  <li><a href="../qc">Plots</a></li>
+  <li><strong>Table</strong></li>
+</ul>
 
-<?php print $table_body_html; ?>
+<?php if ($tableBodyHtml) { ?>
 
-</table>
+  <table class="sortable">
+    <tr class="no-sort">
+      <th>Year</th>
+      <th><abbr title="Day of the year">DoY</abbr></th>
+      <th class="sort-default" data-sort-order="desc">Date</th>
+      <th>Filename</th>
+      <th>Completeness</th>
+      <th>Slips</th>
+      <th>MP1</th>
+      <th>MP2</th>
+      <th>SN1</th>
+      <th>SN2</th>
+    </tr>
+
+  <?php print $tableBodyHtml; ?>
+
+  </table>
+  <p>Past <?php print $numRows; ?> observations.</p>
+
+<?php } else { ?>
+
+  <p class="alert info">No Data</p>
+
+<?php } ?>
 
 <p class="back">&laquo;
-  <a href="<?php print $backLink; ?>">Back to station <?php print $name; ?></a>
+  <a href="<?php print $backLink; ?>">Back to Station <?php print $stationName; ?></a>
 </p>

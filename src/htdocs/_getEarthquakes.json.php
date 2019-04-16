@@ -4,17 +4,17 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$callback = safeParam('callback');
-$days = safeParam('days', 30);
-$mag = safeParam('mag', 2.5);
+$callbackParam = safeParam('callback');
+$daysParam = safeParam('days', 30);
+$magParam = safeParam('mag', 2.5);
 
 $now = date(DATE_RFC2822);
 $time = time();
 
 $db = new Db;
 
-// Db query result: real-time earthquakes, mag>=$mag, past $days days
-$rsEarthquakes = $db->queryEarthquakes($mag, $days);
+// Db query result: real-time earthquakes, mag>=$magParam, past $daysParam days
+$rsEarthquakes = $db->queryEarthquakes($magParam, $daysParam);
 
 // Initialize array template for json feed
 $output = array(
@@ -68,7 +68,7 @@ while ($row = $rsEarthquakes->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Send json stream to browser
-showJson($output, $callback);
+showJson($output, $callbackParam);
 
 /**
  * Get eq's age classification - use global time so calculated age is consistent

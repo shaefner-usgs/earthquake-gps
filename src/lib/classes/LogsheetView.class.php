@@ -15,7 +15,7 @@ class LogsheetView {
 
   private function _getBackLink () {
     return sprintf('<p class="back">&laquo;
-        <a href="%s/%s/%s">Back to station %s</a>
+        <a href="%s/%s/%s">Back to Station %s</a>
       </p>',
       $GLOBALS['MOUNT_PATH'],
       $this->_collection->network,
@@ -26,12 +26,12 @@ class LogsheetView {
 
   private function _getLogSheets () {
     if (!$this->_collection->logsheets) {
-      $logSheetsHtml = '<p class="alert info">No Field Logs Found</p>';
+      $logSheetsHtml = '<p class="alert info">No Field Logs</p>';
     } else {
       $logSheetsHtml = '';
       // loop thru each logsheet (grouped by date)
       foreach ($this->_collection->logsheets as $date => $logsheets) {
-        $logSheetsHtml .= '<h2>' . date('F j, Y', strtotime($date)) . '</h2>';
+        $logSheetsHtml .= '<h3>' . date('F j, Y', strtotime($date)) . '</h3>';
         $logSheetsHtml .= '<ul class="no-style pipelist">';
         foreach ($logsheets as $logsheet) {
           $logSheetsHtml .= sprintf ('<li><a href="%s/%s">%s</a></li>',

@@ -11,10 +11,10 @@ include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 // set default value so page loads without passing params
-$network = safeParam('network', 'Alaska');
+$networkParam = safeParam('network', 'Alaska');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = $network . ' Network';
+  $TITLE = $networkParam . ' Network';
   $NAVIGATION = true;
   $HEAD = '
     <link rel="stylesheet" href="/lib/leaflet-0.7.7/leaflet.css" />
@@ -23,7 +23,7 @@ if (!isset($TEMPLATE)) {
   $FOOT = '
     <script>
       var MOUNT_PATH = "' . $MOUNT_PATH . '",
-          NETWORK = "' . $network . '";
+          NETWORK = "' . $networkParam . '";
     </script>
     <script src="/lib/leaflet-0.7.7/leaflet.js"></script>
     <script src="js/network.js"></script>
@@ -31,7 +31,7 @@ if (!isset($TEMPLATE)) {
   $CONTACT = 'jsvarc';
 
   // importJsonToArray() sets headers -> needs to run before including template
-  $stations = importJsonToArray(__DIR__ . '/_getStations.json.php', $network);
+  $stations = importJsonToArray(__DIR__ . '/_getStations.json.php', $networkParam);
 
   include 'template.inc.php';
 }
@@ -39,7 +39,7 @@ if (!isset($TEMPLATE)) {
 $db = new Db();
 
 // Db query result: network details for selected network
-$rsNetwork = $db->queryNetwork($network);
+$rsNetwork = $db->queryNetwork($networkParam);
 $row = $rsNetwork->fetch(PDO::FETCH_OBJ);
 
 // Check to see if this is a valid network
@@ -47,27 +47,8 @@ if ($stations['count'] === 0) {
   print '<p class="alert info">Network Not Found</p>';
 } else { // Begin: valid network block
 
-// Create HTML for link list
-$links = [
-  'GPS waypoints' => "$network/waypoints",
-  'Velocities and Uncertainties' => "$network/velocities",
-  'Offsets' => "$network/offsets",
-  'Most recent XYZ positions' => "data/networks/$network/${network}_xyz_file",
-  'ITRF2008 XYZ time series' => "data/networks/$network/${network}_ITRF2008_xyz_files.tar.gz",
-  'Stations not updated in the past 7 days' => "$network/notupdated"
-];
-
-$links_html = '<ul class="pipelist no-style">';
-foreach($links as $name => $link) {
-  $links_html .= sprintf('<li><a href="%s">%s</a></li>',
-    $link,
-    $name
-  );
-}
-$links_html .= '</ul>';
-
 // Create HTML for legend
-$legend_icons = [
+$legendIcons = [
   'triangle+grey' => 'Campaign',
   'square+grey' => 'Continuous',
   'blue' => 'Past 3 days',
@@ -76,9 +57,9 @@ $legend_icons = [
   'red' => 'Over 14 days ago'
 ];
 
-$legend_html = '<ul class="legend no-style">';
-foreach ($legend_icons as $key => $description) {
-  $legend_html .= sprintf('<li>
+$legendHtml = '<ul class="legend no-style">';
+foreach ($legendIcons as $key => $description) {
+  $legendHtml .= sprintf('<li>
       <img src="img/pin-s-%s-2x.png" alt="%s icon" /><span>%s</span>
     </li>',
     $key,
@@ -86,13 +67,13 @@ foreach ($legend_icons as $key => $description) {
     $description
   );
 }
-$legend_html .= '</ul>';
+$legendHtml .= '</ul>';
 
 // Create HTML for station list
 $height = ceil($stations['count'] / 8) * 36;
 $starred = false;
 
-$stations_html = '<ul class="stations no-style" style="height: '. $height . 'px;">';
+$stationsHtml = '<ul class="stations no-style" style="height: '. $height . 'px;">';
 foreach ($stations['features'] as $feature) {
   // star high rms values
   $star = '';
@@ -103,52 +84,78 @@ foreach ($stations['features'] as $feature) {
       $star = '<span>*</span>';
       $starred = true;
   }*/
-  $stations_html .= sprintf('<li class="%s">
-      <a href="%s/%s" title="Go to station details">%s%s</a>
+  $stationsHtml .= sprintf('<li>
+      <a href="%s/%s" class="%s button" title="Go to station details">%s%s</a>
     </li>',
-    getColor($feature['properties']['days']),
-    $network,
+    $networkParam,
     $feature['properties']['station'],
+    getColor($feature['properties']['last_observation']),
     strtoupper($feature['properties']['station']),
     $star
   );
 }
-$stations_html .= '</ul>';
+$stationsHtml .= '</ul>';
 
-// Create HTML for Google Earth links
-$geFileBaseUri = $network . '/kml';
+// Create HTML for Download links
+$downloads = [
+  'GPS Waypoints' => ['gpx', "$networkParam/waypoints"],
+  'Most Recent XYZ Positions' => ['text', "data/networks/$networkParam/${networkParam}_xyz_file"],
+  'ITRF2008 XYZ Time Series' => ['zip', "data/networks/$networkParam/${networkParam}_ITRF2008_xyz_files.tar.gz"]
+];
+$kmlFileBaseUri = $networkParam . '/kml';
 
+$downloadsHtml = '<ul class="downloads no-style">';
 if ($row->type === 'campaign') {
-  $geFilesHeader = '<h2>Google Earth Files</h2>';
-  $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '/years">Campaign stations sorted by year(s) surveyed</a>
+  $kmlFiles = '<li>
+      <a href="' . $kmlFileBaseUri . '/years" class="kml">Campaign Stations Sorted by Year(s) Surveyed</a>
     </li>';
-  $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '/last">Campaign stations sorted by last year surveyed</a>
+  $kmlFiles .= '<li>
+      <a href="' . $kmlFileBaseUri . '/last" class="kml">Campaign Stations Sorted by Last Year Surveyed</a>
     </li>';
-  $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '/timespan">Campaign stations sorted by timespan between surveys</a>
+  $kmlFiles .= '<li>
+      <a href="' . $kmlFileBaseUri . '/timespan" class="kml">Campaign Stations Sorted by Timespan Between Surveys</a>
     </li>';
 } else { // continuous network
-  $geFilesHeader = '<h2>Google Earth File</h2>';
-  $geFiles_lis .= '<li>
-      <a href="' . $geFileBaseUri . '">All stations sorted by station name</a>
+  $kmlFiles = '<li>
+      <a href="' . $kmlFileBaseUri . '" class="kml">Stations Sorted by Station Name</a>
     </li>';
 }
-$geFiles_html = "$geFilesHeader<ul>$geFiles_lis</ul>";
+$downloadsHtml .= $kmlFiles;
+foreach ($downloads as $name=>$file) {
+  $downloadsHtml .= sprintf('<li><a href="%s" class="%s">%s</a></li>',
+    $file[1],
+    $file[0],
+    $name
+  );
+}
+$downloadsHtml .= '</ul>';
 
 ?>
 
-<section>
-  <?php print $links_html; ?>
-</section>
+<h2 class="subtitle">Station Map</h2>
+
+<nav>
+  <ul class="pipelist no-style">
+    <li><strong>Station Map</strong></li>
+    <li>
+      <a href="<?php print $networkParam; ?>/velocities">Velocities and Uncertainties</a>
+    </li>
+    <li>
+      <a href="<?php print $networkParam; ?>/offsets">Offsets</a>
+    </li>
+    <li>
+      <a href="<?php print $networkParam; ?>/notupdated">Stations Not Updated in the Past 7 Days</a>
+    </li>
+  </ul>
+</nav>
 
 <section>
   <div class="map"></div>
-  <?php print $legend_html; ?>
-  <h3 class="count"><?php print $stations['count']; ?> stations on this map</h3>
+  <?php print $legendHtml; ?>
+  <p class="small">Pin color indicates when station was last updated.</p>
+  <h3 class="count"><?php print $stations['count']; ?> Stations on this Map</h3>
   <?php
-    print $stations_html;
+    print $stationsHtml;
     if ($starred) {
       print '<p>* = high RMS values</p>';
     }
@@ -156,11 +163,12 @@ $geFiles_html = "$geFilesHeader<ul>$geFiles_lis</ul>";
 </section>
 
 <section>
-  <?php print $geFiles_html; ?>
+  <h2>Downloads</h2>
+  <?php print $downloadsHtml; ?>
 </section>
 
 <?php } // End: valid network block ?>
 
 <p class="back">&laquo;
-  <a href="<?php print $MOUNT_PATH; ?>">Back to all networks</a>
+  <a href="<?php print $MOUNT_PATH; ?>">Back to All Networks</a>
 </p>

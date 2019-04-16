@@ -3,10 +3,6 @@ th {
     cursor: pointer;
     white-space: nowrap;
 
-    &:selection {
-      background: transparent;
-    }
-
     &:after {
       border-color: #404040 transparent;
       border-style: solid;
@@ -15,6 +11,14 @@ th {
       display: inline-block;
       margin: 4px 0 4px 2px;
       visibility: hidden;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:selection {
+      background: transparent;
     }
 
     &.sort-up:after,
@@ -26,11 +30,5 @@ th {
       border-bottom: none;
       border-width: 4px 4px 0;
     }
-  }
-}
-
-.tablist-panel {
-  header {
-    display: none; /* hides in js env only (.tablist-panel added by tabs js) */
   }
 }

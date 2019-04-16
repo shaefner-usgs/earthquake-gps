@@ -24,14 +24,14 @@ if (!isset($TEMPLATE)) {
 }
 
 // Create HTML for legend
-$legend_icons = [
+$legendIcons = [
   'triangle+grey' => 'Campaign',
   'square+grey' => 'Continuous'
 ];
 
-$legend_html = '<ul class="legend no-style">';
-foreach ($legend_icons as $key => $description) {
-  $legend_html .= sprintf('<li>
+$legendHtml = '<ul class="legend no-style">';
+foreach ($legendIcons as $key => $description) {
+  $legendHtml .= sprintf('<li>
       <img src="gps/img/pin-s-%s-2x.png" alt="%s icon" /><span>%s</span>
     </li>',
     $key,
@@ -39,16 +39,16 @@ foreach ($legend_icons as $key => $description) {
     $description
   );
 }
-$legend_html .= '</ul>';
+$legendHtml .= '</ul>';
 
 // Create HTML for network list
 $height = ceil($networks['count'] / 4) * 36;
-$networks_html = '<ul class="networks no-style" style="height: '. $height . 'px;">';
+$networksHtml = '<ul class="networks no-style" style="height: '. $height . 'px;">';
 
 foreach ($networks['features'] as $feature) {
   if ($feature['geometry']['type'] === 'Point') { // skip polygons
-    $networks_html .= sprintf('<li>
-        <a href="gps/%s" title="Go to map of stations" class="%s">%s</a>
+    $networksHtml .= sprintf('<li>
+        <a href="gps/%s" class="%s button" title="Go to map of stations">%s</a>
       </li>',
       $feature['properties']['name'],
       str_replace('point', 'link', $feature['id']),
@@ -57,7 +57,7 @@ foreach ($networks['features'] as $feature) {
   }
 }
 
-$networks_html .= '</ul>';
+$networksHtml .= '</ul>';
 
 ?>
 
@@ -69,14 +69,14 @@ $networks_html .= '</ul>';
   stations have moved we calculate ground deformation.
   <a href="gps/about.php">Read more</a> &raquo;</p>
 
-<p class="alert info"><a href="gps/citation.php">How to cite GPS Data</a></p>
+<p class="alert info"><a href="gps/citation.php">How to Cite GPS Data</a></p>
 
 <section>
   <h2>View Stations by Network</h2>
   <div class="map"></div>
-  <?php print $legend_html; ?>
-  <h3 class="count"><?php print $networks['count']; ?> networks on this map</h3>
-  <?php print $networks_html; ?>
+  <?php print $legendHtml; ?>
+  <h3 class="count"><?php print $networks['count']; ?> Networks on this Map</h3>
+  <?php print $networksHtml; ?>
 </section>
 
 <section>
@@ -85,11 +85,11 @@ $networks_html .= '</ul>';
 </section>
 
 <section>
-  <h2>Google Earth Files</h2>
-  <ul>
-    <li><a href="gps/kml/years">Campaign stations sorted by year(s) surveyed</a></li>
-    <li><a href="gps/kml/last">Campaign stations sorted by last year surveyed</a></li>
-    <li><a href="gps/kml/timespan">Campaign stations sorted by timespan between surveys</a></li>
+  <h2>Downloads</h2>
+  <ul class="downloads no-style">
+    <li><a href="gps/kml/years" class="kml">Campaign Stations Sorted by Year(s) Surveyed</a></li>
+    <li><a href="gps/kml/last" class="kml">Campaign Stations Sorted by Last Year Surveyed</a></li>
+    <li><a href="gps/kml/timespan" class="kml">Campaign Stations Sorted by Timespan Between Surveys</a></li>
   </ul>
 </section>
 

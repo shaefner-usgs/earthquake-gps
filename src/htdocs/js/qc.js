@@ -7,7 +7,7 @@ var Application = require('qc/Application');
 var app,
     el;
 
-el = document.querySelector('#application');
+el = document.querySelector('.application');
 
 app = Application({
   // channel metadata
@@ -46,21 +46,21 @@ app = Application({
   // list of plots
   'plots': [
     {
-      'title': '<h2>Completeness</h2>',
+      'title': '<h3>Completeness</h3>',
       'channels': [
         'percentage',
         'slips_per_obs'
       ]
     },
     {
-      'title': '<h2>Multipath</h2>',
+      'title': '<h3>Multipath</h3>',
       'channels': [
         'mp1',
         'mp2'
       ]
     },
     {
-      'title': '<h2>Signal-to-Noise</h2>',
+      'title': '<h3>Signal-to-Noise</h3>',
       'channels': [
         'sn1',
         'sn2'

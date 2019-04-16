@@ -4,13 +4,15 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$days = 7;
-$network = safeParam('network', 'Pacific');
+$networkParam = safeParam('network', 'Pacific');
 
 if (!isset($TEMPLATE)) {
-  $TITLE = "$network Network";
+  $TITLE = "$networkParam Network";
+  $SUBTITLE = 'Stations Not Updated in the Past 7 Days';
+  $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
-  $HEAD = '<link rel="stylesheet" href="../css/base.css" />';
+  $HEAD = '<link rel="stylesheet" href="../css/notupdated.css" />';
+  $FOOT = '<script src="../js/table.js"></script>';
   $CONTACT = 'jsvarc';
 
   include 'template.inc.php';
@@ -18,38 +20,70 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db();
 
-// Db query result: all stations that haven't been updated in past x days
-$rsLastUpdated = $db->queryLastUpdated($network, $days);
+// Db query result: all stations that haven't been updated in past 7 days
+$rsLastUpdated = $db->queryLastUpdated($networkParam, 7);
 
-// Create html for table
-$table_html = '<table>
-  <tr><th>Station</th><th>Last Observation</th></tr>';
+if ($rsLastUpdated->rowCount() > 0) {
+  // Create html for table
+  $html = '<table class="sortable">
+    <tr class="no-sort">
+      <th>Station</th>
+      <th class="sort-default" data-sort-order="desc">Last Observation</th>
+    </tr>';
 
-while($row = $rsLastUpdated->fetch()) {
-  $table_html .= sprintf("<tr><td>%s</td><td>%s</td>\n",
-    $row['station'],
-    date('M j, Y', strtotime($row['last_observation']))
-  );
+  while($row = $rsLastUpdated->fetch(PDO::FETCH_OBJ)) {
+    $time = strtotime($row->last_observation);
+
+    $html .= sprintf('<tr>
+        <th class="%s link">
+          <a href="./%s" class="%s button">%s</a>
+        </th>
+        <td data-sort="%s">%s</td>
+      </tr>',
+      getColor($row->last_observation),
+      strtolower($row->station),
+      getColor($row->last_observation),
+      strtoupper($row->station),
+      date('Y-m-d', $time),
+      date('M j, Y', $time)
+    );
+  }
+
+  $html .= '</table>';
+} else {
+  $html = '<p class="alert info">None</p>';
 }
 
-$table_html .= '</table>';
-
-$backlink = sprintf('<a href="%s/%s">Back to %s network</a>',
+$backLink = sprintf('%s/%s',
   $MOUNT_PATH,
-  $network,
-  $network
+  $networkParam
 );
 
 ?>
 
-<h2>
-  Stations not updated in the past <?php print $days; ?> days
+<h2 class="subtitle">
+  <?php print $SUBTITLE; ?>
 </h2>
 
-<section>
-  <?php print $table_html; ?>
-</section>
+<nav>
+  <ul class="pipelist no-style">
+    <li>
+      <a href="../<?php print $networkParam; ?>">Station Map</a>
+    </li>
+    <li>
+      <a href="../<?php print $networkParam; ?>/velocities">Velocities and Uncertainties</a>
+    </li>
+    <li>
+      <a href="../<?php print $networkParam; ?>/offsets">Offsets</a>
+    </li>
+    <li>
+      <strong>Stations Not Updated in the Past 7 Days</strong>
+    </li>
+  </ul>
+</nav>
+
+<?php print $html; ?>
 
 <p class="back">&laquo;
-  <?php print $backlink; ?>
+  <a href="<?php print $backLink; ?>">Back to Station Map</a>
 </p>

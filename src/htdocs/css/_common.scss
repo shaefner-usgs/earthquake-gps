@@ -1,9 +1,125 @@
+@import '_vars.scss';
+
+h1 {
+  position: relative;
+
+  a {
+    color: $text-color;
+    text-decoration: none;
+
+    &:active, &:visited {
+      color: $text-color;
+    }
+    &:hover {
+      color: #000;
+    }
+    &:hover:before {
+      content: '\00ab';
+      font-size: 1.75rem;
+      font-weight: normal;
+      left: -1.25rem;
+      position: absolute;
+      top: .5rem;
+    }
+  }
+}
+
+td, th {
+  border-color: #e8e8e8;
+}
+td {
+  background-color: #fff;
+}
+th {
+  background-color: #f8f8f8;
+  font-weight: normal;
+}
+
 .back {
   margin-top: 2em;
 }
 
-.empty {
-  border: 0;
+.button {
+  background-color: color($grey tint(82%));
+  border: 1px solid $grey;
+  color: $text-color;
+  display: block;
+  font: normal 1.7rem $font-sans;
+  line-height: 1.5;
+  overflow: hidden;
+  padding: 2px 4px;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:active, &:visited {
+    color: $text-color;
+  }
+
+  &[href]:hover {
+    background: linear-gradient(to top, color($grey tint(70%)) 0%, rgb(255,255,255) 100%);
+    color: #000;
+  }
+
+  &.blue {
+    background: $lightBlue;
+    border-color: $blue;
+
+    &[href]:hover {
+      background: linear-gradient(to top, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
+    }
+  }
+  &.orange {
+    background: $lightOrange;
+    border-color: $orange;
+
+    &[href]:hover {
+      background: linear-gradient(to top, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
+    }
+  }
+  &.red {
+    background: $lightRed;
+    border-color: $red;
+
+    &[href]:hover {
+      background: linear-gradient(to top, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
+    }
+  }
+  &.yellow {
+    background: $lightYellow;
+    border-color: $yellow;
+
+    &[href]:hover {
+      background: linear-gradient(to top, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
+    }
+  }
+}
+
+.clear {
+  clear: both;
+}
+
+.downloads {
+  a {
+    background: no-repeat 0/22px;
+    display: inline-block;
+    height: 22px;
+    margin: 2px 0;
+    padding-left: 26px;
+  }
+
+  .gpx {
+    background-image: url('../img/gpx-icon.png');
+  }
+  .kml {
+    background-image: url('../img/kml-icon.png');
+  }
+  .text {
+    background-image: url('../img/text-icon.png');
+  }
+  .zip {
+    background-image: url('../img/zip-icon.png');
+  }
 }
 
 .legend {
@@ -26,6 +142,10 @@
   }
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .pipelist {
   display: flex;
   flex-wrap: wrap;
@@ -43,6 +163,36 @@
   }
 }
 
+.popup {
+  dd {
+    color: #666;
+    margin: .2em 0 0;
+  }
+
+  dt {
+    font-weight: normal;
+    margin-top: 1em;
+  }
+
+  h2 {
+    font: normal 1.5em $font-sans !important;
+    margin-top: 0;
+  }
+}
+
+.subtitle {
+  display: flex;
+  margin: -.5em 0 1em;
+
+  span {
+    padding: 3px 0 0 4px;
+  }
+}
+
 .tablist-panel {
   overflow: auto;
+
+  header {
+    display: none; /* hide redundant headers after "tabifying" by js (js adds 'tablist-panel' parent class) */
+  }
 }

@@ -7,7 +7,11 @@
  *
  * @return $color {String}
  */
-function getColor ($days) {
+function getColor ($date) {
+  $now = date(DATE_RFC2822);
+  $secs = 86400; // seconds in a day
+  $days = floor((strtotime($now) - strtotime($date)) / $secs);
+
   if ($days > 14) {
     $color = 'red';
   } else if ($days > 7) {

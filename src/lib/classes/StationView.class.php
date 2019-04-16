@@ -17,7 +17,7 @@ class StationView {
   }
 
   private function _getBackLink () {
-    return sprintf('<p class="back">&laquo; <a href="%s/%s">Back to %s network</a></p>',
+    return sprintf('<p class="back">&laquo; <a href="%s/%s">Back to %s Network</a></p>',
       $GLOBALS['MOUNT_PATH'],
       $this->_model->network,
       $this->_model->network
@@ -86,22 +86,31 @@ class StationView {
       $plotsHtml = '';
       if (is_file("$this->_baseDir/$dataPath/$baseImg")) {
         $navPlots = $this->_getNavPlots($datatype);
-        $image = sprintf('<div class="image">
-            <img src="%s/%s/%s" class="toggle" alt="Plot showing %s data (All data)" />
-          </div>',
+        $image = sprintf('<img src="%s/%s/%s" alt="Plot showing %s data (All data)" />',
           $this->_baseUri,
           $dataPath,
           $baseImg,
           $name
         );
 
-        $plotsHtml = $navPlots . $image . $explanation;
+        $plotsHtml = sprintf ('<h3>Plots</h3>
+          <div class="plots">
+            <div class="image">%s</div>
+            <div class="meta">%s%s</div>
+          </div>',
+          $image,
+          $navPlots,
+          $explanation
+        );
       }
 
       $tablesHtml = '';
       foreach ($tables as $tableName => $tableData) {
         if ($tableData) { // value is empty if no data in database
-          $tablesHtml .= "<h3>$tableName</h3>$tableData";
+          $tablesHtml .= sprintf('<h3>%s</h3><div class="scroll-wrapper">%s</div>',
+            $tableName,
+            $tableData
+          );
         }
       }
 
@@ -111,7 +120,7 @@ class StationView {
             <h2>%s</h2>
           </header>
           %s
-          <h3>Downloads</h3>
+          <h3 class="clear">Downloads</h3>
           %s
           %s
         </section>',
@@ -140,27 +149,35 @@ class StationView {
     $deletedHref = $this->_model->station . "/$datatype/deleted";
 
     $html = '
-      <nav class="downloads">
-        <span>Raw Data:</span>
-        <ul class="no-style">
-          <li><a href="' . $this->_getHref($datatype, '.rneu') .'">All</a></li>
-        </ul>
-        <span>Detrended Data:</span>
-        <ul class="no-style pipelist">
-          <li><a href="' . $this->_getHref($datatype, '_N.data.gz') .'">North</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_E.data.gz') .'">East</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_U.data.gz') .'">Up</a></li>
-        </ul>
-        <span>Trended Data:</span>
-        <ul class="no-style pipelist">
-          <li><a href="' . $this->_getHref($datatype, '_N_wtrend.data.gz') .'">North</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_E_wtrend.data.gz') .'">East</a></li>
-          <li><a href="' . $this->_getHref($datatype, '_U_wtrend.data.gz') .'">Up</a></li>
-        </ul>
-        <span>Deleted points:</span>
-        <ul class="no-style">
-          <li><a href="' . $deletedHref .'">All</a></li>
-        </ul>
+      <nav class="nav-downloads">
+        <div>
+          <h4>Raw Data</h4>
+          <ul class="no-style downloads">
+            <li><a href="' . $this->_getHref($datatype, '.rneu') .'" class="text">All</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Detrended Data</h4>
+          <ul class="no-style downloads">
+            <li><a href="' . $this->_getHref($datatype, '_N.data.gz') .'" class="zip">North</a></li>
+            <li><a href="' . $this->_getHref($datatype, '_E.data.gz') .'" class="zip">East</a></li>
+            <li><a href="' . $this->_getHref($datatype, '_U.data.gz') .'" class="zip">Up</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Trended Data</h4>
+          <ul class="no-style downloads">
+            <li><a href="' . $this->_getHref($datatype, '_N_wtrend.data.gz') .'" class="zip">North</a></li>
+            <li><a href="' . $this->_getHref($datatype, '_E_wtrend.data.gz') .'" class="zip">East</a></li>
+            <li><a href="' . $this->_getHref($datatype, '_U_wtrend.data.gz') .'" class="zip">Up</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Deleted Points</h4>
+          <ul class="no-style downloads">
+            <li><a href="' . $deletedHref .'" class="text">All</a></li>
+          </ul>
+        </div>
       </nav>';
 
     return $html;
@@ -196,13 +213,42 @@ class StationView {
     return $href;
   }
 
-  private function _getLinkList () {
-    $html = '<h2>Station Details</h2>';
-    $links = $this->_model->links;
+  private function _getStationDetails () {
+    $updateTime = strtotime($this->_model->lastUpdate);
+    $numDays = date('z') - date('z', $updateTime);
+    $updated = date('M j, Y', $updateTime);
+    $numDaysStr = '';
+    $plural = 's';
+    if ($numDays > 0 && $numDays < 31) { // show num days since update if 30 or less
+      if ($numDays === 1) {
+        $plural = '';
+      }
+      $numDaysStr = " ($numDays day$plural ago)";
+    }
+    $html = sprintf ('<p>Last observation: %s%s</p>',
+      $updated,
+      $numDaysStr
+    );
 
-    $html .= '<ul>';
+    $links = $this->_model->links;
+    $html .= '<ul class="links">';
     foreach ($links as $key => $value) {
-      $html .= '<li><a href="' . $value . '">' . $key . '</a></li>';
+      $count = '';
+      $number = NULL;
+      if ($key === 'Photos') {
+        $number = $this->_model->numPhotos;
+      } else if ($key === 'Field Logs') {
+        $number = $this->_model->numLogs;
+      }
+      if (isSet($number)) {
+        $count = "&nbsp;<span>($number)</span>";
+      }
+      $html .= sprintf ('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
+        $value[1],
+        $value[0],
+        $key,
+        $count
+      );
     }
     $html .= '</ul>';
 
@@ -215,8 +261,8 @@ class StationView {
 
   private function _getNavPlots ($datatype) {
     $html = '
-      <nav class="plots ' . $datatype . '">
-        <span>Detrended:</span>
+      <nav class="nav-plots ' . $datatype . '">
+        <h4>Detrended</h4>
         <ul class="no-style pipelist">
           <li><a href="' . $this->_getHref($datatype, '_30.png') . '">Past 30 days</a></li>
           <li><a href="' . $this->_getHref($datatype, '_90.png') . '">Past 90 days</a></li>
@@ -224,7 +270,7 @@ class StationView {
           <li><a href="' . $this->_getHref($datatype, '_730.png') . '">Past 2 years</a></li>
           <li><a href="' . $this->_getHref($datatype, '.png') . '" class="selected">All data</a></li>
         </ul>
-        <span>Trended:</span>
+        <h4>Trended</h4>
         <ul class="no-style pipelist">
           <li><a href="' . $this->_getHref($datatype, '_wtrend.png') . '">All data</a></li>
         </ul>
@@ -234,20 +280,35 @@ class StationView {
   }
 
   private function _getNetworks () {
-    $networkListHtml = '<h2>Networks</h2>';
+    $networkListHtml = '<p>This station is not in any other networks.</p>';
     $networks = $this->_model->networkList;
 
-    $networkListHtml .= '<p>This station belongs to the following network(s):</p>';
-    $networkListHtml .= '<ul>';
-    foreach ($networks as $network) {
-      $networkListHtml .= sprintf('<li><a href="%s/%s/%s">%s</a></li>',
-        $GLOBALS['MOUNT_PATH'],
-        $network,
-        $this->_model->station,
-        $network
+    if (count($networks) > 1) {
+      $countOther = count($networks) - 1;
+      $plurality = '';
+      if ($countOther > 1) {
+        $plurality = 's';
+      }
+      $networkListHtml = sprintf('<nav><h4>This station is in %s other network%s</h4>',
+        $countOther,
+        $plurality
       );
+      $networkListHtml .= '<ul class="pipelist no-style">';
+      foreach ($networks as $network) {
+        $cssClass = '';
+        if ($network === $this->_model->network) {
+          $cssClass = 'selected';
+        }
+        $networkListHtml .= sprintf('<li><a href="%s/%s/%s" class="%s">%s</a></li>',
+          $GLOBALS['MOUNT_PATH'],
+          $network,
+          $this->_model->station,
+          $cssClass,
+          $network
+        );
+      }
+      $networkListHtml .= '</ul></nav>';
     }
-    $networkListHtml .= '</ul>';
 
     return $networkListHtml;
   }
@@ -260,7 +321,7 @@ class StationView {
       foreach ($rows as $row) {
         if ($row['datatype'] === $datatype) {
           $component = $row['component'];
-          $date = str_replace('-', '', $row['date']);
+          $date = $row['date'];
 
           $offsets[$date]['decDate'] = $row['decdate'];
           $offsets[$date]['distance'] = $row['distance_from_eq'];
@@ -280,7 +341,7 @@ class StationView {
       if ($offsets) { // offsets exist for datatype
         $html = '<table>
           <tr>
-            <td class="empty"></td>
+            <td class="empty freeze"></td>
             <th>Decimal date</th>
             <th>N offset (mm)</th>
             <th>N uncertainty (mm)</th>
@@ -296,7 +357,7 @@ class StationView {
 
         foreach ($offsets as $dateStr => $tds) {
           $html .= sprintf('<tr>
-              <th>%s</th>
+              <th class="freeze nowrap">%s</th>
               <td>%s</td>
               <td>%s</td>
               <td>%s</td>
@@ -347,7 +408,7 @@ class StationView {
           $days = $row['doy'] - date('z') - 1; // php starts at '0'
           $time = strtotime("+" . $days . " days");
           // use 'year' from db, and calculate 'month' and 'day' from 'doy'
-          $date = $row['year'] . date('md', $time);
+          $date = $row['year'] . '-' . date('m-d', $time);
 
           $postSeismic[$date]['decDate'] = $row['decdate'];
           $postSeismic[$date][$component . '-logsig'] = $row['logsig'];
@@ -358,7 +419,7 @@ class StationView {
       if ($postSeismic) { // postseismic data exists for datatype
         $html = '<table>
           <tr>
-            <td class="empty"></td>
+            <td class="empty freeze"></td>
             <th>Decimal date</th>
             <th>N log amplitude (mm)</th>
             <th>N log amplitude standard deviation (mm)</th>
@@ -373,7 +434,7 @@ class StationView {
 
         foreach ($postSeismic as $dateStr => $tds) {
           $html .= sprintf('<tr>
-              <th>%s</th>
+              <th class="freeze nowrap">%s</th>
               <td>%s</td>
               <td>%s</td>
               <td>%s</td>
@@ -423,9 +484,9 @@ class StationView {
         if ($row['datatype'] === $datatype) {
           $component = $row['component'];
           $direction = $components[$component];
-          $th = '<tr><td class="empty"></td>';
+          $th = '<tr><td class="empty freeze"></td>';
           $tr = '<tr class="' . strtolower($direction) . '">';
-          $tr .= "<th>$direction</th>";
+          $tr .= '<th class="freeze">' . $direction . '</th>';
 
           unset( // don't include these values in the table
             $row['component'],
@@ -449,10 +510,6 @@ class StationView {
           }
 
           foreach ($row as $key => $value) {
-            // strip '-' out of date fields
-            if (preg_match('/\d{4}-\d{2}-\d{2}/', $value)) {
-              $value = str_replace('-', '', $value);
-            }
             $fieldName = ucfirst($key);
             if ($lookupTable[$key]) {
               $fieldName = $lookupTable[$key];
@@ -488,7 +545,7 @@ class StationView {
     print '</div>';
 
     print '<div class="column one-of-three">';
-    print $this->_getLinkList();
+    print $this->_getStationDetails();
     print $this->_getNetworks();
     print '</div>';
 

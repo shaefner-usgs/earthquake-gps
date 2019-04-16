@@ -10,22 +10,22 @@ var graphs,
 graphs = [];
 
 ts = TimeSeries({
-  direction: 'north',
   color: 'rgb(204,40,40)',
+  component: 'north',
   el: document.querySelector('.north'),
   graphs: graphs
 });
 
 TimeSeries({
-  direction: 'east',
   color: 'rgb(10,204,10)',
+  component: 'east',
   el: document.querySelector('.east'),
   graphs: graphs
 });
 
 TimeSeries({
-  direction: 'up',
   color: 'rgb(40,40,204)',
+  component: 'up',
   el: document.querySelector('.up'),
   graphs: graphs
 });

@@ -8,9 +8,9 @@ var SortAndTabifyTable = function () {
   var _this,
       _initialize,
 
-      _initTableSort,
+      _el,
 
-      _el;
+      _initTableSort;
 
   _this = {};
 

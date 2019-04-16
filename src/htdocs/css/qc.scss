@@ -1,20 +1,32 @@
 @import '_common.scss';
-@import 'qc/_NavigationView.scss';
-@import 'qc/_PlotView.scss';
 
 $height: 320px;
 
-h2 {
-  text-align: center;
+.app-nav {
+  overflow: hidden;
+}
+
+.app-plots {
+  border: 1px solid #ddd;
+
+  p {
+    margin-left: 1em;
+  }
 }
 
 .c3-grid line {
   stroke: #DADADA;
 }
 
-.plot, .loading {
+.loading, .plot {
   height: $height;
 }
 .loading {
   padding-top: calc($height/2 - 30px);
+}
+
+.title h3 {
+  font-size: 1.7rem;
+  margin-top: 1.8em;
+  text-align: center;
 }

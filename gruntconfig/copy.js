@@ -47,11 +47,14 @@ var copy = {
   },
 
   dygraph: {
-    cwd: 'node_modules/dygraphs',
+    cwd: 'node_modules/dygraphs/dist',
     dest: config.build + '/' + config.src + '/htdocs/lib/dygraph',
     expand: true,
     src: [
-      'dygraph-combined.js*'
+      'dygraph.css',
+      'dygraph.js',
+      'dygraph.js.map',
+      '!dygraph.min.js'
     ]
   },
 

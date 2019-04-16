@@ -15,13 +15,14 @@ var TimeSeries = function (options) {
 
       _blockRedraw,
       _color,
-      _direction,
+      _component,
       _el,
       _graph,
       _graphs,
 
       _draw,
       _getDateString,
+      _hideGraph,
       _loadData;
 
 
@@ -30,7 +31,7 @@ var TimeSeries = function (options) {
   _initialize = function (options) {
     options = options || {};
     _color = options.color;
-    _direction = options.direction;
+    _component = options.component;
     _el = options.el || document.createElement('div');
     _graphs = options.graphs || [];
 
@@ -46,23 +47,34 @@ var TimeSeries = function (options) {
    * @param data {String}
    */
   _draw = function (data) {
-    _graph = new Dygraph(_el, data, {
+    _graph = new Dygraph(_el.querySelector('.plot'), data, {
       animatedZooms: true,
       axes: {
         x: {
+          gridLineColor: '#c4c4c4',
           valueFormatter: function(num/*, opts, seriesName, dygraph, row, col*/) {
             return _getDateString(new Date(num));
+          },
+          axisLabelFormatter: function(d, gran, opts) {
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var label = Dygraph.dateAxisLabelFormatter(d, gran, opts);
+            if (/^\d{2}(\s+|&#160;)\w{3}$/.test(label)) {
+              label = months[d.getMonth()] + ' ' + d.getDate();
+            }
+            return label;
           }
+        },
+        y: {
+          gridLineColor: '#999999'
         }
       },
       color: _color,
       digitsAfterDecimal: 4,
       gridLinePattern: [3, 3],
-      height: 200,
-      labelsDivWidth: 300,
+      labelsDiv: _el.querySelector('.legend'),
+      legend: 'onmouseover',
       panEdgeFraction: 0.1,
-      sigFigs: 2,
-      title: _direction.capitalize(),
+      title: _component.capitalize(),
       ylabel: 'm',
 
       // sync xrange of graphs (zooming and panning)
@@ -107,6 +119,11 @@ var TimeSeries = function (options) {
     });
 
     _graphs.push(_graph);
+
+    // Hide empty component plot if there's no data
+    if (_graph.rawData_.length === 0) {
+      _hideGraph();
+    }
   };
 
   /**
@@ -129,12 +146,32 @@ var TimeSeries = function (options) {
       pad(d.getSeconds()) + ' UTC';
   };
 
+
+  /**
+   * Hide (remove) component graph and hide application if all components are empty
+   */
+  _hideGraph = function () {
+    var count = 0;
+
+    _el.parentNode.removeChild(_el);
+    _graph.hidden = true;
+
+    _graphs.forEach(function(g) {
+      if (g.hasOwnProperty('hidden') && g.hidden === true) {
+        count ++;
+      }
+    });
+    if (count === 3) {
+      document.querySelector('.application').innerHTML = '<p class="alert info">No Data</p>';
+    }
+  };
+
   /**
    * Load kinematic data via Xhr
    */
   _loadData = function () {
     Xhr.ajax({
-      url: MOUNT_PATH + '/_getKinematic.csv.php?direction=' + _direction + '&station=' + STATION,
+      url: MOUNT_PATH + '/_getKinematic.csv.php?component=' + _component + '&station=' + STATION,
       success: _draw,
       error: function (status) {
         console.log(status);

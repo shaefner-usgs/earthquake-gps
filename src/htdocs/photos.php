@@ -10,10 +10,18 @@ include_once '../lib/classes/PhotoView.class.php'; // view
 
 // set default values so page loads without passing params
 $networkParam = safeParam('network', 'WindKetchFlat_SGPS');
-$stationParam = safeParam('station', '7adl');
+$stationParam = strtolower(safeParam('station', '7adl'));
 
 if (!isset($TEMPLATE)) {
-  $TITLE = 'GPS Station ' . strtoupper($stationParam) . ' - Photos';
+  $TITLE = sprintf ('<a href="../../%s">%s Network</a>',
+    $networkParam,
+    $networkParam
+  );
+  $SUBTITLE = sprintf ('<a href="../%s" class="button">Station %s</a> <span>Photos</span>',
+    $stationParam,
+    strtoupper($stationParam)
+  );
+  $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '<link rel="stylesheet" href="../../css/photos.css" />';
   $FOOT = '
@@ -30,6 +38,11 @@ $db = new Db();
 // Db query result: station details for selected station
 $rsStation = $db->queryStation($stationParam);
 $station = $rsStation->fetch();
+
+$color = getColor($station['last_observation']);
+printf ('<h2 class="subtitle">%s</h2>',
+  str_replace('button', "$color button", $SUBTITLE)
+);
 
 if ($station) {
   // Get a list of photos for selected station

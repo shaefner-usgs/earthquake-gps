@@ -1,3 +1,10 @@
 @import 'tablist/TabList.scss';
 @import '_common.scss';
-@import '_datatable.scss';
+@import '_freezeCells.scss';
+@import '_tableCellLinks.scss';
+@import '_SortAndTabifyTable.scss';
+
+.scroll-wrapper {
+  margin-top: 1.25em;
+  max-height: 80vh;
+}

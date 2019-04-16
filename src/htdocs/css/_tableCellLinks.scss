@@ -1,0 +1,34 @@
+th.link {
+  padding: 0;
+
+  a {
+    align-items: center;
+    border-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+    /* fill enitre table cell with <a> tag's background */
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  &.button {
+    border-width: 0 0 1px 0;
+  }
+
+  &.blue {
+    border-bottom-color: $blue;
+  }
+  &.orange {
+    border-bottom-color: $orange;
+  }
+  &.red {
+    border-bottom-color: $red;
+  }
+  &.yellow {
+    border-bottom-color: $yellow;
+  }
+}
