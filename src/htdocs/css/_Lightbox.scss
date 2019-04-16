@@ -1,6 +1,13 @@
+$fontColor: rgb(228, 226, 255);
+$fontColorMuted: rgb(205, 203, 229);
+
 /* Removes infamous 300ms touch delay */
 html {
   touch-action: manipulation;
+}
+
+#left, #right {
+  display: none;
 }
 
 #simplbox {
@@ -40,8 +47,12 @@ html {
   z-index: 10002;
 
   .icon {
-    color: rgb(205, 203, 229);
+    color: $fontColorMuted;
     cursor: pointer;
+
+    &:hover {
+      color: $fontColor;
+    }
   }
   .material-icons {
     font-size: 30px;
@@ -50,7 +61,7 @@ html {
 
 #simplbox-caption {
   background-color: rgba(13, 5, 255, 0.47);
-  color: rgb(228, 226, 255);
+  color: $fontColor;
   font-size: 20px;
   left: 0;
   padding: 5px;
@@ -62,7 +73,7 @@ html {
   z-index: 10001;
 
   small {
-    color: rgb(205, 203, 229);
+    color: $fontColorMuted;
     padding-left: .5em;
   }
 }
