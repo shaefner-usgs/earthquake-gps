@@ -80,11 +80,11 @@ var NetworksLayer = function (options) {
         networkLinks;
 
     mouseout = function (e) {
-      id = e.target.className.replace('link', ''); // number portion only
+      id = e.target.className.replace(/\D/g, ''); // number portion only
       _hide(id);
     };
     mouseover = function (e) {
-      id = e.target.className.replace('link', ''); // number portion only
+      id = e.target.className.replace(/\D/g, ''); // number portion only
       _show(id);
     };
 
