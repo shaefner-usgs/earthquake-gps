@@ -81,7 +81,7 @@ nav {
     max-width: 12em;
     padding: 4px 0;
     text-decoration: none;
-    transition: all .25s ease-out;
+    transition: all .2s ease-out;
 
     span {
       color: #777;
@@ -91,6 +91,7 @@ nav {
     &:hover {
       background: rgba(229, 255, 218, 0.43);
       color: #000;
+      transition-duration: 0s;
     }
   }
 }
