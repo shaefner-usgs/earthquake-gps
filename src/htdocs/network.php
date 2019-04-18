@@ -43,8 +43,11 @@ $rsNetwork = $db->queryNetwork($networkParam);
 $row = $rsNetwork->fetch(PDO::FETCH_OBJ);
 
 // Check to see if this is a valid network
-if ($stations['count'] === 0) {
+if ($rsNetwork->rowCount() === 0) {
   print '<p class="alert info">Network Not Found</p>';
+}
+else if ($stations['count'] === 0) {
+  print '<p class="alert info">No Stations Found</p>';
 } else { // Begin: valid network block
 
 // Create HTML for legend
