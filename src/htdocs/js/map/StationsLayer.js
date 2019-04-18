@@ -257,6 +257,7 @@ var StationsLayer = function (options) {
   _pointToLayer = function (feature, latlng) {
     var color,
         marker,
+        popup,
         selected,
         shape;
 
@@ -280,19 +281,12 @@ var StationsLayer = function (options) {
         selected: selected,
         shape: shape
       });
+      marker.href = feature.properties.station;
 
       // Add marker to layer
       _this.addLayer(marker);
-
-      // Clicking marker sends user to selected station page
-      if (feature.properties.station !== _station) {
-        marker.href = feature.properties.station;
-        marker.on('click', function () {
-          window.location = this.href;
-        });
-      }
     }
-    else {
+    else { // user viewing a Network page
       // Color stations by days since last update
       color = _getColor(feature.properties.days);
       marker = _getMarker({
@@ -300,12 +294,23 @@ var StationsLayer = function (options) {
         latlng: latlng,
         shape: shape
       });
+      marker.href = NETWORK + '/' + feature.properties.station;
 
       // Group stations in separate layers by type
       _this.layers[color].addLayer(marker);
       _this.count[color] ++;
 
       _bounds.extend(latlng);
+    }
+
+    // Clicking marker sends user to selected station page
+    if (feature.properties.station !== _station) {
+      marker.on('click', function () {
+        popup = marker.getPopup();
+        marker.unbindPopup(); // don't show popup when user clicks a marker
+        window.location = this.href;
+        marker.bindPopup(popup); // put popup back
+      });
     }
 
     return marker;

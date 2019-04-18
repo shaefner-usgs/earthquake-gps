@@ -10,6 +10,8 @@ include_once '../conf/config.inc.php'; // app config
  * Station Object (
  *   [links] => Array
  *   [networkList] => Array
+ *   [numLogs] => Int
+ *   [numPhotos] => Int
  *   [noise] => Array
  *   [offsets] => Array
  *   [postSeismic] => Array
@@ -22,27 +24,30 @@ include_once '../conf/config.inc.php'; // app config
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Station {
-  private $_data = array();
+  private $_data = [];
 
   public function __construct (
     $networkList=NULL,
-    $rsNoise=NULL,
-    $rsOffsets=NULL,
-    $rsPostSeismic=NULL,
-    $rsSeasonal=NULL,
-    $rsVelocities=NULL
+    $noise=NULL,
+    $offsets=NULL,
+    $postSeismic=NULL,
+    $seasonal=NULL,
+    $velocities=NULL
   ) {
 
     $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
       . '/' . $this->station;
 
+    $this->_data['lastUpdate'] = $this->_getLastUpdate($velocities);
     $this->_data['links'] = $this->_getLinkList();
     $this->_data['networkList'] = $networkList;
-    $this->_data['noise'] = $rsNoise->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['offsets'] = $rsOffsets->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['postSeismic'] = $rsPostSeismic->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['seasonal'] = $rsSeasonal->fetchAll(PDO::FETCH_ASSOC);
-    $this->_data['velocities'] = $rsVelocities->fetchAll(PDO::FETCH_ASSOC);
+    $this->_data['numLogs'] = $this->_getNumLogs();
+    $this->_data['numPhotos'] = $this->_getNumPhotos();
+    $this->_data['noise'] = $noise;
+    $this->_data['offsets'] = $offsets;
+    $this->_data['postSeismic'] = $postSeismic;
+    $this->_data['seasonal'] = $seasonal;
+    $this->_data['velocities'] = $velocities;
   }
 
   public function __get ($name) {
@@ -63,6 +68,12 @@ class Station {
     $this->_data[$name] = $value;
   }
 
+  private function _getLastUpdate ($array) {
+    if (is_array($array)) {
+      return $array[0]['last_observation'];
+    }
+  }
+
   private function _getLinkList () {
     $kinematic = $this->stationPath . '/kinematic';
     $logs = $this->stationPath . '/logs';
@@ -71,18 +82,19 @@ class Station {
     $qc = $this->stationPath . '/qc';
     $weather = $this->_getWeatherLink();
 
-    $links = array(
-      'Photos' => $photos,
-      'Field Logs' => $logs,
-      'Quality Control Data' => $qc,
-      '5-minute Kinematic Results' => $kinematic,
-      'Weather' => $weather,
-      '<abbr title="National Geodetic Survey">NGS</abbr> Datasheets' => $ngs
-    );
+    // Multi-dimensional array containing material icons and uris for link list
+    $links = [
+      'Photos' => ['collections', $photos],
+      'Field Logs' => ['assignment', $logs],
+      'Quality Control Data' => ['scatter_plot', $qc],
+      'Kinematic Data' => ['show_chart', $kinematic],
+      'Weather' => ['wb_sunny', $weather],
+      '<abbr title="National Geodetic Survey">NGS</abbr>&nbsp;Datasheets' => ['description', $ngs]
+    ];
 
-    // campaign stations don't have kinematic data; continous don't have photos
+    // Campaign stations don't have kinematic data; continous don't have photos
     if ($this->stationtype === 'campaign') {
-      unset($links['5-minute Kinematic Results']);
+      unset($links['Kinematic Data']);
     } else if ($this->stationtype === 'continuous') {
       unset($links['Photos']);
     }
@@ -96,6 +108,40 @@ class Station {
       $this->lat,
       $this->lon * -1 // ngs server 'balks' at negative values for W longitude
     );
+  }
+
+  private function _getNumLogs () {
+    global $DATA_DIR;
+
+    $dir = sprintf('%s/stations/%s.dir/%s/logsheets',
+      $DATA_DIR,
+      substr($this->station, 0, 1),
+      $this->station
+    );
+    $files = getDirContents($dir);
+
+    $logSheets = [];
+    foreach ($files as $file) {
+      preg_match('/^\w{4}(\d{8})[^\d]+/', $file, $matches);
+      if (isSet($matches[1])) {
+        $logSheets[] = $matches[1];
+      }
+    }
+
+    return count(array_unique($logSheets));
+  }
+
+  private function _getNumPhotos () {
+    global $DATA_DIR;
+
+    $dir = sprintf('%s/stations/%s.dir/%s/photos/screen',
+      $DATA_DIR,
+      substr($this->station, 0, 1),
+      $this->station
+    );
+    $files = getDirContents($dir);
+
+    return count($files);
   }
 
   private function _getWeatherLink () {

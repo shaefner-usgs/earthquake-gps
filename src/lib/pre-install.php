@@ -123,22 +123,24 @@ file_put_contents($APACHE_CONFIG_FILE, '
     $MOUNT_PATH . '/velocities.php?network=$1 [L,PT]
   RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/waypoints$ ' .
     $MOUNT_PATH . '/waypoints.php?network=$1 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})$ ' .
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})$ ' .
     $MOUNT_PATH . '/station.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic$ ' .
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/kinematic$ ' .
     $MOUNT_PATH . '/kinematic.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/kinematic/data$ ' .
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/kinematic/data$ ' .
     $MOUNT_PATH . '/_getKinematic.csv.php?station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/logs$ ' .
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/logs$ ' .
     $MOUNT_PATH . '/logsheets.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/photos$ ' .
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/photos$ ' .
     $MOUNT_PATH . '/photos.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc$ ' .
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc$ ' .
     $MOUNT_PATH . '/qc.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/table$ ' .
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc/table$ ' .
     $MOUNT_PATH . '/qctable.php?network=$1&station=$2 [L,PT]
-  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9]{4})/qc/data$ ' .
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc/data$ ' .
     $MOUNT_PATH . '/_getQcData.csv.php?network=$1&station=$2 [L,PT]
+  RewriteRule ^' . $MOUNT_PATH . '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/(nafixed|itrf2008|filtered)/deleted$ ' .
+    $MOUNT_PATH . '/deleted.php?network=$1&station=$2&datatype=$3 [L,PT]
 
   <Location ' . $MOUNT_PATH . '>
     Order allow,deny

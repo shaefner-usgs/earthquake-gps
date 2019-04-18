@@ -45,7 +45,9 @@ var postcss = {
     options: {
       map: false,
       processors: [
-        cssnano()
+        cssnano({
+          zindex: false
+        })
       ]
     },
     src: [

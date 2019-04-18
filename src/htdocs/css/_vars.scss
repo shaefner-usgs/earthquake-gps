@@ -1,0 +1,14 @@
+/* Define app-level variables */
+
+@import '_variables.scss'; /* also include template-level vars. */
+
+$blue: #002cfb;
+$grey: #ccc;
+$orange: #fd961e;
+$red: #c9000a;
+$yellow: #fffb30;
+
+$lightBlue: color($blue tint(97%));
+$lightOrange: color($orange tint(97%));
+$lightRed: color($red tint(97%));
+$lightYellow: color($yellow tint(97%));

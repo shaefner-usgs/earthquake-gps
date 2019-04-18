@@ -1,3 +1,14 @@
+/* CSS for navigation buttons below maps */
+
+.bubble {
+  background: url('../img/bubble.png') no-repeat;
+  background-size: 20px 20px;
+  display: block;
+  height: 20px;
+  margin: -25px 4px 0 auto;
+  width: 20px;
+}
+
 .networks, .stations {
   align-content: space-between;
   display: flex;
@@ -5,70 +16,50 @@
   justify-content: flex-start;
 
   > li {
-    height: 32px;
-  }
-
-  a:first-child {
-    background: #f3f3f3;
-    border: 1px solid #ddd;
-    color: #000;
-    display: block;
-    overflow: hidden;
-    padding: 0 4px;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  a.bubble {
-    background: url('../img/bubble.png') no-repeat;
-    background-size: 20px 20px;
-    display: block;
-    height: 20px;
-    margin: -23px 4px 0 auto;
-    width: 20px;
+    height: 36px;
   }
 }
 
 .networks > li {
-  width: 24%;
+  width: 24.5%;
 }
 
-.stations {
-  > li {
-    width: 16%;
-  }
+.stations li {
+  width: 12%;
+}
 
-  .blue a:first-child {
-    border-color: $blue;
-    background-color: color($blue tint(97%));
+/* reflow nav-buttons on narrow screens - uses JS to calculate new height after page render */
+@media (max-width: 1000px) {
+  .networks {
+    &:after {
+      content: "narrow"; /* flag for MediaQueries.js that media query was triggered */
+      display: none;
+    }
 
-    &:hover {
-      background: linear-gradient(to bottom, color($blue tint(92%)) 0%, rgb(255,255,255) 100%);
+    > li {
+      width: 49.5%; /* 2 columns */
     }
   }
-  .orange a:first-child {
-    border-color: $orange;
-    background-color: color($orange tint(97%));
+  .stations {
+    &:after {
+      content: "normal"; /* flag for MediaQueries.js that media query was triggered */
+      display: none;
+    }
 
-    &:hover {
-      background: linear-gradient(to bottom, color($orange tint(88%)) 0%, rgb(255,255,255) 100%);
+    > li {
+      width: 16%; /* 6 columns */
     }
   }
-  .red a:first-child {
-    border-color: $red;
-    background-color: color($red tint(97%));
-
-    &:hover {
-      background: linear-gradient(to bottom, color($red tint(92%)) 0%, rgb(255,255,255) 100%);
+}
+@media (max-width: 600px) {
+  .stations {
+    &:after {
+      content: "narrow"; /* flag for MediaQueries.js that media query was triggered */
+      display: none;
     }
-  }
-  .yellow a:first-child {
-    border-color: $yellow;
-    background-color: color($yellow tint(97%));
 
-    &:hover {
-      background: linear-gradient(to bottom, color($yellow tint(84%)) 0%, rgb(255,255,255) 100%);
+    > li {
+      width: 24%; /* 4 columns */
     }
   }
 }

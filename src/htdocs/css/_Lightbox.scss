@@ -1,6 +1,13 @@
+$fontColor: rgb(228, 226, 255);
+$fontColorMuted: rgb(205, 203, 229);
+
 /* Removes infamous 300ms touch delay */
 html {
   touch-action: manipulation;
+}
+
+#left, #right {
+  display: none;
 }
 
 #simplbox {
@@ -27,38 +34,47 @@ html {
     left: 0;
   }
 
-  &:hover:after, &:hover:before {
+  &.right:after, &.left:before {
     opacity: 1;
   }
 }
 
+#simplbox-buttons {
+  display: flex;
+  position: fixed;
+  right: 5px;
+  top: 5px;
+  z-index: 10002;
+
+  .icon {
+    color: $fontColorMuted;
+    cursor: pointer;
+
+    &:hover {
+      color: $fontColor;
+    }
+  }
+  .material-icons {
+    font-size: 30px;
+  }
+}
+
 #simplbox-caption {
-  background-color: rgba(255, 245, 235, .9);
+  background-color: rgba(13, 5, 255, 0.47);
+  color: $fontColor;
   font-size: 20px;
   left: 0;
   padding: 5px;
   position: fixed;
   right: 0;
   text-align: center;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
   top: 0;
   z-index: 10001;
 
   small {
-    color: #a19a94;
+    color: $fontColorMuted;
     padding-left: .5em;
-  }
-}
-
-#simplbox-close {
-  color: #a19a94;
-  cursor: pointer;
-  position: fixed;
-  right: 20px;
-  top: 5px;
-  z-index: 10002;
-
-  .material-icons {
-    font-size: 30px;
   }
 }
 
@@ -67,16 +83,17 @@ html {
   position: fixed;
   top: 50%;
   z-index: 10003;
-}
-#simplbox-loading:before {
-  animation: loader 1s linear infinite;
-  background-color: #ccc;
-  border-radius: 50%;
-  content: '';
-  display: block;
-  height: 8px;
-  transform-origin: 8px 8px;
-  width: 8px;
+
+  &:before {
+    animation: loader 1s linear infinite;
+    background-color: #ccc;
+    border-radius: 50%;
+    content: '';
+    display: block;
+    height: 8px;
+    transform-origin: 8px 8px;
+    width: 8px;
+  }
 }
 @keyframes loader {
   0% {
@@ -96,7 +113,7 @@ html {
 }
 
 #simplbox-overlay {
-  background-color: rgba(0, 0, 0, .92);
+  background-color: rgba(0, 0, 0, .95);
   bottom: 0;
   left: 0;
   position: fixed;

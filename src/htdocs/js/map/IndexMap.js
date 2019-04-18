@@ -115,8 +115,9 @@ var IndexMap = function (options) {
       scrollWheelZoom: false
     });
 
-    // Set intial map extent to contain networks overlay
-    bounds = _networks.getBounds();
+    // Set intial map extent to contain Contiguous U.S.
+    //bounds = _networks.getBounds();
+    bounds = L.latLngBounds([49, -126], [24, -66]);
     map.fitBounds(bounds);
 
     // Add controllers

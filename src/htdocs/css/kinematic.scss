@@ -2,7 +2,7 @@
 
 $height: 200px;
 
-nav button {
+.app-nav button {
   position: relative;
   padding-left: 3.5rem;
 
@@ -23,23 +23,50 @@ nav button {
   }
 }
 
-.dygraph-title {
-  font-family: Merriweather,Times,serif;
-  margin: 0;
+.app-plots {
+  border: 1px solid #ddd;
+  padding: 0 .75em 0 .25em;
+
+  > div {
+    margin: 2em 0;
+
+    &:first-of-type {
+      margin-top: 1.6em;
+    }
+  }
+
+  p {
+    margin-left: .75em;
+  }
 }
 
-.plot, .loading {
+.dygraph-title {
+  font-family: $font-serif;
+  font-size: 1.7rem;
+  margin: 0;
+  z-index: 100;
+}
+
+.east, .north, .up {
+  position: relative;
+}
+
+.legend {
+  background: #fff;
+  font-size: 1.5rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.loading, .plot {
   height: $height;
 }
 .loading {
   padding-top: calc($height/2 - 20px);
 }
-
-.plots {
-  border: 1px solid #ddd;
-  padding: 0 1em 0;
-
-  > div {
-    margin: 1.8em 0;
-  }
+.plot {
+  width: 100%;
 }

@@ -72,6 +72,26 @@ class Db {
   }
 
   /**
+   * Query db to get a list of deleted points for a station
+   *
+   * @param $network {String}
+   * @param $station {String}
+   * @param $datatype {String}
+   *
+   * @return {Function}
+   */
+  public function queryDeletedPts ($network, $station, $datatype) {
+    $sql = 'SELECT * FROM gps_deleted_pts WHERE network = :network AND
+      station = :station AND datatype = :datatype ORDER BY FIELD(`component`, "N", "E", "U"), `date` ASC';
+
+    return $this->_execQuery($sql, array(
+      'network' => $network,
+      'station' => $station,
+      'datatype' => $datatype
+    ));
+  }
+
+  /**
    * Query db to get a list of stations for a given network that aren't up to date
    *
    * @param $network {String}
@@ -201,16 +221,18 @@ class Db {
 
       $sql = "SELECT * FROM gps_offsets
         WHERE network = :network AND  station = :station
-        ORDER BY `year` ASC";
+        ORDER BY `date` ASC";
     } else {
-      $sql = "SELECT station, `date`, decdate, offsettype,
+      $sql = "SELECT station, `date`, decdate, offsettype, eqinfo, eqmagnitude,
+        distance_from_eq,
         GROUP_CONCAT(CONCAT(datatype, '/', component, ':', size)
           ORDER BY datatype ASC, component ASC) AS size,
         GROUP_CONCAT(CONCAT(datatype, '/', component, ':', uncertainty)
           ORDER BY datatype ASC, component ASC) AS uncertainty
         FROM gps_offsets
         WHERE network = :network
-        GROUP BY station, `date`, decdate, offsettype
+        GROUP BY station, `date`, decdate, offsettype, eqinfo, eqmagnitude,
+          distance_from_eq
         ORDER BY station ASC, `date` DESC";
     }
 
@@ -236,7 +258,7 @@ class Db {
 
     $sql = "SELECT * FROM gps_postseismic
       WHERE $where
-      ORDER BY `year` ASC";
+      ORDER BY `decdate` ASC";
 
     return $this->_execQuery($sql, $params);
   }
@@ -299,7 +321,7 @@ class Db {
   public function queryStation ($station, $network=NULL) {
     $params['station'] = $station;
     $sql = 'SELECT s.lat, s.lon, s.elevation, s.x, s.y, s.z, s.station,
-      s.showcoords, r.stationtype, r.network
+      s.showcoords, r.stationtype, r.last_observation, r.network
       FROM gps_stations s
       LEFT JOIN gps_relations r USING (station)
       WHERE s.station = :station';
