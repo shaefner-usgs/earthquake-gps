@@ -112,16 +112,16 @@ class Db {
   }
 
   /**
-   * Query db to get a list of "non-hidden" networks a given station belongs to
+   * Query db to get a list of networks a given station belongs to
    *
    * @param $station {String}
    *
    * @return {Function}
    */
   public function queryNetworkList ($station) {
-    $sql = 'SELECT r.network FROM gps_relations r
+    $sql = 'SELECT r.network, n.show FROM gps_relations r
       LEFT JOIN gps_networks n USING (network)
-      WHERE r.station = :station AND n.show = 1
+      WHERE r.station = :station
       ORDER BY network ASC';
 
     return $this->_execQuery($sql, array(

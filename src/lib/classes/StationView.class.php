@@ -93,7 +93,7 @@ class StationView {
           $name
         );
 
-        $plotsHtml = sprintf ('<h3>Plots</h3>
+        $plotsHtml = sprintf('<h3>Plots</h3>
           <div class="plots">
             <div class="image">%s</div>
             <div class="meta">%s%s</div>
@@ -225,7 +225,7 @@ class StationView {
       }
       $numDaysStr = " ($numDays day$plural ago)";
     }
-    $html = sprintf ('<p>Last observation: %s%s</p>',
+    $html = sprintf('<p>Last observation: %s%s</p>',
       $updated,
       $numDaysStr
     );
@@ -243,7 +243,7 @@ class StationView {
       if (isSet($number)) {
         $count = "&nbsp;<span>($number)</span>";
       }
-      $html .= sprintf ('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
+      $html .= sprintf('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
         $value[1],
         $value[0],
         $key,
@@ -280,34 +280,58 @@ class StationView {
   }
 
   private function _getNetworks () {
-    $networkListHtml = '<p>This station is not in any other networks.</p>';
+    $lis = '';
     $networks = $this->_model->networkList;
 
-    if (count($networks) > 1) {
-      $countOther = count($networks) - 1;
-      $plurality = '';
-      if ($countOther > 1) {
-        $plurality = 's';
+    $count = 0;
+    foreach ($networks as $network) {
+      $cssClass = '';
+      $networkName = $network[0];
+      $networkText = $networkName;
+      $networkSelected = false;
+      $showNetwork = $network[1];
+
+      if ($networkName === $this->_model->network) {
+        $networkSelected = true;
       }
-      $networkListHtml = sprintf('<nav><h4>This station is in %s other network%s</h4>',
-        $countOther,
-        $plurality
-      );
-      $networkListHtml .= '<ul class="pipelist no-style">';
-      foreach ($networks as $network) {
-        $cssClass = '';
-        if ($network === $this->_model->network) {
+
+      if ($showNetwork || $networkSelected) { // add network to list
+        $count ++;
+        if ($networkSelected) {
           $cssClass = 'selected';
+          if (!$showNetwork) {
+            $networkText = $networkName . '<span> (hidden)</span>';
+          }
         }
-        $networkListHtml .= sprintf('<li><a href="%s/%s/%s" class="%s">%s</a></li>',
+        $lis .= sprintf('<li><a href="%s/%s/%s" class="%s">%s</a></li>',
           $GLOBALS['MOUNT_PATH'],
-          $network,
+          $networkName,
           $this->_model->station,
           $cssClass,
-          $network
+          $networkText
         );
       }
-      $networkListHtml .= '</ul></nav>';
+
+    }
+
+    if ($count > 1) { // station is in more than 1 network
+      $plurality = '';
+      if ($count > 2) {
+        $plurality = 's';
+      }
+
+      $networkListHtml = sprintf('<nav>
+          <h4>This station is in %s other network%s</h4>
+          <ul class="other pipelist no-style">
+            %s
+          </ul>
+        </nav>',
+        $count - 1,
+        $plurality,
+        $lis
+      );
+    } else {
+      $networkListHtml = '<p>This station is not in any other networks.</p>';
     }
 
     return $networkListHtml;
@@ -544,7 +568,7 @@ class StationView {
     print $this->_getMap();
     print '</div>';
 
-    print '<div class="column one-of-three">';
+    print '<div class="column one-of-three details">';
     print $this->_getStationDetails();
     print $this->_getNetworks();
     print '</div>';

@@ -41,18 +41,13 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db;
 
-// Db query result: all "non-hidden" networks that selected station belongs to
+// Db query result: all networks that selected station belongs to
 $rsNetworkList = $db->queryNetworkList($stationParam);
 
 // Create an array of networks
-$networkList = array();
+$networkList = [];
 while ($row = $rsNetworkList->fetch(PDO::FETCH_ASSOC)) {
-  array_push($networkList, $row['network']);
-}
-// Add currently selected network if it's not already in the list
-// (this would happen if user is viewing a "hidden" network)
-if (!in_array($networkParam, $networkList)) {
-  array_push($networkList, $networkParam);
+  $networkList[] = [$row['network'], intval($row['show'])];
 }
 
 // Db query results for selected network and station
