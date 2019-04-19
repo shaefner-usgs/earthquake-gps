@@ -15,11 +15,15 @@ Lightbox({
  * Show / hide buttons for full-size images
  */
 onMouseEvent = function (e) {
-  var button = e.target.parentNode.nextElementSibling;
+  var button,
+      evt;
 
-  if (e.type === 'mouseover') {
+  button = e.target.parentNode.nextElementSibling;
+  evt = e.type;
+
+  if (evt === 'mouseover') {
     button.classList.remove('hide');
-  } else {
+  } else if (evt === 'mouseout') {
     button.classList.add('hide');
   }
 };
@@ -36,6 +40,9 @@ initButtons = function () {
     button.classList.add('hide'); // hide all buttons initially
     button.addEventListener('mouseover', function () {
       this.classList.remove('hide'); // make button persistent
+    });
+    button.addEventListener('click', function () {
+      this.classList.add('hide'); // hide on click
     });
 
     photo.addEventListener('mouseover', onMouseEvent);
