@@ -104,8 +104,9 @@ var Lightbox = function (options) {
     });
     document.body.appendChild(buttons);
 
-    _simplBox.API_AddEvent(close, 'click touchend', function () {
+    _simplBox.API_AddEvent(close, 'click touchend', function (e) {
       _simplBox.API_RemoveImageElement();
+      e.stopPropagation();
     });
     _simplBox.API_AddEvent(left, 'click touchend', function (e) {
       _rotatePhoto(-90);
