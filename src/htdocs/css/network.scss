@@ -2,6 +2,14 @@
 @import '_maplist.scss';
 @import 'map/_map.scss';
 
+html {
+  touch-action: manipulation;
+
+  .stations a {
+    touch-action: none;
+  }
+}
+
 .popup {
   img {
     height: 206px;
