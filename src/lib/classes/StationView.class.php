@@ -145,6 +145,27 @@ class StationView {
       (errant observations) sometimes contaminates the velocities.</small></p>';
   }
 
+  private function _getDownloadItem ($datatype, $fileType, $fileSuffix, $text) {
+    $href = $this->_getHref($datatype, $fileSuffix);
+    $hrefAttr = '';
+    $titleAttr = '';
+
+    if ($href) {
+      $hrefAttr = ' href="' . $href . '"';
+    } else {
+      $titleAttr = ' title="No Data"';
+    }
+
+    $a = sprintf('<a%s%s class="%s">%s</a>',
+      $hrefAttr,
+      $titleAttr,
+      $fileType,
+      $text
+    );
+
+    return $a;
+  }
+
   private function _getDownloads ($datatype) {
     $deletedHref = $this->_model->station . "/$datatype/deleted";
 
@@ -153,23 +174,23 @@ class StationView {
         <div>
           <h4>Raw Data</h4>
           <ul class="no-style downloads">
-            <li><a href="' . $this->_getHref($datatype, '.rneu') .'" class="text">All</a></li>
+            <li>' . $this->_getDownloadItem($datatype, 'text', '.rneu', 'All') . '</li>
           </ul>
         </div>
         <div>
           <h4>Detrended Data</h4>
           <ul class="no-style downloads">
-            <li><a href="' . $this->_getHref($datatype, '_N.data.gz') .'" class="zip">North</a></li>
-            <li><a href="' . $this->_getHref($datatype, '_E.data.gz') .'" class="zip">East</a></li>
-            <li><a href="' . $this->_getHref($datatype, '_U.data.gz') .'" class="zip">Up</a></li>
+            <li>' . $this->_getDownloadItem($datatype, 'zip', '_N.data.gz', 'North') . '</li>
+            <li>' . $this->_getDownloadItem($datatype, 'zip', '_E.data.gz', 'East') . '</li>
+            <li>' . $this->_getDownloadItem($datatype, 'zip', '_U.data.gz', 'Up') . '</li>
           </ul>
         </div>
         <div>
           <h4>Trended Data</h4>
           <ul class="no-style downloads">
-            <li><a href="' . $this->_getHref($datatype, '_N_wtrend.data.gz') .'" class="zip">North</a></li>
-            <li><a href="' . $this->_getHref($datatype, '_E_wtrend.data.gz') .'" class="zip">East</a></li>
-            <li><a href="' . $this->_getHref($datatype, '_U_wtrend.data.gz') .'" class="zip">Up</a></li>
+            <li>' . $this->_getDownloadItem($datatype, 'zip', '_N_wtrend.data.gz', 'North') . '</li>
+            <li>' . $this->_getDownloadItem($datatype, 'zip', '_E_wtrend.data.gz', 'East') . '</li>
+            <li>' . $this->_getDownloadItem($datatype, 'zip', '_U_wtrend.data.gz', 'Up') . '</li>
           </ul>
         </div>
         <div>
@@ -205,9 +226,13 @@ class StationView {
     $file = $this->_model->station . $suffix;
     $href = "$this->_baseUri/$dataPath/$file";
 
-    // Check if img exists; if not link to no-data img
-    if (preg_match('/png$/', $file) && !is_file("$this->_baseDir/$dataPath/$file")) {
-      $href = "#no-data";
+    // Check if file exists; if not, return link to #no-data (*.png) or empty string (everything else)
+    if (!is_file("$this->_baseDir/$dataPath/$file")) {
+      if (preg_match('/png$/', $file)) {
+        $href = "#no-data";
+      } else {
+        $href = '';
+      }
     }
 
     return $href;

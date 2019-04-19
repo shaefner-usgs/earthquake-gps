@@ -138,6 +138,11 @@ nav {
 .panel {
   margin-top: 1em;
 
+  a:not([href]) {
+    color: #000;
+    opacity: .3;
+  }
+
   h3 {
     margin-top: 1.8em;
 
