@@ -162,7 +162,7 @@ $downloadsHtml .= '</ul>';
 <section>
   <div class="map"></div>
   <?php print $legendHtml; ?>
-  <p class="small">Pin color indicates when station was last updated.</p>
+  <small>Pin color indicates when station was last updated.</small>
   <h3 class="count"><?php print $stations['count']; ?> Stations on this Map</h3>
   <?php
     print $stationsHtml;
