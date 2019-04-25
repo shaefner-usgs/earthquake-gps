@@ -44,11 +44,11 @@ var NetworksLayer = function (options) {
       _ids,
       _markerOptions,
 
-      _attachEvents,
-      _hide,
+      _addListeners,
+      _hideLabelPoly,
       _onEachFeature,
       _pointToLayer,
-      _show,
+      _showLabelPoly,
       _style;
 
 
@@ -65,43 +65,43 @@ var NetworksLayer = function (options) {
       style: _style
     });
 
-    _attachEvents();
+    _addListeners();
   };
 
 
   /**
-   * Attach mouseover events to list of networks below map
+   * Add event listeners for newtork buttons to show labels/polygons on map
    */
-  _attachEvents = function () {
-    var i,
+  _addListeners = function () {
+    var button,
+        i,
         id,
-        mouseout,
-        mouseover,
-        networkLinks;
+        onMouseout,
+        onMouseover;
 
-    mouseout = function (e) {
+    onMouseout = function (e) {
       id = e.target.className.replace(/\D/g, ''); // number portion only
-      _hide(id);
+      _hideLabelPoly(id);
     };
-    mouseover = function (e) {
+    onMouseover = function (e) {
       id = e.target.className.replace(/\D/g, ''); // number portion only
-      _show(id);
+      _showLabelPoly(id);
     };
 
-    networkLinks = document.querySelectorAll('.networks a');
-    for (i = 0; i < networkLinks.length; i ++) {
-      networkLinks[i].addEventListener('mouseover', mouseover);
-      networkLinks[i].addEventListener('mouseout', mouseout);
+    button = document.querySelectorAll('.networks a');
+    for (i = 0; i < button.length; i ++) {
+      button[i].addEventListener('mouseover', onMouseover);
+      button[i].addEventListener('mouseout', onMouseout);
     }
   };
 
   /**
-   * Hide label & polygon
+   * Hide label & polygon on map
    *
    * @param id {Int}
    *     optional; id number of feature to hide (hides all if no id is given)
    */
-  _hide = function (id) {
+  _hideLabelPoly = function (id) {
     var ids,
         label,
         poly;
@@ -140,10 +140,10 @@ var NetworksLayer = function (options) {
 
       layer.on({
         mouseover: function () {
-          _show(id);
+          _showLabelPoly(id);
         },
         mouseout: function () {
-          _hide(id);
+          _hideLabelPoly(id);
         }
       }).bindLabel(label, {
         className: labelId + ' off', // labels off by default
@@ -183,16 +183,16 @@ var NetworksLayer = function (options) {
   };
 
   /**
-   * Show label & polygon
+   * Show label & polygon on map
    *
    * @param id {Int}
    *     id number of feature to show
    */
-  _show = function (id) {
+  _showLabelPoly = function (id) {
     var label = document.querySelector('.label' + id),
         poly = document.querySelector('.poly' + id);
 
-    _hide();
+    _hideLabelPoly();
     label.classList.remove('off');
     if (poly) {
       poly.classList.remove('off');

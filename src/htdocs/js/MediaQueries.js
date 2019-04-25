@@ -28,7 +28,7 @@ var MediaQueries = function (options) {
       _el,
       _lastBreakpoint,
 
-      _resizeListener;
+      _addListeners;
 
 
   _this = {};
@@ -41,11 +41,14 @@ var MediaQueries = function (options) {
       _currentBreakpoint = '';
       _lastBreakpoint = '';
 
-      _resizeListener();
+      _addListeners();
     }
   };
 
-  _resizeListener = function () {
+  /**
+   * Add event listeners for triggering js-based media query
+   */
+  _addListeners = function () {
     var event;
 
     ['resize', 'orientationchange', 'load'].forEach(function(evt) {
