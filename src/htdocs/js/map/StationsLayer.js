@@ -46,9 +46,9 @@ _SHAPES = {
  *     {
  *       count: {Object}
  *       layers: {Object}
+ *       markers: {Object}
  *       name: {Object}
  *       getBounds: {Function}
- *       openPopup: {Function}
  *     }
  */
 var StationsLayer = function (options) {
@@ -57,15 +57,21 @@ var StationsLayer = function (options) {
 
       _bounds,
       _icons,
+      _ids,
       _markerOptions,
       _station,
 
+      _addListeners,
+      _addPopupIcons,
       _getColor,
+      _getId,
       _getMarker,
       _getPopup,
+      _hideLabel,
       _initLayers,
       _onEachFeature,
-      _pointToLayer;
+      _pointToLayer,
+      _showLabel;
 
 
   _this = L.featureGroup();
@@ -76,14 +82,15 @@ var StationsLayer = function (options) {
 
     _bounds = new L.LatLngBounds();
     _icons = {};
+    _ids = [];
 
-    _this.points = {};
+    _this.markers = {};
 
-    if (options.station) {
-      // Station user is currently viewing (not passed from Network map)
+    if (options.station) { // map on station page
+      // Station user is currently viewing
       _station = options.station;
-    } else {
-      // Network map classes stations by age...set up individual layers
+    } else { // map on network page
+      // Set up individual layers grouped by age
       _initLayers();
     }
 
@@ -91,22 +98,70 @@ var StationsLayer = function (options) {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });
+
+    _addPopupIcons();
+    _addListeners();
   };
 
 
   /**
-   * Create a layerGroup for each group of stations (classed by age)
-   * (also set up a count to keep track of how many stations are in each group)
+   * Add event listeners for station buttons to show labels/popups on map
    */
-  _initLayers = function () {
-    _this.count = {};
-    _this.layers = {};
-    _this.names = _LAYERNAMES;
-    Object.keys(_LAYERNAMES).forEach(function (key) {
-      _this.count[key] = 0;
-      _this.layers[key] = L.layerGroup();
-      _this.addLayer(_this.layers[key]); // add to featureGroup
-    });
+  _addListeners = function () {
+    var button,
+        buttons,
+        i,
+        icon,
+        onClick,
+        onMouseout,
+        onMouseover;
+
+    onClick = function (e) {
+      var button,
+          station;
+
+      button = e.target.parentNode.querySelector('.button');
+      station = button.textContent.match(/\w+/); // ignore '*' (high RMS value)
+
+      _this.markers[station[0].toUpperCase()].openPopup();
+      e.preventDefault();
+    };
+    onMouseout = function (e) {
+      _hideLabel(_getId(e.target));
+    };
+    onMouseover = function (e) {
+      _showLabel(_getId(e.target));
+    };
+
+    buttons = document.querySelectorAll('.stations a:first-child');
+    for (i = 0; i < buttons.length; i ++) {
+      button = buttons[i];
+      button.addEventListener('mouseover', onMouseover);
+      button.addEventListener('mouseout', onMouseout);
+
+      icon = button.nextElementSibling;
+      icon.addEventListener('mouseover', onMouseover);
+      icon.addEventListener('click', onClick);
+    }
+  };
+
+  /**
+   * Add popup icons to station buttons
+   */
+  _addPopupIcons = function () {
+    var buttons,
+        i,
+        icon;
+
+    buttons = document.querySelectorAll('.stations li');
+    for (i = 0; i < buttons.length; i ++) {
+      icon = document.createElement('a');
+      icon.setAttribute('href', '#');
+      icon.setAttribute('class', 'icon');
+      icon.setAttribute('title', 'View station popup');
+
+      buttons[i].appendChild(icon);
+    }
   };
 
   /**
@@ -133,6 +188,24 @@ var StationsLayer = function (options) {
     }
 
     return color;
+  };
+
+  /**
+   * Get id of feature (station), which is attached to the button element
+   *
+   * @param el {Element}
+   *     button element or its sibling
+   */
+  _getId = function (el) {
+    var id;
+
+    if (el.classList.contains('icon')) {
+      el = el.parentNode.querySelector('.button');
+    }
+
+    id = el.className.replace(/\D/g, ''); // number portion only
+
+    return id;
   };
 
   /**
@@ -212,6 +285,42 @@ var StationsLayer = function (options) {
   };
 
   /**
+   * Hide label on map
+   *
+   * @param id {Int}
+   *     optional; id number of feature to hide (hides all if no id is given)
+   */
+  _hideLabel = function (id) {
+    var ids,
+        label;
+
+    ids = _ids; // all ids
+    if (id) {
+      ids = [id];
+    }
+
+    ids.forEach(function(id) {
+      label = document.querySelector('.label' + id);
+      label.classList.add('off');
+    });
+  };
+
+  /**
+   * Create a layerGroup for each group of stations (classed by age)
+   * (also set up a count to keep track of how many stations are in each group)
+   */
+  _initLayers = function () {
+    _this.count = {};
+    _this.layers = {};
+    _this.names = _LAYERNAMES;
+    Object.keys(_LAYERNAMES).forEach(function (key) {
+      _this.count[key] = 0;
+      _this.layers[key] = L.layerGroup();
+      _this.addLayer(_this.layers[key]); // add to featureGroup
+    });
+  };
+
+  /**
    * Leaflet GeoJSON option: called on each created feature layer. Useful for
    * attaching events and popups to features.
    *
@@ -219,13 +328,29 @@ var StationsLayer = function (options) {
    * @param layer (L.Layer)
    */
   _onEachFeature = function (feature, layer) {
-    var label,
+    var id,
+        label,
+        labelId,
         popup;
 
+    id = feature.id;
     label = feature.properties.station.toUpperCase();
-    layer.bindLabel(label, {
+    labelId = 'label' + id;
+
+    layer.on({
+      mouseover: function () {
+        _showLabel(id);
+      },
+      mouseout: function () {
+        _hideLabel(id);
+      }
+    }).bindLabel(label, {
+      className: labelId + ' off', // labels off by default
+      noHide: true,
       pane: 'popupPane'
     });
+
+    _ids.push(id);
 
     if (_station) { // user viewing a Station page
       // Only include popup on selected station
@@ -243,7 +368,7 @@ var StationsLayer = function (options) {
     }
 
     // Store point so its popup can be accessed by openPopup()
-    _this.points[label] = layer;
+    _this.markers[label] = layer;
   };
 
   /**
@@ -317,39 +442,25 @@ var StationsLayer = function (options) {
   };
 
   /**
+   * Show label on map
+   *
+   * @param id {Int}
+   *     id number of feature to show
+   */
+  _showLabel = function (id) {
+    var label = document.querySelector('.label' + id);
+
+    _hideLabel();
+    label.classList.remove('off');
+  };
+
+  /**
    * Get bounds for station layers
    *
    * @return {L.LatLngBounds}
    */
   _this.getBounds = function () {
     return _bounds;
-  };
-
-  /**
-   * Hide label for a given station
-   *
-   * @param station {String}
-   */
-  _this.hideLabel = function (station) {
-    _this.points[station].hideLabel();
-  };
-
-  /**
-   * Open popup for a given station
-   *
-   * @param station {String}
-   */
-  _this.openPopup = function (station) {
-    _this.points[station].openPopup();
-  };
-
-  /**
-   * Show label for a given station
-   *
-   * @param station {String}
-   */
-  _this.showLabel = function (station) {
-    _this.points[station].showLabel();
   };
 
 

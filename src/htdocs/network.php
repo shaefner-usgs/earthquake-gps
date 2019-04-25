@@ -88,10 +88,11 @@ foreach ($stations['features'] as $feature) {
       $starred = true;
   }*/
   $stationsHtml .= sprintf('<li>
-      <a href="%s/%s" class="%s button" title="Go to station details">%s%s</a>
+      <a href="%s/%s" class="link%d %s button" title="Go to station details">%s%s</a>
     </li>',
     $networkParam,
     $feature['properties']['station'],
+    $feature['id'],
     getColor($feature['properties']['last_observation']),
     strtoupper($feature['properties']['station']),
     $star
