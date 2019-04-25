@@ -266,7 +266,7 @@ class StationView {
         $number = $this->_model->numLogs;
       }
       if (isSet($number)) {
-        $count = "&nbsp;<span>($number)</span>";
+        $count = "&nbsp;<small>($number)</small>";
       }
       $html .= sprintf('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
         $value[1],
@@ -325,7 +325,7 @@ class StationView {
         if ($networkSelected) {
           $cssClass = 'selected';
           if (!$showNetwork) {
-            $networkText = $networkName . '<span> (hidden)</span>';
+            $networkText = $networkName . ' <small>(hidden)</small>';
           }
         }
         $lis .= sprintf('<li><a href="%s/%s/%s" class="%s">%s</a></li>',

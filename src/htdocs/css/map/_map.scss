@@ -2,15 +2,6 @@
 
 .map {
   height: 700px;
-
-  /* template's css is getting the way */
-  input[type=checkbox], input[type=radio] {
-    display: inline;
-    height: auto;
-    opacity: 1;
-    position: static;
-    width: auto;
-  }
 }
 
 @media all and (max-height: 667px) {
