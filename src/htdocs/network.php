@@ -62,9 +62,10 @@ $legendIcons = [
 
 $legendHtml = '<ul class="legend no-style">';
 foreach ($legendIcons as $key => $description) {
-  $legendHtml .= sprintf('<li>
+  $legendHtml .= sprintf('<li class="%s">
       <img src="img/pin-s-%s-2x.png" alt="%s icon" /><span>%s</span>
     </li>',
+    $key,
     $key,
     $key,
     $description

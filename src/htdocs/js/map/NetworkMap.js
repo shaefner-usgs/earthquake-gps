@@ -31,12 +31,15 @@ var NetworkMap = function (options) {
 
       _earthquakes,
       _el,
+      _map,
       _stations,
 
+      _addListeners,
       _getMapLayers,
       _initMap,
       _loadEarthquakesLayer,
       _loadStationsLayer,
+      _setLegendState,
       _showCounts;
 
 
@@ -51,6 +54,25 @@ var NetworkMap = function (options) {
     _loadStationsLayer();
   };
 
+
+  /**
+   * Add event listeners for greying out legend when layer is turned off in controller
+   */
+  _addListeners = function () {
+    var color,
+        legendItem;
+
+    _map.on('overlayadd overlayremove', function (e) {
+      color = e.name.match(/blue|orange|red|yellow/)[0];
+      legendItem = document.querySelector('.legend .' + color);
+
+      if (e.type === 'overlayremove') {
+        legendItem.classList.add('greyed-out');
+      } else {
+        legendItem.classList.remove('greyed-out');
+      }
+    });
+  };
 
   /**
    * Get all map layers that will be displayed on map
@@ -152,29 +174,28 @@ var NetworkMap = function (options) {
       return;
     }
     var bounds,
-        layers,
-        map;
+        layers;
 
     layers = _getMapLayers();
 
     // Create map
-    map = L.map(_el, {
+    _map = L.map(_el, {
       layers: layers.defaults,
       scrollWheelZoom: false
     });
 
     // Set intial map extent to contain stations overlay
     bounds = _stations.getBounds();
-    map.fitBounds(bounds);
+    _map.fitBounds(bounds);
 
     // Add controllers
-    L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
-    L.control.groupedLayers(layers.baseLayers, layers.overlays).addTo(map);
-    L.control.mousePosition().addTo(map);
-    L.control.scale().addTo(map);
+    L.control.fullscreen({ pseudoFullscreen: true }).addTo(_map);
+    L.control.groupedLayers(layers.baseLayers, layers.overlays).addTo(_map);
+    L.control.mousePosition().addTo(_map);
+    L.control.scale().addTo(_map);
 
     // Remember user's map settings (selected layers, map extent)
-    map.restoreMap({
+    _map.restoreMap({
       baseLayers: layers.baseLayers,
       id: NETWORK,
       overlays: layers.overlays,
@@ -182,8 +203,26 @@ var NetworkMap = function (options) {
       shareLayers: true
     });
 
-    // Show station counts
+    // Add listeners and show station counts
+    _addListeners();
+    _setLegendState();
     _showCounts();
+  };
+
+  /**
+   *
+   */
+  _setLegendState = function () {
+    var layer,
+        legendItem;
+
+    Object.keys(_stations.layers).forEach(function(key) {
+      layer = _stations.layers[key];
+      if (!_map.hasLayer(layer)) {
+        legendItem = document.querySelector('.legend .' + key);
+        legendItem.classList.add('greyed-out');
+      }
+    });
   };
 
   /**
