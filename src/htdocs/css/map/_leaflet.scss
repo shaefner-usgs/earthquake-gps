@@ -42,6 +42,10 @@ input[type=checkbox], input[type=radio] {
   font-weight: 500;
   padding: 2px 6px;
 
+  &.off {
+    display: none;
+  }
+
   &:before {
     left: -8px;
     top: 6px;

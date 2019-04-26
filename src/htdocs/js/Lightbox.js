@@ -27,8 +27,8 @@ var Lightbox = function (options) {
 
       _addButtons,
       _addCaption,
+      _addListeners,
       _addLoadingSpinner,
-      _addNavHandlers,
       _addOverlay,
       _createButton,
       _getPosition,
@@ -52,7 +52,7 @@ var Lightbox = function (options) {
         _angle = 0;
 
         _removeComponent('simplbox-loading');
-        _addNavHandlers();
+        _addListeners();
         _showNavButtons();
       },
       onImageLoadStart: function () {
@@ -104,8 +104,9 @@ var Lightbox = function (options) {
     });
     document.body.appendChild(buttons);
 
-    _simplBox.API_AddEvent(close, 'click touchend', function () {
+    _simplBox.API_AddEvent(close, 'click touchend', function (e) {
       _simplBox.API_RemoveImageElement();
+      e.stopPropagation();
     });
     _simplBox.API_AddEvent(left, 'click touchend', function (e) {
       _rotatePhoto(-90);
@@ -139,23 +140,9 @@ var Lightbox = function (options) {
   };
 
   /**
-   * Add loading spinner
+   * Add event listeners for prev / next photo navigation
    */
-  _addLoadingSpinner = function () {
-    var div1,
-        div2;
-
-    div1 = document.createElement('div');
-    div2 = document.createElement('div');
-    div1.setAttribute('id', 'simplbox-loading');
-    div1.appendChild(div2);
-    document.body.appendChild(div1);
-  };
-
-  /**
-   * Add handlers for prev / next photo navigation
-   */
-  _addNavHandlers = function () {
+  _addListeners = function () {
     var div,
         position;
 
@@ -188,6 +175,20 @@ var Lightbox = function (options) {
     div.addEventListener('mouseout', function () {
       div.classList.remove('left', 'right');
     });
+  };
+
+  /**
+   * Add loading spinner
+   */
+  _addLoadingSpinner = function () {
+    var div1,
+        div2;
+
+    div1 = document.createElement('div');
+    div2 = document.createElement('div');
+    div1.setAttribute('id', 'simplbox-loading');
+    div1.appendChild(div2);
+    document.body.appendChild(div1);
   };
 
   /**

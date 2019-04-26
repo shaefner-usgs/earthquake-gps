@@ -70,7 +70,7 @@ var StationMap = function (options) {
         terrain;
 
     // Separate selected station into its own layer
-    selStation = _stations.points[STATION.toUpperCase()];
+    selStation = _stations.markers[STATION.toUpperCase()];
     stations = {};
     stations['Station ' + STATION.toUpperCase()] = selStation;
     stations['Other stations'] = _stations.removeLayer(selStation);
@@ -136,7 +136,7 @@ var StationMap = function (options) {
       shareLayers: true
     });
 
-    _stations.openPopup(STATION.toUpperCase());
+    _stations.markers[STATION.toUpperCase()].openPopup();
   };
 
   /**

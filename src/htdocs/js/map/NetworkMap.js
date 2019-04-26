@@ -33,7 +33,6 @@ var NetworkMap = function (options) {
       _el,
       _stations,
 
-      _addEvents,
       _getMapLayers,
       _initMap,
       _loadEarthquakesLayer,
@@ -50,61 +49,8 @@ var NetworkMap = function (options) {
     // Load eqs, stations layers which each call initMap() when finished
     _loadEarthquakesLayer();
     _loadStationsLayer();
-
-    _addEvents();
   };
 
-
-  /**
-   * Attach handlers for map popups & labels to list of stations below the map
-   */
-  _addEvents = function () {
-    var a, i, li, lis, newA, station,
-
-        hideLabel,
-        openPopup,
-        showLabel;
-
-    hideLabel = function (e) {
-      _stations.hideLabel(e.target.station);
-    };
-
-    openPopup = function (e) {
-      e.preventDefault();
-      _stations.openPopup(e.target.station);
-    };
-
-    showLabel = function (e) {
-      _stations.showLabel(e.target.station);
-    };
-
-    lis = document.querySelectorAll('.stations li');
-    for (i = 0; i < lis.length; i ++) {
-      li = lis[i];
-      // get station name (ignore '*' that indicates high rms value)
-      a = li.querySelector('a');
-      station = a.textContent.match(/\w+/);
-
-      // add label events to station buttons
-      a.station = station; // add station prop so it's accessible from event
-      a.addEventListener('click', hideLabel);
-      a.addEventListener('mouseout', hideLabel);
-      a.addEventListener('mouseover', showLabel);
-
-      // add popup icons to station buttons
-      newA = document.createElement('a');
-      newA.setAttribute('class', 'bubble');
-      newA.setAttribute('href', '#');
-      newA.setAttribute('title', 'View station popup');
-      li.appendChild(newA);
-
-      // add popup, label events to popup icons
-      newA.station = station;
-      newA.addEventListener('click', openPopup);
-      newA.addEventListener('mouseout', hideLabel);
-      newA.addEventListener('mouseover', showLabel);
-    }
-  };
 
   /**
    * Get all map layers that will be displayed on map

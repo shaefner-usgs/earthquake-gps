@@ -44,9 +44,8 @@ nav {
     margin-top: 0;
   }
 
-  span {
+  small {
     color: #777;
-    font-size: .8em;
     font-weight: normal;
   }
 }
@@ -137,6 +136,11 @@ nav {
 
 .panel {
   margin-top: 1em;
+
+  a:not([href]) {
+    color: #000;
+    opacity: .3;
+  }
 
   h3 {
     margin-top: 1.8em;

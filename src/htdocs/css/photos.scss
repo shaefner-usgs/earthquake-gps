@@ -7,24 +7,21 @@ h3 {
 
 .fullsize {
   background: rgba(0, 0, 0, .5);
-  bottom: 10px;
+  bottom: 14px;
   color: #fff;
   display: inline;
   line-height: 1;
-  padding: 3px;
+  padding: 4px 5px;
   position: absolute;
-  right: 4px;
+  right: 7px;
   transition: background .25s ease-out;
   z-index: 100;
 
-  &:active {
-    color: #0ff !important;
+  &:active, &:hover, &:visited {
+    color: #fff;
   }
   &:hover {
     background: #000;
-  }
-  &:visited {
-    color: #fff;
   }
   &.hide {
     opacity: 0;

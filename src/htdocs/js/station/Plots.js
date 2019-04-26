@@ -25,13 +25,12 @@ var Plots = function (options) {
     options = options || {};
     _el = options.el || document.createElement('div');
 
-    // add EventListeners
     _addListeners();
   };
 
 
   /**
-   * EventListeners to toggle plots by date range
+   * Add event listeners for buttons that toggle plots by date range
    */
   _addListeners = function () {
     var links;

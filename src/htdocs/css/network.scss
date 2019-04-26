@@ -2,6 +2,15 @@
 @import '_maplist.scss';
 @import 'map/_map.scss';
 
+section > .pipelist {
+  margin-bottom: 1em;
+}
+
+small {
+  display: block;
+  margin-top: -.5em;
+}
+
 .popup {
   img {
     height: 206px;
@@ -10,13 +19,4 @@
   .pipelist {
     margin: 1em 0;
   }
-}
-
-.small {
-  margin-top: .5em;
-  font-size: .8em;
-}
-
-section > .pipelist {
-  margin-bottom: 1em;
 }

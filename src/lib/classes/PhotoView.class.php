@@ -55,7 +55,9 @@ class PhotoView {
           $photosHtml .= sprintf('<li class="%s">
               <h4>%s</h4>
               <a href="%s/screen/%s" data-simplbox><img width="144" height="144" src="%s/thumb/%s" alt="%s - %s (%d of %d)"/></a>
-              <a class="fullsize" href="%s/full/%s"><i class="material-icons" title="Full resolution photo">&#xE2C4;</i></a>
+              <a class="fullsize" href="%s/full/%s">
+                <i class="material-icons" title="Full resolution photo">&#xE2C4;</i>
+              </a>
             </li>',
             $photo->code,
             $photo->type,

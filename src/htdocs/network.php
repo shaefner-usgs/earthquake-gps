@@ -88,10 +88,11 @@ foreach ($stations['features'] as $feature) {
       $starred = true;
   }*/
   $stationsHtml .= sprintf('<li>
-      <a href="%s/%s" class="%s button" title="Go to station details">%s%s</a>
+      <a href="%s/%s" class="link%d %s button" title="Go to station details">%s%s</a>
     </li>',
     $networkParam,
     $feature['properties']['station'],
+    $feature['id'],
     getColor($feature['properties']['last_observation']),
     strtoupper($feature['properties']['station']),
     $star
@@ -102,12 +103,12 @@ $stationsHtml .= '</ul>';
 // Create HTML for Download links
 $downloads = [
   'GPS Waypoints' => ['gpx', "$networkParam/waypoints"],
-  'Most Recent XYZ Positions' => ['text', "data/networks/$networkParam/${networkParam}_xyz_file"],
-  'ITRF2008 XYZ Time Series' => ['zip', "data/networks/$networkParam/${networkParam}_ITRF2008_xyz_files.tar.gz"]
+  'Most Recent XYZ Positions' => ['text', "networks/$networkParam/${networkParam}_xyz_file"],
+  'ITRF2008 XYZ Time Series' => ['zip', "networks/$networkParam/${networkParam}_ITRF2008_xyz_files.tar.gz"]
 ];
-$kmlFileBaseUri = $networkParam . '/kml';
 
 $downloadsHtml = '<ul class="downloads no-style">';
+$kmlFileBaseUri = $networkParam . '/kml';
 if ($row->type === 'campaign') {
   $kmlFiles = '<li>
       <a href="' . $kmlFileBaseUri . '/years" class="kml">Campaign Stations Sorted by Year(s) Surveyed</a>
@@ -124,13 +125,20 @@ if ($row->type === 'campaign') {
     </li>';
 }
 $downloadsHtml .= $kmlFiles;
-foreach ($downloads as $name=>$file) {
-  $downloadsHtml .= sprintf('<li><a href="%s" class="%s">%s</a></li>',
-    $file[1],
-    $file[0],
-    $name
-  );
+
+foreach ($downloads as $name => $file) {
+  $type = $file[0];
+  $path = $file[1];
+  $fullPath = $DATA_DIR . '/' . $path;
+  if (file_exists($fullPath) || $type === 'gpx') {
+    $downloadsHtml .= sprintf('<li><a href="data/%s" class="%s">%s</a></li>',
+      $file[1],
+      $file[0],
+      $name
+    );
+  }
 }
+
 $downloadsHtml .= '</ul>';
 
 ?>
@@ -155,7 +163,7 @@ $downloadsHtml .= '</ul>';
 <section>
   <div class="map"></div>
   <?php print $legendHtml; ?>
-  <p class="small">Pin color indicates when station was last updated.</p>
+  <small>Pin color indicates when station was last updated.</small>
   <h3 class="count"><?php print $stations['count']; ?> Stations on this Map</h3>
   <?php
     print $stationsHtml;
