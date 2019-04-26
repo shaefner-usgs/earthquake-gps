@@ -301,7 +301,10 @@ var StationsLayer = function (options) {
 
     ids.forEach(function(id) {
       label = document.querySelector('.label' + id);
-      label.classList.add('off');
+
+      if (label) { // in case map isn't rendered yet
+        label.classList.add('off');
+      }
     });
   };
 
@@ -450,8 +453,10 @@ var StationsLayer = function (options) {
   _showLabel = function (id) {
     var label = document.querySelector('.label' + id);
 
-    _hideLabel();
-    label.classList.remove('off');
+    if (label) { // in case map isn't rendered yet
+      _hideLabel();
+      label.classList.remove('off');
+    }
   };
 
   /**

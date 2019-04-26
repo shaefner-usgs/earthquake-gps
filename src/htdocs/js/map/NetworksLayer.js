@@ -114,7 +114,10 @@ var NetworksLayer = function (options) {
     ids.forEach(function(id) {
       label = document.querySelector('.label' + id);
       poly = document.querySelector('.poly' + id);
-      label.classList.add('off');
+
+      if (label) { // in case map isn't rendered yet
+        label.classList.add('off');
+      }
       if (poly) {
         poly.classList.add('off');
       }
@@ -193,7 +196,10 @@ var NetworksLayer = function (options) {
         poly = document.querySelector('.poly' + id);
 
     _hideLabelPoly();
-    label.classList.remove('off');
+
+    if (label) { // in case map isn't rendered yet
+      label.classList.remove('off');
+    }
     if (poly) {
       poly.classList.remove('off');
     }
