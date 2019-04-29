@@ -15,6 +15,10 @@ html {
   touch-action: none; /* Removes touch action */
   z-index: 9999;
 
+  img {
+    max-width: 100%;
+  }
+
   &:after, &:before {
     background: rgba(0, 0, 0, .5);
     color: #fff;
