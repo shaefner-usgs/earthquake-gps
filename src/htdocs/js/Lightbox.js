@@ -52,8 +52,11 @@ var Lightbox = function (options) {
         _angle = 0;
 
         _removeComponent('simplbox-loading');
-        _addListeners();
-        _showNavButtons();
+
+        if (!_simplBox.browser.isTouch) {
+          _addListeners();
+          _showNavButtons();
+        }
       },
       onImageLoadStart: function () {
         _addLoadingSpinner();
