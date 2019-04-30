@@ -34,7 +34,7 @@ _SHAPES = {
 
 
 /**
- * Factory for Stations overlay
+ * Factory for Stations overlay, which is used on both Network and Station pages
  *
  * @param options {Object}
  *     {
@@ -86,10 +86,10 @@ var StationsLayer = function (options) {
 
     _this.markers = {};
 
-    if (options.station) { // map on station page
+    if (options.station) { // map on Station page
       // Station user is currently viewing
       _station = options.station;
-    } else { // map on network page
+    } else { // map on Network page
       // Set up individual layers grouped by age
       _initLayers();
     }
@@ -236,7 +236,7 @@ var StationsLayer = function (options) {
    *
    * @return popup {String}
    */
-  _getPopup = function (feature, type) {
+  _getPopup = function (feature, mapType) {
     var data,
         popup,
         popupTemplate,
@@ -256,7 +256,7 @@ var StationsLayer = function (options) {
       y: feature.properties.y,
       z: feature.properties.z
     };
-    if (type === 'network') { // using layer on network page
+    if (mapType === 'network') { // map on Network page
       popupTemplate = '<div class="popup station">' +
           '<h2>Station {station}</h2>' +
           '<span>({lat}, {lon})</span>' +
@@ -269,7 +269,7 @@ var StationsLayer = function (options) {
           '</ul>' +
           '<a href="{baseUri}"><img src="{imgSrc}" alt="plot" /></a>' +
         '</div>';
-    } else { // using layer on station page
+    } else { // map on Station page
       popupTemplate = '<div class="popup">' +
           '<h2>Station {station}</h2>' +
           '<dl>' +
@@ -302,7 +302,7 @@ var StationsLayer = function (options) {
     ids.forEach(function(id) {
       label = document.querySelector('.label' + id);
 
-      if (label) { // in case map isn't rendered yet
+      if (label) { // check if it exists in case map isn't rendered yet
         label.classList.add('off');
       }
     });
@@ -355,13 +355,13 @@ var StationsLayer = function (options) {
 
     _ids.push(id);
 
-    if (_station) { // user viewing a Station page
-      // Only include popup on selected station
+    if (_station) { // map on Station page
+      // Include popup on selected station only
       if (feature.properties.station === _station) {
         popup = _getPopup(feature, 'station');
         layer.bindPopup(popup);
       }
-    } else {
+    } else { // map on Network page
       // Include popup on every station
       popup = _getPopup(feature, 'network');
       layer.bindPopup(popup, {
@@ -391,7 +391,7 @@ var StationsLayer = function (options) {
 
     shape = _SHAPES[feature.properties.type];
 
-    if (_station) { // user viewing a Station page
+    if (_station) { // map on Station page
       // Highlight the selected station only
       color = 'grey';
       selected = false;
@@ -414,7 +414,7 @@ var StationsLayer = function (options) {
       // Add marker to layer
       _this.addLayer(marker);
     }
-    else { // user viewing a Network page
+    else { // map on Network page
       // Color stations by days since last update
       color = _getColor(feature.properties.days);
       marker = _getMarker({
@@ -424,7 +424,7 @@ var StationsLayer = function (options) {
       });
       marker.href = NETWORK + '/' + feature.properties.station;
 
-      // Group stations in separate layers by type
+      // Group stations in separate layers by age
       _this.layers[color].addLayer(marker);
       _this.count[color] ++;
 
