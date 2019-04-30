@@ -32,8 +32,8 @@ var StationMap = function (options) {
       _el,
       _stations,
 
-      _initMap,
       _getMapLayers,
+      _initMap,
       _loadEarthquakesLayer,
       _loadStationsLayer;
 
