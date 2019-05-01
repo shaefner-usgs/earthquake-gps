@@ -35,6 +35,10 @@ _SHAPES = {
  *     }
  *
  * @return {L.FeatureGroup}
+ *     {
+ *       hideLabelPoly: {Function}
+ *       showLabelPoly: {Function}
+ *     }
  */
 var NetworksLayer = function (options) {
   var _this,
@@ -44,13 +48,12 @@ var NetworksLayer = function (options) {
       _ids,
       _markerOptions,
 
-      _addListeners,
-      _hideLabelPoly,
       _onEachFeature,
       _pointToLayer,
-      _showLabelPoly,
       _style;
 
+
+  _this = L.featureGroup();
 
   _initialize = function () {
     options = Util.extend({}, _DEFAULTS, options);
@@ -59,70 +62,13 @@ var NetworksLayer = function (options) {
     _icons = {};
     _ids = [];
 
-    _this = L.geoJson(options.data, {
+    L.geoJson(options.data, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer,
       style: _style
     });
-
-    _addListeners();
   };
 
-
-  /**
-   * Add event listeners for newtork buttons to show labels/polygons on map
-   */
-  _addListeners = function () {
-    var button,
-        i,
-        id,
-        onMouseout,
-        onMouseover;
-
-    onMouseout = function (e) {
-      id = e.target.className.replace(/\D/g, ''); // number portion only
-      _hideLabelPoly(id);
-    };
-    onMouseover = function (e) {
-      id = e.target.className.replace(/\D/g, ''); // number portion only
-      _showLabelPoly(id);
-    };
-
-    button = document.querySelectorAll('.networks a');
-    for (i = 0; i < button.length; i ++) {
-      button[i].addEventListener('mouseover', onMouseover);
-      button[i].addEventListener('mouseout', onMouseout);
-    }
-  };
-
-  /**
-   * Hide label & polygon on map
-   *
-   * @param id {Int}
-   *     optional; id number of feature to hide (hides all if no id is given)
-   */
-  _hideLabelPoly = function (id) {
-    var ids,
-        label,
-        poly;
-
-    ids = _ids; // all ids
-    if (id) {
-      ids = [id];
-    }
-
-    ids.forEach(function(id) {
-      label = document.querySelector('.label' + id);
-      poly = document.querySelector('.poly' + id);
-
-      if (label) { // in case map isn't rendered yet
-        label.classList.add('off');
-      }
-      if (poly) {
-        poly.classList.add('off');
-      }
-    });
-  };
 
   /**
    * Leaflet GeoJSON option: called on each created feature layer. Useful for
@@ -143,10 +89,10 @@ var NetworksLayer = function (options) {
 
       layer.on({
         mouseover: function () {
-          _showLabelPoly(id);
+          _this.showLabelPoly(id);
         },
         mouseout: function () {
-          _hideLabelPoly(id);
+          _this.hideLabelPoly(id);
         }
       }).bindLabel(label, {
         className: labelId + ' off', // labels off by default
@@ -182,42 +128,86 @@ var NetworksLayer = function (options) {
       window.location = MOUNT_PATH + '/' + this.href;
     });
 
+    // Add marker to layer
+    _this.addLayer(marker);
+
     return marker;
-  };
-
-  /**
-   * Show label & polygon on map
-   *
-   * @param id {Int}
-   *     id number of feature to show
-   */
-  _showLabelPoly = function (id) {
-    var label = document.querySelector('.label' + id),
-        poly = document.querySelector('.poly' + id);
-
-    _hideLabelPoly();
-
-    if (label) { // in case map isn't rendered yet
-      label.classList.remove('off');
-    }
-    if (poly) {
-      poly.classList.remove('off');
-    }
   };
 
   /**
    * Leaflet GeoJSON option: used to get style options for vector layers
    *
    * @param feature {Object}
-   *
-   * @return {Object}
    */
   _style = function (feature) {
+    var latlng,
+        latlngs,
+        polygon;
+
     if (feature.geometry.type === 'Polygon') {
-      return {
+      // Flip order of lat, lng values
+      latlngs = [];
+      feature.geometry.coordinates[0].forEach(function (pair) {
+        latlng = [pair[1], pair[0]];
+        latlngs.push(latlng);
+      });
+
+      polygon = L.polygon(latlngs, {
         className: feature.id + ' off', // polygons off by default
         weight: 2
-      };
+      });
+
+      // Add polygon to layer
+      _this.addLayer(polygon);
+    }
+  };
+
+  /**
+   * Hide label & polygon on map
+   *
+   * @param id {Integer}
+   *     optional; id number of feature to hide (hides all if no id is given)
+   */
+  _this.hideLabelPoly = function (id) {
+    var ids,
+        label,
+        poly;
+
+    ids = _ids; // all ids
+    if (id) {
+      ids = [id];
+    }
+
+    ids.forEach(function(id) {
+      label = document.querySelector('.label' + id);
+      poly = document.querySelector('.poly' + id);
+
+      if (label) { // in case map isn't rendered yet
+        label.classList.add('off');
+      }
+      if (poly) {
+        poly.classList.add('off');
+      }
+    });
+  };
+
+  /**
+   * Show label & polygon on map
+   *
+   * @param id {Integer}
+   *     id number of feature to show
+   */
+  _this.showLabelPoly = function (id) {
+    var label = document.querySelector('.label' + id),
+        poly = document.querySelector('.poly' + id);
+
+    _this.hideLabelPoly();
+
+    if (label) { // in case map isn't rendered yet
+      label.classList.remove('off');
+    }
+    if (poly) {
+      poly.classList.remove('off');
     }
   };
 
