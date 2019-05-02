@@ -11,7 +11,7 @@ require('map/RestoreMap');
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
 require('map/DarkLayer');
 require('map/GreyscaleLayer');
-require('map/NetworksLayer.js');
+require('map/NetworksLayer');
 require('map/SatelliteLayer');
 require('map/TerrainLayer');
 
@@ -28,6 +28,7 @@ var IndexMap = function (options) {
       _el,
       _networks,
 
+      _addListeners,
       _getMapLayers,
       _initMap,
       _loadNetworksLayer;
@@ -43,6 +44,32 @@ var IndexMap = function (options) {
     _loadNetworksLayer();
   };
 
+
+  /**
+   * Add event listeners for newtork buttons to show labels/polygons on map
+   */
+  _addListeners = function () {
+    var button,
+        i,
+        id,
+        onMouseout,
+        onMouseover;
+
+    onMouseout = function (e) {
+      id = e.target.className.replace(/\D/g, ''); // number portion only
+      _networks.hideLabelPoly(id);
+    };
+    onMouseover = function (e) {
+      id = e.target.className.replace(/\D/g, ''); // number portion only
+      _networks.showLabelPoly(id);
+    };
+
+    button = document.querySelectorAll('.networks a');
+    for (i = 0; i < button.length; i ++) {
+      button[i].addEventListener('mouseover', onMouseover);
+      button[i].addEventListener('mouseout', onMouseout);
+    }
+  };
 
   /**
    * Get all map layers that will be displayed on map
@@ -133,6 +160,9 @@ var IndexMap = function (options) {
       scope: 'GPS',
       shareLayers: true
     });
+
+    // Add listeners to buttons below map
+    _addListeners();
   };
 
 
