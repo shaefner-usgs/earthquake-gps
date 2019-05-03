@@ -1,0 +1,40 @@
+$fontColor: rgb(228, 226, 255);
+$fontColorMuted: rgb(205, 203, 229);
+
+.status-bar {
+  background: rgba(0, 0, 255, 0.9);
+  box-shadow: 0 -1px 12px rgba(0, 0, 0, 0.5);
+  color: $fontColor;
+  display: flex;
+  font-size: 1.25em;
+  left: 0;
+  padding: 8px 10px;
+  position: fixed;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+
+  a {
+    color: $fontColor;
+
+    &:active, &:hover, &:visited {
+      color: $fontColor;
+    }
+  }
+
+  i {
+    color: $fontColorMuted;
+    cursor: pointer;
+    font-size: 30px;
+
+    &:hover {
+      color: $fontColor;
+    }
+  }
+
+  p {
+    flex: 10 0 0;
+    margin: 0;
+  }
+}
