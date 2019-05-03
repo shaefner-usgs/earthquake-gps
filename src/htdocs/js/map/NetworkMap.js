@@ -2,7 +2,8 @@
 'use strict';
 
 
-var Xhr = require('util/Xhr');
+var StatusBar = require('StatusBar'),
+    Xhr = require('util/Xhr');
 
 // Leaflet plugins
 require('leaflet-fullscreen');
@@ -33,6 +34,7 @@ var NetworkMap = function (options) {
       _el,
       _map,
       _stations,
+      _statusBar,
 
       _addListeners,
       _addPopupIcons,
@@ -41,6 +43,7 @@ var NetworkMap = function (options) {
       _initMap,
       _loadEarthquakesLayer,
       _loadStationsLayer,
+      _openPopup,
       _setLegendState,
       _showCounts;
 
@@ -75,14 +78,18 @@ var NetworkMap = function (options) {
 
     onClick = function (e) {
       var button,
+          color,
+          layer,
           marker,
           station;
 
       button = e.target.parentNode.querySelector('.button');
+      color = button.getAttribute('class').match(/blue|orange|red|yellow/)[0];
+      layer = _stations.layers[color];
       station = button.textContent.match(/\w+/)[0]; // ignore '*' (high RMS value)
       marker = _stations.markers[station.toUpperCase()];
-      marker.openPopup();
 
+      _openPopup(marker, layer);
       e.preventDefault();
     };
     onMouseout = function (e) {
@@ -288,6 +295,38 @@ var NetworkMap = function (options) {
         console.log(status);
       }
     });
+  };
+
+  /**
+   * Open popups on map from buttons below map; alert user if layer is turned off
+   *
+   * @param marker {L.marker}
+   * @param layer {L.layer}
+   */
+  _openPopup = function (marker, layer) {
+    var p;
+
+    if (_map.hasLayer(marker)) {
+      if (_statusBar) {
+        _statusBar.remove(); // first, remove any prev. existing status bar
+      }
+      marker.openPopup();
+    } else {
+      p = document.createElement('p');
+      p.innerHTML = 'Map layer is off. <a href="#" class="turn-on">Turn it on</a>.';
+      p.querySelector('.turn-on').addEventListener('click', function (e) {
+        _map.addLayer(layer);
+        marker.openPopup();
+        _statusBar.remove();
+        _showCounts(); // counts get removed when layer is dynamically turned on
+
+        e.preventDefault();
+      });
+      _statusBar = StatusBar({
+        message: p
+      });
+      _statusBar.add();
+    }
   };
 
   /**
