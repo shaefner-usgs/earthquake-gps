@@ -12,22 +12,30 @@ var _DEFAULTS = {
 /**
  * Factory for creating a non-modal status bar
  *
- *   @param options {Object}
- *       {
- *         message: {Element|String} <p> element or String
- *         type: {String <info|warning|error>} optional
- *       }
+ * @param options {Object}
+ *     {
+ *       message: {Element|String} <p> element or String
+ *       type: {String <info|warning|error>} optional
+ *     }
+ *
+ * @return {Object}
+ *     {
+ *       hide: {Function}
+ *       remove: {Function}
+ *       show: {Function}
+ *     }
  */
 var StatusBar = function (options) {
   var _this,
       _initialize,
 
+      _el,
       _message,
-      _statusBar,
       _type,
 
+      _add,
       _addListeners,
-      _getHtml;
+      _createEl;
 
 
       _this = {};
@@ -43,10 +51,20 @@ var StatusBar = function (options) {
       _message.toString();
     }
 
-    _statusBar = _getHtml();
-    _addListeners();
+    _el = _createEl();
+    _add();
   };
 
+
+  /**
+   * Add status bar to page
+   */
+  _add = function () {
+    _this.remove(); // first, remove any existing status bars before adding another
+    _addListeners();
+
+    document.body.appendChild(_el);
+  };
 
   /**
    * Add click handler for closing status bar
@@ -54,52 +72,63 @@ var StatusBar = function (options) {
   _addListeners = function () {
     var closeButton;
 
-    closeButton = _statusBar.querySelector('.material-icons');
+    closeButton = _el.querySelector('.material-icons');
     closeButton.addEventListener('click', function () {
-      _this.remove();
+      _this.hide();
     });
   };
 
   /**
-   * Get HTML content for status bar
+   * Create status bar Element (hidden via css; call _this.show() to display)
+   *
+   * @return el {Element}
    */
-  _getHtml = function () {
+  _createEl = function () {
     var closeButton,
-        div;
+        el;
 
     closeButton = document.createElement('i');
     closeButton.classList.add('material-icons');
     closeButton.innerHTML = 'cancel';
 
-    div = document.createElement('div');
-    div.classList.add('sb-' + _type, 'status-bar');
+    el = document.createElement('div');
+    el.classList.add('sb-' + _type, 'status-bar', 'hide'); // hidden by default
     if (_message.nodeType === 1) { // element
-      div.appendChild(_message);
+      el.appendChild(_message);
     } else { // string
-      div.innerHTML = '<p>' + _message + '</p>';
+      el.innerHTML = '<p>' + _message + '</p>';
     }
-    div.appendChild(closeButton);
+    el.appendChild(closeButton);
 
-    return div;
+    return el;
   };
 
   /**
-   * Add status bar to page
+   * Hide status bar via CSS
    */
-  _this.add = function () {
-    _this.remove();
-
-    document.body.appendChild(_statusBar);
+  _this.hide = function () {
+    _el.classList.add('hide');
   };
 
   /**
    * Remove status bar from page
    */
   _this.remove = function () {
-    var statusBar = document.querySelector('.status-bar');
+    var statusBar;
+
+    statusBar = document.querySelector('.status-bar');
     if (statusBar) {
       statusBar.parentNode.removeChild(statusBar);
     }
+  };
+
+  /**
+   * Show status bar via CSS
+   */
+  _this.show = function () {
+    setTimeout(function() { // 'trick' browser into animating when adding to DOM
+      _el.classList.remove('hide');
+    }, 0);
   };
 
 

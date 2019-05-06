@@ -3,6 +3,7 @@ $fontColorMuted: rgb(205, 203, 229);
 
 .status-bar {
   background: rgba(0, 0, 255, 0.9);
+  border-bottom: 1px solid rgb(25, 139, 230);
   box-shadow: 0 -1px 12px rgba(0, 0, 0, 0.5);
   color: $fontColor;
   display: flex;
@@ -11,6 +12,9 @@ $fontColorMuted: rgb(205, 203, 229);
   padding: 8px 10px;
   position: fixed;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  transform: scaleY(1);
+  transform-origin: top;
+  transition: transform 0.2s ease-out;
   top: 0;
   width: 100%;
   z-index: 1000;
@@ -36,5 +40,9 @@ $fontColorMuted: rgb(205, 203, 229);
   p {
     flex: 10 0 0;
     margin: 0;
+  }
+
+  &.hide {
+    transform: scaleY(0);
   }
 }

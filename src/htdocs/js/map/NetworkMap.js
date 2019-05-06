@@ -308,7 +308,7 @@ var NetworkMap = function (options) {
 
     if (_map.hasLayer(marker)) {
       if (_statusBar) {
-        _statusBar.remove(); // first, remove any prev. existing status bar
+        _statusBar.hide(); // hide any prev. existing status bar
       }
       marker.openPopup();
     } else {
@@ -317,7 +317,7 @@ var NetworkMap = function (options) {
       p.querySelector('.turn-on').addEventListener('click', function (e) {
         _map.addLayer(layer);
         marker.openPopup();
-        _statusBar.remove();
+        _statusBar.hide();
         _showCounts(); // counts get removed when layer is dynamically turned on
 
         e.preventDefault();
@@ -325,7 +325,7 @@ var NetworkMap = function (options) {
       _statusBar = StatusBar({
         message: p
       });
-      _statusBar.add();
+      _statusBar.show();
     }
   };
 
