@@ -128,7 +128,7 @@ var StatusBar = function (options) {
   _this.show = function () {
     setTimeout(function() { // 'trick' browser into animating when adding to DOM
       _el.classList.remove('hide');
-    }, 0);
+    }, 10);
   };
 
 
