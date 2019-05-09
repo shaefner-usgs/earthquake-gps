@@ -1,5 +1,9 @@
 /* CSS for navigation buttons below maps */
 
+h3.count {
+  font: normal 1.2em $font-sans;
+}
+
 .icon {
   background: url('../img/bubble.png') no-repeat;
   background-size: 20px 20px;
