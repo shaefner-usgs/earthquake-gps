@@ -31,13 +31,14 @@ addListeners = function () {
     var button = getButton(thumb);
 
     button.classList.add('hide'); // hide all buttons initially
-    button.addEventListener('mouseover', onMouseover); // make button persistent
-    button.addEventListener('click', function () {
-      this.classList.add('hide'); // hide on click
-    });
 
-    thumb.addEventListener('mouseover', onMouseover);
     thumb.addEventListener('mouseout', onMouseout);
+    [button, thumb].forEach(function(el) {
+      el.addEventListener('mouseover', onMouseover);
+      el.addEventListener('click', function () {
+        button.classList.add('hide'); // hide on click
+      });
+    });
   });
 };
 
