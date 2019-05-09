@@ -122,26 +122,6 @@ th {
   }
 }
 
-.legend {
-  display: flex;
-  flex-flow: row wrap;
-  margin-top: 0;
-
-  img {
-    height: 25px;
-    position: absolute;
-  }
-  li {
-    padding: .5em 1.25em 0 0;
-    position: relative;
-    white-space: nowrap;
-  }
-  span {
-    display: inline-block;
-    margin-left: 25px;
-  }
-}
-
 .nowrap {
   white-space: nowrap;
 }
@@ -160,23 +140,6 @@ th {
     cursor: text;
     font-weight: bold;
     text-decoration: none;
-  }
-}
-
-.popup {
-  dd {
-    color: #666;
-    margin: .2em 0 0;
-  }
-
-  dt {
-    font-weight: normal;
-    margin-top: 1em;
-  }
-
-  h2 {
-    font: normal 1.5em $font-sans !important;
-    margin-top: 0;
   }
 }
 
