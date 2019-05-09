@@ -91,7 +91,7 @@ $backLink = sprintf('%s/%s/%s',
   </section>
 
   <section class="app-download">
-    <h3>Download</h3>
+    <h2>Download</h2>
     <ul class="downloads no-style">
       <li><a href="kinematic/data" class="text">Plot Data</a></li>
     </ul>

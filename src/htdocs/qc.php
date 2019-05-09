@@ -69,7 +69,7 @@ $backLink = sprintf('%s/%s/%s',
     <p class="alert info">Javascript must be enabled to view these plots.</p>
   </noscript>
   <section class="app-download">
-    <h3>Download</h3>
+    <h2>Download</h2>
     <ul class="downloads no-style">
       <li><a href="qc/data" class="text">Plot Data</a></li>
     </ul>
