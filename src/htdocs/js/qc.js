@@ -28,7 +28,7 @@ app = Application({
       'units': 'percentage'
     },
     'slips_per_obs': {
-      'title': 'Cycle Slips per Observation'
+      'title': 'Observations per Slip'
     },
     'sn1': {
       'title': 'SN1',
