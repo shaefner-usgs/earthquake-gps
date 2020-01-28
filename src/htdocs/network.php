@@ -125,10 +125,17 @@ foreach ($downloads as $name => $file) {
   $type = $file[0];
   $path = $file[1];
   $fullPath = $DATA_DIR . '/' . $path;
-  if (file_exists($fullPath) || $type === 'gpx') {
+
+  if ($type === 'gpx') {
+    $downloadsHtml .= sprintf('<li><a href="%s" class="%s">%s</a></li>',
+      $path,
+      $type,
+      $name
+    );
+  } else if (file_exists($fullPath)) {
     $downloadsHtml .= sprintf('<li><a href="data/%s" class="%s">%s</a></li>',
-      $file[1],
-      $file[0],
+      $path,
+      $type,
       $name
     );
   }
