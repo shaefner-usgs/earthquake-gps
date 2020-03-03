@@ -72,6 +72,39 @@ class Db {
   }
 
   /**
+   * Query db to get closest stations to a given lat, lon (distance is in kms)
+   *   query returns duplicate stations, so grab extra and subsequently filter
+   *
+   * @param $latpoint {Float}
+   * @param $lonpoint {Float}
+   * @param $station {String}
+   */
+  public function queryClosestStations ($latpoint, $lonpoint, $station) {
+    $sql = 'SELECT s.station, r.network,
+      111.045 * DEGREES(ACOS(COS(RADIANS(latpoint))
+        * COS(RADIANS(s.lat))
+        * COS(RADIANS(lonpoint) - RADIANS(s.lon))
+        + SIN(RADIANS(latpoint))
+        * SIN(RADIANS(s.lat)))) AS distance
+      FROM gps_stations s
+      LEFT JOIN (gps_relations r) ON r.station = s.station
+      LEFT JOIN (gps_networks n) ON n.network = r.network
+      JOIN (
+        SELECT :latpoint AS latpoint, :lonpoint AS lonpoint
+      ) AS p
+      WHERE s.lat IS NOT NULL AND s.lon IS NOT NULL
+        AND n.show = 1 AND s.station != :station
+      ORDER BY distance
+      LIMIT 18';
+
+    return $this->_execQuery($sql, array(
+      'latpoint' => $latpoint,
+      'lonpoint' => $lonpoint,
+      'station' => $station
+    ));
+  }
+
+  /**
    * Query db to get a list of deleted points for a station
    *
    * @param $network {String}
