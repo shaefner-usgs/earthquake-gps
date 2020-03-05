@@ -3,6 +3,14 @@
 @import '_common.scss';
 @import '_freezeCells.scss';
 
+dt {
+  font-weight: normal !important;
+  font-size: 1.1em;
+}
+dd {
+  margin: 0 0 1em 0;
+}
+
 h1 em {
   font-size: .8em;
   font-style: normal;
@@ -30,13 +38,19 @@ mark {
 
 nav {
   h4 {
-    font: normal 1em $font-sans;
-    margin: 1em 0 .25em;
+    font: normal 1.1em $font-sans;
+    margin: 1em 0 .1em;
   }
 
   ul {
     margin: 0 0 .25em;
   }
+}
+
+.closest {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .details {
@@ -78,7 +92,7 @@ nav {
 
 .links {
   list-style: none;
-  margin-bottom: 2em;
+  margin: 0;
   padding: 0;
 
   i {
@@ -90,7 +104,7 @@ nav {
     color: #333;
     display: flex;
     max-width: 12em;
-    padding: 4px 0;
+    padding: 3px 0;
     text-decoration: none;
     transition: all .2s ease-out;
 
@@ -103,7 +117,7 @@ nav {
 }
 
 .map {
-  height: 350px;
+  height: 450px;
   margin-bottom: 1em;
 }
 

@@ -75,6 +75,15 @@ $rsStation->setFetchMode(
 );
 $stationModel = $rsStation->fetch();
 
+// Add closest stations which depend on stationModel already being created
+$rsClosestStations = $db->queryClosestStations(
+  $stationModel->lat,
+  $stationModel->lon,
+  $stationModel->station
+);
+$closestStations = $rsClosestStations->fetchAll(PDO::FETCH_GROUP);
+$stationModel->closestStations = array_slice($closestStations, 0, 5, true); // closest 5
+
 // Create the view and render it
 printf ('<h2 class="subtitle"><a class="%s button">%s</a></h2>',
   getColor($stationModel->lastUpdate),

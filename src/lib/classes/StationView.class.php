@@ -24,6 +24,30 @@ class StationView {
     );
   }
 
+  private function _getClosestStations () {
+    $html = '<ul class="closest">';
+    $stations = $this->_model->closestStations;
+
+    foreach ($stations as $name => $propsList) {
+      $network = $propsList[0]['network']; // default to first network in list
+      foreach($propsList as $props) {
+        if ($props['network'] === $this->_model->network) {
+          // When station is in mult. networks, link to same network
+          $network = $props['network'];
+        }
+      }
+      $html .= sprintf('<li><a href="/monitoring/gps/%s/%s">%s</a> (%s km)</li>',
+        $network,
+        $name,
+        strtoupper($name),
+        round(floatval($propsList[0]['distance']), 1)
+      );
+    }
+    $html .= '</ul>';
+
+    return $html;
+  }
+
   private function _getData () {
     $html = '<div class="tablist">';
     $datatypes = [
@@ -156,14 +180,14 @@ class StationView {
       $titleAttr = ' title="No Data"';
     }
 
-    $a = sprintf('<a%s%s class="%s">%s</a>',
+    $html = sprintf('<a%s%s class="%s">%s</a>',
       $hrefAttr,
       $titleAttr,
       $fileType,
       $text
     );
 
-    return $a;
+    return $html;
   }
 
   private function _getDownloads ($datatype) {
@@ -238,48 +262,6 @@ class StationView {
     return $href;
   }
 
-  private function _getStationDetails () {
-    $updateTime = strtotime($this->_model->lastUpdate);
-    $numDays = date('z') - date('z', $updateTime);
-    $updated = date('M j, Y', $updateTime);
-    $numDaysStr = '';
-    $plural = 's';
-    if ($numDays > 0 && $numDays < 31) { // show num days since update if 30 or less
-      if ($numDays === 1) {
-        $plural = '';
-      }
-      $numDaysStr = " ($numDays day$plural ago)";
-    }
-    $html = sprintf('<p>Last observation: %s%s</p>',
-      $updated,
-      $numDaysStr
-    );
-
-    $links = $this->_model->links;
-    $html .= '<ul class="links">';
-    foreach ($links as $key => $value) {
-      $count = '';
-      $number = NULL;
-      if ($key === 'Photos') {
-        $number = $this->_model->numPhotos;
-      } else if ($key === 'Field Logs') {
-        $number = $this->_model->numLogs;
-      }
-      if (isSet($number)) {
-        $count = "&nbsp;<small>($number)</small>";
-      }
-      $html .= sprintf('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
-        $value[1],
-        $value[0],
-        $key,
-        $count
-      );
-    }
-    $html .= '</ul>';
-
-    return $html;
-  }
-
   private function _getMap () {
     return '<div class="map"></div>';
   }
@@ -345,7 +327,7 @@ class StationView {
         $plurality = 's';
       }
 
-      $networkListHtml = sprintf('<nav>
+      $html = sprintf('<nav>
           <h4>This station is in %s other network%s</h4>
           <ul class="other pipelist no-style">
             %s
@@ -356,10 +338,10 @@ class StationView {
         $lis
       );
     } else {
-      $networkListHtml = '<p>This station is not in any other networks.</p>';
+      $html = '<p>This station is not in any other networks.</p>';
     }
 
-    return $networkListHtml;
+    return $html;
   }
 
   private function _getOffsetsTable ($datatype) {
@@ -512,6 +494,53 @@ class StationView {
         $html .= '</table>';
       }
     }
+
+    return $html;
+  }
+
+  private function _getStationDetails () {
+    $updateTime = strtotime($this->_model->lastUpdate);
+    $links = $this->_model->links;
+    $numDays = date('z') - date('z', $updateTime);
+    $updated = date('M j, Y', $updateTime);
+
+    $numDaysStr = '';
+    $plural = 's';
+    if ($numDays > 0 && $numDays < 31) { // show num days since update if 30 or less
+      if ($numDays === 1) {
+        $plural = '';
+      }
+      $numDaysStr = " ($numDays day$plural ago)";
+    }
+
+    $html = '<ul class="links">';
+    foreach ($links as $key => $value) {
+      $count = '';
+      $number = NULL;
+      if ($key === 'Photos') {
+        $number = $this->_model->numPhotos;
+      } else if ($key === 'Field Logs') {
+        $number = $this->_model->numLogs;
+      }
+      if (isSet($number)) {
+        $count = "&nbsp;<small>($number)</small>";
+      }
+      $html .= sprintf('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
+        $value[1],
+        $value[0],
+        $key,
+        $count
+      );
+    }
+    $html .= '</ul><dl><dt>Last observation</dt>';
+
+    $html .= sprintf('<dd>%s%s</dd>',
+      $updated,
+      $numDaysStr
+    );
+    $html .= '<dt>Closest stations</dt>';
+    $html .= $this->_getClosestStations();
+    $html .= '</dl>';
 
     return $html;
   }
