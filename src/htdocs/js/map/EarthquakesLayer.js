@@ -105,22 +105,24 @@ var EarthquakesLayer = function (options) {
         popup,
         popupTemplate,
         props,
+        roundedMag,
         tooltip,
         tooltipTemplate;
 
     props = feature.properties;
+    roundedMag = Math.round(props.mag * 10) / 10;
     data = {
-      mag: Math.round(props.mag * 10) / 10,
+      mag: roundedMag.toFixed(1),
       time: Moment.utc(props.time, 'x').format('ddd, MMM D HH:mm:ss') + ' UTC',
       place: props.place,
       url: props.url
     };
 
-    tooltipTemplate = 'M{mag} - {time}';
+    tooltipTemplate = 'M {mag} - {time}';
     tooltip = L.Util.template(tooltipTemplate, data);
 
     popupTemplate = '<div class="popup eq">' +
-        '<h2>M{mag}, {place}</h2>' +
+        '<h2>M {mag}, {place}</h2>' +
         '<time>{time}</time>' +
         '<p><a href="{url}" target="_blank">Details</a> &raquo;</p>' +
       '</div>';
