@@ -5,8 +5,6 @@
 var Moment = require('moment'),
     Util = require('util/Util');
 
-require('leaflet.label');
-
 
 var _COLORS,
     _DEFAULTS,
@@ -104,11 +102,11 @@ var EarthquakesLayer = function (options) {
    */
   _onEachFeature = function (feature, layer) {
     var data,
-        label,
-        labelTemplate,
         popup,
         popupTemplate,
-        props;
+        props,
+        tooltip,
+        tooltipTemplate;
 
     props = feature.properties;
     data = {
@@ -118,8 +116,8 @@ var EarthquakesLayer = function (options) {
       url: props.url
     };
 
-    labelTemplate = 'M{mag} - {time}';
-    label = L.Util.template(labelTemplate, data);
+    tooltipTemplate = 'M{mag} - {time}';
+    tooltip = L.Util.template(tooltipTemplate, data);
 
     popupTemplate = '<div class="popup eq">' +
         '<h2>M{mag}, {place}</h2>' +
@@ -131,7 +129,7 @@ var EarthquakesLayer = function (options) {
     layer.bindPopup(popup, {
       autoPanPadding: L.point(50, 50),
       maxWidth: '265'
-    }).bindLabel(label);
+    }).bindTooltip(tooltip);
   };
 
   /**

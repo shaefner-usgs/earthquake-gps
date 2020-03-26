@@ -38,7 +38,7 @@ var NetworkMap = function (options) {
 
       _addListeners,
       _addPopupIcons,
-      _getId,
+      _getStationName,
       _getMapLayers,
       _initMap,
       _loadEarthquakesLayer,
@@ -62,7 +62,7 @@ var NetworkMap = function (options) {
 
   /**
    * Add event listeners for:
-   *   1. station buttons to show labels/popups on map
+   *   1. station buttons to show tooltips/popups on map
    *   2. greying out legend item when layer is turned off in controller
    */
   _addListeners = function () {
@@ -93,10 +93,10 @@ var NetworkMap = function (options) {
       e.preventDefault();
     };
     onMouseout = function (e) {
-      _stations.hideLabel(_getId(e.target));
+      _stations.hideTooltip(_getStationName(e.target));
     };
     onMouseover = function (e) {
-      _stations.showLabel(_getId(e.target));
+      _stations.showTooltip(_getStationName(e.target));
     };
 
     buttons = document.querySelectorAll('.stations a:first-child');
@@ -107,6 +107,7 @@ var NetworkMap = function (options) {
 
       icon = button.nextElementSibling;
       icon.addEventListener('mouseover', onMouseover);
+      icon.addEventListener('mouseout', onMouseout);
       icon.addEventListener('click', onClick);
     }
 
@@ -142,23 +143,19 @@ var NetworkMap = function (options) {
   };
 
   /**
-   * Get id of feature (station), which is attached to the button element
+   * Get station name, which is the text to the button element
    *
    * @param el {Element}
    *     button element or its sibling
    *
-   * @return id {Integer}
+   * @return {String}
    */
-  _getId = function (el) {
-    var id;
-
+  _getStationName = function (el) {
     if (el.classList.contains('icon')) {
       el = el.parentNode.querySelector('.button');
     }
 
-    id = el.className.replace(/\D/g, ''); // number portion only
-
-    return id;
+    return el.textContent;
   };
 
   /**

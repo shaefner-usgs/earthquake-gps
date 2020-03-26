@@ -4,7 +4,7 @@
 
 require('map/Utfgrid');
 
-var CLASSES = 'leaflet-mouseover-tooltip';
+var CLASSES = 'leaflet-tooltip utfgrid';
 
 L.MouseOverLayer = L.LayerGroup.extend({
 
@@ -111,8 +111,10 @@ L.MouseOverLayer = L.LayerGroup.extend({
     this._tooltip.innerHTML = L.Util.template(this._tiptext, evt.data);
 
     // Update position
-    L.DomUtil.setPosition(this._tooltip, this._map.latLngToLayerPoint(
-        evt.latlng));
+    var point = this._map.latLngToLayerPoint(evt.latlng);
+    point.x += 10;
+    point.y += -10;
+    L.DomUtil.setPosition(this._tooltip, point);
 
     // Show the tooltip
     this._tooltip.style.display = 'block';

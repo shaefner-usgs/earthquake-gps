@@ -5,8 +5,6 @@
 var Icon = require('map/Icon'),
     Util = require('util/Util');
 
-require('leaflet.label');
-
 
 var _DEFAULTS,
     _MARKER_DEFAULTS,
@@ -36,17 +34,17 @@ _SHAPES = {
  *
  * @return {L.FeatureGroup}
  *     {
- *       hideLabelPoly: {Function}
- *       showLabelPoly: {Function}
+ *       hideOverlays: {Function}
+ *       showOverlays: {Function}
  *     }
  */
 var NetworksLayer = function (options) {
   var _this,
       _initialize,
 
-      _icons,
       _ids,
       _markerOptions,
+      _markers,
 
       _onEachFeature,
       _pointToLayer,
@@ -59,8 +57,8 @@ var NetworksLayer = function (options) {
     options = Util.extend({}, _DEFAULTS, options);
     _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
 
-    _icons = {};
     _ids = [];
+    _markers = {};
 
     L.geoJson(options.data, {
       onEachFeature: _onEachFeature,
@@ -78,27 +76,19 @@ var NetworksLayer = function (options) {
    * @param layer (L.Layer)
    */
   _onEachFeature = function (feature, layer) {
-    var id,
-        label,
-        labelId;
+    var id;
 
     if (feature.geometry.type === 'Point') {
       id = feature.id.replace('point', ''); // number portion only
-      label = feature.properties.name;
-      labelId = 'label' + id;
 
       layer.on({
         mouseover: function () {
-          _this.showLabelPoly(id);
+          _this.showOverlays(id);
         },
         mouseout: function () {
-          _this.hideLabelPoly(id);
+          _this.hideOverlays(id);
         }
-      }).bindLabel(label, {
-        className: labelId + ' off', // labels off by default
-        noHide: true,
-        pane: 'popupPane'
-      });
+      }).bindTooltip(feature.properties.name);
 
       _ids.push(id);
     }
@@ -113,14 +103,17 @@ var NetworksLayer = function (options) {
    * @return marker {L.Marker}
    */
   _pointToLayer = function (feature, latlng) {
-    var key,
+    var id,
+        key,
         marker,
         shape;
 
+    id = feature.id.replace('point', ''); // number portion only
     shape = _SHAPES[feature.properties.type];
     key = shape + '+grey';
     _markerOptions.icon = Icon.getIcon(key);
     marker = L.marker(latlng, _markerOptions);
+    _markers[id] = marker; // save ref to marker for tooltips
 
     // Clicking marker sends user to selected network page
     marker.href = feature.properties.name;
@@ -163,48 +156,41 @@ var NetworksLayer = function (options) {
   };
 
   /**
-   * Hide label & polygon on map
+   * Hide marker's polygon, tooltip on map
    *
    * @param id {Integer}
-   *     optional; id number of feature to hide (hides all if no id is given)
+   *     id number of feature to hide
    */
-  _this.hideLabelPoly = function (id) {
-    var ids,
-        label,
+  _this.hideOverlays = function (id) {
+    var marker,
         poly;
 
-    ids = _ids; // all ids
-    if (id) {
-      ids = [id];
+    marker = _markers[id];
+    poly = document.querySelector('.poly' + id);
+
+    if (marker) {
+      marker.closeTooltip();
     }
-
-    ids.forEach(function(id) {
-      label = document.querySelector('.label' + id);
-      poly = document.querySelector('.poly' + id);
-
-      if (label) { // in case map isn't rendered yet
-        label.classList.add('off');
-      }
-      if (poly) {
-        poly.classList.add('off');
-      }
-    });
+    if (poly) {
+      poly.classList.add('off');
+    }
   };
 
   /**
-   * Show label & polygon on map
+   * Show marker's polygon, tooltip on map
    *
    * @param id {Integer}
    *     id number of feature to show
    */
-  _this.showLabelPoly = function (id) {
-    var label = document.querySelector('.label' + id),
-        poly = document.querySelector('.poly' + id);
+  _this.showOverlays = function (id) {
+    var marker,
+        poly;
 
-    _this.hideLabelPoly();
+    marker = _markers[id];
+    poly = document.querySelector('.poly' + id);
 
-    if (label) { // in case map isn't rendered yet
-      label.classList.remove('off');
+    if (marker) {
+      marker.openTooltip();
     }
     if (poly) {
       poly.classList.remove('off');

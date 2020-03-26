@@ -5,8 +5,6 @@
 var Icon = require('map/Icon'),
     Util = require('util/Util');
 
-require('leaflet.label');
-
 
 var _DEFAULTS,
     _LAYERNAMES,
@@ -48,9 +46,9 @@ _SHAPES = {
  *       layers: {Object}
  *       markers: {Object}
  *       names: {Object}
- *       getBounds: {Function}
- *       hideLabel: {Function}
- *       showLabel: {Function}
+ *       getBounds: {Function},
+ *       hideTooltip {Function},
+ *       showTooltip {Function}
  *     }
  */
 var StationsLayer = function (options) {
@@ -58,8 +56,6 @@ var StationsLayer = function (options) {
       _initialize,
 
       _bounds,
-      _icons,
-      _ids,
       _markerOptions,
       _station,
 
@@ -78,8 +74,6 @@ var StationsLayer = function (options) {
     _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
 
     _bounds = new L.LatLngBounds();
-    _icons = {};
-    _ids = [];
 
     _this.markers = {};
 
@@ -139,7 +133,7 @@ var StationsLayer = function (options) {
 
     _markerOptions.zIndexOffset = 0;
     if (options.selected) {
-      _markerOptions.zIndexOffset = 1000;
+      _markerOptions.zIndexOffset = 1000; // bring to top
     }
 
     return L.marker(options.latlng, _markerOptions);
@@ -226,28 +220,13 @@ var StationsLayer = function (options) {
    */
   _onEachFeature = function (feature, layer) {
     var id,
-        label,
-        labelId,
-        popup;
+        popup,
+        tooltip;
 
     id = feature.id;
-    label = feature.properties.station.toUpperCase();
-    labelId = 'label' + id;
+    tooltip = feature.properties.station.toUpperCase();
 
-    layer.on({
-      mouseover: function () {
-        _this.showLabel(id);
-      },
-      mouseout: function () {
-        _this.hideLabel(id);
-      }
-    }).bindLabel(label, {
-      className: labelId + ' off', // labels off by default
-      noHide: true,
-      pane: 'popupPane'
-    });
-
-    _ids.push(id);
+    layer.bindTooltip(tooltip);
 
     if (_station) { // map on Station page
       // Include popup on selected station only
@@ -263,9 +242,6 @@ var StationsLayer = function (options) {
         minWidth: 256,
       });
     }
-
-    // Store point so its popup can be accessed by openPopup()
-    _this.markers[label] = layer;
   };
 
   /**
@@ -281,8 +257,10 @@ var StationsLayer = function (options) {
         marker,
         popup,
         selected,
-        shape;
+        shape,
+        tooltip;
 
+    tooltip = feature.properties.station.toUpperCase();
     shape = _SHAPES[feature.properties.type];
 
     if (_station) { // map on Station page
@@ -325,6 +303,9 @@ var StationsLayer = function (options) {
       _bounds.extend(latlng);
     }
 
+    // save ref to marker for popups/tooltips
+    _this.markers[tooltip] = marker;
+
     // Clicking marker sends user to selected station page
     if (feature.properties.station !== _station) {
       marker.on('click', function () {
@@ -348,41 +329,30 @@ var StationsLayer = function (options) {
   };
 
   /**
-   * Hide label on map
+   * Hide tooltip on map
    *
-   * @param id {Integer}
-   *     optional; id number of feature to hide (hides all if no id is given)
+   * @param tooltip {String}
+   *     tooltip to hide
    */
-  _this.hideLabel = function (id) {
-    var ids,
-        label;
+  _this.hideTooltip = function (tooltip) {
+    var marker = _this.markers[tooltip];
 
-    ids = _ids; // all ids
-    if (id) {
-      ids = [id];
+    if (marker) {
+      marker.closeTooltip();
     }
-
-    ids.forEach(function(id) {
-      label = document.querySelector('.label' + id);
-
-      if (label) { // check if it exists in case map isn't rendered yet
-        label.classList.add('off');
-      }
-    });
   };
 
   /**
-   * Show label on map
+   * Show tooltip on map
    *
-   * @param id {Integer}
-   *     id number of feature to show
+   * @param tooltip {String}
+   *     tooltip to show
    */
-  _this.showLabel = function (id) {
-    var label = document.querySelector('.label' + id);
+  _this.showTooltip = function (tooltip) {
+    var marker = _this.markers[tooltip];
 
-    if (label) { // in case map isn't rendered yet
-      _this.hideLabel();
-      label.classList.remove('off');
+    if (marker) {
+      marker.openTooltip();
     }
   };
 

@@ -61,7 +61,7 @@ var copy = {
   leaflet: {
     expand: true,
     cwd: 'node_modules/leaflet/dist',
-    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet-0.7.7',
+    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet',
     rename: function (dest, src) {
       var newName;
 
@@ -70,6 +70,7 @@ var copy = {
       // version as compressed
       newName = src.replace('leaflet.js', 'leaflet-min.js');
       newName = newName.replace('leaflet-src.js', 'leaflet.js');
+      newName = newName.replace('leaflet.js.map', 'leaflet-src.js.map');
 
       return dest + '/' + newName;
     },

@@ -46,7 +46,7 @@ var IndexMap = function (options) {
 
 
   /**
-   * Add event listeners for newtork buttons to show labels/polygons on map
+   * Add event listeners for newtork buttons to show tooltips/polygons on map
    */
   _addListeners = function () {
     var button,
@@ -57,11 +57,11 @@ var IndexMap = function (options) {
 
     onMouseout = function (e) {
       id = e.target.className.replace(/\D/g, ''); // number portion only
-      _networks.hideLabelPoly(id);
+      _networks.hideOverlays(id);
     };
     onMouseover = function (e) {
       id = e.target.className.replace(/\D/g, ''); // number portion only
-      _networks.showLabelPoly(id);
+      _networks.showOverlays(id);
     };
 
     button = document.querySelectorAll('.networks a');
