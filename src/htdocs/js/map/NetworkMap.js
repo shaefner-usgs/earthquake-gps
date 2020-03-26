@@ -112,13 +112,15 @@ var NetworkMap = function (options) {
     }
 
     _map.on('overlayadd overlayremove', function (e) {
-      color = e.name.match(/blue|orange|red|yellow/)[0];
-      legendItem = document.querySelector('.legend .' + color);
+      color = e.name.match(/<span class="(blue|orange|red|yellow)">/);
+      if (color) {
+        legendItem = document.querySelector('.legend .' + color[1]);
 
-      if (e.type === 'overlayremove') {
-        legendItem.classList.add('greyed-out');
-      } else {
-        legendItem.classList.remove('greyed-out');
+        if (e.type === 'overlayremove') {
+          legendItem.classList.add('greyed-out');
+        } else {
+          legendItem.classList.remove('greyed-out');
+        }
       }
     });
   };
