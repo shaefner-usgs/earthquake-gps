@@ -361,7 +361,7 @@ class StationView {
           $offsets[$date][$component . '-uncertainty'] = $row['uncertainty'];
           $offsets[$date]['id'] = '';
           if ($row['eqinfo']) {
-            $offsets[$date]['id'] = sprintf('<a href="https://earthquake.usgs.gov/earthquakes/eventpage/%s#executive">%s</a>',
+            $offsets[$date]['id'] = sprintf('<a href="https://earthquake.usgs.gov/earthquakes/eventpage/%s">%s</a>',
               $row['eqinfo'],
               $row['eqinfo']
             );
