@@ -39,7 +39,7 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db();
 
-// Db query result: station details for selected station
+// Db query: station details for selected station
 $rsStation = $db->queryStation($stationParam);
 
 $station = $rsStation->fetch();

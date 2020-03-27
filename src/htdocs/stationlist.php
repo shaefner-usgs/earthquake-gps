@@ -17,8 +17,9 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db();
 
-// Db query result: first char for all stations in db
-$rsStationChars = $db->queryStationChars();
+// Db queries
+$rsStationChars = $db->queryStationChars(); // unique first chars of station names
+$rsStationList = $db->queryStationList($filterParam);
 
 // Create html for jumplist
 $navHtml = '<nav class="jumplist">';
@@ -34,9 +35,6 @@ while ($row = $rsStationChars->fetch(PDO::FETCH_ASSOC)) {
   );
 }
 $navHtml .= '</nav>';
-
-// Db query result: station list
-$rsStationList = $db->queryStationList($filterParam);
 
 // Create a more "friendly" array to loop over for creating list html
 while ($row = $rsStationList->fetch(PDO::FETCH_ASSOC)) {

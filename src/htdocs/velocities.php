@@ -20,7 +20,7 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db;
 
-// Db query result: velocities for selected network
+// Db query: velocities for selected network
 $rsVelocities = $db->queryVelocities($networkParam);
 
 if ($rsVelocities->rowCount() > 0) {

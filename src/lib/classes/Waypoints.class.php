@@ -94,7 +94,7 @@ class Waypoints {
   private function _getStations() {
     $db = new Db;
 
-    // Db query result: all stations in a given network
+    // Db query: all stations in a given network
     return $db->queryStations($this->_network);
   }
 

@@ -21,7 +21,7 @@ $urls = [
   "$urlBase/stations"
 ];
 
-// Db query result: all non-hidden networks
+// Db query: all non-hidden networks
 $rsNetworks = $db->queryNetworks();
 
 while ($row1 = $rsNetworks->fetch(PDO::FETCH_OBJ)) {
@@ -33,7 +33,7 @@ while ($row1 = $rsNetworks->fetch(PDO::FETCH_OBJ)) {
     "$urlBase/$network/velocities"
   );
 
-  // Db query result: all stations in a given network
+  // Db query: all stations in a given network
   $rsStations = $db->queryStations($network);
 
   while ($row2 = $rsStations->fetch(PDO::FETCH_OBJ)) {

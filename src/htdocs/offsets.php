@@ -20,7 +20,7 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db;
 
-// Db query results: offsets, velocities for selected network
+// Db queries: offsets, velocities for selected network
 $rsOffsets = $db->queryOffsets($networkParam);
 $rsVelocities = $db->queryVelocities($networkParam);
 

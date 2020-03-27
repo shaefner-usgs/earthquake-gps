@@ -11,7 +11,7 @@ $now = date(DATE_RFC2822);
 
 $db = new Db;
 
-// Db query result: all qc data for a given station / network
+// Db query: all qc data for a given station / network
 $rsQcData = $db->queryQcData($networkParam, $stationParam);
 
 $output = "Date, Filename, Completeness, Slips_per_obs, MP1, MP2, SN1, SN2\n";

@@ -10,7 +10,7 @@ $now = date(DATE_RFC2822);
 
 $db = new Db;
 
-// Db query result: time series data for given station
+// Db query: time series data for given station
 $rsTimeSeries = $db->queryTimeSeries($stationParam);
 
 // Set header

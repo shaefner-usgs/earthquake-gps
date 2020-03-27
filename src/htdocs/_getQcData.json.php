@@ -12,7 +12,7 @@ $now = date(DATE_RFC2822);
 
 $db = new Db;
 
-// Db query result: all qc data for a given station / network
+// Db query: all qc data for a given station / network
 $rsQcData = $db->queryQcData($networkParam, $stationParam);
 
 // Initialize array template for json feed

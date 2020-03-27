@@ -5,9 +5,11 @@ include_once '../conf/config.inc.php'; // app config
 /**
  * Model for GPS station
  * - populates fields from db query using magic __set method
- * - also sets up other properites (e.g. links, networkList, and velocities)
+ * - also sets up other properites (e.g. links, networkList, velocities, etc)
+ * - additional props are added after model is created (see station.php)
  *
  * Station Object (
+ *   [lastUpdate] => String
  *   [links] => Array
  *   [networkList] => Array
  *   [numLogs] => Int
@@ -68,9 +70,9 @@ class Station {
     $this->_data[$name] = $value;
   }
 
-  private function _getLastUpdate ($array) {
-    if (is_array($array)) {
-      return $array[0]['last_observation'];
+  private function _getLastUpdate ($velocities) {
+    if (is_array($velocities)) {
+      return $velocities[0]['last_observation'];
     }
   }
 

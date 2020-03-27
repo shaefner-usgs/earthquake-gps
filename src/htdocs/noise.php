@@ -20,7 +20,7 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db;
 
-// Db query results: noise, velocities for selected network
+// Db queries: noise, velocities for selected network
 $rsNoise = $db->queryNoise($networkParam);
 $rsVelocities = $db->queryVelocities($networkParam);
 

@@ -7,7 +7,7 @@ include_once '../lib/classes/Db.class.php'; // db connector, queries
 include_once '../lib/classes/Station.class.php'; // model
 include_once '../lib/classes/StationView.class.php'; // view
 
-// set default values so page loads without passing params
+// Set params, including default values so page loads with no params
 $networkParam = safeParam('network', 'Pacific');
 $stationParam = strtolower(safeParam('station', 'aoa1'));
 
@@ -41,30 +41,28 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db;
 
-// Db query result: all networks that selected station belongs to
+// Db queries for selected network and station
 $rsNetworkList = $db->queryNetworkList($stationParam);
-
-// Create an array of networks
-$networkList = [];
-while ($row = $rsNetworkList->fetch(PDO::FETCH_ASSOC)) {
-  $networkList[] = [$row['network'], intval($row['show'])];
-}
-
-// Db query results for selected network and station
 $rsNoise = $db->queryNoise($networkParam, $stationParam);
 $rsOffsets = $db->queryOffsets($networkParam, $stationParam);
 $rsPostSeismic = $db->queryPostSeismic($networkParam, $stationParam);
 $rsSeasonal = $db->querySeasonal($networkParam, $stationParam);
+$rsStation = $db->queryStation($stationParam, $networkParam);
 $rsVelocities = $db->queryVelocities($networkParam, $stationParam);
 
-// Db query result: station details for selected station and network
-$rsStation = $db->queryStation($stationParam, $networkParam);
+// Create an array of networks station belongs to
+$networkList = [];
+while ($row = $rsNetworkList->fetch(PDO::FETCH_ASSOC)) {
+  $networkList[] = [
+    'name' => $row['network'],
+    'show' => intval($row['show'])
+  ];
+}
 
-// Create the station model using the station details + $networkList, etc.
+// Create the Station model
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
-  'Station',
-  [
+  'Station', [
     $networkList,
     $rsNoise->fetchAll(PDO::FETCH_ASSOC),
     $rsOffsets->fetchAll(PDO::FETCH_ASSOC),
@@ -75,7 +73,7 @@ $rsStation->setFetchMode(
 );
 $stationModel = $rsStation->fetch();
 
-// Add closest stations which depend on stationModel already being created
+// Add closest stations which depend on Station model already being created
 $rsClosestStations = $db->queryClosestStations(
   $stationModel->lat,
   $stationModel->lon,

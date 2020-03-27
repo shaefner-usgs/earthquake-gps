@@ -32,7 +32,7 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db();
 
-// Db query result: network details for selected network
+// Db query: network details for selected network
 $rsNetwork = $db->queryNetwork($networkParam);
 $row = $rsNetwork->fetch(PDO::FETCH_OBJ);
 

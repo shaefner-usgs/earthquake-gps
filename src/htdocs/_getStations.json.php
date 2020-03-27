@@ -20,7 +20,7 @@ $now = date(DATE_RFC2822);
 
 $db = new Db;
 
-// Db query result: all stations in a given network
+// Db query: all stations in a given network
 $rsStations = $db->queryStations($networkParam);
 
 // Initialize array template for json feed

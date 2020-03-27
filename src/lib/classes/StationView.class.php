@@ -28,9 +28,9 @@ class StationView {
     $html = '<ul class="closest">';
     $stations = $this->_model->closestStations;
 
-    foreach ($stations as $name => $propsList) {
-      $network = $propsList[0]['network']; // default to first network in list
-      foreach($propsList as $props) {
+    foreach ($stations as $name => $list) {
+      $network = $list[0]['network']; // default to first network in list
+      foreach($list as $props) {
         if ($props['network'] === $this->_model->network) {
           // When station is in mult. networks, link to same network
           $network = $props['network'];
@@ -40,7 +40,7 @@ class StationView {
         $network,
         $name,
         strtoupper($name),
-        round(floatval($propsList[0]['distance']), 1)
+        round(floatval($list[0]['distance']), 1)
       );
     }
     $html .= '</ul>';
@@ -293,12 +293,11 @@ class StationView {
     $count = 0;
     foreach ($networks as $network) {
       $cssClass = '';
-      $networkName = $network[0];
-      $networkText = $networkName;
+      $networkDisplay = $network['name'];
       $networkSelected = false;
-      $showNetwork = $network[1];
+      $showNetwork = $network['show'];
 
-      if ($networkName === $this->_model->network) {
+      if ($network['name'] === $this->_model->network) {
         $networkSelected = true;
       }
 
@@ -307,15 +306,15 @@ class StationView {
         if ($networkSelected) {
           $cssClass = 'selected';
           if (!$showNetwork) {
-            $networkText = $networkName . ' <small>(hidden)</small>';
+            $networkDisplay .= ' <small>(hidden)</small>';
           }
         }
         $lis .= sprintf('<li><a href="%s/%s/%s" class="%s">%s</a></li>',
           $GLOBALS['MOUNT_PATH'],
-          $networkName,
+          $network['name'],
           $this->_model->station,
           $cssClass,
-          $networkText
+          $networkDisplay
         );
       }
 

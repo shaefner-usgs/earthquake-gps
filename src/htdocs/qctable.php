@@ -29,7 +29,7 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db;
 
-// Db query results: station details for selected station and past 14 records of QC data
+// Db queries: station details for selected station and past 14 records of QC data
 $rsStation = $db->queryStation($stationParam);
 $rsQcData = $db->queryQcData($networkParam, $stationParam, 14);
 

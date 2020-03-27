@@ -10,7 +10,7 @@ $now = date(DATE_RFC2822);
 
 $db = new Db;
 
-// Db query result: all "non-hidden" networks
+// Db query: all "non-hidden" networks
 $rsNetworks = $db->queryNetworks();
 
 // Initialize array template for json feed

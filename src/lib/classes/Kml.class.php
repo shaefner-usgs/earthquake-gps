@@ -478,7 +478,7 @@ class Kml {
       'all' => []
     ];
 
-    // Db query result: all stations in non-hidden networks,
+    // Db query: all stations in non-hidden networks,
     // (with the option to limit to given network)
     $rsStations = $db->queryStations($this->_network);
 

@@ -20,7 +20,7 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db();
 
-// Db query result: all stations that haven't been updated in past 7 days
+// Db query: all stations that haven't been updated in past 7 days
 $rsLastUpdated = $db->queryLastUpdated($networkParam, 7);
 
 if ($rsLastUpdated->rowCount() > 0) {
