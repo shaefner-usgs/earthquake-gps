@@ -63,12 +63,12 @@ while ($row = $rsNetworkList->fetch(PDO::FETCH_ASSOC)) {
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
   'Station', [
-    $networkList,
+    $rsVelocities->fetchAll(PDO::FETCH_ASSOC),
     $rsNoise->fetchAll(PDO::FETCH_ASSOC),
     $rsOffsets->fetchAll(PDO::FETCH_ASSOC),
     $rsPostSeismic->fetchAll(PDO::FETCH_ASSOC),
     $rsSeasonal->fetchAll(PDO::FETCH_ASSOC),
-    $rsVelocities->fetchAll(PDO::FETCH_ASSOC)
+    $networkList
   ]
 );
 $stationModel = $rsStation->fetch();

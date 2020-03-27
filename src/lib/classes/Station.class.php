@@ -9,7 +9,14 @@ include_once '../conf/config.inc.php'; // app config
  * - additional props are added after model is created (see station.php)
  *
  * Station Object (
+ *   Minimal model
+ *
  *   [lastUpdate] => String
+ *   [stationPath] => String
+ *   ... (+ all properties returned from station db query)
+ *
+ *   Full model includes additional props necessary for station.php
+ *
  *   [links] => Array
  *   [networkList] => Array
  *   [numLogs] => Int
@@ -18,9 +25,7 @@ include_once '../conf/config.inc.php'; // app config
  *   [offsets] => Array
  *   [postSeismic] => Array
  *   [seasonal] => Array
- *   [stationPath] => String
  *   [velocities] => Array
- *   ... (+ all properties returned from db query)
  * )
  *
  * @author Scott Haefner <shaefner@usgs.gov>
@@ -29,27 +34,32 @@ class Station {
   private $_data = [];
 
   public function __construct (
-    $networkList=NULL,
+    $velocities=NULL,
     $noise=NULL,
     $offsets=NULL,
     $postSeismic=NULL,
     $seasonal=NULL,
-    $velocities=NULL
+    $networkList=NULL
   ) {
 
-    $this->_data['stationPath'] = $GLOBALS['MOUNT_PATH'] . '/' . $this->network
-      . '/' . $this->station;
-
     $this->_data['lastUpdate'] = $this->_getLastUpdate($velocities);
-    $this->_data['links'] = $this->_getLinkList();
-    $this->_data['networkList'] = $networkList;
-    $this->_data['numLogs'] = $this->_getNumLogs();
-    $this->_data['numPhotos'] = $this->_getNumPhotos();
-    $this->_data['noise'] = $noise;
-    $this->_data['offsets'] = $offsets;
-    $this->_data['postSeismic'] = $postSeismic;
-    $this->_data['seasonal'] = $seasonal;
-    $this->_data['velocities'] = $velocities;
+    $this->_data['stationPath'] = sprintf('%s/%s/%s',
+      $GLOBALS['MOUNT_PATH'],
+      $this->network,
+      $this->station
+    );
+
+    if ($noise) { // use 'noise' param as a proxy to determine wheter to set additional props
+      $this->_data['links'] = $this->_getLinkList();
+      $this->_data['networkList'] = $networkList;
+      $this->_data['numLogs'] = $this->_getNumLogs();
+      $this->_data['numPhotos'] = $this->_getNumPhotos();
+      $this->_data['noise'] = $noise;
+      $this->_data['offsets'] = $offsets;
+      $this->_data['postSeismic'] = $postSeismic;
+      $this->_data['seasonal'] = $seasonal;
+      $this->_data['velocities'] = $velocities;
+    }
   }
 
   public function __get ($name) {
