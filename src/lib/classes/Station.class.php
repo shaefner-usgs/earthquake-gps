@@ -49,7 +49,7 @@ class Station {
       $this->station
     );
 
-    if ($noise) { // use 'noise' param as a proxy to determine wheter to set additional props
+    if ($networkList) { // use $networkList param as a proxy to determine wheter to set additional props
       $this->_data['links'] = $this->_getLinkList();
       $this->_data['networkList'] = $networkList;
       $this->_data['numLogs'] = $this->_getNumLogs();
