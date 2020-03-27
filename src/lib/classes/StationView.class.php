@@ -36,7 +36,7 @@ class StationView {
           $network = $props['network'];
         }
       }
-      $html .= sprintf('<li><a href="/monitoring/gps/%s/%s">%s</a> (%s km)</li>',
+      $html .= sprintf('<li><a href="/monitoring/gps/%s/%s">%s</a> <small>(%s km)</small></li>',
         $network,
         $name,
         strtoupper($name),
@@ -509,7 +509,7 @@ class StationView {
       if ($numDays === 1) {
         $plural = '';
       }
-      $numDaysStr = " ($numDays day$plural ago)";
+      $numDaysStr = " <small>($numDays day$plural ago)</small>";
     }
 
     $html = '<ul class="links">';
