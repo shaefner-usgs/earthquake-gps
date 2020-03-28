@@ -25,22 +25,26 @@ class StationView {
   }
 
   private function _getClosestStations () {
-    $html = '<ul class="closest">';
+    $html = '<ul class="closest links">';
     $stations = $this->_model->closestStations;
 
-    foreach ($stations as $name => $list) {
-      $network = $list[0]['network']; // default to first network in list
-      foreach($list as $props) {
-        if ($props['network'] === $this->_model->network) {
-          // When station is in mult. networks, link to same network
-          $network = $props['network'];
-        }
-      }
-      $html .= sprintf('<li><a href="/monitoring/gps/%s/%s">%s</a> <small>(%s km)</small></li>',
-        $network,
+    foreach ($stations as $name => $params) {
+      $iconKey = $this->_getIconKey($params['stationtype'], $params['lastUpdate']);
+      $html .= sprintf('<li>
+          <a href="%s/%s/%s">
+            <img src="%s/img/pin-s-%s-2x.png" alt="%s station icon" />
+            %s
+            <small>(%s km)</small>
+          </a>
+        </li>',
+        $GLOBALS['MOUNT_PATH'],
+        $params['network'],
         $name,
+        $GLOBALS['MOUNT_PATH'],
+        $iconKey,
+        $iconKey,
         strtoupper($name),
-        round(floatval($list[0]['distance']), 1)
+        round(floatval($params['distance']), 1)
       );
     }
     $html .= '</ul>';
@@ -262,6 +266,17 @@ class StationView {
     return $href;
   }
 
+  private function _getIconKey ($type, $date) {
+    $shapes = [
+      'campaign' => 'triangle',
+      'continuous' => 'square'
+    ];
+    $color = getColor($date);
+    $shape = $shapes[$type];
+
+    return "$shape+$color";
+  }
+
   private function _getMap () {
     return '<div class="map"></div>';
   }
@@ -306,7 +321,7 @@ class StationView {
         if ($networkSelected) {
           $cssClass = 'selected';
           if (!$showNetwork) {
-            $networkDisplay .= ' <small>(hidden)</small>';
+            $networkDisplay .= '<small>(hidden)</small>';
           }
         }
         $lis .= sprintf('<li><a href="%s/%s/%s" class="%s">%s</a></li>',
@@ -509,7 +524,7 @@ class StationView {
       if ($numDays === 1) {
         $plural = '';
       }
-      $numDaysStr = " <small>($numDays day$plural ago)</small>";
+      $numDaysStr = "<small>($numDays day$plural ago)</small>";
     }
 
     $html = '<ul class="links">';
@@ -522,7 +537,7 @@ class StationView {
         $number = $this->_model->numLogs;
       }
       if (isSet($number)) {
-        $count = "&nbsp;<small>($number)</small>";
+        $count = "<small>($number)</small>";
       }
       $html .= sprintf('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
         $value[1],
@@ -533,12 +548,12 @@ class StationView {
     }
     $html .= '</ul><dl><dt>Last observation</dt>';
 
-    $html .= sprintf('<dd>%s%s</dd>',
+    $html .= sprintf('<dd class="lastUpdate">%s%s</dd>',
       $updated,
       $numDaysStr
     );
     $html .= '<dt>Closest stations</dt>';
-    $html .= $this->_getClosestStations();
+    $html .= '<dd>' . $this->_getClosestStations() . '</dd>';
     $html .= '</dl>';
 
     return $html;

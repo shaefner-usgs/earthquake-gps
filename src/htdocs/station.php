@@ -41,7 +41,7 @@ if (!isset($TEMPLATE)) {
 
 $db = new Db;
 
-// Db queries for selected network and station
+// Db queries for the selected station/network
 $rsNetworkList = $db->queryNetworkList($stationParam);
 $rsNoise = $db->queryNoise($networkParam, $stationParam);
 $rsOffsets = $db->queryOffsets($networkParam, $stationParam);
@@ -50,7 +50,7 @@ $rsSeasonal = $db->querySeasonal($networkParam, $stationParam);
 $rsStation = $db->queryStation($stationParam, $networkParam);
 $rsVelocities = $db->queryVelocities($networkParam, $stationParam);
 
-// Create an array of networks station belongs to
+// Create an array of networks the selected station belongs to
 $networkList = [];
 while ($row = $rsNetworkList->fetch(PDO::FETCH_ASSOC)) {
   $networkList[] = [
@@ -59,7 +59,7 @@ while ($row = $rsNetworkList->fetch(PDO::FETCH_ASSOC)) {
   ];
 }
 
-// Create the Station model
+// Create the Station model for the selected station
 $rsStation->setFetchMode(
   PDO::FETCH_CLASS,
   'Station', [
@@ -73,14 +73,52 @@ $rsStation->setFetchMode(
 );
 $stationModel = $rsStation->fetch();
 
-// Add closest stations which depend on Station model already being created
+// Get the 5 closest stations
 $rsClosestStations = $db->queryClosestStations(
   $stationModel->lat,
   $stationModel->lon,
   $stationModel->station
 );
-$closestStations = $rsClosestStations->fetchAll(PDO::FETCH_GROUP);
-$stationModel->closestStations = array_slice($closestStations, 0, 5, true); // closest 5
+$closestStations = array_slice(
+  $rsClosestStations->fetchAll(PDO::FETCH_GROUP),
+  0, 5, true // keep closest 5
+);
+
+// Create a Station model for each of the closest stations and keep select props
+foreach ($closestStations as $station => $paramsList) {
+  $network = '';
+  foreach ($paramsList as $params) {
+    if ($params['network'] === $networkParam) { // currently selected network
+      $distance = $params['distance'];
+      $network = $params['network'];
+    }
+  }
+  if (!$network) { // set to first result in list if no match found for network
+    $distance = $paramsList[0]['distance'];
+    $network = $paramsList[0]['network'];
+  }
+
+  $rsClosestStation = $db->queryStation($station, $network);
+  $rsClosestVelocities = $db->queryVelocities($network, $station);
+
+  $rsClosestStation->setFetchMode(
+    PDO::FETCH_CLASS,
+    'Station', [
+      $rsClosestVelocities->fetchAll(PDO::FETCH_ASSOC)
+    ]
+  );
+  $closestStationModel = $rsClosestStation->fetch();
+
+  // Set props to keep for closest stations list
+  $closestStations[$station] = [
+    'distance' => $distance,
+    'lastUpdate' => $closestStationModel->lastUpdate,
+    'network' => $network,
+    'stationtype' => $closestStationModel->stationtype
+  ];
+}
+
+$stationModel->closestStations = $closestStations;
 
 // Create the view and render it
 printf ('<h2 class="subtitle"><a class="%s button">%s</a></h2>',
