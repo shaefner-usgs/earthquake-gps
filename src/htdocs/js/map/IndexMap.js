@@ -142,7 +142,7 @@ var IndexMap = function (options) {
       scrollWheelZoom: false
     });
 
-    // Set intial map extent to contain Contiguous U.S.
+    // Set initial map extent to contain Contiguous U.S.
     //bounds = _networks.getBounds();
     bounds = L.latLngBounds([49, -126], [24, -66]);
     map.fitBounds(bounds);
