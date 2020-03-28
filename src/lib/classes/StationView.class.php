@@ -513,22 +513,29 @@ class StationView {
   }
 
   private function _getStationDetails () {
-    $updateTime = strtotime($this->_model->lastUpdate);
+    $lastUpdate = 'Unknown'; // default
     $links = $this->_model->links;
-    $numDays = date('z') - date('z', $updateTime);
-    $updated = date('M j, Y', $updateTime);
 
-    $numDaysStr = '';
-    $plural = 's';
-    if ($numDays > 0 && $numDays < 31) { // show num days since update if 30 or less
-      if ($numDays === 1) {
-        $plural = '';
+    if ($this->_model->lastUpdate) {
+      $updateTime = strtotime($this->_model->lastUpdate);
+      $lastUpdate = date('M j, Y', $updateTime);
+      $numDays = date('z') - date('z', $updateTime);
+      $plural = 's';
+
+      if ($numDays >= 0 && $numDays < 31) { // show num days since update if 30 or less
+        if ($numDays === 0) {
+          $lastUpdate .= '<small>(today)</small>';
+        } else {
+          if ($numDays === 1) {
+            $plural = '';
+          }
+          $lastUpdate .= "<small>($numDays day$plural ago)</small>";
+        }
       }
-      $numDaysStr = "<small>($numDays day$plural ago)</small>";
     }
 
     $html = '<ul class="links">';
-    foreach ($links as $key => $value) {
+    foreach ($links as $key => $arr) {
       $count = '';
       $number = NULL;
       if ($key === 'Photos') {
@@ -539,16 +546,22 @@ class StationView {
       if (isSet($number)) {
         $count = "<small>($number)</small>";
       }
-      $html .= sprintf('<li><a href="%s"><i class="material-icons">%s</i>%s%s</a></li>',
-        $value[1],
-        $value[0],
+      $html .= sprintf('<li>
+          <a href="%s">
+            <i class="material-icons">%s</i>%s%s
+          </a>
+        </li>',
+        $arr['link'],
+        $arr['icon'],
         $key,
         $count
       );
     }
-    $html .= '</ul><dl><dt>Last observation</dt>';
+    $html .= '</ul>';
 
-    $html .= sprintf('<dd class="lastUpdate">%s%s</dd>',
+    $html .= '<dl><dt>Last observation</dt>';
+    $html .= '<dd class="lastUpdate">' . $lastUpdate . '</dd>';
+    $html .= sprintf('',
       $updated,
       $numDaysStr
     );
