@@ -60,10 +60,12 @@ var StationMap = function (options) {
    *     }
    */
   _getMapLayers = function () {
-    var dark,
+    var count,
+        dark,
         faults,
         greyscale,
         layers,
+        otherStations,
         satellite,
         selStation,
         stations,
@@ -71,9 +73,11 @@ var StationMap = function (options) {
 
     // Separate selected station into its own layer
     selStation = _stations.markers[STATION.toUpperCase()];
+    otherStations = _stations.removeLayer(selStation);
+    count = otherStations.getLayers().length;
     stations = {};
     stations['Station ' + STATION.toUpperCase()] = selStation;
-    stations['Other stations'] = _stations.removeLayer(selStation);
+    stations['Other stations <span>(' + count + ')</span>'] = otherStations;
 
     dark = L.darkLayer();
     greyscale = L.greyscaleLayer();
@@ -92,7 +96,7 @@ var StationMap = function (options) {
     layers.overlays[NETWORK + ' Network'] = stations;
     layers.overlays.Geology = {
       'Faults': faults,
-      'M2.5+ Earthquakes': _earthquakes
+      'M 2.5+ Earthquakes': _earthquakes
     };
     layers.defaults = [terrain, _earthquakes, selStation, _stations];
 

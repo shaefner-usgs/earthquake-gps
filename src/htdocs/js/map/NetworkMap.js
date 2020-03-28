@@ -196,7 +196,7 @@ var NetworkMap = function (options) {
       'Stations, Last Updated': {},
       'Geology': {
         'Faults': faults,
-        'M2.5+ Earthquakes': _earthquakes
+        'M 2.5+ Earthquakes': _earthquakes
       }
     };
     layers.defaults = [terrain, _earthquakes];
