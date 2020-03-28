@@ -96,12 +96,30 @@ class Station {
 
     // Multi-dimensional array containing material icons and uris for link list
     $links = [
-      'Photos' => ['collections', $photos],
-      'Field Logs' => ['assignment', $logs],
-      'Quality Control Data' => ['scatter_plot', $qc],
-      'Kinematic Data' => ['show_chart', $kinematic],
-      'Weather' => ['wb_sunny', $weather],
-      '<abbr title="National Geodetic Survey">NGS</abbr>&nbsp;Datasheets' => ['description', $ngs]
+      'Photos' => [
+        'icon' => 'collections',
+        'link' => $photos
+      ],
+      'Field Logs' => [
+        'icon' => 'assignment',
+        'link' => $logs
+      ],
+      'Quality Control Data' => [
+        'icon' => 'scatter_plot',
+        'link' => $qc
+      ],
+      'Kinematic Data' => [
+        'icon' => 'show_chart',
+        'link' => $kinematic
+      ],
+      'Weather' => [
+        'icon' => 'wb_sunny',
+        'link' => $weather
+      ],
+      '<abbr title="National Geodetic Survey">NGS</abbr>&nbsp;Datasheets' => [
+        'icon' => 'description',
+        'link' => $ngs
+      ]
     ];
 
     // Campaign stations don't have kinematic data; continous don't have photos
