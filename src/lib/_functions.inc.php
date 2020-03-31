@@ -1,6 +1,50 @@
 <?php
 
 /**
+ * Create GeoJson for Leaflet map overlay layers
+ *
+ * @param $data {Array}
+ *   [
+ *     count: {Integer}
+ *     features: [
+ *       coords: {Array}
+ *       id: {String}
+ *       props: {Array}
+ *       type: {Point|Polygon}
+ *     ]
+ *   ]
+ *
+ * @return {String}
+ */
+function getGeoJson ($data) {
+  $now = date(DATE_RFC2822);
+
+  // Initialize array template for json feed
+  $geoJson = [
+    'generated' => $now,
+    'count' => $data['count'],
+    'type' => 'FeatureCollection',
+    'features' => []
+  ];
+
+  // Add features
+  foreach ($data['features'] as $feature) {
+    $geoJsonFeature = [
+      'geometry' => [
+        'coordinates' => $feature['coords'],
+        'type' => $feature['type']
+      ],
+      'id' => $feature['id'],
+      'properties' => $feature['props'],
+      'type' => 'Feature'
+    ];
+    array_push($geoJson['features'], $geoJsonFeature);
+  }
+
+  return json_encode($geoJson) . "\n";
+}
+
+/**
  * Get color classification based on the number of days since the last update
  *
  * @param $days {Integer}
