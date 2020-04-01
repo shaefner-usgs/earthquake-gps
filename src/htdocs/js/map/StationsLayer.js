@@ -38,6 +38,7 @@ _SHAPES = {
  *     {
  *       data: {String} Geojson data
  *       markerOptions: {Object} L.Marker options
+ *       station: {Object} selected station on Station page
  *     }
  *
  * @return {L.FeatureGroup}
