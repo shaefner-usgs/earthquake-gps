@@ -53,7 +53,9 @@ var NetworkMap = function (options) {
     options = options || {};
     _el = options.el || document.createElement('div');
 
-    // Load eqs layer which calls initMap() when finished
+    _earthquakes = L.layerGroup(); // use empty layer until ajax request completes
+
+    _initMap();
     _loadEarthquakesLayer();
   };
 
@@ -198,7 +200,7 @@ var NetworkMap = function (options) {
         'Stations, Last Updated': {},
         'Geology': {
           'Faults': faults,
-          'M 2.5+ Earthquakes': _earthquakes
+          'M 2.5+ Earthquakes <div class="spinner"></div>': _earthquakes
         }
       },
       defaults: [terrain, _earthquakes]
@@ -260,17 +262,21 @@ var NetworkMap = function (options) {
    * Load earthquakes layer from geojson data via ajax
    */
   _loadEarthquakesLayer = function () {
-    var url;
+    var eqs,
+        spinner,
+        url;
 
     url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=2.5&orderby=time-asc';
 
     Xhr.ajax({
       url: url,
       success: function (data) {
-        _earthquakes = L.earthquakesLayer({
+        eqs = L.earthquakesLayer({
           data: data
         });
-        _initMap();
+        _earthquakes.addLayer(eqs);
+        spinner = document.querySelector('.spinner');
+        spinner.parentNode.removeChild(spinner);
       },
       error: function (status) {
         console.log(status);
