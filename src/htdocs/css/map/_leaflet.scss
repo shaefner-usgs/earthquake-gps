@@ -32,8 +32,25 @@ input[type=checkbox], input[type=radio] {
   }
 }
 
-.leaflet-control-layers span span {
-  color: #777;
+.leaflet-control-layers {
+  font-size: 14px;
+  line-height: 1.6;
+
+  label {
+    margin-top: .15em;
+  }
+
+  span span {
+    color: #777;
+  }
+}
+
+/* Leaflet grouped layers - override plugin defaults */
+.leaflet-control-layers-group-name {
+  font-size: 1.1em;
+  font-weight: normal;
+  margin-bottom: .25em;
+  margin-left: 0;
 }
 
 /* Ensure popups are on top of tooltips */
