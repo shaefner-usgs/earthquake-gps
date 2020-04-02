@@ -38,6 +38,10 @@ input[type=checkbox], input[type=radio] {
 
   label {
     margin-top: .15em;
+
+    span {
+      position: relative;
+    }
   }
 
   span span {
