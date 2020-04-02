@@ -13,7 +13,7 @@ var uglify = {
       cwd: config.build + '/' + config.src,
       dest: config.dist,
       expand: true,
-      src: '**/*.js'
+      src: ['**/*.js', '!**/leaflet*esm.js']
     }]
   }
 };
