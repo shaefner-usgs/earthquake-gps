@@ -49,6 +49,10 @@ input[type=checkbox], input[type=radio] {
   }
 }
 
+.leaflet-control-layers-expanded {
+  padding: 10px 25px 6px 15px;
+}
+
 /* Leaflet grouped layers - override plugin defaults */
 .leaflet-control-layers-group-name {
   font-size: 1.1em;
@@ -57,10 +61,9 @@ input[type=checkbox], input[type=radio] {
   margin-left: 0;
 }
 
-/* Add extra space around baselayer/overlay separator */
+/* Expand/add extra space around baselayer/overlay separator */
 .leaflet-control-layers-separator {
-  margin-bottom: 10px;
-  margin-top: 10px;
+  margin: 10px -25px 10px -15px;
 }
 
 /* Ensure popups are on top of tooltips */
