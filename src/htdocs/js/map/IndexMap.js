@@ -1,8 +1,6 @@
-/* global L, MOUNT_PATH */
+/* global L */
 'use strict';
 
-
-var Xhr = require('util/Xhr');
 
 // Leaflet plugins
 require('leaflet-fullscreen');
@@ -30,8 +28,7 @@ var IndexMap = function (options) {
 
       _addListeners,
       _getMapLayers,
-      _initMap,
-      _loadNetworksLayer;
+      _initMap;
 
 
   _this = {};
@@ -40,8 +37,7 @@ var IndexMap = function (options) {
     options = options || {};
     _el = options.el || document.createElement('div');
 
-    // Load netwoks layer which calls initMap() when finished
-    _loadNetworksLayer();
+    _initMap();
   };
 
 
@@ -93,37 +89,24 @@ var IndexMap = function (options) {
     satellite = L.satelliteLayer();
     terrain = L.terrainLayer();
 
-    layers = {};
-    layers.baseLayers = {
-      'Terrain': terrain,
-      'Satellite': satellite,
-      'Greyscale': greyscale,
-      'Dark': dark
+    _networks = L.networksLayer({
+      data: window.data.networks
+    });
+
+    layers = {
+      baseLayers: {
+        'Terrain': terrain,
+        'Satellite': satellite,
+        'Greyscale': greyscale,
+        'Dark': dark
+      },
+      overlays: {
+        'Networks': _networks
+      },
+      defaults: [terrain, _networks]
     };
-    layers.overlays = {
-      'Networks': _networks
-    };
-    layers.defaults = [terrain, _networks];
 
     return layers;
-  };
-
-  /**
-   * Load networks layer from geojson data via ajax
-   */
-  _loadNetworksLayer = function () {
-    Xhr.ajax({
-      url: MOUNT_PATH + '/_getNetworks.json.php',
-      success: function (data) {
-        _networks = L.networksLayer({
-          data: data
-        });
-        _initMap();
-      },
-      error: function (status) {
-        console.log(status);
-      }
-    });
   };
 
   /**

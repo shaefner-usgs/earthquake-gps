@@ -1,4 +1,4 @@
-/* global L, MOUNT_PATH, NETWORK */
+/* global L, NETWORK */
 'use strict';
 
 
@@ -42,7 +42,6 @@ var NetworkMap = function (options) {
       _getMapLayers,
       _initMap,
       _loadEarthquakesLayer,
-      _loadStationsLayer,
       _openPopup,
       _setLegendState,
       _showCounts;
@@ -54,9 +53,8 @@ var NetworkMap = function (options) {
     options = options || {};
     _el = options.el || document.createElement('div');
 
-    // Load eqs, stations layers which each call initMap() when finished
+    // Load eqs layer which calls initMap() when finished
     _loadEarthquakesLayer();
-    _loadStationsLayer();
   };
 
 
@@ -180,26 +178,31 @@ var NetworkMap = function (options) {
         terrain;
 
     dark = L.darkLayer();
+    faults = L.faultsLayer();
     greyscale = L.greyscaleLayer();
     satellite = L.satelliteLayer();
     terrain = L.terrainLayer();
-    faults = L.faultsLayer();
 
-    layers = {};
-    layers.baseLayers = {
-      'Terrain': terrain,
-      'Satellite': satellite,
-      'Greyscale': greyscale,
-      'Dark': dark
+    _stations = L.stationsLayer({
+      data: window.data.stations
+    });
+
+    layers = {
+      baseLayers: {
+        'Terrain': terrain,
+        'Satellite': satellite,
+        'Greyscale': greyscale,
+        'Dark': dark
+      },
+      overlays: {
+        'Stations, Last Updated': {},
+        'Geology': {
+          'Faults': faults,
+          'M 2.5+ Earthquakes': _earthquakes
+        }
+      },
+      defaults: [terrain, _earthquakes]
     };
-    layers.overlays = {
-      'Stations, Last Updated': {},
-      'Geology': {
-        'Faults': faults,
-        'M 2.5+ Earthquakes': _earthquakes
-      }
-    };
-    layers.defaults = [terrain, _earthquakes];
 
     // Add stations to overlays / defaults
     Object.keys(_stations.layers).forEach(function(key) {
@@ -216,9 +219,6 @@ var NetworkMap = function (options) {
    * Create Leaflet map instance
    */
   _initMap = function () {
-    if (!_stations || !_earthquakes) { // check that both ajax layers are set
-      return;
-    }
     var bounds,
         layers;
 
@@ -268,24 +268,6 @@ var NetworkMap = function (options) {
       url: url,
       success: function (data) {
         _earthquakes = L.earthquakesLayer({
-          data: data
-        });
-        _initMap();
-      },
-      error: function (status) {
-        console.log(status);
-      }
-    });
-  };
-
-  /**
-   * Load stations layer from geojson data via ajax
-   */
-  _loadStationsLayer = function () {
-    Xhr.ajax({
-      url: MOUNT_PATH + '/_getStations.json.php?network=' + NETWORK,
-      success: function (data) {
-        _stations = L.stationsLayer({
           data: data
         });
         _initMap();

@@ -26,9 +26,8 @@ class StationView {
 
   private function _getClosestStations () {
     $html = '<ul class="closest links">';
-    $stations = $this->_model->closestStations;
 
-    foreach ($stations as $name => $params) {
+    foreach ($this->_model->closestStations as $name => $params) {
       $iconKey = $this->_getIconKey($params['stationtype'], $params['lastUpdate']);
       $html .= sprintf('<li>
           <a href="%s/%s/%s">
@@ -247,6 +246,51 @@ class StationView {
         <li><mark class="red">Red</mark> &ndash; earthquakes</li>
         <li><mark class="blue">Blue</mark> &ndash; manually entered</li>
       </ul>';
+  }
+
+  private function _getGeoJsonData () {
+    $count = count($this->_model->stations);
+    $features = [];
+    $now = date(DATE_RFC2822);
+    $secs = 86400; // secs in one day
+
+    foreach ($this->_model->stations as $station) {
+      $id = intval($station['id']);
+
+      $features[] = [
+        'coords' => [
+          floatval($station['lon']),
+          floatval($station['lat'])
+        ],
+        'id' => $id,
+        'props' => [
+          'days' => floor((strtotime($now) - strtotime($station['last_observation'])) / $secs),
+          'elevation' => $station['elevation'],
+          'last_observation' => $station['last_observation'],
+          'showcoords' => intval($station['showcoords']),
+          'station' => $station['station'],
+          'type' => $station['stationtype'],
+          'x' => $station['x'],
+          'y' => $station['y'],
+          'z' => $station['z']
+        ],
+        'type' => 'Point'
+      ];
+
+    }
+
+    $geoJson = getGeoJson([
+      'count' => $count,
+      'features' => $features
+    ]);
+
+    return sprintf('<script>
+        var data = {
+          stations: %s
+        };
+      </script>',
+      $geoJson
+    );
   }
 
   private function _getHref ($datatype, $suffix) {
@@ -605,7 +649,7 @@ class StationView {
           // Use select values from seasonal for velocities
           if ($table === 'velocities') {
             $seasonalRows = $this->_model->seasonal;
-            foreach($seasonalRows as $seasonalRow) {
+            foreach ($seasonalRows as $seasonalRow) {
               if ($seasonalRow['datatype'] === $datatype && $seasonalRow['component'] === $component) {
                 $row['decdate'] = $seasonalRow['decdate'];
                 $row['year'] = $seasonalRow['year'];
@@ -659,5 +703,6 @@ class StationView {
     print $this->_getData();
     print $this->_getDisclaimer();
     print $this->_getBackLink();
+    print $this->_getGeoJsonData();
   }
 }

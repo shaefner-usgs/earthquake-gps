@@ -1,4 +1,4 @@
-/* global L, MOUNT_PATH, NETWORK, STATION */
+/* global L, NETWORK, STATION */
 'use strict';
 
 
@@ -34,8 +34,7 @@ var StationMap = function (options) {
 
       _getMapLayers,
       _initMap,
-      _loadEarthquakesLayer,
-      _loadStationsLayer;
+      _loadEarthquakesLayer;
 
 
   _this = {};
@@ -44,9 +43,8 @@ var StationMap = function (options) {
     options = options || {};
     _el = options.el || document.createElement('div');
 
-    // Load eqs, stations layers which each call initMap() when finished
+    // Load eqs layer which calls initMap() when finished
     _loadEarthquakesLayer();
-    _loadStationsLayer();
   };
 
   /**
@@ -71,6 +69,17 @@ var StationMap = function (options) {
         stations,
         terrain;
 
+    dark = L.darkLayer();
+    faults = L.faultsLayer();
+    greyscale = L.greyscaleLayer();
+    satellite = L.satelliteLayer();
+    terrain = L.terrainLayer();
+
+    _stations = L.stationsLayer({
+      data: window.data.stations,
+      station: STATION
+    });
+
     // Separate selected station into its own layer
     selStation = _stations.markers[STATION.toUpperCase()];
     otherStations = _stations.removeLayer(selStation);
@@ -79,26 +88,23 @@ var StationMap = function (options) {
     stations['Station ' + STATION.toUpperCase()] = selStation;
     stations['Other stations <span>(' + count + ')</span>'] = otherStations;
 
-    dark = L.darkLayer();
-    greyscale = L.greyscaleLayer();
-    satellite = L.satelliteLayer();
-    terrain = L.terrainLayer();
-    faults = L.faultsLayer();
-
-    layers = {};
-    layers.baseLayers = {
-      'Terrain': terrain,
-      'Satellite': satellite,
-      'Greyscale': greyscale,
-      'Dark': dark
+    layers = {
+      baseLayers: {
+        'Terrain': terrain,
+        'Satellite': satellite,
+        'Greyscale': greyscale,
+        'Dark': dark
+      },
+      overlays: {},
+      defaults: [terrain, _earthquakes, selStation, otherStations]
     };
-    layers.overlays = {};
+
+    // Add overlays separately in order to use a variable value in the key
     layers.overlays[NETWORK + ' Network'] = stations;
-    layers.overlays.Geology = {
+    layers.overlays.Geology =  {
       'Faults': faults,
       'M 2.5+ Earthquakes': _earthquakes
     };
-    layers.defaults = [terrain, _earthquakes, selStation, _stations];
 
     return layers;
   };
@@ -107,16 +113,12 @@ var StationMap = function (options) {
    * Create Leaflet map instance
    */
   _initMap = function () {
-    if (!_stations || !_earthquakes) { // check that both ajax layers are set
-      return;
-    }
     var bounds,
         layers,
         map;
 
-    // bounds contain only selected station
-    bounds = _stations.getBounds();
     layers = _getMapLayers();
+    bounds = _stations.getBounds();
 
     // Create map
     map = L.map(_el, {
@@ -156,25 +158,6 @@ var StationMap = function (options) {
       success: function (data) {
         _earthquakes = L.earthquakesLayer({
           data: data
-        });
-        _initMap();
-      },
-      error: function (status) {
-        console.log(status);
-      }
-    });
-  };
-
-  /**
-   * Load stations layer from geojson data via ajax
-   */
-  _loadStationsLayer = function () {
-    Xhr.ajax({
-      url: MOUNT_PATH + '/_getStations.json.php?network=' + NETWORK,
-      success: function (data) {
-        _stations = L.stationsLayer({
-          data: data,
-          station: STATION
         });
         _initMap();
       },

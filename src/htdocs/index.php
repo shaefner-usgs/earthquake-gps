@@ -2,6 +2,7 @@
 
 include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
+include_once '../lib/classes/Db.class.php'; // db connector, queries
 
 if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Data';
@@ -17,18 +18,67 @@ if (!isset($TEMPLATE)) {
   ';
   $CONTACT = 'jsvarc';
 
-  // importJsonToArray() sets headers -> needs to run before including template
-  $networks = importJsonToArray(__DIR__ . '/_getNetworks.json.php');
-
   include 'template.inc.php';
 }
 
-// Create HTML for legend
+$db = new Db;
+
+// Db query: all "non-hidden" networks
+$rsNetworks = $db->queryNetworks();
+
+$count = $rsNetworks->rowCount();
+$features = [];
+$height = ceil($count / 4) * 36;
 $legendIcons = [
   'triangle+grey' => 'Campaign',
   'square+grey' => 'Continuous'
 ];
+$lis = '';
 
+// Create features array for geoJson map layer and <li>'s for network list
+while ($row = $rsNetworks->fetch(PDO::FETCH_OBJ)) {
+  $id = intval($row->id);
+
+  $features[] = [
+    'coords' => [
+      floatval($row->lon),
+      floatval($row->lat)
+    ],
+    'id' => 'point' . $id,
+    'props' => [
+      'name' => $row->network,
+      'type' => $row->type
+    ],
+    'type' => 'Point'
+  ];
+
+  if ($row->polygon) { // network has a polygon defined, add it
+    $features[] = [
+      'coords' => [json_decode($row->polygon, true)],
+      'id' => 'poly' . $id,
+      'props' => [],
+      'type' => 'Polygon'
+    ];
+  }
+
+  $lis .= sprintf('<li>
+      <a href="gps/%s" class="link%d button" title="Go to map of stations">%s</a>
+    </li>',
+    $row->network,
+    $id,
+    $row->network
+  );
+}
+
+// Create HTML for network list buttons
+$networkListHtml = sprintf('<ul class="networks no-style" style="height: %spx">
+    %s
+  <ul>',
+  $height,
+  $lis
+);
+
+// Create HTML for legend
 $legendHtml = '<ul class="legend no-style">';
 foreach ($legendIcons as $key => $description) {
   $legendHtml .= sprintf('<li>
@@ -41,23 +91,11 @@ foreach ($legendIcons as $key => $description) {
 }
 $legendHtml .= '</ul>';
 
-// Create HTML for network list
-$height = ceil($networks['count'] / 4) * 36;
-$networksHtml = '<ul class="networks no-style" style="height: '. $height . 'px;">';
-
-foreach ($networks['features'] as $feature) {
-  if ($feature['geometry']['type'] === 'Point') { // skip polygons
-    $networksHtml .= sprintf('<li>
-        <a href="gps/%s" class="%s button" title="Go to map of stations">%s</a>
-      </li>',
-      $feature['properties']['name'],
-      str_replace('point', 'link', $feature['id']),
-      $feature['properties']['name']
-    );
-  }
-}
-
-$networksHtml .= '</ul>';
+// Create geoJson data for embedding in HTML
+$geoJson = getGeoJson([
+  'count' => $count,
+  'features' => $features
+]);
 
 ?>
 
@@ -75,8 +113,8 @@ $networksHtml .= '</ul>';
   <h2>View Stations by Network</h2>
   <div class="map"></div>
   <?php print $legendHtml; ?>
-  <h3 class="count"><?php print $networks['count']; ?> Networks on this Map</h3>
-  <?php print $networksHtml; ?>
+  <h3 class="count"><?php print $count; ?> Networks on this Map</h3>
+  <?php print $networkListHtml; ?>
 </section>
 
 <section>
@@ -104,3 +142,9 @@ $networksHtml .= '</ul>';
     <a href="gps/sources.php">full listing of observing agencies</a>). These
     results are available on this website as time series of daily GPS positions.</p>
 </section>
+
+<script>
+  var data = {
+    networks: <?php print $geoJson; ?>
+  };
+</script>

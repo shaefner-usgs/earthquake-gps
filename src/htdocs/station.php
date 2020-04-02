@@ -7,7 +7,7 @@ include_once '../lib/classes/Db.class.php'; // db connector, queries
 include_once '../lib/classes/Station.class.php'; // model
 include_once '../lib/classes/StationView.class.php'; // view
 
-// Set params, including default values so page loads with no params
+// Set default network/station so page loads without passing params
 $networkParam = safeParam('network', 'Pacific');
 $stationParam = strtolower(safeParam('station', 'aoa1'));
 
@@ -48,6 +48,7 @@ $rsOffsets = $db->queryOffsets($networkParam, $stationParam);
 $rsPostSeismic = $db->queryPostSeismic($networkParam, $stationParam);
 $rsSeasonal = $db->querySeasonal($networkParam, $stationParam);
 $rsStation = $db->queryStation($stationParam, $networkParam);
+$rsStations = $db->queryStations($networkParam); // all stations in network
 $rsVelocities = $db->queryVelocities($networkParam, $stationParam);
 
 // Create an array of networks the selected station belongs to
@@ -68,6 +69,7 @@ $rsStation->setFetchMode(
     $rsOffsets->fetchAll(PDO::FETCH_ASSOC),
     $rsPostSeismic->fetchAll(PDO::FETCH_ASSOC),
     $rsSeasonal->fetchAll(PDO::FETCH_ASSOC),
+    $rsStations->fetchAll(PDO::FETCH_ASSOC),
     $networkList
   ]
 );

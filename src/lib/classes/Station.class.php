@@ -25,6 +25,7 @@ include_once '../conf/config.inc.php'; // app config
  *   [offsets] => Array
  *   [postSeismic] => Array
  *   [seasonal] => Array
+ *   [stations] => Array
  *   [velocities] => Array
  * )
  *
@@ -39,6 +40,7 @@ class Station {
     $offsets=NULL,
     $postSeismic=NULL,
     $seasonal=NULL,
+    $stations=NULL,
     $networkList=NULL
   ) {
 
@@ -58,6 +60,7 @@ class Station {
       $this->_data['offsets'] = $offsets;
       $this->_data['postSeismic'] = $postSeismic;
       $this->_data['seasonal'] = $seasonal;
+      $this->_data['stations'] = $stations;
       $this->_data['velocities'] = $velocities;
     }
   }
