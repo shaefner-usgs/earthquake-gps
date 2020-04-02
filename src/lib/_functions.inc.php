@@ -1,6 +1,33 @@
 <?php
 
 /**
+ * Get color classification based on the number of days since the last update
+ *
+ * @param $days {Integer}
+ *
+ * @return $color {String}
+ */
+function getColor ($date) {
+  $now = date(DATE_RFC2822);
+  $secs = 86400; // seconds in a day
+  $days = floor((strtotime($now) - strtotime($date)) / $secs);
+
+  if ($days > 14) {
+    $color = 'red';
+  } else if ($days > 7) {
+    $color = 'orange';
+  } else if ($days > 3) {
+    $color = 'yellow';
+  } else if ($days >= 0) {
+    $color = 'blue';
+  } else {
+    $color = 'grey';
+  }
+
+  return $color;
+}
+
+/**
  * Create GeoJson for Leaflet map overlay layers
  *
  * @param $data {Array}
@@ -45,33 +72,6 @@ function getGeoJson ($data) {
 }
 
 /**
- * Get color classification based on the number of days since the last update
- *
- * @param $days {Integer}
- *
- * @return $color {String}
- */
-function getColor ($date) {
-  $now = date(DATE_RFC2822);
-  $secs = 86400; // seconds in a day
-  $days = floor((strtotime($now) - strtotime($date)) / $secs);
-
-  if ($days > 14) {
-    $color = 'red';
-  } else if ($days > 7) {
-    $color = 'orange';
-  } else if ($days > 3) {
-    $color = 'yellow';
-  } else if ($days >= 0) {
-    $color = 'blue';
-  } else {
-    $color = 'grey';
-  }
-
-  return $color;
-}
-
-/**
  * Get directory contents (checks first if it exists and doesn't return .., .)
  *
  * @param $dir {String}
@@ -89,34 +89,6 @@ function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
   }
 
   return $r;
-}
-
-/**
- * Import dynamically generated json file and store it in an array
- *
- * @param $file {String}
- *     full path to json file to import (__DIR__ magic constant is useful)
- * @param $network {String} default is NULL
- *     GPS Network - filter for json results
- *
- * @return {Array} json file contents
- */
-function importJsonToArray ($file, $network=NULL) {
-  if (is_file($file)) {
-    // Read file contents into output buffer
-    ob_start();
-    include $file;
-    $contents = ob_get_contents();
-    ob_end_clean();
-
-    // Reset to html (gets set to JSON by included $file)
-    header('Content-Type: text/html');
-
-    return json_decode($contents, true);
-  } else {
-    trigger_error("importJsonToArray(): Failed opening $file for import",
-      E_USER_WARNING);
-  }
 }
 
 /**
