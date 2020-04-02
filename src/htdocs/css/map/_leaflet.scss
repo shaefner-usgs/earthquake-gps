@@ -53,6 +53,12 @@ input[type=checkbox], input[type=radio] {
   margin-left: 0;
 }
 
+/* Add extra space around baselayer/overlay separator */
+.leaflet-control-layers-separator {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
 /* Ensure popups are on top of tooltips */
 .leaflet-popup {
   z-index: 1000;
