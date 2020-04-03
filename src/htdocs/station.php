@@ -22,7 +22,7 @@ if (!isset($TEMPLATE)) {
   $TITLETAG = "$SUBTITLE | $TITLE";
   $NAVIGATION = true;
   $HEAD = '
-    <link rel="stylesheet" href="/lib/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="../lib/leaflet/leaflet.css" />
     <link rel="stylesheet" href="../css/station.css" />
   ';
   $FOOT = '
@@ -31,7 +31,7 @@ if (!isset($TEMPLATE)) {
           NETWORK = "' . $networkParam . '",
           STATION = "' . $stationParam . '";
     </script>
-    <script src="/lib/leaflet/leaflet.js"></script>
+    <script src="../lib/leaflet/leaflet.js"></script>
     <script src="../js/station.js"></script>
   ';
   $CONTACT = 'jsvarc';

@@ -8,12 +8,12 @@ if (!isset($TEMPLATE)) {
   $TITLE = 'GPS Data';
   $NAVIGATION = true;
   $HEAD = '
-    <link rel="stylesheet" href="/lib/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="gps/lib/leaflet/leaflet.css" />
     <link rel="stylesheet" href="gps/css/index.css" />
   ';
   $FOOT = '
     <script>var MOUNT_PATH = "' . $MOUNT_PATH . '";</script>
-    <script src="/lib/leaflet/leaflet.js"></script>
+    <script src="gps/lib/leaflet/leaflet.js"></script>
     <script src="gps/js/index.js"></script>
   ';
   $CONTACT = 'jsvarc';
