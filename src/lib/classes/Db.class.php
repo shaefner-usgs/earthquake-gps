@@ -10,7 +10,12 @@ class Db {
 
   public function __construct() {
     try {
-      $this->db = new PDO($GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASS']);
+      $this->db = new PDO(
+        $GLOBALS['DB_DSN'],
+        $GLOBALS['DB_USER'],
+        $GLOBALS['DB_PASS'],
+        [PDO::ATTR_EMULATE_PREPARES => false] // http://stackoverflow.com/a/1197424/5079380
+      );
       $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
       print '<p class="alert error">ERROR 1: ' . $e->getMessage() . '</p>';
