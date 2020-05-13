@@ -27,7 +27,7 @@ app = Application({
       'title': 'Completeness of Observation',
       'units': 'percentage'
     },
-    'slips_per_obs': {
+    'obs_per_slip': {
       'title': 'Observations per Slip'
     },
     'sn1': {
@@ -49,7 +49,7 @@ app = Application({
       'title': '<h3>Completeness</h3>',
       'channels': [
         'percentage',
-        'slips_per_obs'
+        'obs_per_slip'
       ]
     },
     {

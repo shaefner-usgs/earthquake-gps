@@ -21,7 +21,7 @@ while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
     $row['date'],
     $row['filename'],
     $row['percentage'],
-    $row['slips_per_obs'],
+    $row['obs_per_slip'],
     $row['mp1'],
     $row['mp2'],
     $row['sn1'],

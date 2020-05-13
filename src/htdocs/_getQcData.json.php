@@ -27,7 +27,7 @@ $fields = [
   'mp1',
   'mp2',
   'percentage',
-  'slips_per_obs',
+  'obs_per_slip',
   'sn1',
   'sn2'
 ];
