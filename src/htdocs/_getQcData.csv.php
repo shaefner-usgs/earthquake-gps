@@ -14,7 +14,7 @@ $db = new Db;
 // Db query: all qc data for a given station / network
 $rsQcData = $db->queryQcData($networkParam, $stationParam);
 
-$output = "Date, Filename, Completeness, Slips_per_obs, MP1, MP2, SN1, SN2\n";
+$output = "Date, Filename, Completeness, Obs_per_slip, MP1, MP2, SN1, SN2\n";
 
 while($row = $rsQcData->fetch(PDO::FETCH_ASSOC)) {
   $output .= sprintf("%s, %s, %s, %s, %s, %s, %s, %s\n",
