@@ -138,7 +138,7 @@ class Db {
    * @return {Function}
    */
   public function queryLastUpdated ($network, $days=7) {
-    $sql = 'SELECT LOWER(station), last_observation FROM gps_velocities
+    $sql = 'SELECT LOWER(station) AS station, last_observation FROM gps_velocities
       WHERE datatype = "nafixed" AND network = :network AND component = "U"
         AND last_observation < (NOW() - INTERVAL :days DAY)
       ORDER BY last_observation DESC, station ASC';
@@ -213,7 +213,7 @@ class Db {
       $sql = "SELECT * FROM gps_noise
         WHERE network = :network  AND  station = :station";
     } else {
-      $sql = "SELECT LOWER(station),
+      $sql = "SELECT LOWER(station) AS station,
         GROUP_CONCAT(CONCAT(datatype, '/', component, ':', whitenoise)
           ORDER BY datatype ASC, component ASC) AS whitenoise,
         GROUP_CONCAT(CONCAT(datatype, '/', component, ':', plamp1)
@@ -261,8 +261,8 @@ class Db {
         WHERE network = :network AND  station = :station
         ORDER BY `date` ASC";
     } else {
-      $sql = "SELECT LOWER(station), `date`, decdate, offsettype, eqinfo, eqmagnitude,
-        distance_from_eq,
+      $sql = "SELECT LOWER(station) AS station, `date`, decdate, offsettype,
+        eqinfo, eqmagnitude, distance_from_eq,
         GROUP_CONCAT(CONCAT(datatype, '/', component, ':', size)
           ORDER BY datatype ASC, component ASC) AS size,
         GROUP_CONCAT(CONCAT(datatype, '/', component, ':', uncertainty)
@@ -490,7 +490,7 @@ class Db {
         ORDER BY last_observation DESC";
     } else {
       // using MAX() to limit aggregated values from JOIN to 1 value
-      $sql = "SELECT LOWER(v.station), v.last_observation,
+      $sql = "SELECT LOWER(v.station) AS station, v.last_observation,
         MAX(s.lat) AS lat,
         MAX(s.lon) AS lon,
         MAX(s.elevation) AS elevation,
