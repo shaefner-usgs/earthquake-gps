@@ -48,7 +48,7 @@ else if ($count === 0) {
 $downloads = [
   'GPS Waypoints' => ['gpx', "$networkParam/waypoints"],
   'Most Recent XYZ Positions' => ['text', "networks/$networkParam/${networkParam}_xyz_file"],
-  'ITRF2008 XYZ Time Series' => ['zip', "networks/$networkParam/${networkParam}_ITRF2008_xyz_files.tar.gz"]
+  'ITRF2008 XYZ Time Series' => ['zip', "itrf2008_xyz_files/${networkParam}_ITRF2008_xyz_files.tar.gz"]
 ];
 $features = [];
 $height = ceil($count / 8) * 36;
