@@ -335,8 +335,8 @@ var NetworkMap = function (options) {
   /**
    * Add count dynamically so it doesn't affect the layer name
    *
-   * restoreMap plugin uses the name, and layer state is shared by
-   * multiple pages
+   * restoreMap plugin uses the layer name to track state (which is shared by
+   * maps on different pages), so name needs to be consistent
    */
   _showCounts = function () {
     var sel;
