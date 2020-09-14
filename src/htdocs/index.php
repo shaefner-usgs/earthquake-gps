@@ -73,7 +73,7 @@ while ($row = $rsNetworks->fetch(PDO::FETCH_OBJ)) {
 // Create HTML for network list buttons
 $networkListHtml = sprintf('<ul class="networks no-style" style="height: %spx">
     %s
-  <ul>',
+  </ul>',
   $height,
   $lis
 );
