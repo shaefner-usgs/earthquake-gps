@@ -108,7 +108,7 @@ class StationView {
   /**
    * Get download link
    *
-   * @param $datatype {String <filtered | itrf2008 | nafixed>}
+   * @param $datatype {String <filtered | itrf2008 | itrf2014 | na2014 | nafixed>}
    * @param $fileType {String <text | zip>}
    * @param $fileSuffix {String}
    * @param $text {String}
@@ -139,7 +139,7 @@ class StationView {
   /**
    * Get a list of download links
    *
-   * @param $datatype {String <filtered | itrf2008 | nafixed>}
+   * @param $datatype {String <filtered | itrf2008 | itrf2014 | na2014 | nafixed>}
    *
    * @return $html {String}
    */
@@ -184,7 +184,7 @@ class StationView {
   /**
    * Get plot explanation text
    *
-   * @param $datatype {String <filtered | itrf2008 | nafixed>}
+   * @param $datatype {String <filtered | itrf2008 | itrf2014 | na2014 | nafixed>}
    *
    * @return {String}
    */
@@ -258,7 +258,7 @@ class StationView {
   /**
    * Get href attribute for plot/download links
    *
-   * @param $datatype {String <filtered | itrf2008 | nafixed>}
+   * @param $datatype {String <filtered | itrf2008 | itrf2014 | na2014 | nafixed>}
    * @param $suffix {String}
    *
    * @return $href {String}
@@ -292,7 +292,7 @@ class StationView {
   /**
    * Get plot navigation link list
    *
-   * @param $datatype {String <filtered | itrf2008 | nafixed>}
+   * @param $datatype {String <filtered | itrf2008 | itrf2014 | na2014 | nafixed>}
    *
    * @return $html {String}
    */
@@ -381,7 +381,7 @@ class StationView {
   /**
    * Get offsets table
    *
-   * @param $datatype {String <filtered | itrf2008 | nafixed>}
+   * @param $datatype {String <filtered | itrf2008 | itrf2014 | na2014 | nafixed>}
    *
    * @return $html {String}
    */
@@ -467,19 +467,23 @@ class StationView {
   /**
    * Get path for plot/download links
    *
-   * @param $datatype {String <filtered | itrf2008 | nafixed>}
+   * @param $datatype {String <filtered | itrf2008 | itrf2014 | na2014 | nafixed>}
    *
-   * @return {String}
+   * @return {String} || null
    */
   private function _getPath ($datatype) {
-    return 'networks/' . $this->_model->network . '/' . $this->_model->station .
+    $path = 'networks/' . $this->_model->network . '/' . $this->_model->station .
       '/' . $datatype;
+
+    if (is_dir($this->_baseDir . '/' . $path)) {
+      return $path;
+    }
   }
 
   /**
    * Get postseismic table
    *
-   * @param $datatype {String <filtered | itrf2008 | nafixed>}
+   * @param $datatype {String <filtered | itrf2008 | itrf2014 | na2014 | nafixed>}
    *
    * @return $html {String}
    */
@@ -640,109 +644,113 @@ class StationView {
   private function _getTabbedContent () {
     $html = '<div class="tablist">';
     $datatypes = [
+      'na2014' => 'NA2014',
       'nafixed' => 'NA-fixed',
+      'itrf2014' => 'ITRF2014',
       'itrf2008' => 'ITRF2008',
       'filtered' => 'Filtered'
     ];
 
     foreach ($datatypes as $datatype => $name) {
       $baseImg = $this->_model->station . '.png';
-
       $dataPath = $this->_getPath($datatype);
-      $downloadsHtml = $this->_getDownloads($datatype);
-      $explanation = $this->_getExplanation($datatype);
 
-      $tables = [
-        'Velocities' => $this->_getTable('velocities', $datatype, [
-          'decdate' => 'Reference date',
-          'doy' => 'Reference day of year',
-          'int' => 'Intercept (mm)',
-          'intsig' => 'Intercept standard deviation (mm)',
-          'last_observation' => 'Last observation',
-          'sigma' => 'Velocity standard deviation (mm/yr)',
-          'velocity' => 'Velocity (mm/yr)',
-          'year' => 'Reference year'
-        ]),
-        'Offsets' => $this->_getOffsetsTable($datatype),
-        'Noise' => $this->_getTable('noise', $datatype, [
-          'bpfilterelement1' => 'Lower frequency limit for band-pass (BP) filtered noise (cycle/year)',
-          'bpfilterelement2' => 'Upper frequency limit for band-pass (BP) filtered noise (cycle/year) ',
-          'BPamplitude' => 'Amplitude of BP filtered noise (mm)',
-          'GM' => 'Amplitude of generalized Gauss-Markov noise',
-          'numberofpoles' => 'Number of poles for BP filtered noise',
-          'plamp1' => 'Amplitude of first power law (mm/yr^(<em>n<sub>1</sub></em>/4))',
-          'plamp2' => 'Amplitude of second power law (mm/yr^(<em>n<sub>2</sub></em>/4))',
-          'plexp1' => '<em>n<sub>1</sub></em> (spectral index of first power law)',
-          'plexp2' => '<em>n<sub>2</sub></em> (spectral index of second power law)',
-          'whitenoise' => 'White noise (mm)'
-        ]),
-        'Post-seismic' => $this->_getPostSeismicTable($datatype),
-        'Seasonal' => $this->_getTable('seasonal', $datatype, [
-          'decdate' => 'Reference date',
-          'doy' => 'Reference day of year',
-          'p13cosamp' => 'Amplitude of cosine (13.63-day period), mm',
-          'p13cossig' => 'Standard deviation of cosine amplitude (13.63-day period)',
-          'p13sinamp' => 'Amplitude of sine (13.63-day period), mm',
-          'p13sinsig' => 'Standard deviation of sine amplitude (13.63-day period)',
-          'p182cosamp' => 'Amplitude of cosine (180.625-day period), mm',
-          'p182cossig' => 'Standard deviation of cosine amplitude (180.625-day period)',
-          'p182sinamp' => 'Amplitude of sine (180.625-day period), mm',
-          'p182sinsig' => 'Standard deviation of sine amplitude (180.625-day period)',
-          'p365cosamp' => 'Amplitude of cosine (365.25-day period), mm',
-          'p365cossig' => 'Standard deviation of cosine amplitude (365.25-day period)',
-          'p365sinamp' => 'Amplitude of sine (365.25-day period), mm',
-          'p365sinsig' => 'Standard deviation of sine amplitude (365.25-day period)',
-          'year' => 'Reference year'
-        ])
-      ];
+      if ($dataPath) {
+        $downloadsHtml = $this->_getDownloads($datatype);
+        $explanation = $this->_getExplanation($datatype);
 
-      $plotsHtml = '';
-      if (is_file("$this->_baseDir/$dataPath/$baseImg")) {
-        $navPlots = $this->_getNavPlots($datatype);
-        $image = sprintf('<img src="%s/%s/%s" alt="Plot showing %s data (All data)" />',
-          $this->_baseUri,
-          $dataPath,
-          $baseImg,
-          $name
-        );
+        $tables = [
+          'Velocities' => $this->_getTable('velocities', $datatype, [
+            'decdate' => 'Reference date',
+            'doy' => 'Reference day of year',
+            'int' => 'Intercept (mm)',
+            'intsig' => 'Intercept standard deviation (mm)',
+            'last_observation' => 'Last observation',
+            'sigma' => 'Velocity standard deviation (mm/yr)',
+            'velocity' => 'Velocity (mm/yr)',
+            'year' => 'Reference year'
+          ]),
+          'Offsets' => $this->_getOffsetsTable($datatype),
+          'Noise' => $this->_getTable('noise', $datatype, [
+            'bpfilterelement1' => 'Lower frequency limit for band-pass (BP) filtered noise (cycle/year)',
+            'bpfilterelement2' => 'Upper frequency limit for band-pass (BP) filtered noise (cycle/year) ',
+            'BPamplitude' => 'Amplitude of BP filtered noise (mm)',
+            'GM' => 'Amplitude of generalized Gauss-Markov noise',
+            'numberofpoles' => 'Number of poles for BP filtered noise',
+            'plamp1' => 'Amplitude of first power law (mm/yr^(<em>n<sub>1</sub></em>/4))',
+            'plamp2' => 'Amplitude of second power law (mm/yr^(<em>n<sub>2</sub></em>/4))',
+            'plexp1' => '<em>n<sub>1</sub></em> (spectral index of first power law)',
+            'plexp2' => '<em>n<sub>2</sub></em> (spectral index of second power law)',
+            'whitenoise' => 'White noise (mm)'
+          ]),
+          'Post-seismic' => $this->_getPostSeismicTable($datatype),
+          'Seasonal' => $this->_getTable('seasonal', $datatype, [
+            'decdate' => 'Reference date',
+            'doy' => 'Reference day of year',
+            'p13cosamp' => 'Amplitude of cosine (13.63-day period), mm',
+            'p13cossig' => 'Standard deviation of cosine amplitude (13.63-day period)',
+            'p13sinamp' => 'Amplitude of sine (13.63-day period), mm',
+            'p13sinsig' => 'Standard deviation of sine amplitude (13.63-day period)',
+            'p182cosamp' => 'Amplitude of cosine (180.625-day period), mm',
+            'p182cossig' => 'Standard deviation of cosine amplitude (180.625-day period)',
+            'p182sinamp' => 'Amplitude of sine (180.625-day period), mm',
+            'p182sinsig' => 'Standard deviation of sine amplitude (180.625-day period)',
+            'p365cosamp' => 'Amplitude of cosine (365.25-day period), mm',
+            'p365cossig' => 'Standard deviation of cosine amplitude (365.25-day period)',
+            'p365sinamp' => 'Amplitude of sine (365.25-day period), mm',
+            'p365sinsig' => 'Standard deviation of sine amplitude (365.25-day period)',
+            'year' => 'Reference year'
+          ])
+        ];
 
-        $plotsHtml = sprintf('<h3>Plots</h3>
-          <div class="plots">
-            <div class="image">%s</div>
-            <div class="meta">%s%s</div>
-          </div>',
-          $image,
-          $navPlots,
-          $explanation
-        );
-      }
+        $plotsHtml = '';
+        if (is_file("$this->_baseDir/$dataPath/$baseImg")) {
+          $navPlots = $this->_getNavPlots($datatype);
+          $image = sprintf('<img src="%s/%s/%s" alt="Plot showing %s data (All data)" />',
+            $this->_baseUri,
+            $dataPath,
+            $baseImg,
+            $name
+          );
 
-      $tablesHtml = '';
-      foreach ($tables as $tableName => $tableData) {
-        if ($tableData) { // value is empty if no data in database
-          $tablesHtml .= sprintf('<h3>%s</h3><div class="scroll-wrapper">%s</div>',
-            $tableName,
-            $tableData
+          $plotsHtml = sprintf('<h3>Plots</h3>
+            <div class="plots">
+              <div class="image">%s</div>
+              <div class="meta">%s%s</div>
+            </div>',
+            $image,
+            $navPlots,
+            $explanation
           );
         }
-      }
 
-      $html .= sprintf('
-        <section class="panel" data-title="%s">
-          <header>
-            <h2>%s</h2>
-          </header>
-          %s
-          <h3 class="clear">Downloads</h3>
-          %s
-          %s
-        </section>',
-        $name,
-        $name,
-        $plotsHtml,
-        $downloadsHtml,
-        $tablesHtml
-      );
+        $tablesHtml = '';
+        foreach ($tables as $tableName => $tableData) {
+          if ($tableData) { // value is empty if no data in database
+            $tablesHtml .= sprintf('<h3>%s</h3><div class="scroll-wrapper">%s</div>',
+              $tableName,
+              $tableData
+            );
+          }
+        }
+
+        $html .= sprintf('
+          <section class="panel" data-title="%s">
+            <header>
+              <h2>%s</h2>
+            </header>
+            %s
+            <h3 class="clear">Downloads</h3>
+            %s
+            %s
+          </section>',
+          $name,
+          $name,
+          $plotsHtml,
+          $downloadsHtml,
+          $tablesHtml
+        );
+      }
     }
 
     $html .= '</div>';
@@ -754,7 +762,7 @@ class StationView {
    * Get noise, seasonal or velocities table
    *
    * @param $table {String <noise | seasonal | velocities>}
-   * @param $datatype {String <filtered | itrf2008 | nafixed>}
+   * @param $datatype {String <filtered | itrf2008 | itrf2014 | na2014 | nafixed>}
    * @param $lookupTable {Array}
    *     key/value pairs for table headers
    *

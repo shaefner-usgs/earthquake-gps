@@ -5,16 +5,18 @@ var Plots = require ('station/Plots'),
     StationMap = require('map/StationMap'),
     TabList = require('tablist/TabList');
 
-Plots({
-  el: document.querySelector('.filtered')
-});
+var types = [
+  'filtered',
+  'itrf2008',
+  'itrf2014',
+  'na2014',
+  'nafixed'
+];
 
-Plots({
-  el: document.querySelector('.itrf2008')
-});
-
-Plots({
-  el: document.querySelector('.nafixed')
+types.forEach(function(type) {
+  Plots({
+    el: document.querySelector('.' + type)
+  });
 });
 
 StationMap({
