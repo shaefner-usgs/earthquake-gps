@@ -71,7 +71,7 @@ class StationView {
         $closestStation->lastUpdate
       );
       $html .= sprintf('<li>
-          <a href="%s/%s/%s">
+          <a href="%s/%s/%s" title="%s Network">
             <img src="%s/img/pin-s-%s-2x.png" alt="%s station icon" />
             %s
             <small>(%s km)</small>
@@ -80,6 +80,7 @@ class StationView {
         $GLOBALS['MOUNT_PATH'],
         $closestStation->network,
         $closestStation->station,
+        $closestStation->network,
         $GLOBALS['MOUNT_PATH'],
         $iconKey,
         $iconKey,
