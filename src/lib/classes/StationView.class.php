@@ -63,7 +63,7 @@ class StationView {
    */
   private function _getClosestStations () {
     $closestStations = $this->_model->getClosestStations($this->_collection);
-    $html = '<ul class="closest links">';
+    $html = '<p>5 closest stations in all networks</p><ul class="closest links">';
 
     foreach ($closestStations as $closestStation) {
       $iconKey = $this->_model->getIconKey(
