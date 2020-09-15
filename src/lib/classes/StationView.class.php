@@ -643,7 +643,6 @@ class StationView {
    * @return $html {String}
    */
   private function _getTabbedContent () {
-    $html = '<div class="tablist">';
     $datatypes = [
       'na2014' => 'NA2014',
       'nafixed' => 'NA-fixed',
@@ -651,6 +650,7 @@ class StationView {
       'itrf2008' => 'ITRF2008',
       'filtered' => 'Filtered'
     ];
+    $html = '';
 
     foreach ($datatypes as $datatype => $name) {
       $baseImg = $this->_model->station . '.png';
@@ -753,8 +753,9 @@ class StationView {
         );
       }
     }
-
-    $html .= '</div>';
+    if ($html) {
+      $html = '<div class="tablist">' . $html . '</div>';
+    }
 
     return $html;
   }
