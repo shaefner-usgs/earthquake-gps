@@ -10,7 +10,7 @@ $db = new Db();
 
 $rsMetadata = $db->queryMetadata($stationParam);
 
-$output = "benchmark, date, observer, organization, receiver, receiver_sn, receiver_type, antenna_sn, antenna_type, dome, height, interval, first_observation\n";
+$output = "benchmark, date, observer, organization, receiver, receiver_sn, receiver_type, antenna, antenna_sn, dome, height (m), interval, first_observation (s)\n";
 while($row = $rsMetadata->fetch()) {
   $output .= sprintf("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
     $row['benchmark'],
@@ -20,8 +20,8 @@ while($row = $rsMetadata->fetch()) {
     $row['receiver'],
     $row['receiver_sn'],
     $row['receiver_type'],
-    $row['antenna_sn'],
     $row['antenna_type'],
+    $row['antenna_sn'],
     $row['dome'],
     $row['height'],
     $row['interval'],
