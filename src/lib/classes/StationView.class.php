@@ -146,6 +146,7 @@ class StationView {
    */
   private function _getDownloads ($datatype) {
     $deletedHref = $this->_model->station . "/$datatype/deleted";
+    $metadataHref = $this->_model->station . '/metadata';
 
     $html = '
       <nav class="nav-downloads">
@@ -175,6 +176,12 @@ class StationView {
           <h4>Deleted Points</h4>
           <ul class="no-style downloads">
             <li><a href="' . $deletedHref .'" class="text">All</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Observation Metadata</h4>
+          <ul class="no-style downloads">
+            <li><a href="' . $metadataHref .'" class="text">All</a></li>
           </ul>
         </div>
       </nav>';

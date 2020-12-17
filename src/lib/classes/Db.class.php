@@ -150,6 +150,21 @@ class Db {
   }
 
   /**
+   * Query db to get station's observation metadata
+   *
+   * @param $station {String}
+   *
+   * @return {Function}
+   */
+  public function queryMetadata ($station) {
+    $sql = 'SELECT * FROM gps_metadata WHERE station = :station';
+
+    return $this->_execQuery($sql, array(
+      'station' => $station
+    ));
+  }
+
+  /**
    * Query db to get a list of networks a given station belongs to
    *
    * @param $station {String}
