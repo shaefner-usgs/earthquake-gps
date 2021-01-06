@@ -177,14 +177,19 @@ class StationView {
           <ul class="no-style downloads">
             <li><a href="' . $deletedHref .'" class="text">All</a></li>
           </ul>
-        </div>
+        </div>';
+
+    if ($this->_model->stationtype === 'campaign') {
+      $html .= '
         <div>
           <h4>Observation Metadata</h4>
           <ul class="no-style downloads">
             <li><a href="' . $metadataHref .'" class="text">All</a></li>
           </ul>
-        </div>
-      </nav>';
+        </div>';
+    }
+
+    $html .= '</nav>';
 
     return $html;
   }
