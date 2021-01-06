@@ -4,13 +4,13 @@ include_once '../conf/config.inc.php'; // app config
 include_once '../lib/_functions.inc.php'; // app functions
 include_once '../lib/classes/Db.class.php'; // db connector, queries
 
-$stationParam = strtolower(safeParam('station', 'fire'));
-
 $db = new Db();
-
+$output = 'benchmark, date, observer, organization, receiver, receiver_sn, ' .
+  'receiver_type, antenna, antenna_sn, dome, height (m), slant height (m), ' .
+  "interval, first_observation (s)\n";
+$stationParam = strtolower(safeParam('station', 'fire'));
 $rsMetadata = $db->queryMetadata($stationParam);
 
-$output = "benchmark, date, observer, organization, receiver, receiver_sn, receiver_type, antenna, antenna_sn, dome, height (m), slant height (m), interval, first_observation (s)\n";
 while($row = $rsMetadata->fetch()) {
   $output .= sprintf("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
     $row['benchmark'],
