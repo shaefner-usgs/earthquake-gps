@@ -47,10 +47,10 @@ $APACHE_CONFIG_FILE = $CONF_DIR . DIRECTORY_SEPARATOR . 'httpd.conf';
 $DEFAULTS = array(
   'APP_DIR' => $APP_DIR,
   'DATA_DIR' => str_replace('/apps/', '/data/', $APP_DIR),
-  'MOUNT_PATH' => '',
+  'MOUNT_PATH' => '/monitoring/gps',
   'DATA_HOST' => '',
 
-  'DB_DSN' => 'mysql:host=127.0.0.1;port=3306;dbname=web',
+  'DB_DSN' => 'mysql:host=127.0.0.1;port=3306;dbname=web;charset=utf8',
   'DB_USER' => 'web',
   'DB_PASS' => ''
 );
