@@ -207,6 +207,17 @@ class Station {
   }
 
   /**
+   * Get a link to the purple air AQI map centered on the station's coords
+   */
+  private function _getAqiLink () {
+    return sprintf(
+      'https://www.purpleair.com/map?opt=1/mAQI/a10/cC0#8/%.4f/%.4f',
+      $this->lat,
+      $this->lon
+    );
+  }
+
+  /**
    * Get last update time
    *
    * @param $velocities {Array}
@@ -250,6 +261,10 @@ class Station {
         'icon' => 'wb_sunny',
         'href' => $this->_getWeatherLink()
       ],
+      'AQI' => [
+        'icon' => 'cloud',
+        'href' => $this->_getAqiLink()
+      ],
       '<abbr title="National Geodetic Survey">NGS</abbr>&nbsp;Datasheets' => [
         'icon' => 'description',
         'href' => $this->_getNgsLink()
@@ -266,6 +281,9 @@ class Station {
     return json_decode(json_encode($links)); // cast array to object
   }
 
+  /**
+   * Get a link to the NGS datasheets for the station's coords
+   */
   private function _getNgsLink () {
     return sprintf(
       'https://www.ngs.noaa.gov/cgi-bin/ds_radius.prl?selectedFormat=Decimal+Degrees&DLatBox=%f&DLonBox=%f&RadBox=0.5&StabilSelected=0&TypeSelected=X-0&SubmitBtn=Submit',
@@ -274,6 +292,9 @@ class Station {
     );
   }
 
+  /**
+   * Get a link to the weather forecast for the station's coords
+   */
   private function _getWeatherLink () {
     return sprintf(
       'https://forecast.weather.gov/MapClick.php?textField1=%.4f&textField2=%.4f',
