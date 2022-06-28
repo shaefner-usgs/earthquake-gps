@@ -1,52 +1,67 @@
 {
   "name": "earthquake-gps",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "USGS GPS Stations and Data",
-  "main": "Gruntfile.js",
+  "keywords": [
+    "usgs",
+    "earthquake",
+    "gps"
+  ],
+  "author": "Scott Haefner",
+  "license": "CC0-1.0",
+  "main": "src/htdocs/js/index.js",
   "scripts": {
+    "build": "grunt build",
+    "dist": "grunt dist",
+    "watch": "grunt",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/usgs/earthquake-gps.git"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/usgs/earthquake-gps/issues"
+  "engines": {
+    "node": ">=10"
   },
-  "homepage": "https://github.com/usgs/earthquake-gps",
-  "devDependencies": {
+  "dependencies": {
     "SimplBox": "shaefner-usgs/SimplBox",
-    "autoprefixer": "^6.1.2",
     "c3": "^0.4.18",
-    "cssnano": "^3.5.2",
     "d3": "^3.5.12",
     "dygraphs": "^2.1.0",
-    "gateway": "^1.0.0",
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^4.0.1",
-    "grunt-connect-proxy": "^0.2.0",
-    "grunt-connect-rewrite": "^0.2.1",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-connect": "^0.11.2",
-    "grunt-contrib-copy": "^0.8.2",
-    "grunt-contrib-jshint": "^0.11.3",
-    "grunt-contrib-uglify": "^1.0.1",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-postcss": "^0.7.1",
-    "hazdev-tablist": "^0.1.1",
-    "hazdev-template": "usgs/hazdev-template",
-    "hazdev-webutils": "^0.1.5",
-    "http-rewrite-middleware": "^0.1.6",
-    "ini": "^1.3.4",
     "leaflet": "^1.6.0",
     "leaflet-ajax": "^2.0.0",
     "leaflet-fullscreen": "shaefner-usgs/Leaflet.fullscreen",
     "leaflet-groupedlayercontrol": "ismyrnow/Leaflet.groupedlayercontrol",
     "moment": "^2.13.0",
-    "postcss-import": "^7.1.3",
-    "precss": "^1.3.0",
-    "tablesort": "shaefner-usgs/tablesort"
+    "tablesort": "shaefner-usgs/tablesort",
+    "utfgrid": "danzel/Leaflet.utfgrid"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@lodder/grunt-postcss": "^3.1.1",
+    "autoprefixer": "^10.4.2",
+    "babelify": "^10.0.0",
+    "cssnano": "^5.1.1",
+    "gateway": "^1.0.0",
+    "grunt": "^1.4.1",
+    "grunt-browserify": "^6.0.0",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-connect": "^3.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^5.0.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-eslint": "^24.0.0",
+    "grunt-sass": "^3.1.0",
+    "hazdev-tablist": "^0.1.1",
+    "hazdev-template": "shaefner-usgs/hazdev-template",
+    "hazdev-webutils": "0.2.0",
+    "http-proxy-middleware": "^2.0.3",
+    "http-rewrite-middleware": "^0.1.6",
+    "ini": "^2.0.0",
+    "load-grunt-tasks": "^5.1.0",
+    "postcss": "^8.4.8",
+    "sass": "^1.49.9"
   }
 }

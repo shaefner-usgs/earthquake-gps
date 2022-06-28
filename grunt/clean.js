@@ -1,12 +1,13 @@
 'use strict';
 
-var config = require('./config');
 
+var config = require('./config');
 
 var clean = {
   build: [
     config.build
   ],
+
   dist: [
     config.dist
   ]

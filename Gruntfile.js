@@ -1,48 +1,47 @@
 'use strict';
 
+
 module.exports = function (grunt) {
+  var gruntConfig = require('./grunt');
 
-  var gruntConfig = require('./gruntconfig');
+  // Load all tasks matching patterns ['grunt-*', '@*/grunt-*'] in package.json
+  require('load-grunt-tasks')(grunt);
 
-  // Configure tasks
   grunt.initConfig(gruntConfig);
 
-  // Load grunt tasks
-  gruntConfig.tasks.forEach(grunt.loadNpmTasks);
+  // Only lint the file that changed
+  grunt.event.on('watch', function (action, filepath) {
+    grunt.config('eslint.build.src', filepath);
+  });
 
   grunt.registerTask('build', [
-    'clean', // clean first
-    'jshint', // then check for errors
+    'clean:build',
+    'eslint',
     'browserify',
-    'copy:dev',
+    'sass',
+    'postcss:build',
+    'copy:build',
     'copy:c3',
     'copy:d3',
     'copy:dygraph',
     'copy:leaflet',
     'copy:leaflet_fullscreen',
     'copy:simplbox',
-    'postcss:dev'
-  ]);
-
-  // Setup cli tasks
-  grunt.registerTask('default', [
-    'build',
-    'configureRewriteRules',
-    'configureProxies:dev', // don't need to define (defined by module)
-    'connect:template',
-    'connect:dev',
-    'watch'
+    'connect:template'
   ]);
 
   grunt.registerTask('dist', [
-    'clean:dist',
     'build',
-    'copy:dist',
+    'clean:dist',
     'postcss:dist',
     'uglify',
-    'configureRewriteRules',
-    'configureProxies:dist', // don't need to define (defined by module)
-    'connect:template',
-    'connect:dist:keepalive'
+    'copy:dist',
+    'connect:dist'
+  ]);
+
+  grunt.registerTask('default', [
+    'build',
+    'connect:build',
+    'watch'
   ]);
 };

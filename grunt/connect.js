@@ -1,17 +1,30 @@
 'use strict';
 
-var config = require('./config');
 
+var config = require('./config'),
+    gateway = require('gateway'),
+    proxy = require('http-proxy-middleware'),
+    rewrite = require('http-rewrite-middleware');
 
 var MOUNT_PATH = config.ini.MOUNT_PATH;
 
-
-// handle proxies for template, rewrites, php parsing
-var addMiddleware = function (connect, options, middlewares) {
-  middlewares.unshift(
-    require('grunt-connect-rewrite/lib/utils').rewriteRequest,
-    require('grunt-connect-proxy/lib/utils').proxyRequest,
-    require('gateway')(options.base[0], {
+var addMiddleware = function(connect, options, middlewares) {
+  middlewares.unshift( // add custom middleware to default middlewares[]
+    proxy.createProxyMiddleware(MOUNT_PATH + '/data', {
+      changeOrigin: true,
+      headers: {
+        'accept-encoding': 'identity',
+      },
+      target: 'https://' + config.ini.DATA_HOST
+    }),
+    proxy.createProxyMiddleware('/theme', {
+      pathRewrite: {
+        '^/theme': ''
+      },
+      target: 'http://localhost:' + config.templatePort
+    }),
+    rewrite.getMiddleware(getRewrites()),
+    gateway(options.base[0], {
       '.php': 'php-cgi',
       'env': {
         'PHPRC': 'node_modules/hazdev-template/dist/conf/php.ini'
@@ -23,35 +36,45 @@ var addMiddleware = function (connect, options, middlewares) {
 };
 
 var connect = {
-  // global options (extended with options below)
   options: {
-    hostname: '*' // allow access by others
+    hostname: '*'
   },
 
-  proxies: [
-    {
-      context: '/data', // data on dev server
-      host: config.ini.DATA_HOST,
-      port: 80,
-      headers: {
-        'accept-encoding': 'identity',
-        host: config.ini.DATA_HOST
-      },
-      rewrite: {
-        '^/data': MOUNT_PATH + '/data'
-      }
-    },
-    {
-      context: '/theme/', // 'local' template
-      host: 'localhost',
-      port: config.templatePort,
-      rewrite: {
-        '^/theme': ''
-      }
+  build: {
+    options: {
+      base: config.build + '/' + config.src + '/htdocs',
+      livereload: config.liveReloadPort,
+      middleware: addMiddleware,
+      port: config.buildPort
     }
-  ],
+  },
 
-  rules: [
+  dist: {
+    options: {
+      base: config.dist + '/htdocs',
+      keepalive: true,
+      middleware: addMiddleware,
+      port: config.distPort
+    }
+  },
+
+  template: {
+    options: {
+      base: 'node_modules/hazdev-template/dist/htdocs',
+      middleware: addMiddleware,
+      port: config.templatePort
+    }
+  }
+};
+
+
+/**
+ * Get a list of rewrite rules for app
+ *
+ * @return {Array}
+ */
+function getRewrites() {
+  return [
     {
       from: '^(' + MOUNT_PATH + ')(.*)/+$',
       to: 'http://localhost:' + config.buildPort + '$1$2', // strip final '/'
@@ -133,42 +156,8 @@ var connect = {
       from: '^' + MOUNT_PATH + '/?(.*)$',
       to: '/$1'
     }
-  ],
+  ];
+}
 
-  // web server for .build folder
-  dev: {
-    options: {
-      base: [ // Document roots
-        config.build + '/' + config.src + '/htdocs',
-        config.etc
-      ],
-      livereload: config.liveReloadPort,
-      middleware: addMiddleware,
-      open: 'http://localhost:' + config.buildPort + MOUNT_PATH,
-      port: config.buildPort
-    }
-  },
-
-  // web server for dist folder
-  dist: {
-    options: {
-      base: [ // Document roots
-        config.dist + '/htdocs'
-      ],
-      middleware: addMiddleware,
-      open: 'http://localhost:' + config.distPort + MOUNT_PATH,
-      port: config.distPort
-    }
-  },
-
-  // web server for template
-  template: {
-    options: {
-      base: ['node_modules/hazdev-template/dist/htdocs'],
-      middleware: addMiddleware,
-      port: config.templatePort
-    }
-  }
-};
 
 module.exports = connect;

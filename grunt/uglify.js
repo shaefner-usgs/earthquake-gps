@@ -1,21 +1,24 @@
 'use strict';
 
+
 var config = require('./config');
 
 var uglify = {
   options: {
-    compress: {},
-    mangle: true,
-    report: 'min'
+    banner: '/* uglified: <%= grunt.template.today("mm-dd-yyyy hh:MM:ss") %> */\n'
   },
+
   dist: {
     files: [{
       cwd: config.build + '/' + config.src,
       dest: config.dist,
       expand: true,
-      src: ['**/*.js', '!**/leaflet*esm.js']
+      src: [
+        'htdocs/**/*.js'
+      ]
     }]
   }
 };
+
 
 module.exports = uglify;

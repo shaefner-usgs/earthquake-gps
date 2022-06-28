@@ -1,16 +1,23 @@
 'use strict';
 
+
 var config = require('./config');
 
 var copy = {
-  dev: {
+  options: {
+    mode: true,
+    timestamp: true
+  },
+
+  build: {
     cwd: config.src,
     dest: config.build + '/' + config.src,
-    expand: true, // keep file structure relative to cwd
+    expand: true,
+    filter: 'isFile',
     src: [
       '**/*',
-      '!**/*.scss',
-      '!**/*.js'
+      '!**/*.js',
+      '!**/*.scss'
     ]
   },
 
@@ -18,10 +25,12 @@ var copy = {
     cwd: config.build + '/' + config.src,
     dest: config.dist,
     expand: true,
+    filter: 'isFile',
     src: [
       '**/*',
       '!**/*.css',
-      '!**/*.js'
+      '!**/*.js',
+      '!**/*.map'
     ]
   },
 
@@ -59,32 +68,32 @@ var copy = {
   },
 
   leaflet: {
-    expand: true,
     cwd: 'node_modules/leaflet/dist',
     dest: config.build + '/' + config.src + '/htdocs/lib/leaflet',
+    expand: true,
+    filter: 'isFile',
     rename: function (dest, src) {
-      var newName;
-
-      // swap -src version to be default and add -min to compressed version
-      // this is nice for debugging but allows production to use default
-      // version as compressed
-      newName = src.replace('leaflet.js', 'leaflet-min.js');
-      newName = newName.replace('leaflet-src.js', 'leaflet.js');
-      newName = newName.replace('leaflet.js.map', 'leaflet-src.js.map');
+      // grab 'src' version of Leaflet to make debugging easier (uglified for dist)
+      var newName = src.replace(/leaflet-src\.js$/, 'leaflet.js');
 
       return dest + '/' + newName;
     },
     src: [
-      '**/*'
+      'images/**/*',
+      'leaflet-src.js',
+      'leaflet-src.js.map',
+      'leaflet.css'
     ]
   },
 
   leaflet_fullscreen: {
     cwd: 'node_modules/leaflet-fullscreen/dist',
-    dest: config.build + '/' + config.src + '/htdocs/img',
+    dest: config.build + '/' + config.src + '/htdocs/lib/leaflet-fullscreen',
     expand: true,
     src: [
-      '*.png'
+      '**/*',
+      '!**/*.css',
+      '!**/*.js'
     ]
   },
 
@@ -97,5 +106,6 @@ var copy = {
     ]
   }
 };
+
 
 module.exports = copy;
