@@ -2,8 +2,7 @@
 'use strict';
 
 
-var Icon = require('map/Icon'),
-    Util = require('util/Util');
+var Icon = require('map/Icon');
 
 
 var _DEFAULTS,
@@ -54,8 +53,8 @@ var NetworksLayer = function (options) {
   _this = L.featureGroup();
 
   _initialize = function () {
-    options = Util.extend({}, _DEFAULTS, options);
-    _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
+    options = Object.assign({}, _DEFAULTS, options);
+    _markerOptions = Object.assign({}, _MARKER_DEFAULTS, options.markerOptions);
 
     _ids = [];
     _markers = {};

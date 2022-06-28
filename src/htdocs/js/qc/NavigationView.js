@@ -1,7 +1,6 @@
 'use strict';
 
-var Util = require('util/Util'),
-    View = require('mvc/View');
+var View = require('mvc/View');
 
 
 var _DEFAULTS = {};
@@ -33,7 +32,7 @@ var NavigationView = function (options) {
   _initialize = function (options) {
     var el;
 
-    options = Util.extend({}, _DEFAULTS, options);
+    Object.assign({}, _DEFAULTS, options);
 
     el = _this.el;
     el.innerHTML =
@@ -90,7 +89,7 @@ var NavigationView = function (options) {
   /**
    * Free references.
    */
-  _this.destroy = Util.compose(function () {
+  _this.destroy = function () {
     _past60Days.removeEventListener('click', _onPast60DaysClick);
     _pastYear.removeEventListener('click', _onPastYearClick);
 
@@ -99,7 +98,7 @@ var NavigationView = function (options) {
     _onPastYearClick = null;
     _pastYear = null;
     _this = null;
-  }, _this.destroy);
+  };
 
 
   _initialize(options);

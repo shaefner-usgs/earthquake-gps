@@ -12,14 +12,14 @@ var MousePosition = L.Control.extend({
     lngFirst: false,
     numDigits: 3,
     lngFormatter: function(n) { return [Math.abs(n).toFixed(3), '&deg;',
-            (n<0?'W':'E')].join(''); },
+      (n<0?'W':'E')].join(''); },
     latFormatter: function(n) { return [Math.abs(n).toFixed(3), '&deg;',
-            (n<0?'S':'N')].join(''); }
+      (n<0?'S':'N')].join(''); }
   },
 
   onAdd: function (map) {
     this._container = L.DomUtil.create('div',
-        'leaflet-control-background leaflet-control-mouseposition');
+      'leaflet-control-background leaflet-control-mouseposition');
     L.DomEvent.disableClickPropagation(this._container);
     map.on('mousemove', this._onMouseMove, this);
     this._container.innerHTML=this.options.emptyString;
@@ -46,8 +46,8 @@ var MousePosition = L.Control.extend({
       lat = this.options.latFormatter(lat);
     }
     var value = this.options.lngFirst ?
-            lng + this.options.separator + lat :
-            lat + this.options.separator + lng;
+      lng + this.options.separator + lat :
+      lat + this.options.separator + lng;
     this._container.innerHTML = value;
   }
 });

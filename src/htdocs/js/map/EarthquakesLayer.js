@@ -2,8 +2,7 @@
 'use strict';
 
 
-var Moment = require('moment'),
-    Util = require('util/Util');
+var Moment = require('moment');
 
 
 var _COLORS,
@@ -54,8 +53,8 @@ var EarthquakesLayer = function (options) {
 
 
   _initialize = function (options) {
-    options = Util.extend({}, _DEFAULTS, options);
-    _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
+    options = Object.assign({}, _DEFAULTS, options);
+    _markerOptions = Object.assign({}, _MARKER_DEFAULTS, options.markerOptions);
 
     _pastDay = Moment.utc().subtract(1, 'days');
     _pastHour = Moment.utc().subtract(1, 'hours');

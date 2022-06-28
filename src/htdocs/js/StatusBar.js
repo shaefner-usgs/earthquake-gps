@@ -1,8 +1,6 @@
 'use strict';
 
 
-var Util = require('util/Util');
-
 var _DEFAULTS = {
   message: 'No message set (use message property when creating).',
   type: 'info'
@@ -38,10 +36,10 @@ var StatusBar = function (options) {
       _createEl;
 
 
-      _this = {};
+  _this = {};
 
   _initialize = function (options) {
-    options = Util.extend({}, _DEFAULTS, options);
+    options = Object.assign({}, _DEFAULTS, options);
 
     _message = options.message;
     _type = options.type;

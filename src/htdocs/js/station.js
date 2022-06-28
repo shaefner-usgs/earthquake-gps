@@ -3,7 +3,7 @@
 
 var Plots = require ('station/Plots'),
     StationMap = require('map/StationMap'),
-    TabList = require('tablist/TabList');
+    TabList = require('tablist/TabList'); // located in node_modules/hazdev-tablist/src
 
 var types = [
   'filtered',

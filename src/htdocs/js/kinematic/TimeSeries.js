@@ -157,7 +157,7 @@ var TimeSeries = function (options) {
     _graph.hidden = true;
 
     _graphs.forEach(function(g) {
-      if (g.hasOwnProperty('hidden') && g.hidden === true) {
+      if (Object.prototype.hasOwnProperty.call(g, 'hidden') && g.hidden === true) {
         count ++;
       }
     });

@@ -1,7 +1,6 @@
 'use strict';
 
 var Events = require('util/Events'),
-    Util = require('util/Util'),
     Xhr = require('util/Xhr');
 
 var _DEFAULTS = {};
@@ -26,7 +25,7 @@ var Factory = function (options) {
   _initialize = function (options) {
     var url;
 
-    options = Util.extend({}, _DEFAULTS, options);
+    options = Object.assign({}, _DEFAULTS, options);
     url = options.url;
 
     // set status variables to null
@@ -131,14 +130,14 @@ var Factory = function (options) {
   /**
    * Free references.
    */
-  _this.destroy = Util.compose(function () {
+  _this.destroy = function () {
     _data = null;
     _error = null;
     _initialize = null;
     _onError = null;
     _onSuccess = null;
     _this = null;
-  }, _this.destroy);
+  };
 
 
   /**

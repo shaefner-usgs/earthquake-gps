@@ -4,12 +4,9 @@
 
 var Application = require('qc/Application');
 
-var app,
-    el;
+var el = document.querySelector('.application');
 
-el = document.querySelector('.application');
-
-app = Application({
+Application({
   // channel metadata
   'channels': {
     'date': {

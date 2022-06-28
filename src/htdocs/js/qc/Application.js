@@ -3,7 +3,6 @@
 var Factory = require('qc/Factory'),
     NavigationView = require('qc/NavigationView'),
     PlotView = require('qc/PlotView'),
-    Util = require('util/Util'),
     View = require('mvc/View');
 
 var _DEFAULTS = {};
@@ -33,7 +32,6 @@ var Application = function (options) {
       _initialize,
       // variables
       _factory,
-      _navigationView,
       _plotViews,
       // methods
       _onDataChange;
@@ -46,7 +44,7 @@ var Application = function (options) {
         el,
         plots;
 
-    options = Util.extend({}, _DEFAULTS, options);
+    options = Object.assign({}, _DEFAULTS, options);
 
     el = _this.el;
     download = el.querySelector('.app-download');
@@ -61,7 +59,7 @@ var Application = function (options) {
       url: options.url
     });
 
-    _navigationView = NavigationView({
+    NavigationView({
       el: el.querySelector('.app-nav'),
       model: _this.model
     });
@@ -69,7 +67,7 @@ var Application = function (options) {
     // create component plots
     options.plots.forEach(function (plot) {
       var view;
-      view = PlotView(Util.extend({
+      view = PlotView(Object.assign({
         data: _this.model
       }, plot));
       plots.appendChild(view.el);
@@ -105,8 +103,8 @@ var Application = function (options) {
    */
   _this.render = function (changed) {
     if (!changed ||
-        changed.hasOwnProperty('start') ||
-        changed.hasOwnProperty('end')) {
+        Object.prototype.hasOwnProperty.call(changed, 'start') ||
+        Object.prototype.hasOwnProperty.call(changed, 'end')) {
       // only fetch data if start or end has changed.
       _factory.getData({
         callback: _onDataChange,

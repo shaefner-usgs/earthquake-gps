@@ -2,8 +2,7 @@
 'use strict';
 
 
-var Icon = require('map/Icon'),
-    Util = require('util/Util');
+var Icon = require('map/Icon');
 
 
 var _DEFAULTS,
@@ -71,8 +70,8 @@ var StationsLayer = function (options) {
   _this = L.featureGroup();
 
   _initialize = function (options) {
-    options = Util.extend({}, _DEFAULTS, options);
-    _markerOptions = Util.extend({}, _MARKER_DEFAULTS, options.markerOptions);
+    options = Object.assign({}, _DEFAULTS, options);
+    _markerOptions = Object.assign({}, _MARKER_DEFAULTS, options.markerOptions);
 
     _bounds = new L.LatLngBounds();
 
@@ -220,11 +219,9 @@ var StationsLayer = function (options) {
    * @param layer (L.Layer)
    */
   _onEachFeature = function (feature, layer) {
-    var id,
-        popup,
+    var popup,
         tooltip;
 
-    id = feature.id;
     tooltip = feature.properties.station.toUpperCase();
 
     layer.bindTooltip(tooltip);

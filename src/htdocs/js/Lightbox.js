@@ -2,9 +2,6 @@
 'use strict';
 
 
-var Util = require('util/Util');
-
-
 var _DEFAULTS = {
   animationSpeed: 0,
   imageSize: 1,
@@ -78,7 +75,7 @@ var Lightbox = function (options) {
       }
     };
     el = options.el;
-    options = Util.extend({}, _DEFAULTS, callbacks, options);
+    options = Object.assign({}, _DEFAULTS, callbacks, options);
 
     _simplBox = new SimplBox(el, options);
     _simplBoxId = SimplBox.options.imageElementId;

@@ -2,9 +2,6 @@
 'use strict';
 
 
-var Util = require('util/Util');
-
-
 var _DEFAULTS,
     _ICONS;
 
@@ -34,8 +31,8 @@ var Icon = function (options) {
  */
 Icon.getIcon = function (key, options) {
   // Don't recreate existing icons
-  if (!_ICONS.hasOwnProperty('key')) {
-    options = Util.extend({}, _DEFAULTS, options);
+  if (!Object.prototype.hasOwnProperty.call(_ICONS, 'key')) {
+    options = Object.assign({}, _DEFAULTS, options);
 
     options.iconRetinaUrl = MOUNT_PATH + '/img/pin-s-' + key + '-2x.png';
     options.iconUrl = MOUNT_PATH + '/img/pin-s-' + key + '.png';

@@ -2,7 +2,7 @@
 'use strict';
 
 
-require('map/Utfgrid');
+require('utfgrid');
 
 var CLASSES = 'leaflet-tooltip utfgrid';
 
@@ -129,5 +129,3 @@ L.MouseOverLayer = L.LayerGroup.extend({
 L.mouseOverLayer = function (options) {
   return new L.MouseOverLayer(options);
 };
-
-return L.MouseOverLayer;

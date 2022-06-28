@@ -2,8 +2,7 @@
 
 'use strict';
 
-var Util = require('util/Util'),
-    View = require('mvc/View');
+var View = require('mvc/View');
 
 
 var _C3_DEFAULTS = {
@@ -82,7 +81,7 @@ var PlotView = function (options) {
   _initialize = function (options) {
     var el;
 
-    options = Util.extend({}, _DEFAULTS, options);
+    options = Object.assign({}, _DEFAULTS, options);
     el = _this.el;
     el.innerHTML = '<header class="title"></header>' +
         '<div class="plot"></div>';

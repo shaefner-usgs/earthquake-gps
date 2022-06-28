@@ -2,7 +2,6 @@
 'use strict';
 
 
-require('map/Utfgrid');
 require('map/MouseOverLayer');
 
 
