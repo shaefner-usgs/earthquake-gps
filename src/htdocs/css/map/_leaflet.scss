@@ -1,7 +1,9 @@
-@import '_vars.scss';
-@import 'leaflet.fullscreen.css';
-@import 'leaflet.groupedlayercontrol.css';
-@import '_MousePosition.scss';
+@use 'htdocs/css/variables' as *; // located in node_modules/hazdev-template/src
+@use 'leaflet.groupedlayercontrol'; // located in node_modules/leaflet-groupedlayercontrol/src
+@use 'Leaflet.fullscreen'; // located in node_modules/leaflet-fullscreen/dist
+
+@use '../vars' as *;
+@use 'MousePosition';
 
 /* Template's css is getting the way */
 input[type=checkbox], input[type=radio] {
@@ -22,13 +24,13 @@ input[type=checkbox], input[type=radio] {
 
 /* Leaflet fullscreen plugin icons - override image paths */
 .leaflet-control-fullscreen a {
-  background-image: url(/img/fullscreen.png);
+  background-image: url(/lib/leaflet-fullscreen/fullscreen.png);
 }
 @media
   (-webkit-min-device-pixel-ratio:2),
   (min-resolution:192dpi) {
   .leaflet-control-fullscreen a {
-    background-image: url(/img/fullscreen@2x.png);
+    background-image: url(/lib/leaflet-fullscreen/fullscreen@2x.png);
   }
 }
 

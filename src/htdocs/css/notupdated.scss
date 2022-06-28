@@ -1,6 +1,6 @@
-@import '_common.scss';
-@import '_tableCellLinks.scss';
-@import '_SortAndTabifyTable.scss';
+@use 'common';
+@use 'SortAndTabifyTable';
+@use 'tableCellLinks';
 
 table {
   border-collapse: separate;

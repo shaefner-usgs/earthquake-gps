@@ -1,5 +1,7 @@
-@import '_common.scss';
-@import '_Lightbox.scss';
+@use 'htdocs/css/variables' as *; // located in node_modules/hazdev-template/src
+
+@use 'common';
+@use 'Lightbox';
 
 h3 {
   margin-top: 1.8em;

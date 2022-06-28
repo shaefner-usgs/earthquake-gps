@@ -1,4 +1,6 @@
-@import '_common.scss';
+@use 'htdocs/css/variables' as *; // located in node_modules/hazdev-template/src
+
+@use 'common';
 
 $height: 200px;
 

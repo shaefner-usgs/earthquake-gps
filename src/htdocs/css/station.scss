@@ -1,7 +1,9 @@
-@import 'map/_leaflet.scss';
-@import 'tablist/TabList.scss';
-@import '_common.scss';
-@import '_freezeCells.scss';
+@use 'htdocs/css/variables' as *; // located in node_modules/hazdev-template/src
+@use 'tablist/TabList'; // located in node_modules/hazdev-tablist/src
+
+@use 'map/leaflet';
+@use 'common';
+@use 'freezeCells';
 
 dt {
   font-weight: normal !important;

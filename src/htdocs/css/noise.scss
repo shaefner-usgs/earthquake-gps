@@ -1,8 +1,9 @@
-@import 'tablist/TabList.scss';
-@import '_common.scss';
-@import '_freezeCells.scss';
-@import '_tableCellLinks.scss';
-@import '_SortAndTabifyTable.scss';
+@use 'tablist/TabList'; // located in node_modules/hazdev-tablist/src
+
+@use 'common';
+@use 'freezeCells';
+@use 'SortAndTabifyTable';
+@use 'tableCellLinks';
 
 .scroll-wrapper {
   margin-top: 1.25em;
