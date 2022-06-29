@@ -36,7 +36,7 @@ if (!isset($TEMPLATE)) {
 $db = new Db();
 
 // Db query: station details for selected station
-$rsStation = $db->queryStation($stationParam);
+$rsStation = $db->queryStation($stationParam, $networkParam);
 $station = $rsStation->fetch();
 
 $color = getColor($station['last_observation']);
