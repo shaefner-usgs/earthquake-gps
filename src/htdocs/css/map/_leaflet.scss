@@ -14,6 +14,10 @@ input[type=checkbox], input[type=radio] {
   width: auto;
 }
 
+.leaflet-container {
+  font-size: 1rem;
+}
+
 /* Quell long attributions */
 .leaflet-control-attribution {
   max-width: 300px;
