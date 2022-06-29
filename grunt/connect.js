@@ -129,10 +129,6 @@ function getRewrites() {
       to: '/logsheets.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/offsets$',
-      to: '/offsets.php?network=$1&station=$2'
-    },
-    {
       from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/photos$',
       to: '/photos.php?network=$1&station=$2'
     },
@@ -141,16 +137,20 @@ function getRewrites() {
       to: '/qc.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc/data$',
-      to: '/_getQcData.csv.php?network=$1&station=$2'
-    },
-    {
       from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc/table$',
       to: '/qctable.php?network=$1&station=$2'
     },
     {
-      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/(nafixed|itrf2008|filtered)/deleted$',
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/qc/data$',
+      to: '/_getQcData.csv.php?network=$1&station=$2'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/(filtered|itrf2008|itrf2014|na2014|nafixed)/deleted$',
       to: '/deleted.php?network=$1&station=$2&datatype=$3'
+    },
+    {
+      from: '^' + MOUNT_PATH + '/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]{4})/metadata$',
+      to: '/metadata.php?station=$2'
     },
     {
       from: '^' + MOUNT_PATH + '/?(.*)$',
