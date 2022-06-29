@@ -18,6 +18,7 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+$count = 0;
 $db = new Db;
 
 // Db queries: offsets, velocities for selected network
@@ -93,7 +94,14 @@ if ($rsOffsets->rowCount() > 0) {
     }
 
     foreach($datatypes as $datatype=>$name) {
-      if ($sizeValues[$datatype] && $uncertaintyValues[$datatype]) { // only create table if there's data
+      if (
+        array_key_exists($datatype, $sizeValues) &&
+        array_key_exists($datatype, $uncertaintyValues)
+      ) { // only create table if there's data
+        if (!array_key_exists($datatype, $tableBody)) {
+          $tableBody[$datatype] = '';
+        }
+
         $tableBody[$datatype] .= sprintf('<tr>
             <th class="%s freeze link" title="Last observation: %s">
               <a href="./%s" class="%s button">%s</a>
@@ -129,12 +137,13 @@ if ($rsOffsets->rowCount() > 0) {
           $eqinfo,
           $row->distance_from_eq
         );
+        $count ++;
       }
     }
   }
 
   foreach ($datatypes as $datatype => $name) {
-    if ($tableBody[$datatype]) {
+    if (array_key_exists($datatype, $tableBody)) {
       $html .= sprintf('<section class="panel" data-title="%s">
           <header>
             <h3>%s</h3>
@@ -155,7 +164,9 @@ if ($rsOffsets->rowCount() > 0) {
   }
 
   $html .= '</div>';
-} else {
+}
+
+if ($count === 0) {
   $html = '<p class="alert info">No Data</p>';
 }
 

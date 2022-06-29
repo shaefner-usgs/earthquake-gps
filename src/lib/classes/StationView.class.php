@@ -623,11 +623,6 @@ class StationView {
 
     $html .= '<dl><dt>Last observation</dt>';
     $html .= '<dd class="lastUpdate">' . $lastUpdate . '</dd>';
-    $html .= sprintf('',
-      $updated,
-      $numDaysStr
-    );
-
     $html .= '<dt>Closest stations</dt>';
     $html .= '<dd>' . $this->_getClosestStations() . '</dd>';
     $html .= '</dl>';

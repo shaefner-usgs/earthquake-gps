@@ -103,7 +103,7 @@ function getDirContents ($dir, $order=SCANDIR_SORT_DESCENDING) {
  *
  * @return $value {String}
  */
-function safeParam ($name, $default=NULL, $filter=FILTER_SANITIZE_STRING) {
+function safeParam ($name, $default=NULL, $filter=FILTER_SANITIZE_FULL_SPECIAL_CHARS) {
   $value = NULL;
 
   if (isset($_POST[$name]) && $_POST[$name] !== '') {

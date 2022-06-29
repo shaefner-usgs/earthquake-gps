@@ -43,11 +43,16 @@ while ($row = $rsStationList->fetch(PDO::FETCH_ASSOC)) {
   $stations[$station] = $networks[$station];
 }
 
-// Create html for subheader
-$sel = ucfirst($filterParam);
-if ($sel === '') {
+$sel = '';
+
+if ($filterParam) {
+  $sel = ucfirst($filterParam);
+}
+if (!$sel) {
   $sel = 'All';
 }
+
+// Create html for subheader
 $subheaderHtml = sprintf ('<h2>&lsquo;%s&rsquo; Stations (%d)</h2>',
   $sel,
   count($stations)

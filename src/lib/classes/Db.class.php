@@ -6,16 +6,15 @@
  * @author Scott Haefner <shaefner@usgs.gov>
  */
 class Db {
-  private static $db;
+  private $db;
 
   public function __construct() {
+    global $DB_DSN, $DB_PASS, $DB_USER;
+
     try {
-      $this->db = new PDO(
-        $GLOBALS['DB_DSN'],
-        $GLOBALS['DB_USER'],
-        $GLOBALS['DB_PASS'],
-        [PDO::ATTR_EMULATE_PREPARES => false] // http://stackoverflow.com/a/1197424/5079380
-      );
+      $this->db = new PDO($DB_DSN, $DB_USER, $DB_PASS);
+
+      $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false); // https://stackoverflow.com/a/1197424/5079380
       $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
       print '<p class="alert error">ERROR 1: ' . $e->getMessage() . '</p>';
@@ -30,7 +29,8 @@ class Db {
    * @param $params {Array} default is NULL
    *     key-value substitution params for SQL query
    *
-   * @return $stmt {Object} - PDOStatement object
+   * @return $stmt {Object}
+   *     PDOStatement object upon success
    */
   private function _execQuery ($sql, $params=NULL) {
     try {
@@ -43,11 +43,12 @@ class Db {
           $stmt->bindValue($key, $value, $type);
         }
       }
+
       $stmt->execute();
 
       return $stmt;
     } catch(Exception $e) {
-      print '<p class="alert error">ERROR 2: ' . $e->getMessage() . '</p>';
+      print '<p class="alert error">ERROR: ' . $e->getMessage() . '</p>';
     }
   }
 
@@ -60,15 +61,15 @@ class Db {
    * @return $type {Integer}
    */
   private function _getType ($var) {
-    $varType = gettype($var);
     $pdoTypes = array(
       'boolean' => PDO::PARAM_BOOL,
       'integer' => PDO::PARAM_INT,
       'NULL' => PDO::PARAM_NULL,
       'string' => PDO::PARAM_STR
     );
-
     $type = $pdoTypes['string']; // default
+    $varType = gettype($var);
+
     if (isset($pdoTypes[$varType])) {
       $type = $pdoTypes[$varType];
     }

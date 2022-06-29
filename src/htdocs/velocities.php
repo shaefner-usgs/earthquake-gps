@@ -18,6 +18,7 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+$count = 0;
 $db = new Db;
 
 // Db query: velocities for selected network
@@ -75,8 +76,15 @@ if ($rsVelocities->rowCount() > 0) {
       $velocityValues[$datatype][$component] = $value;
     }
 
-    foreach($datatypes as $datatype=>$name) {
-      if ($sigmaValues[$datatype] && $velocityValues[$datatype]) { // only create table if there's data
+    foreach($datatypes as $datatype => $name) {
+      if (
+        array_key_exists($datatype, $sigmaValues) &&
+        array_key_exists($datatype, $velocityValues)
+      ) { // only create table if there's data
+        if (!array_key_exists($datatype, $tableBody)) {
+          $tableBody[$datatype] = '';
+        }
+
         $tableBody[$datatype] .= sprintf('<tr>
             <th class="%s freeze link" title="Last observation: %s">
               <a href="./%s" class="%s button">%s</a>
@@ -107,12 +115,13 @@ if ($rsVelocities->rowCount() > 0) {
           $velocityValues[$datatype]['U'],
           $sigmaValues[$datatype]['U']
         );
+        $count ++;
       }
     }
   }
 
   foreach ($datatypes as $datatype => $name) {
-    if ($tableBody[$datatype]) {
+    if (array_key_exists($datatype, $tableBody)) {
       $html .= sprintf('<section class="panel" data-title="%s">
           <header>
             <h3>%s</h3>
@@ -133,7 +142,9 @@ if ($rsVelocities->rowCount() > 0) {
   }
 
   $html .= '</div>';
-} else {
+}
+
+if ($count === 0) {
   $html = '<p class="alert info">No Data</p>';
 }
 

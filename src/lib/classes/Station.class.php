@@ -53,7 +53,9 @@ class Station {
   }
 
   public function __get ($name) {
-    return $this->_data[$name];
+    if (array_key_exists($name, $this->_data)) {
+      return $this->_data[$name];
+    }
   }
 
   public function __set ($name, $value) {
@@ -222,15 +224,19 @@ class Station {
    *
    * @param $velocities {Array}
    *
-   * @return {String}
+   * @return $lastUpdate {String}
    */
   private function _getLastUpdate ($velocities) {
-    if ($velocities[$this->station]) { // velocities array keyed by station
-      return $velocities[$this->station]->last_observation;
-    } else { // indexed velocities array; return first elem
+    $lastUpdate = '';
+
+    if (array_key_exists($this->station, $velocities)) { // assoc. velocities array
+      $lastUpdate = $velocities[$this->station]->last_observation;
+    } else if (array_key_exists(0, $velocities)) { // indexed velocities array
+      $lastUpdate = $velocities[0]->last_observation;
       $this->velocities = $velocities; // add velocities to Model
-      return $velocities[0]->last_observation;
     }
+
+    return $lastUpdate;
   }
 
   /**
