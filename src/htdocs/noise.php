@@ -18,6 +18,7 @@ if (!isset($TEMPLATE)) {
   include 'template.inc.php';
 }
 
+$count = 0;
 $db = new Db;
 
 // Db queries: noise, velocities for selected network
@@ -30,7 +31,8 @@ if ($rsNoise->rowCount() > 0) {
     'na2014' => 'NA2014',
     'itrf2008' => 'ITRF2008',
     'itrf2014' => 'ITRF2014',
-    'filtered' => 'Filtered'  ];
+    'filtered' => 'Filtered'
+  ];
 
   // Create an array of last update time keyed by station name
   $lastObs = [];
@@ -98,7 +100,11 @@ if ($rsNoise->rowCount() > 0) {
     }
 
     foreach($datatypes as $datatype=>$name) {
-      if ($values['whitenoise'][$datatype]) { // only create table if there's data
+      if (array_key_exists($datatype, $values['whitenoise'])) { // only create table if there's data
+        if (!array_key_exists($datatype, $tableBody)) {
+          $tableBody[$datatype] = '';
+        }
+
         $tableBody[$datatype] .= sprintf('<tr>
             <th class="%s freeze link" title="Last observation: %s">
               <a href="./%s" class="%s button">%s</a>
@@ -170,12 +176,13 @@ if ($rsNoise->rowCount() > 0) {
           $values['plexp2'][$datatype]['E'],
           $values['plexp2'][$datatype]['U']
         );
+        $count ++;
       }
     }
   }
 
   foreach ($datatypes as $datatype => $name) {
-    if ($tableBody[$datatype]) {
+    if (array_key_exists($datatype, $tableBody)) {
       $html .= sprintf('<section class="panel" data-title="%s">
           <header>
             <h3>%s</h3>
@@ -196,7 +203,9 @@ if ($rsNoise->rowCount() > 0) {
   }
 
   $html .= '</div>';
-} else {
+}
+
+if ($count === 0) {
   $html = '<p class="alert info">No Data</p>';
 }
 
