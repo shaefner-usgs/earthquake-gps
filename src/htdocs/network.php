@@ -70,6 +70,11 @@ $secs = 86400; // secs in one day
 // Create features array for geoJson map layer and <li>'s for station list
 while ($row = $rsStations->fetch(PDO::FETCH_OBJ)) {
   $id = intval($row->id);
+  $last_observation = '2000-01-01'; // default value
+
+  if ($row->last_observation) {
+    $last_observation = $row->last_observation;
+  }
 
   $features[] = [
     'coords' => [
@@ -78,9 +83,9 @@ while ($row = $rsStations->fetch(PDO::FETCH_OBJ)) {
     ],
     'id' => $id,
     'props' => [
-      'days' => floor((strtotime($now) - strtotime($row->last_observation)) / $secs),
+      'days' => floor((strtotime($now) - strtotime($last_observation)) / $secs),
       'elevation' => $row->elevation,
-      'last_observation' => $row->last_observation,
+      'last_observation' => $last_observation,
       'showcoords' => intval($row->showcoords),
       'station' => $row->station,
       'type' => $row->stationtype,
@@ -97,7 +102,7 @@ while ($row = $rsStations->fetch(PDO::FETCH_OBJ)) {
     $networkParam,
     $row->station,
     $id,
-    getColor($row->last_observation),
+    getColor($last_observation),
     strtoupper($row->station)
   );
 }
