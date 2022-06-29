@@ -27,9 +27,10 @@ $rsVelocities = $db->queryVelocities($networkParam);
 if ($rsNoise->rowCount() > 0) {
   $datatypes = [
     'nafixed' => 'NA-fixed',
+    'na2014' => 'NA2014',
     'itrf2008' => 'ITRF2008',
-    'filtered' => 'Filtered'
-  ];
+    'itrf2014' => 'ITRF2014',
+    'filtered' => 'Filtered'  ];
 
   // Create an array of last update time keyed by station name
   $lastObs = [];

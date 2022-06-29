@@ -28,7 +28,9 @@ $rsVelocities = $db->queryVelocities($networkParam);
 if ($rsOffsets->rowCount() > 0) {
   $datatypes = [
     'nafixed' => 'NA-fixed',
+    'na2014' => 'NA2014',
     'itrf2008' => 'ITRF2008',
+    'itrf2014' => 'ITRF2014',
     'filtered' => 'Filtered'
   ];
 
