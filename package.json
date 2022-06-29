@@ -28,13 +28,13 @@
     "c3": "^0.4.18",
     "d3": "^3.5.12",
     "dygraphs": "^2.1.0",
-    "leaflet": "^1.6.0",
+    "leaflet": "^1.8.0",
     "leaflet-ajax": "^2.0.0",
-    "leaflet-fullscreen": "shaefner-usgs/Leaflet.fullscreen",
-    "leaflet-groupedlayercontrol": "ismyrnow/Leaflet.groupedlayercontrol",
+    "leaflet-fullscreen": "github:shaefner-usgs/Leaflet.fullscreen",
+    "leaflet-groupedlayercontrol": "github:ismyrnow/Leaflet.groupedlayercontrol",
     "moment": "^2.13.0",
-    "tablesort": "shaefner-usgs/tablesort",
-    "utfgrid": "danzel/Leaflet.utfgrid"
+    "tablesort": "github:shaefner-usgs/tablesort",
+    "utfgrid": "github:danzel/Leaflet.utfgrid"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -55,7 +55,7 @@
     "grunt-eslint": "^24.0.0",
     "grunt-sass": "^3.1.0",
     "hazdev-tablist": "^0.1.1",
-    "hazdev-template": "shaefner-usgs/hazdev-template",
+    "hazdev-template": "github:shaefner-usgs/hazdev-template",
     "hazdev-webutils": "0.2.0",
     "http-proxy-middleware": "^2.0.3",
     "http-rewrite-middleware": "^0.1.6",
