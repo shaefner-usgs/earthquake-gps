@@ -2,6 +2,8 @@
 'use strict';
 
 
+require('Leaflet.geoJSON.dateLine');
+
 var Moment = require('moment');
 
 
@@ -60,7 +62,7 @@ var EarthquakesLayer = function (options) {
     _pastHour = Moment.utc().subtract(1, 'hours');
     _pastWeek = Moment.utc().subtract(1, 'weeks');
 
-    _this = L.geoJson(options.data, {
+    _this = L.geoJSON.dateLine(options.data, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });
