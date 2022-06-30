@@ -12,7 +12,8 @@ var browserify = {
       paths: [
         config.src + '/htdocs/js',
         'node_modules/hazdev-tablist/src',
-        'node_modules/hazdev-webutils/src'
+        'node_modules/hazdev-webutils/src',
+        'node_modules/leaflet-geojson-dateline/src'
       ]
     },
     noParse: [
