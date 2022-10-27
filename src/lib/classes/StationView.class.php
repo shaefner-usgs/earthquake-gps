@@ -707,6 +707,10 @@ class StationView {
             'p365cossig' => 'Standard deviation of cosine amplitude (365.25-day period)',
             'p365sinamp' => 'Amplitude of sine (365.25-day period), mm',
             'p365sinsig' => 'Standard deviation of sine amplitude (365.25-day period)',
+            'p14cosamp' => 'Amplitude of cosine (14.76-day period), mm',
+            'p14cossig' => 'Standard deviation of cosine amplitude (14.76-day period)',
+            'p14sinamp' => 'Amplitude of sine (14.76-day period), mm',
+            'p14sinsig' => 'Standard deviation of sine amplitude (14.76-day period)',
             'year' => 'Reference year'
           ])
         ];
