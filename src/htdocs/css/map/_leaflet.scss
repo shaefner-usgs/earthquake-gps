@@ -28,13 +28,13 @@ input[type=checkbox], input[type=radio] {
 
 /* Leaflet fullscreen plugin icons - override image paths */
 .leaflet-control-fullscreen a {
-  background-image: url(/lib/leaflet-fullscreen/fullscreen.png);
+  background-image: url(/monitoring/gps/lib/leaflet-fullscreen/fullscreen.png);
 }
 @media
   (-webkit-min-device-pixel-ratio:2),
   (min-resolution:192dpi) {
   .leaflet-control-fullscreen a {
-    background-image: url(/lib/leaflet-fullscreen/fullscreen@2x.png);
+    background-image: url(/monitoring/gps/lib/leaflet-fullscreen/fullscreen@2x.png);
   }
 }
 
