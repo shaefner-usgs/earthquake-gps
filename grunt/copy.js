@@ -91,9 +91,7 @@ var copy = {
     dest: config.build + '/' + config.src + '/htdocs/lib/leaflet-fullscreen',
     expand: true,
     src: [
-      '**/*',
-      '!**/*.css',
-      '!**/*.js'
+      '**/*.png'
     ]
   },
 
