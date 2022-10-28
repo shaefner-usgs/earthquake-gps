@@ -56,15 +56,19 @@ var StationsLayer = function (options) {
       _initialize,
 
       _bounds,
+      _map,
       _markerOptions,
       _station,
 
+      _addListeners,
       _getColor,
       _getMarker,
       _getPopup,
       _initLayers,
       _onEachFeature,
-      _pointToLayer;
+      _pointToLayer,
+      _render,
+      _update;
 
 
   _this = L.featureGroup();
@@ -74,6 +78,7 @@ var StationsLayer = function (options) {
     _markerOptions = Object.assign({}, _MARKER_DEFAULTS, options.markerOptions);
 
     _bounds = new L.LatLngBounds();
+    _map = options.map;
 
     _this.markers = {};
 
@@ -85,12 +90,17 @@ var StationsLayer = function (options) {
       _initLayers();
     }
 
-    L.geoJson(options.data, {
+    L.geoJSON(options.data, {
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });
+
+    _addListeners();
   };
 
+  _addListeners = function () {
+    _map.on('moveend viewreset', _render, this);
+  };
 
   /**
    * Get icon color based on the number of days since the last update
@@ -318,12 +328,80 @@ var StationsLayer = function (options) {
   };
 
   /**
+   * Render the markers on both sides of the IDL.
+   */
+  _render = function () {
+    var center = _map.getCenter().lng,
+        options = {
+          max: center + 180,
+          min: center - 180
+        };
+
+    if (_this.layers) { // Network map
+      Object.keys(_this.layers).forEach(color => {
+        var layer = _this.layers[color];
+
+        layer.eachLayer(marker => {
+          _update(marker, options);
+
+          if (!_map.hasLayer(marker)) {
+            _map.addLayer(marker);
+          }
+        });
+      });
+    } else { // Station map
+      _this.eachLayer(marker => {
+        _update(marker, options);
+
+        if (!_map.hasLayer(marker)) {
+          _map.addLayer(marker);
+        }
+      });
+    }
+  };
+
+  /**
+   * Update the given marker's position to be rendered in the visible map
+   * area, accounting for copies of "wrapping" maps.
+   *
+   * @param marker {L.Marker}
+   * @param options {Object}
+   */
+  _update = function (marker, options) {
+    var status,
+        latLng = marker.getLatLng();
+
+    while (latLng.lng <= options.min) {
+      latLng.lng += 360;
+      status = 'updated';
+    }
+    while (latLng.lng > options.max) {
+      latLng.lng -= 360;
+      status = 'updated';
+    }
+
+    if (status === 'updated') {
+      marker.setLatLng(latLng);
+    }
+  };
+
+  /**
    * Get bounds for station layers
    *
    * @return {L.LatLngBounds}
    */
   _this.getBounds = function () {
-    return _bounds;
+    var bounds = _bounds;
+
+    // ugly hack: bounds aren't calculated correctly for Alaska_ITRF2014
+    if (NETWORK === 'Alaska_ITRF2014' && !_station) {
+      bounds = [
+        [_bounds.getSouth(), -189],
+        [_bounds.getNorth(), -130]
+      ];
+    }
+
+    return bounds;
   };
 
   /**

@@ -30,6 +30,7 @@ var StationMap = function (options) {
 
       _earthquakes,
       _el,
+      _map,
       _stations,
 
       _getMapLayers,
@@ -79,6 +80,7 @@ var StationMap = function (options) {
 
     _stations = L.stationsLayer({
       data: window.data.stations,
+      map: _map,
       station: STATION
     });
 
@@ -116,27 +118,27 @@ var StationMap = function (options) {
    */
   _initMap = function () {
     var bounds,
-        layers,
-        map;
-
-    layers = _getMapLayers();
-    bounds = _stations.getBounds();
+        layers;
 
     // Create map
-    map = L.map(_el, {
-      layers: layers.defaults,
-      scrollWheelZoom: false,
-      center: bounds.getCenter(),
-      zoom: 7
+    _map = L.map(_el, {
+      scrollWheelZoom: false
     });
 
+    // _map must be instantiated before calling _getMapLayers()
+    layers = _getMapLayers();
+    layers.defaults.forEach(layer => _map.addLayer(layer));
+
+    bounds = _stations.getBounds();
+    _map.setView(bounds.getCenter(), 7);
+
     // Add controllers
-    L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
-    L.control.groupedLayers(layers.baseLayers, layers.overlays).addTo(map);
-    L.control.scale().addTo(map);
+    L.control.fullscreen({ pseudoFullscreen: true }).addTo(_map);
+    L.control.groupedLayers(layers.baseLayers, layers.overlays).addTo(_map);
+    L.control.scale().addTo(_map);
 
     // Remember user's map settings (selected layers, map extent)
-    map.restoreMap({
+    _map.restoreMap({
       baseLayers: layers.baseLayers,
       id: NETWORK + '-' + STATION,
       overlays: layers.overlays,

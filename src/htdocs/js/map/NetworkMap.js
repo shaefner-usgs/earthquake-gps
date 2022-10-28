@@ -186,7 +186,8 @@ var NetworkMap = function (options) {
     terrain = L.terrainLayer();
 
     _stations = L.stationsLayer({
-      data: window.data.stations
+      data: window.data.stations,
+      map: _map
     });
 
     layers = {
@@ -224,15 +225,16 @@ var NetworkMap = function (options) {
     var bounds,
         layers;
 
-    layers = _getMapLayers();
-
     // Create map
     _map = L.map(_el, {
-      layers: layers.defaults,
       scrollWheelZoom: false
     });
 
-    // Set intial map extent to contain stations overlay
+    // _map must be instantiated before calling _getMapLayers()
+    layers = _getMapLayers();
+    layers.defaults.forEach(layer => _map.addLayer(layer));
+
+    // Set initial map extent to contain stations overlay
     bounds = _stations.getBounds();
     _map.fitBounds(bounds);
 
