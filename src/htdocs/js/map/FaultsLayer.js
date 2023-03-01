@@ -2,7 +2,7 @@
 'use strict';
 
 
-require('map/MouseOverLayer');
+require('leaflet-mouseover-layer');
 
 
 /**
@@ -15,7 +15,7 @@ var FaultsLayer = function () {
       _plates,
       _urlPrefix;
 
-  _urlPrefix = 'https://bayquakealliance.org/faults/tiles/';
+  _urlPrefix = 'https://escweb.wr.usgs.gov/faults/tiles/';
 
   // L.mouseOverLayer is an extended L.layerGroup class that adds utfGrid mouseovers
   _faults = L.mouseOverLayer({
