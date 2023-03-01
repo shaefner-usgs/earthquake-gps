@@ -7,7 +7,7 @@ var Xhr = require('util/Xhr');
 // Leaflet plugins
 require('leaflet-fullscreen');
 require('leaflet-groupedlayercontrol');
-require('map/RestoreMap');
+require('leaflet-restore-map');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
 require('map/DarkLayer');

@@ -4,7 +4,7 @@
 
 // Leaflet plugins
 require('leaflet-fullscreen');
-require('map/RestoreMap');
+require('leaflet-restore-map');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
 require('map/DarkLayer');

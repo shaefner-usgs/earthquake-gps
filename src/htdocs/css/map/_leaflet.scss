@@ -1,9 +1,9 @@
 @use 'htdocs/css/variables' as *; // located in node_modules/hazdev-template/src
 @use 'leaflet.groupedlayercontrol'; // located in node_modules/leaflet-groupedlayercontrol/src
 @use 'Leaflet.fullscreen'; // located in node_modules/leaflet-fullscreen/dist
+@use 'L.Control.MousePosition'; // located in node_modules/leaflet-mouse-position
 
 @use '../vars' as *;
-@use 'MousePosition';
 
 /* Template's css is getting the way */
 input[type=checkbox], input[type=radio] {

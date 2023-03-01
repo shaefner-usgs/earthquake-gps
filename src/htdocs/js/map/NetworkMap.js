@@ -8,8 +8,8 @@ var StatusBar = require('StatusBar'),
 // Leaflet plugins
 require('leaflet-fullscreen');
 require('leaflet-groupedlayercontrol');
-require('map/MousePosition');
-require('map/RestoreMap');
+require('leaflet-mouse-position');
+require('leaflet-restore-map');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
 require('map/DarkLayer');
