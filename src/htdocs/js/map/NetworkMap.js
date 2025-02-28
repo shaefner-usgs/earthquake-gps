@@ -12,14 +12,14 @@ require('leaflet-mouse-position');
 require('leaflet-restore-map');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
-require('map/DarkLayer');
+// require('map/DarkLayer');
 require('map/EarthquakesLayer');
 require('map/FaultsLayer');
-require('map/GreyscaleLayer');
+// require('map/GreyscaleLayer');
 require('map/SatelliteLayer');
 require('map/StationsLayer');
-require('map/TerrainLayer');
-
+// require('map/TerrainLayer');
+require('map/TerrainLayer-alt');
 
 /**
  * Factory for leaflet map instance on the 'network' page
@@ -171,17 +171,17 @@ var NetworkMap = function (options) {
    *     }
    */
   _getMapLayers = function () {
-    var dark,
+    var // dark,
         faults,
-        greyscale,
+        // greyscale,
         layers,
         name,
         satellite,
         terrain;
 
-    dark = L.darkLayer();
+    // dark = L.darkLayer();
     faults = L.faultsLayer();
-    greyscale = L.greyscaleLayer();
+    // greyscale = L.greyscaleLayer();
     satellite = L.satelliteLayer();
     terrain = L.terrainLayer();
 
@@ -194,8 +194,8 @@ var NetworkMap = function (options) {
       baseLayers: {
         'Terrain': terrain,
         'Satellite': satellite,
-        'Greyscale': greyscale,
-        'Dark': dark
+        // 'Greyscale': greyscale,
+        // 'Dark': dark
       },
       overlays: {
         'Stations, Last Updated': {},
@@ -227,6 +227,7 @@ var NetworkMap = function (options) {
 
     // Create map
     _map = L.map(_el, {
+      attributionControl: false,
       scrollWheelZoom: false
     });
 
@@ -239,6 +240,7 @@ var NetworkMap = function (options) {
     _map.fitBounds(bounds);
 
     // Add controllers
+    L.control.attribution({ prefix: '' }).addTo(_map);
     L.control.fullscreen({ pseudoFullscreen: true }).addTo(_map);
     L.control.groupedLayers(layers.baseLayers, layers.overlays).addTo(_map);
     L.control.mousePosition().addTo(_map);

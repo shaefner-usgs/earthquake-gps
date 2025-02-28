@@ -7,11 +7,12 @@ require('leaflet-fullscreen');
 require('leaflet-restore-map');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
-require('map/DarkLayer');
-require('map/GreyscaleLayer');
+// require('map/DarkLayer');
+// require('map/GreyscaleLayer');
 require('map/NetworksLayer');
 require('map/SatelliteLayer');
-require('map/TerrainLayer');
+// require('map/TerrainLayer');
+require('map/TerrainLayer-alt');
 
 
 /**
@@ -78,14 +79,14 @@ var IndexMap = function (options) {
    *    }
    */
   _getMapLayers = function () {
-    var dark,
-        greyscale,
+    var // dark,
+        // greyscale,
         layers,
         satellite,
         terrain;
 
-    dark = L.darkLayer();
-    greyscale = L.greyscaleLayer();
+    // dark = L.darkLayer();
+    // greyscale = L.greyscaleLayer();
     satellite = L.satelliteLayer();
     terrain = L.terrainLayer();
 
@@ -97,8 +98,8 @@ var IndexMap = function (options) {
       baseLayers: {
         'Terrain': terrain,
         'Satellite': satellite,
-        'Greyscale': greyscale,
-        'Dark': dark
+        // 'Greyscale': greyscale,
+        // 'Dark': dark
       },
       overlays: {
         'Networks': _networks
@@ -121,6 +122,7 @@ var IndexMap = function (options) {
 
     // Create map
     map = L.map(_el, {
+      attributionControl: false,
       layers: layers.defaults,
       scrollWheelZoom: false
     });
@@ -131,6 +133,7 @@ var IndexMap = function (options) {
     map.fitBounds(bounds);
 
     // Add controllers
+    L.control.attribution({ prefix: '' }).addTo(map);
     L.control.fullscreen({ pseudoFullscreen: true }).addTo(map);
     L.control.layers(layers.baseLayers, layers.overlays).addTo(map);
     L.control.scale().addTo(map);

@@ -10,13 +10,14 @@ require('leaflet-groupedlayercontrol');
 require('leaflet-restore-map');
 
 // Factories for creating map layers (returns e.g. "L.earthquakesLayer()")
-require('map/DarkLayer');
+// require('map/DarkLayer');
 require('map/EarthquakesLayer');
 require('map/FaultsLayer');
-require('map/GreyscaleLayer');
+// require('map/GreyscaleLayer');
 require('map/SatelliteLayer');
 require('map/StationsLayer');
-require('map/TerrainLayer');
+// require('map/TerrainLayer');
+require('map/TerrainLayer-alt');
 
 
 /**
@@ -62,9 +63,9 @@ var StationMap = function (options) {
    */
   _getMapLayers = function () {
     var count,
-        dark,
+        // dark,
         faults,
-        greyscale,
+        // greyscale,
         layers,
         otherStations,
         satellite,
@@ -72,9 +73,9 @@ var StationMap = function (options) {
         stations,
         terrain;
 
-    dark = L.darkLayer();
+    // dark = L.darkLayer();
     faults = L.faultsLayer();
-    greyscale = L.greyscaleLayer();
+    // greyscale = L.greyscaleLayer();
     satellite = L.satelliteLayer();
     terrain = L.terrainLayer();
 
@@ -96,8 +97,8 @@ var StationMap = function (options) {
       baseLayers: {
         'Terrain': terrain,
         'Satellite': satellite,
-        'Greyscale': greyscale,
-        'Dark': dark
+        // 'Greyscale': greyscale,
+        // 'Dark': dark
       },
       overlays: {},
       defaults: [terrain, _earthquakes, selStation, otherStations]
@@ -122,6 +123,7 @@ var StationMap = function (options) {
 
     // Create map
     _map = L.map(_el, {
+      attributionControl: false,
       scrollWheelZoom: false
     });
 
@@ -133,6 +135,7 @@ var StationMap = function (options) {
     _map.setView(bounds.getCenter(), 7);
 
     // Add controllers
+    L.control.attribution({ prefix: '' }).addTo(_map);
     L.control.fullscreen({ pseudoFullscreen: true }).addTo(_map);
     L.control.groupedLayers(layers.baseLayers, layers.overlays).addTo(_map);
     L.control.scale().addTo(_map);
